@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\Account\Commands\" />
+    <Folder Include="Features\Account\Queries\" />
+    <Folder Include="Features\Activity\Commands\" />
+    <Folder Include="Features\Activity\Queries\" />
+    <Folder Include="Features\Group\Commands\" />
+    <Folder Include="Features\Group\Queries\" />
+    <Folder Include="Features\Member\Commands\" />
+    <Folder Include="Features\Member\Queries\" />
+    <Folder Include="Features\Organization\Commands\" />
+    <Folder Include="Features\Organization\Queries\" />
+    <Folder Include="Features\Project\Commands\" />
+    <Folder Include="Features\Project\Queries\" />
+    <Folder Include="MappingProfiles\" />
+  </ItemGroup>
+
+</Project>
