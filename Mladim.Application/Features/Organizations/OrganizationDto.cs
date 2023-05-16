@@ -1,6 +1,6 @@
 ﻿using Mladim.Domain.Enums;
 
-namespace Mladim.Application.Features.Organizations.Commands.AddOrganization;
+namespace Mladim.Application.Features.Organizations;
 
 public class OrganizationDto
 {

@@ -19,24 +19,27 @@ public class UpdateOrganizationCommandValidator : AbstractValidator<UpdateOrgani
 
     public UpdateOrganizationCommandValidator(IUnitOfWork unitOfWork)
     {
-        UnitOfWork = unitOfWork;
-    }
-	public UpdateOrganizationCommandValidator()
-	{
         RuleFor(c => c.Id)
-            .NotNull()
-            .WithMessage("{PropertyName} je zahtevan.")
-            .MustAsync(ExistOrganization)
-            .WithMessage("{PropertyName} ne obstaja");
+           .NotNull()
+           .WithMessage("{PropertyName} je zahtevan.");
+
+        RuleFor(c => c.Id)
+            .Null()
+            .MustAsync(ExistOrganization);
+
         RuleFor(c => c.Name)
             .NotEmpty()
             .WithMessage("{PropertyName} je zahtevan.");
+        
         RuleFor(c => c.Description)
             .NotEmpty()
             .WithMessage("{PropertyName} je zahtevan.");
-    }   
+
+        UnitOfWork = unitOfWork;
+    }
+	
     
-    private async Task<bool> ExistOrganization(int? organizationId, CancellationToken cancellationToken)
+    private async Task<bool> ExistOrganization(int organizationId, CancellationToken cancellationToken)
     {
         return await this.UnitOfWork.GetRepository<Organization>()
             .AnyAsync(o => o.Id == organizationId);

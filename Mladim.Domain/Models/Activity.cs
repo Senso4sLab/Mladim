@@ -14,7 +14,7 @@ public class Activity
     public string Description { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
-    public List<ActiveMember> Members { get; set; } = new();
+    public List<ActiveMember> ActiveMember { get; set; } = new();
     public List<AnonymousParticipants> AnonymousParticipantGroups { get; set; } = new();
 
     public List<Partner> Partners { get; set; } = new();

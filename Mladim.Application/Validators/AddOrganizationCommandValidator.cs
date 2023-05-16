@@ -11,15 +11,21 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Validators;
 
-public class AddOrganizationCommandValidator : AbstractValidator<UpdateOrganizationCommand>
-{   
-	public AddOrganizationCommandValidator()
+public class AddOrganizationCommandValidator : AbstractValidator<AddOrganizationCommand>
+{
+    private IUnitOfWork UnitOfWork { get; }
+    public AddOrganizationCommandValidator(IUnitOfWork unitOfWork)
 	{       
         RuleFor(c => c.Name)
-            .NotEmpty()
+            .NotEmpty()           
             .WithMessage("{PropertyName} je zahtevan.");
+        
         RuleFor(c => c.Description)
-            .NotEmpty()
-            .WithMessage("{PropertyName} je zahtevan.");
-    }    
+            .NotEmpty()            
+            .WithMessage("{PropertyName} je zahtevan.");      
+
+        UnitOfWork = unitOfWork;
+    }   
+
+  
 }

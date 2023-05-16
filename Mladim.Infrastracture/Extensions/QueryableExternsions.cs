@@ -10,12 +10,8 @@ namespace Mladim.Infrastracture.Extensions;
 
 public static class QueryableExternsions
 {
-    public static IQueryable<T> AddIncludes<T>(this IQueryable<T> sequence, IEnumerable<Expression<Func<T, string>>> includes) where T : class
-    {      
-        if(includes != null)
-            foreach (var include in includes)
-                sequence.Include(include);
-
-        return sequence;
-    }
+    public static IQueryable<T> AddIncludes<T>(this IQueryable<T> sequence, IEnumerable<Expression<Func<T, string>>> includes) where T : class =>
+        includes == null ? sequence :
+            includes.Aggregate(sequence, (seq, include) => seq.Include(include));
+    
 }

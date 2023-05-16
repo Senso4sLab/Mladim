@@ -15,7 +15,7 @@ public class ActiveMemberConfigurations : IEntityTypeConfiguration<ActiveMember>
     public void Configure(EntityTypeBuilder<ActiveMember> builder)
     {
         builder.HasOne(m => m.Activity)
-            .WithMany(a => a.Members)
+            .WithMany(a => a.ActiveMember)
             .HasForeignKey(d => d.ActivityId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.ClientCascade);

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Mladim.Application.Features.Organizations;
 using Mladim.Application.Features.Organizations.Commands.AddOrganization;
 using Mladim.Application.Features.Organizations.Commands.UpdateOrganization;
 using Mladim.Domain.Models;

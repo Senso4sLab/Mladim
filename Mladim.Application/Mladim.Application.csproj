@@ -15,13 +15,14 @@
     <Folder Include="Features\Groups\Queries\" />
     <Folder Include="Features\Members\Commands\" />
     <Folder Include="Features\Members\Queries\" />
-    <Folder Include="Features\Organizations\Queries\" />
     <Folder Include="Features\Projects\Commands\" />
     <Folder Include="Features\Projects\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.5.2" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.2" />
     <PackageReference Include="MediatR" Version="12.0.1" />
   </ItemGroup>
 

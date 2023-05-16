@@ -1,10 +1,12 @@
-﻿using Mladim.Application.Contract;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Mladim.Application.Contract;
 using Mladim.Application.Contracts;
 using Mladim.Infrastracture.Persistance;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,12 +24,17 @@ public class UnitOfWork : IUnitOfWork
     }
     public IGenericRepository<T> GetRepository<T>() where T : class
     {
-        var type = typeof(T).Name;
+        var type = typeof(T).Name;       
 
-        if(!this.Repository.ContainsKey(type))
+        if (!this.Repository.ContainsKey(type))
         {
-            var repositoryType = typeof(GenericRepository<>);
-            var repositoryInstance = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(T)), this.Context);
+            //var repositoryType = typeof(GenericRepository<>);
+            //var repositoryInstance = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(T)), this.Context);
+
+            var typeName = $"{type}Repository";            
+
+            var repositoryInstance = Activator.CreateInstance(Assembly.GetExecutingAssembly().FullName!, typeName);
+            
             this.Repository.Add(type, repositoryInstance);
         }
 

@@ -1,4 +1,5 @@
 ﻿using Mladim.Domain.Enums;
+using Mladim.Domain.IdentityModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,7 @@ public class Organization
     public List<Member> Members { get; set; } = new();
     public List<Partner> Partners { get; set; } = new();
     public List<Project> Projects { get; set; } = new();
-    public List<Group> Groups { get; set; } = new();   
+    public List<Group> Groups { get; set; } = new();
+    public List<ApplicationUser> AppUsers { get; set; } = new();
 
 }

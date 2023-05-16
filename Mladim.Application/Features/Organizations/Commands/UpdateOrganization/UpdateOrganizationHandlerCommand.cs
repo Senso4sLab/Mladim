@@ -2,6 +2,7 @@
 using MediatR;
 using Mladim.Domain.Models;
 using Mladim.Application.Contracts;
+using Mladim.Application.Features.Organizations.Commands.AddOrganization;
 
 namespace Mladim.Application.Features.Organizations.Commands.UpdateOrganization;
 

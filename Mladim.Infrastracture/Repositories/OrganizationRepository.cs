@@ -1,4 +1,5 @@
-﻿using Mladim.Application.Contract;
+﻿using Microsoft.EntityFrameworkCore;
+using Mladim.Application.Contract;
 using Mladim.Domain.Models;
 using Mladim.Infrastracture.Persistance;
 using System;
@@ -15,4 +16,6 @@ public class OrganizationRepository : GenericRepository<Organization>
 	{
 
 	}
+
+   
 }
