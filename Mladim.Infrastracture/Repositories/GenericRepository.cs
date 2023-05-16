@@ -20,11 +20,24 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         return response.Entity;
     }
 
-    public bool Remove(T entity) =>
-        this.DbSet.Remove(entity).Entity != null;
+    public async Task AddAsync(IEnumerable<T> entities)
+    {
+        await DbSet.AddRangeAsync(entities);        
+    }
 
-    public void Remove(IEnumerable<T> entities) =>
+    public bool Remove(T entity)
+    {
+        this.DbSet.Entry(entity).State = EntityState.Unchanged;
+        return this.DbSet.Remove(entity).Entity != null;
+    }
+
+    public void Remove(IEnumerable<T> entities)
+    {
+        foreach (var entity in entities)
+            this.DbSet.Entry(entity).State = EntityState.Unchanged;
+
         this.DbSet.RemoveRange(entities);
+    }
 
     public T Update(T entity) =>
        this.DbSet.Update(entity).Entity;
@@ -38,4 +51,8 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         return await DbSet.AsQueryable<T>().AddIncludes(includes).FirstOrDefaultAsync(predicate);
     }
+
+    public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate) =>
+        await DbSet.AnyAsync(predicate);
+
 }

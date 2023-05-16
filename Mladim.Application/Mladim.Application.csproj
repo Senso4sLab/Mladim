@@ -7,19 +7,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Account\Commands\" />
-    <Folder Include="Features\Account\Queries\" />
-    <Folder Include="Features\Activity\Commands\" />
-    <Folder Include="Features\Activity\Queries\" />
-    <Folder Include="Features\Group\Commands\" />
-    <Folder Include="Features\Group\Queries\" />
-    <Folder Include="Features\Member\Commands\" />
-    <Folder Include="Features\Member\Queries\" />
-    <Folder Include="Features\Organization\Commands\" />
-    <Folder Include="Features\Organization\Queries\" />
-    <Folder Include="Features\Project\Commands\" />
-    <Folder Include="Features\Project\Queries\" />
-    <Folder Include="MappingProfiles\" />
+    <Folder Include="Features\Accounts\Commands\" />
+    <Folder Include="Features\Accounts\Queries\" />
+    <Folder Include="Features\Activities\Commands\" />
+    <Folder Include="Features\Activities\Queries\" />
+    <Folder Include="Features\Groups\Commands\" />
+    <Folder Include="Features\Groups\Queries\" />
+    <Folder Include="Features\Members\Commands\" />
+    <Folder Include="Features\Members\Queries\" />
+    <Folder Include="Features\Organizations\Queries\" />
+    <Folder Include="Features\Projects\Commands\" />
+    <Folder Include="Features\Projects\Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="MediatR" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mladim.Domain\Mladim.Domain.csproj" />
   </ItemGroup>
 
 </Project>
