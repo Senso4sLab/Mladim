@@ -1,0 +1,35 @@
+﻿using AutoMapper;
+using MediatR;
+using Mladim.Application.Contracts;
+using Mladim.Domain.Dtos;
+using Mladim.Domain.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Mladim.Application.Features.Members.Participants.Queries.GetParticipant;
+
+public class GetParticipantQueryHandler : IRequestHandler<GetParticipantQuery, ParticipantDto>
+{
+    public IUnitOfWork UnitOfWork { get; }
+    public IMapper Mapper { get; }
+    public GetParticipantQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+    {
+        UnitOfWork = unitOfWork;
+        Mapper = mapper;
+    }
+    
+
+    public async Task<ParticipantDto> Handle(GetParticipantQuery request, CancellationToken cancellationToken)
+    {
+        var participant = await this.UnitOfWork.GetRepository<Participant>()
+            .GetFirstOrDefaultAsync(sm => sm.Id == request.ParticipantId);
+
+        if (participant == null)
+            throw new Exception("");
+
+        return this.Mapper.Map<ParticipantDto>(participant);
+    }
+}

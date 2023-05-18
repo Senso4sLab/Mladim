@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Mladim.Application.Contracts;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
@@ -30,6 +31,8 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, Act
             throw new Exception();
 
         var activity = this.Mapper.Map<Activity>(request);
+
+        this.UnitOfWork.ConfigEntityState(activity.Partners, EntityState.Unchanged);
 
         project.Activities.Add(activity);
 

@@ -7,12 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Members\Commands\**" />
+    <Compile Remove="Features\Members\Queries\**" />
+    <EmbeddedResource Remove="Features\Members\Commands\**" />
+    <EmbeddedResource Remove="Features\Members\Queries\**" />
+    <None Remove="Features\Members\Commands\**" />
+    <None Remove="Features\Members\Queries\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Features\Accounts\Commands\" />
     <Folder Include="Features\Accounts\Queries\" />
     <Folder Include="Features\Groups\Commands\" />
     <Folder Include="Features\Groups\Queries\" />
-    <Folder Include="Features\Members\Commands\" />
-    <Folder Include="Features\Members\Queries\" />
+    <Folder Include="Features\Members\AnonymousParticipants\Commands\" />
+    <Folder Include="Features\Members\AnonymousParticipants\Queries\" />
+    <Folder Include="Features\Members\BaseMembers\Commands\AddMemberHandler\NewFolder\" />
+    <Folder Include="Features\Members\BaseMembers\Commands\UpdateMember\" />
+    <Folder Include="Features\Members\BaseMembers\Queries\GetMember\" />
+    <Folder Include="Features\Members\BaseMembers\Queries\GetMembers\" />
   </ItemGroup>
 
   <ItemGroup>

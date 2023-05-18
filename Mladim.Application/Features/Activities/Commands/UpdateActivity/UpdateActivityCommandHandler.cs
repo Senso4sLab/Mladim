@@ -18,14 +18,12 @@ namespace Mladim.Application.Features.Activities.Commands.UpdateActivity
         {
             Mapper = mapper;
             UnitOfWork = unitOfWork;
-        }
-
-        
+        }       
 
         public async Task<int> Handle(UpdateActivityCommand request, CancellationToken cancellationToken)
         {
             var activity = await this.UnitOfWork.ActivityRepository
-            .GetByIdAsync(request.Id, p => p.Partners, p => p.ActivityMembers, p => p.AnonymousParticipantGroups);
+                .GetByIdAsync(request.Id, p => p.Partners, p => p.ActivityMembers, p => p.AnonymousParticipantGroups);
 
             if (activity == null)
                 throw new Exception();

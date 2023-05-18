@@ -8,6 +8,7 @@ namespace Mladim.Domain.Dtos;
 
 public class StaffMemberDto : MemberDto
 {
+
     public string Email { get; set; }
     public bool IsActive { get; set; } = true;
     public bool IsRegistered { get; set; }   

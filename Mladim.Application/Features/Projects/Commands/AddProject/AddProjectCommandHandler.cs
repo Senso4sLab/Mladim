@@ -36,7 +36,7 @@ public class AddProjectCommandHandler : IRequestHandler<AddProjectCommand, Proje
             throw new Exception();
 
         this.UnitOfWork.ConfigEntityState(project.Partners, EntityState.Unchanged);
-        this.UnitOfWork.ConfigEntityState(project.ProjectMembers, EntityState.Unchanged);
+        //this.UnitOfWork.ConfigEntityState(project.ProjectMembers, EntityState.Unchanged);
 
         organization.Projects.Add(project); 
 

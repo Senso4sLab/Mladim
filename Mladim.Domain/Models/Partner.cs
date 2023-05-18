@@ -16,11 +16,8 @@ public class Partner
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
     public bool IsActive { get; set; } = true;
-
     public int? OrganizationId { get; set; }
     public Organization Organization { get; set; }
-
-    public List<ActivityDto> Activities { get; set; } = new();
-
+    public List<Activity > Activities { get; set; } = new();
     public List<Project> Projects { get; set; } = new();
 }

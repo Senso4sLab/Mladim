@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using Mladim.Infrastracture.Extensions;
 using Mladim.Application.Contract;
 using Microsoft.EntityFrameworkCore.Query;
+using Mladim.Domain.Models;
 
 namespace Mladim.Infrastracture.Repositories;
 
@@ -27,16 +28,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     }
 
     public virtual bool Remove(T entity)
-    {
-        this.DbSet.Entry(entity).State = EntityState.Unchanged;
+    {        
         return this.DbSet.Remove(entity).Entity != null;
     }
 
     public virtual void Remove(IEnumerable<T> entities)
-    {
-        foreach (var entity in entities)
-            this.DbSet.Entry(entity).State = EntityState.Unchanged;
-
+    { 
         this.DbSet.RemoveRange(entities);
     }
 
@@ -46,22 +43,22 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate) =>
         await DbSet.AnyAsync(predicate);
 
-    public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+    public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
     {
         var queryable = DbSet.AsQueryable<T>().Where(predicate);
-
-        if (include != null)
-            queryable = include(queryable);       
+      
+        if (includes != null)
+            queryable = includes.Aggregate(queryable, (sequence, element) => sequence.Include(element));   
 
         return await queryable.ToListAsync() ?? Enumerable.Empty<T>();       
     }
 
-    public async Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
+    public async Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
     {
         var queryable = DbSet.AsQueryable<T>();
-        
-        if (include != null)           
-            queryable = include(DbSet.AsQueryable<T>());
+
+        if (includes != null)
+            queryable = includes.Aggregate(queryable, (sequence, element) => sequence.Include(element));
 
         return await queryable.FirstOrDefaultAsync(predicate);
     }

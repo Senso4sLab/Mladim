@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,22 +20,37 @@ public class UnitOfWork : IUnitOfWork
     public IProjectRepository ProjectRepository =>
         projectRepository ??= new ProjectRepository(this.Context);
     public IActivityRepository ActivityRepository =>
-       activityRepository ??= new ActivityRepository(this.Context);    
+       activityRepository ??= new ActivityRepository(this.Context);
     public IMemberRepository MemberRepository =>
         memberRepository ??= new MemberRepository(this.Context);
     public IGroupRepository GroupRepository =>
        groupRepository ??= new GroupRepository(this.Context);
-
     public IAppUserRepository AppUserRepository =>
        appUserRepository ??= new AppUserRepository(this.Context);
-
-    
     private IOrganizationRepository organizationRepository;
     private IActivityRepository activityRepository;
     private IProjectRepository projectRepository;
     private IAppUserRepository appUserRepository;
     private IMemberRepository memberRepository;
     private IGroupRepository groupRepository;
+
+
+    private Hashtable repositories = new Hashtable();
+
+
+    public IGenericRepository<T> GetRepository<T>() where T : class
+    {
+        var name = typeof(T).Name;
+        
+        if(!repositories.ContainsKey(name))
+        {
+            var genericType = typeof(GenericRepository<>);
+            var instance = Activator.CreateInstance(genericType.MakeGenericType(typeof(T)), this.Context);
+            repositories.Add(name, instance);
+        }
+
+        return (IGenericRepository<T>) repositories[name];
+    }
 
     public UnitOfWork(ApplicationDbContext context)
     {

@@ -16,6 +16,7 @@ public interface IUnitOfWork : IDisposable
     IAppUserRepository AppUserRepository { get; }
     IMemberRepository MemberRepository { get; }
     IGroupRepository GroupRepository { get; }
+    IGenericRepository<T> GetRepository<T>() where T : class;
 
     void ConfigEntityState<T>(IEnumerable<T> entities, EntityState state);
     Task<int> SaveChangesAsync();
