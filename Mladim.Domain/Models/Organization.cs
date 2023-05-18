@@ -33,6 +33,6 @@ public class Organization
     public List<Partner> Partners { get; set; } = new();
     public List<Project> Projects { get; set; } = new();
     public List<Group> Groups { get; set; } = new();
-    public List<ApplicationUser> AppUsers { get; set; } = new();
+    public List<AppUser> AppUsers { get; set; } = new();
 
 }

@@ -15,7 +15,7 @@ public class AnonymousParticipants
     public int Number { get; set; }
 
     public int ActivityId { get; set; }
-    public Activity Activity { get; set; }
+    public ActivityDto Activity { get; set; }
 
     public override bool Equals(object? obj) =>
        obj is AnonymousParticipants ap ? this.Equals(ap) : false;

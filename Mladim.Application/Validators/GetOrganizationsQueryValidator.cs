@@ -27,6 +27,6 @@ public class GetOrganizationsQueryValidator : AbstractValidator<GetOrganizations
     }    
 
     private async Task<bool> ExistUserId(string appUserId, CancellationToken cancellationToken) =>	
-		await this.UnitOfWork.GetRepository<ApplicationUser>().AnyAsync(au => au.Id == appUserId);	
+		await this.UnitOfWork.AppUserRepository.AnyAsync(au => au.Id == appUserId);	
 	
 }

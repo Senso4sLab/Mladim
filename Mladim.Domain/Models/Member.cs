@@ -17,5 +17,10 @@ public class Member
     public int Year { get; set; }
     public int OrganizationId { get; set; }
     public Organization Organization { get; set; }
+
     public List<Group> Groups { get; set; } = new();
+
+    public List<MemberProject> MemberProjects { get; set; } = new();
+    public List<MemberActivity> MemberActivities { get; set; } = new();
 }
+

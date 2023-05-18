@@ -16,8 +16,7 @@ public class Project
     public DateTime End { get; set; }
 
     public List<Activity> Activities { get; set; } = new();
-
-    public List<ActiveMember> ActiveMembers { get; set; } = new();
+    public List<MemberProject> ProjectMembers { get; set; } = new();
 
     public List<Partner> Partners { get; set; } = new();
 

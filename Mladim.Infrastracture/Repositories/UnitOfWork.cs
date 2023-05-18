@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
 using Mladim.Application.Contract;
 using Mladim.Application.Contracts;
 using Mladim.Infrastracture.Persistance;
@@ -6,49 +6,52 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Mladim.Infrastracture.Repositories;
 
 public class UnitOfWork : IUnitOfWork
-{    
+{
     private ApplicationDbContext Context { get; }
-    private Hashtable Repository { get; }
+    public IOrganizationRepository OrganizationRepository =>
+        organizationRepository ??= new OrganizationRepository(this.Context);
+    public IProjectRepository ProjectRepository =>
+        projectRepository ??= new ProjectRepository(this.Context);
+    public IActivityRepository ActivityRepository =>
+       activityRepository ??= new ActivityRepository(this.Context);    
+    public IMemberRepository MemberRepository =>
+        memberRepository ??= new MemberRepository(this.Context);
+    public IGroupRepository GroupRepository =>
+       groupRepository ??= new GroupRepository(this.Context);
+
+    public IAppUserRepository AppUserRepository =>
+       appUserRepository ??= new AppUserRepository(this.Context);
+
+    
+    private IOrganizationRepository organizationRepository;
+    private IActivityRepository activityRepository;
+    private IProjectRepository projectRepository;
+    private IAppUserRepository appUserRepository;
+    private IMemberRepository memberRepository;
+    private IGroupRepository groupRepository;
 
     public UnitOfWork(ApplicationDbContext context)
     {
         this.Context = context; 
-        this.Repository = new Hashtable();
-    }
-    public IGenericRepository<T> GetRepository<T>() where T : class
+        
+    }    
+
+    public async Task<int> SaveChangesAsync() =>
+        await this.Context.SaveChangesAsync();
+
+    public void ConfigEntityState<T>(IEnumerable<T> entities, EntityState state)
     {
-        var type = typeof(T).Name;       
-
-        if (!this.Repository.ContainsKey(type))
-        {
-            //var repositoryType = typeof(GenericRepository<>);
-            //var repositoryInstance = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(T)), this.Context);
-
-            var typeName = $"{type}Repository";            
-
-            var repositoryInstance = Activator.CreateInstance(Assembly.GetExecutingAssembly().FullName!, typeName);
-            
-            this.Repository.Add(type, repositoryInstance);
-        }
-
-        return (IGenericRepository<T>) this.Repository[type]!;
-
+        foreach (var entity in entities)
+            this.Context.Entry(entity).State = state;
     }
 
-    public async Task<int> SaveChangesAsync()
-    {
-       return await this.Context.SaveChangesAsync(); 
-    }
-
-    public void Dispose()
-    {
+    public void Dispose() =>    
        this.Context.Dispose();  
-    }
+    
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Mladim.Application.Contracts;
+using Mladim.Domain.Dtos;
 using Mladim.Domain.IdentityModels;
 using Mladim.Domain.Models;
 using System;
@@ -23,10 +24,13 @@ public class GetOrganizationsHandlerQuery : IRequestHandler<GetOrganizationsQuer
 
     public async Task<IEnumerable<OrganizationDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
     {
-        var ress = await this.UnitOfWork.GetRepository<Organization>()
+        var organizations = await this.UnitOfWork.OrganizationRepository
             .GetAllAsync(o => o.AppUsers.Any(au => au.Id == request.AppUserId));
 
-        return this.Mapper.Map<IEnumerable<OrganizationDto>>(request);
+        if(organizations == null)
+            return Enumerable.Empty<OrganizationDto>();
+
+        return this.Mapper.Map<IEnumerable<OrganizationDto>>(organizations);
     }
         
 }

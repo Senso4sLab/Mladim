@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Mladim.Domain.IdentityModels;
 
-public class ApplicationUser : IdentityUser
+public class AppUser : IdentityUser
 {
     public string Name { get; set; }
     public string Surname { get; set; }

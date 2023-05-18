@@ -3,6 +3,7 @@ using MediatR;
 using Mladim.Domain.Models;
 using Mladim.Application.Contracts;
 using Mladim.Domain.IdentityModels;
+using Mladim.Domain.Dtos;
 
 namespace Mladim.Application.Features.Organizations.Commands.AddOrganization;
 
@@ -22,20 +23,20 @@ public class AddOrganizationHandlerCommand : IRequestHandler<AddOrganizationComm
 
         if (request.AppUserId != null)
         {
-            var appUser = await UnitOfWork.GetRepository<ApplicationUser>()
-                .GetFirstOrDefaultAsync(au => au.Id == request.AppUserId);
+            var applicationUser = await UnitOfWork.MemberRepository
+                .GetMemberById<AppUser>(request.AppUserId);               
 
-            if (appUser == null)
+            if (applicationUser == null)
                 throw new Exception("");
 
-            organization.AppUsers.Add(appUser);
+            organization.AppUsers.Add(applicationUser);
         }        
 
-        var response = await UnitOfWork.GetRepository<Organization>()
+        organization = await UnitOfWork.OrganizationRepository
                .AddAsync(organization);
 
         await this.UnitOfWork.SaveChangesAsync();
 
-        return Mapper.Map<OrganizationDto>(response);
+        return Mapper.Map<OrganizationDto>(organization);
     }
 }

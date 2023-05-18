@@ -19,8 +19,7 @@ public class UpdateOrganizationHandlerCommand : IRequestHandler<UpdateOrganizati
     {
         var organization = Mapper.Map<Organization>(request);
 
-        var response = UnitOfWork.GetRepository<Organization>()
-            .Update(organization);
+        this.UnitOfWork.OrganizationRepository.Update(organization);
 
         return await this.UnitOfWork.SaveChangesAsync();
     }

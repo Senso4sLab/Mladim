@@ -20,7 +20,7 @@ public class Partner
     public int? OrganizationId { get; set; }
     public Organization Organization { get; set; }
 
-    public List<Activity> Activities { get; set; } = new();
+    public List<ActivityDto> Activities { get; set; } = new();
 
     public List<Project> Projects { get; set; } = new();
 }

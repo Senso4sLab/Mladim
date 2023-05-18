@@ -2,7 +2,6 @@
 
 namespace Mladim.Application.Contract;
 
-public interface IGroupRepository : IGenericRepository<Group>
-{
+public interface IGroupRepository 
 
 }

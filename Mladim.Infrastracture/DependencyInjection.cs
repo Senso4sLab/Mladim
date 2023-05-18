@@ -26,7 +26,7 @@ public static class DependencyInjection
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         });
         
-        collection.AddIdentity<ApplicationUser, IdentityRole>(options =>
+        collection.AddIdentity<AppUser, IdentityRole>(options =>
         {
             options.User.RequireUniqueEmail = true;
         })

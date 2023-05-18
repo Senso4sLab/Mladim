@@ -2,7 +2,7 @@
 
 namespace Mladim.Application.Contract;
 
-public interface IMemberRepository : IGenericRepository<Member>
+public interface IMemberRepository
 {
-
+    ValueTask<TOut?> GetMemberById<TOut>(object id) where TOut : class;
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Mladim.WebAPI.Controllers;
@@ -7,4 +8,9 @@ namespace Mladim.WebAPI.Controllers;
 [ApiController]
 public class GroupController : ControllerBase
 {
+    private IMediator Mediator { get; }
+    public GroupController(IMediator mediator)
+    {
+        this.Mediator = mediator;
+    }
 }
