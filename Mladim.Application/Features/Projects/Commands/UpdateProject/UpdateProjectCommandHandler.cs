@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
     public async Task<int> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
     {
         var project = await this.UnitOfWork.ProjectRepository
-            .GetByIdAsync(request.Id, p => p.Partners, p => p.ProjectMembers);
+            .FirstOrDefaultAsync(p => p.Id == request.Id);
 
         if (project == null)
             throw new Exception();

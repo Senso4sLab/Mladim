@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Application.Features.Organizations.Queries.GetOrganizations;
 using Mladim.Domain.IdentityModels;
 using System;

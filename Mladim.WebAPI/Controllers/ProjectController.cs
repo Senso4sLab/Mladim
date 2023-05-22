@@ -39,7 +39,7 @@ public class ProjectController : ControllerBase
         return Ok(response);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{projectId}")]
     public async Task<ActionResult<bool>> RemoveAsync(int projectId)
     {
         var response = await this.Mediator.Send(new RemoveProjectCommand { ProjectId = projectId });
@@ -47,7 +47,7 @@ public class ProjectController : ControllerBase
     }
 
 
-    [HttpGet("{id}")]
+    [HttpGet("{projectId}")]
     public async Task<ActionResult<ProjectDto?>> GetAsync(int projectId)
     {
         var response = await this.Mediator.Send(new GetProjectQuery { ProjectId = projectId });
@@ -55,7 +55,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProjectDto>>> GetAllByOrganizationAsync([FromQuery]int organizationId)
+    public async Task<ActionResult<IEnumerable<ProjectDto>>> GetAllByOrganizationAsync([FromQuery] int organizationId)
     {
         var response = await this.Mediator.Send(new GetProjectsByOrganizationQuery { OrganizationId = organizationId });
         return Ok(response);

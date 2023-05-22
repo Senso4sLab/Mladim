@@ -3,75 +3,41 @@
   <Class Name="Mladim.Domain.Models.Activity">
     <Position X="25" Y="8.5" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAICAAAAACIgAAAAAAABCAQABAAAAAEAAAAAAAACAAA=</HashCode>
+      <HashCode>AAICAEAAACAoAAAAAAABCAQABCAAAAEAACAAAAAAAAA=</HashCode>
       <FileName>Models\Activity.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Project" />
     </ShowAsAssociation>
     <ShowAsCollectionAssociation>
-      <Property Name="ActivityMembers" />
-      <Property Name="AnonymousParticipantGroups" />
       <Property Name="Partners" />
+      <Property Name="Participants" />
     </ShowAsCollectionAssociation>
-  </Class>
-  <Class Name="Mladim.Domain.Models.AnonymousParticipants">
-    <Position X="29.5" Y="8.5" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAQCAAAAAAAAAECAgEAAAAAAAAAAAIAAAAAAAEAAAAA=</HashCode>
-      <FileName>Models\AnonymousParticipants.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Activity" />
-    </ShowAsAssociation>
   </Class>
   <Class Name="Mladim.Domain.Models.Group">
     <Position X="16.75" Y="2.75" Width="2" />
-    <AssociationLine Name="Organization" Type="Mladim.Domain.Models.Organization" FixedToPoint="true">
-      <Path>
-        <Point X="17.75" Y="4.623" />
-        <Point X="17.75" Y="6.75" />
-      </Path>
-    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAgAAAAEAAAAAQAAQAAAAAAAAAEAAAAIAA=</HashCode>
+      <HashCode>AAACAAAAAAAgAAAAEAAAAAQAAAAAAAgAAAAEAAAAAAA=</HashCode>
       <FileName>Models\Group.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Organization" />
-    </ShowAsAssociation>
-    <ShowAsCollectionAssociation>
-      <Property Name="Members" />
-    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Mladim.Domain.Models.StaffMember">
-    <Position X="13.5" Y="10" Width="1.5" />
-    <InheritanceLine Type="Mladim.Domain.Models.Member" FixedFromPoint="true">
-      <Path>
-        <Point X="13.438" Y="8.065" />
-        <Point X="13.438" Y="9.625" />
-        <Point X="14.25" Y="9.625" />
-        <Point X="14.25" Y="10" />
-      </Path>
-    </InheritanceLine>
+    <Position X="13.5" Y="10" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAACAAAAAAEAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAACAAAAAAMAAAAAAAAAAAAAAAAAEAAAAAgAA=</HashCode>
       <FileName>Models\StaffMember.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Mladim.Domain.Models.Project">
     <Position X="20.25" Y="8.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAICAAAAACAgAAAAAAAAAAQAAQBAAAEAAAAAAIAAIgA=</HashCode>
+      <HashCode>AAICAEAAACAgAAAAAAAAAAQAASAAAAEAAAAAAIAAIgA=</HashCode>
       <FileName>Models\Project.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Organization" />
-    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
-      <Property Name="Activities" />
-      <Property Name="ProjectMembers" />
       <Property Name="Partners" />
+      <Property Name="Activities" />
+      <Property Name="Staff" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Mladim.Domain.Models.Partner">
@@ -79,25 +45,14 @@
     <AssociationLine Name="Projects" Type="Mladim.Domain.Models.Project" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="22.688" Y="6.892" />
-        <Point X="22.688" Y="9.306" />
-        <Point X="21.75" Y="9.306" />
-      </Path>
-    </AssociationLine>
-    <AssociationLine Name="Organization" Type="Mladim.Domain.Models.Organization" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="22.25" Y="5.492" />
-        <Point X="20.167" Y="5.492" />
-        <Point X="20.167" Y="8.061" />
-        <Point X="18.75" Y="8.061" />
+        <Point X="22.688" Y="9.369" />
+        <Point X="21.75" Y="9.369" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAACAAAAACAgAAAAFAAAQAQAAQAAAAAAAAAAAIAAIwA=</HashCode>
+      <HashCode>AAACAAAAACAgAAAAFAAAQCQAAAAAAAAAAAAAAIAAAwA=</HashCode>
       <FileName>Models\Partner.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Organization" />
-    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="Activities" />
       <Property Name="Projects" />
@@ -105,123 +60,41 @@
   </Class>
   <Class Name="Mladim.Domain.Models.Participant">
     <Position X="11.5" Y="10" Width="1.5" />
-    <InheritanceLine Type="Mladim.Domain.Models.Member" FixedFromPoint="true">
-      <Path>
-        <Point X="13.438" Y="8.065" />
-        <Point X="13.438" Y="9.625" />
-        <Point X="12.25" Y="9.625" />
-        <Point X="12.25" Y="10" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAA=</HashCode>
       <FileName>Models\Participant.cs</FileName>
     </TypeIdentifier>
-  </Class>
-  <Class Name="Mladim.Domain.Models.Organization">
-    <Position X="17.25" Y="6.75" Width="1.5" />
-    <AssociationLine Name="Partners" Type="Mladim.Domain.Models.Partner" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="18.75" Y="7.377" />
-        <Point X="18.874" Y="7.491" />
-        <Point X="19.483" Y="7.491" />
-        <Point X="19.483" Y="5.007" />
-        <Point X="22.25" Y="5.007" />
-      </Path>
-    </AssociationLine>
-    <TypeIdentifier>
-      <HashCode>AgQCAUAEACAgAAAAAgAQQAQAACAAAEECAAAEAAAAgwA=</HashCode>
-      <FileName>Models\Organization.cs</FileName>
-    </TypeIdentifier>
     <ShowAsCollectionAssociation>
-      <Property Name="Projects" />
-      <Property Name="Partners" />
-      <Property Name="Members" />
-      <Property Name="Groups" />
+      <Property Name="Activities" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Mladim.Domain.Models.Member">
     <Position X="12.5" Y="6" Width="2" />
-    <AssociationLine Name="MemberProjects" Type="Mladim.Domain.Models.MemberProject" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="14.5" Y="7.514" />
-        <Point X="15.779" Y="7.514" />
-        <Point X="15.779" Y="13.09" />
-        <Point X="17.25" Y="13.09" />
-      </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.134" Y="0.18" />
-      </MemberNameLabel>
-    </AssociationLine>
-    <AssociationLine Name="MemberActivities" Type="Mladim.Domain.Models.MemberActivity" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="14.5" Y="7.738" />
-        <Point X="15.373" Y="7.738" />
-        <Point X="15.373" Y="15.59" />
-        <Point X="17.25" Y="15.59" />
-      </Path>
-    </AssociationLine>
-    <AssociationLine Name="Organization" Type="Mladim.Domain.Models.Organization" FixedToPoint="true">
-      <Path>
-        <Point X="14.5" Y="7.312" />
-        <Point X="17.25" Y="7.312" />
-      </Path>
-    </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AACCAEAABAAAAACAAAAAAAQABQAAAABAAAAAAAAAIAA=</HashCode>
+      <HashCode>AAACAAAABAAAAACAAAAAAAQABAAAAAAAAAAAAAACAAA=</HashCode>
       <FileName>Models\Member.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Organization" />
-    </ShowAsAssociation>
-    <ShowAsCollectionAssociation>
-      <Property Name="MemberProjects" />
-      <Property Name="MemberActivities" />
-      <Property Name="Groups" />
-    </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="Mladim.Domain.Models.MemberProject">
-    <Position X="17.25" Y="12.25" Width="1.5" />
-    <AssociationLine Name="Member" Type="Mladim.Domain.Models.Member" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="17.25" Y="12.639" />
-        <Point X="15.862" Y="12.639" Type="JumpStart" />
-        <Point X="15.696" Y="12.639" Type="JumpEnd" />
-        <Point X="15.456" Y="12.639" Type="JumpStart" />
-        <Point X="15.29" Y="12.639" Type="JumpEnd" />
-        <Point X="10.764" Y="12.639" />
-        <Point X="10.764" Y="7.054" />
-        <Point X="12.5" Y="7.054" />
-      </Path>
-    </AssociationLine>
+  <Class Name="Mladim.Domain.Models.StaffMemberProject">
+    <Position X="16.5" Y="12.25" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAAAAAGQAABAAIAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\MemberProject.cs</FileName>
+      <HashCode>AAEAEAAAAAAAAAAAAAAAGAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\StaffMemberProject.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Project" />
-      <Property Name="Member" />
+      <Property Name="StaffMember" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="Mladim.Domain.Models.MemberActivity">
-    <Position X="17.25" Y="14.75" Width="1.5" />
-    <AssociationLine Name="Member" Type="Mladim.Domain.Models.Member" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="17.25" Y="15.139" />
-        <Point X="15.456" Y="15.139" Type="JumpStart" />
-        <Point X="15.29" Y="15.139" Type="JumpEnd" />
-        <Point X="10.796" Y="15.139" />
-        <Point X="10.796" Y="7.054" />
-        <Point X="12.5" Y="7.054" />
-      </Path>
-    </AssociationLine>
+  <Class Name="Mladim.Domain.Models.StaffMemberActivity">
+    <Position X="16.5" Y="14.75" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAEAAAAAAEQAAAAAIAAAAAAAAAEAAAAA=</HashCode>
-      <FileName>Models\MemberActivity.cs</FileName>
+      <HashCode>AAEAEAAAAAAAAEAAAAAAEAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Models\StaffMemberActivity.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Activity" />
-      <Property Name="Member" />
+      <Property Name="StaffMember" />
     </ShowAsAssociation>
   </Class>
   <Font Name="Segoe UI" Size="9" />

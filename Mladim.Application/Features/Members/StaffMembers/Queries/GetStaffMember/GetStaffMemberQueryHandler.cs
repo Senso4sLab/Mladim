@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
@@ -23,8 +23,8 @@ public class GetStaffMemberQueryHandler : IRequestHandler<GetStaffMemberQuery, S
 
     public async Task<StaffMemberDto> Handle(GetStaffMemberQuery request, CancellationToken cancellationToken)
     {
-        var staffMember = await this.UnitOfWork.GetRepository<StaffMember>()
-            .GetFirstOrDefaultAsync(sm => sm.Id == request.StaffMemberId);
+        var staffMember = await this.UnitOfWork.StaffMemberRepository
+            .FirstOrDefaultAsync(sm => sm.Id == request.StaffMemberId);
 
         if (staffMember == null)
             throw new Exception("");

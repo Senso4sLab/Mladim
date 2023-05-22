@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
@@ -25,7 +25,8 @@ public class AddProjectCommandHandler : IRequestHandler<AddProjectCommand, Proje
 
     public async Task<ProjectDto> Handle(AddProjectCommand request, CancellationToken cancellationToken)
     {
-        var organization = await this.UnitOfWork.OrganizationRepository.GetByIdAsync(request.OrganizationId);
+        var organization = await this.UnitOfWork.OrganizationRepository
+            .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
 
         if (organization == null)
             throw new Exception();
@@ -36,7 +37,8 @@ public class AddProjectCommandHandler : IRequestHandler<AddProjectCommand, Proje
             throw new Exception();
 
         this.UnitOfWork.ConfigEntityState(project.Partners, EntityState.Unchanged);
-        //this.UnitOfWork.ConfigEntityState(project.ProjectMembers, EntityState.Unchanged);
+        this.UnitOfWork.ConfigEntityState(project.Groups, EntityState.Unchanged);
+        this.UnitOfWork.ConfigEntityState(project.Staff.Select(sp => sp.StaffMember), EntityState.Unchanged);
 
         organization.Projects.Add(project); 
 

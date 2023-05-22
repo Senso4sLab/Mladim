@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
@@ -26,7 +26,7 @@ public class AddPartnerCommandHandler : IRequestHandler<AddPartnerCommand, Partn
     {
         var partner = this.Mapper.Map<Partner>(request);
 
-        await this.UnitOfWork.GetRepository<Partner>().AddAsync(partner);
+        await this.UnitOfWork.PartnerRepository.AddAsync(partner);
 
         await this.UnitOfWork.SaveChangesAsync();
 

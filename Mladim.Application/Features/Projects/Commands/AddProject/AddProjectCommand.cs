@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ public class AddProjectCommand : IRequest<ProjectDto>
     public string WebpageUrl { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
-    public List<MemberProjectDto> ProjectMembers { get; set; } = new();
+    public List<StaffMemberProjectDto> Staff { get; set; } = new();
+    public List<ProjectGroupDto> Groups { get; set; } = new();
     public List<PartnerDto> Partners { get; set; } = new();
 }

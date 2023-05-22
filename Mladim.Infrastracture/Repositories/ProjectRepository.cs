@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mladim.Application.Contract;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Models;
 using Mladim.Infrastracture.Persistance;
 using System;
@@ -12,46 +12,23 @@ using System.Threading.Tasks;
 
 namespace Mladim.Infrastracture.Repositories;
 
-public class ProjectRepository : IProjectRepository
+public class ProjectRepository : GenericRepository<Project>,  IProjectRepository
 {
     private ApplicationDbContext Context { get; }
    
-    public ProjectRepository(ApplicationDbContext context)
+    public ProjectRepository(ApplicationDbContext context) : base(context)
 	{
-        Context = context;      
-    }   
-   
-
-    public async Task<Project?> AddAsync(Project entity)
-    {
-        var project = await this.Context.Projects.AddAsync(entity);
-        return project?.Entity;
+       
     }
 
-    public async Task<Project?> GetByIdAsync(int id, params Expression<Func<Project, object>>[] includes)
+    public override async Task<Project?> FirstOrDefaultAsync(Expression<Func<Project, bool>> predicate)
     {
-        var queryable = Context.Projects.AsQueryable();
-
-        if (includes != null)
-            queryable = includes.Aggregate(queryable, (first, other) => first.Include(other));
-
-        return await queryable.FirstOrDefaultAsync(x => x.Id == id);
+        return await this.Context.Projects
+            .Include(p => p.Staff)
+                .ThenInclude(sp => sp.StaffMember)
+            .Include(p => p.Partners)
+            .Include(p => p.Groups)
+                .ThenInclude(g => g.Members)
+            .FirstOrDefaultAsync(predicate);       
     }
-
-
-    public async Task<IEnumerable<Project>> GetAllAsync(Expression<Func<Project, bool>> predicate)
-    {
-        return await Context.Projects.Where(predicate).AsNoTracking().ToListAsync();
-    }
-
-    public void Remove(Project Project) =>
-        this.Context.Projects.Remove(Project);
-
-    public Task<bool> AnyAsync(Expression<Func<Project, bool>> predicate) =>
-        this.Context.Projects.AnyAsync(predicate);
-
-    public void Update(Project Project) =>
-        this.Context.Projects.Update(Project);
-
-
 }

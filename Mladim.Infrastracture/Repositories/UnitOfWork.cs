@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mladim.Application.Contract;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Infrastracture.Persistance;
 using System;
 using System.Collections;
@@ -21,36 +20,44 @@ public class UnitOfWork : IUnitOfWork
         projectRepository ??= new ProjectRepository(this.Context);
     public IActivityRepository ActivityRepository =>
        activityRepository ??= new ActivityRepository(this.Context);
-    public IMemberRepository MemberRepository =>
-        memberRepository ??= new MemberRepository(this.Context);
+    public IStaffMemberRepository StaffMemberRepository =>
+        memberRepository ??= new StaffMemberRepository(this.Context);
     public IGroupRepository GroupRepository =>
        groupRepository ??= new GroupRepository(this.Context);
     public IAppUserRepository AppUserRepository =>
        appUserRepository ??= new AppUserRepository(this.Context);
+
+    public IPartnerRepository PartnerRepository => 
+        partnerRepository ??= new PartnerRepository(this.Context);
+    public IParticipantRepository ParticipantRepository =>
+        participantRepository ??= new ParticipantRepository(this.Context);
+
     private IOrganizationRepository organizationRepository;
     private IActivityRepository activityRepository;
     private IProjectRepository projectRepository;
     private IAppUserRepository appUserRepository;
-    private IMemberRepository memberRepository;
+    private IStaffMemberRepository memberRepository;
     private IGroupRepository groupRepository;
+    private IParticipantRepository participantRepository;
+    private IPartnerRepository partnerRepository;
 
 
-    private Hashtable repositories = new Hashtable();
+    //private Hashtable repositories = new Hashtable();
 
 
-    public IGenericRepository<T> GetRepository<T>() where T : class
-    {
-        var name = typeof(T).Name;
+    //public IGenericRepository<T> GetRepository<T>() where T : class
+    //{
+    //    var name = typeof(T).Name;
         
-        if(!repositories.ContainsKey(name))
-        {
-            var genericType = typeof(GenericRepository<>);
-            var instance = Activator.CreateInstance(genericType.MakeGenericType(typeof(T)), this.Context);
-            repositories.Add(name, instance);
-        }
+    //    if(!repositories.ContainsKey(name))
+    //    {
+    //        var genericType = typeof(GenericRepository<>);
+    //        var instance = Activator.CreateInstance(genericType.MakeGenericType(typeof(T)), this.Context);
+    //        repositories.Add(name, instance);
+    //    }
 
-        return (IGenericRepository<T>) repositories[name];
-    }
+    //    return (IGenericRepository<T>) repositories[name]!;
+    //}
 
     public UnitOfWork(ApplicationDbContext context)
     {

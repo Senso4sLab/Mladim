@@ -1,4 +1,5 @@
 ﻿using Mladim.Domain.Enums;
+using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,9 @@ public class ActivityDto
     public DateTime End { get; set; }
     public ActivityTypes ActivityTypes { get; set; }
     public List<PartnerDto> Partners { get; set; } = new();
-    public List<MemberActivityDto> ActivityMembers { get; set; } = new();
-    public List<AnonymousParticipantsDto> AnonymousParticipantGroups { get; set; } = new();  
+    public List<ActivityGroupDto> Groups { get; set; } = new(); 
+    public List<ParticipantDto> Participants { get; set; } = new();
+    public List<StaffMemberActivityDto> Staff { get; set; } = new();
+    public List<AnonymousParticipantActivityDto> AnonymousParticipants { get; set; } = new();  
   
 }

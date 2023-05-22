@@ -14,13 +14,16 @@ public class Activity
     public string Description { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
-    //public List<ActiveMember> ActiveMember { get; set; } = new();
 
+    public List<StaffMemberActivity> Staff { get; set; } = new();
+    
+    public List<ActivityGroup> Groups { get; set; } = new();
 
-    public List<MemberActivity> ActivityMembers { get; set; } = new();
-    public List<AnonymousParticipants> AnonymousParticipantGroups { get; set; } = new();
+    public List<AnonymousParticipantActivity> AnonymousParticipants { get; set; } = new();
 
     public List<Partner> Partners { get; set; } = new();
+
+    public List<Participant> Participants { get; set; } = new();
 
     public ActivityTypes ActivityTypes { get; set; }
     public int ProjectId { get; set; }

@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,8 @@ public class GetProjectsByOrganizationQueryHandler : IRequestHandler<GetProjects
 
     public async Task<IEnumerable<ProjectDto>> Handle(GetProjectsByOrganizationQuery request, CancellationToken cancellationToken)
     {
-        var projects =  await this.UnitOfWork.ProjectRepository.GetAllAsync(p => p.OrganizationId == request.OrganizationId);
+        var projects =  await this.UnitOfWork.ProjectRepository
+            .GetAllAsync(p => p.OrganizationId == request.OrganizationId);
         return this.Mapper.Map<IEnumerable<ProjectDto>>(projects);
     }
 }

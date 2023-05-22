@@ -19,4 +19,8 @@ public class OrganizationDto
     public OrganizationStatus Status { get; set; }
     public OrganizationFields Fields { get; set; }
     public OrganizationRegions Regions { get; set; }
+
+    public List<PartnerDto> Partners { get; set; } = new();
+    public List<MemberDto> Members { get; set; } = new();
+    public List<GroupDto> Groups { get; set; } = new();
 }

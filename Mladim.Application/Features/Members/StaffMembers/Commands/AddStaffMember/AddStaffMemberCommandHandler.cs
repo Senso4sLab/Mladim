@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
@@ -29,7 +29,7 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
     {
         var staffMember = this.Mapper.Map<StaffMember>(request);
 
-        await this.UnitOfWork.GetRepository<StaffMember>().AddAsync(staffMember);
+        await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);
 
         await this.UnitOfWork.SaveChangesAsync();
 

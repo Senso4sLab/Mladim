@@ -1,20 +1,21 @@
-﻿using Mladim.Application.Contract;
+﻿using Mladim.Application.Contracts.Persistence;
+using Mladim.Domain.Models;
 using Mladim.Infrastracture.Persistance;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
+
 using System.Threading.Tasks;
 
 namespace Mladim.Infrastracture.Repositories;
 
-public class GroupRepository :IGroupRepository
+public class GroupRepository : GenericRepository<Group> , IGroupRepository
 {
     private ApplicationDbContext Context { get; }
-    public GroupRepository(ApplicationDbContext context) 
+    public GroupRepository(ApplicationDbContext context) : base(context)
     {
-        Context = context;
+       
     }
 
   

@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ public class GetActivityQueryHandler : IRequestHandler<GetActivityQuery, Activit
     public async Task<ActivityDto> Handle(GetActivityQuery request, CancellationToken cancellationToken)
     {
         var activity = await this.UnitOfWork.ActivityRepository
-            .GetByIdAsync(request.ActivityId, p => p.ActivityMembers, p => p.Partners, p => p.AnonymousParticipantGroups);
+            .FirstOrDefaultAsync(a => a.Id == request.ActivityId);
 
         if (activity == null)
             throw new Exception();

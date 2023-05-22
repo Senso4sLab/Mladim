@@ -1,14 +1,9 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mladim.Application.Features.Members.Participants.Commands.AddParticipant;
 using Mladim.Application.Features.Members.Participants.Commands.UpdateParticipant;
 using Mladim.Application.Features.Members.Participants.Queries.GetParticipant;
 using Mladim.Application.Features.Members.Participants.Queries.GetParticipants;
-using Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
-using Mladim.Application.Features.Members.StaffMembers.Commands.UpdateStaffMember;
-using Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMember;
-using Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMembers;
 using Mladim.Domain.Dtos;
 
 namespace Mladim.WebAPI.Controllers
@@ -46,7 +41,7 @@ namespace Mladim.WebAPI.Controllers
         }
 
 
-        [HttpGet("/{memId}")]
+        [HttpGet("{memId}")]
         public async Task<ActionResult<ParticipantDto?>> GetAsync(int memId)
         {
             var response = await this.Mediator.Send(new GetParticipantQuery { ParticipantId = memId });

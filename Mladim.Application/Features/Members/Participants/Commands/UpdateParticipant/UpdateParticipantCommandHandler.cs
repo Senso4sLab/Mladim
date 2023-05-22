@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ public class UpdateParticipantCommandHandler : IRequestHandler<UpdateParticipant
     public async Task<int> Handle(UpdateParticipantCommand request, CancellationToken cancellationToken)
     {
         var participant = this.Mapper.Map<Participant>(request);
-        this.UnitOfWork.GetRepository<Participant>().Update(participant);
+        this.UnitOfWork.ParticipantRepository.Update(participant);
 
         return await this.UnitOfWork.SaveChangesAsync();
     }

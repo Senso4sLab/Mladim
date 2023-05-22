@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Mladim.Domain.Dtos;
 using Mladim.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mladim.Application.Features.Organizations.Commands.AddOrganization;
+namespace Mladim.Application.Features.Organizations.Commands.UpdateOrganization;
 
 public class UpdateOrganizationCommand : IRequest<int>
 {
@@ -25,4 +26,6 @@ public class UpdateOrganizationCommand : IRequest<int>
     public OrganizationStatus Status { get; set; }
     public OrganizationFields Fields { get; set; }
     public OrganizationRegions Regions { get; set; }
+
+    
 }

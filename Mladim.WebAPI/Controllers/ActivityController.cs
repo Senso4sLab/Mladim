@@ -33,15 +33,15 @@ public class ActivityController : ControllerBase
         return Ok(response);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<ActionResult<bool>> RemoveAsync(int activity)
+    [HttpDelete("{activityId}")]
+    public async Task<ActionResult<bool>> RemoveAsync(int activityId)
     {
-        var response = await this.Mediator.Send(new RemoveActivityCommand { ActivityId = activity });
+        var response = await this.Mediator.Send(new RemoveActivityCommand { ActivityId = activityId });
         return Ok(response);
     }
 
 
-    [HttpGet("{id}")]
+    [HttpGet("{activityId}")]
     public async Task<ActionResult<ActivityDto?>> GetAsync(int activityId)
     {
         var response = await this.Mediator.Send(new GetActivityQuery { ActivityId = activityId });

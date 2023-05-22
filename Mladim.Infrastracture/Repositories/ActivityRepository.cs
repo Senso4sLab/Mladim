@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mladim.Application.Contract;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Models;
 using Mladim.Infrastracture.Persistance;
 using System;
@@ -11,46 +11,28 @@ using System.Threading.Tasks;
 
 namespace Mladim.Infrastracture.Repositories;
 
-public class ActivityRepository : IActivityRepository
+public class ActivityRepository : GenericRepository<Activity>, IActivityRepository
 {
     private ApplicationDbContext Context { get; }
 
-    public ActivityRepository(ApplicationDbContext context)
+    public ActivityRepository(ApplicationDbContext context) : base(context)
     {
-        Context = context;
+       
     }
 
-
-    public async Task<Activity?> AddAsync(Activity entity)
+    public async override Task<Activity?> FirstOrDefaultAsync(Expression<Func<Activity, bool>> predicate)
     {
-        var Activity = await this.Context.Activities.AddAsync(entity);
-        return Activity?.Entity;
+       return await this.Context.Activities
+            .Include(a => a.Groups)
+                .ThenInclude(ag => ag.Members)
+            .Include(a => a.AnonymousParticipants)
+                .ThenInclude(ap => ap.AnonymousParticipant)
+            .Include(a => a.Participants)
+            .Include(a => a.Partners)
+            .Include(a => a.Staff)
+                .ThenInclude(sa => sa.StaffMember)            
+            .FirstOrDefaultAsync(predicate);
     }
-
-    public async Task<Activity?> GetByIdAsync(int id, params Expression<Func<Activity, object>>[] includes)
-    {
-        var queryable = Context.Activities.AsQueryable();
-
-        if (includes != null)
-            queryable = includes.Aggregate(queryable, (first, other) => first.Include(other));
-
-        return await queryable.FirstOrDefaultAsync(x => x.Id == id);
-    }
-
-
-    public async Task<IEnumerable<Activity>> GetAllAsync(Expression<Func<Activity, bool>> predicate)
-    {
-        return await Context.Activities.Where(predicate).AsNoTracking().ToListAsync();
-    }
-
-    public void Remove(Activity Activity) =>
-        this.Context.Activities.Remove(Activity);
-
-    public Task<bool> AnyAsync(Expression<Func<Activity, bool>> predicate) =>
-        this.Context.Activities.AnyAsync(predicate);
-
-    public void Update(Activity Activity) =>
-        this.Context.Activities.Update(Activity);
 
 }
 

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
@@ -27,7 +27,7 @@ public class AddParticipantCommandHandler : IRequestHandler<AddParticipantComman
     {
         var participant = this.Mapper.Map<Participant>(request);
 
-        await this.UnitOfWork.GetRepository<Participant>().AddAsync(participant);
+        await this.UnitOfWork.ParticipantRepository.AddAsync(participant);
 
         await this.UnitOfWork.SaveChangesAsync();
 

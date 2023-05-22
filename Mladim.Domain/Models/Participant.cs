@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 namespace Mladim.Domain.Models;
 
 public class Participant : Member
-{   
-    public AgeGroups AgeGroup { get; set; }
+{
+  
+    public AgeGroups AgeGroup { get; set; }   
+
+    public List<Activity> Activities { get; set; } = new ();
 }

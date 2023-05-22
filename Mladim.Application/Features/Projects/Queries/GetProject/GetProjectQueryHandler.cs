@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +24,8 @@ public class GetProjectQueryHandler : IRequestHandler<GetProjectQuery, ProjectDt
 
     public async Task<ProjectDto> Handle(GetProjectQuery request, CancellationToken cancellationToken)
     {
-       var project= await this.UnitOfWork.ProjectRepository
-            .GetByIdAsync(request.ProjectId, p => p.ProjectMembers, p => p.Partners);
+        var project = await this.UnitOfWork.ProjectRepository
+                .FirstOrDefaultAsync(p => p.Id == request.ProjectId);
 
         if (project == null)
             throw new Exception();

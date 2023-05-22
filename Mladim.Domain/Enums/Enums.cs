@@ -188,5 +188,13 @@ public enum Gender
     Male = 1,
     [Display(Name = "Ženska")]
     Female = 2,
+    [Display(Name ="Drugo")]
+    Other = 3,
+};
 
-}
+[Flags]
+public enum GroupType
+{
+    StaffGroup = 1,
+    ParticipantGroup = 2,
+};

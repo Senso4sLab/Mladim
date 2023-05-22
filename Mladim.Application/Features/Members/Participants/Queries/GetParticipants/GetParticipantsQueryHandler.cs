@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
@@ -29,15 +29,15 @@ public class GetParticipantsQueryHandler : IRequestHandler<GetParticipantsQuery,
         Expression<Func<Participant, bool>> predicate = null;
 
         if (request.ActivityId != null)
-            predicate = sm => sm.MemberActivities.Any(mp => mp.ActivityId == request.ActivityId);      
+            predicate = sm => sm.Activities.Any(a => a.Id == request.ActivityId);
         else if (request.OrganizationId != null)
-            predicate = sm => sm.OrganizationId == request.OrganizationId;
+            predicate = sm => sm.OrganizationMembers.Any(om => om.OrganizationId == request.OrganizationId);
 
         if (predicate == null)
             return Enumerable.Empty<ParticipantDto>();
 
         var participant = await this.UnitOfWork
-                .GetRepository<Participant>().GetAllAsync(predicate);
+                .ParticipantRepository.GetAllAsync(predicate);
 
         return this.Mapper.Map<IEnumerable<ParticipantDto>>(participant);
     }

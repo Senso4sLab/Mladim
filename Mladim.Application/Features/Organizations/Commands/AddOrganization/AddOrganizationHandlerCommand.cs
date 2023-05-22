@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
 using Mladim.Domain.Models;
-using Mladim.Application.Contracts;
 using Mladim.Domain.IdentityModels;
 using Mladim.Domain.Dtos;
+using Mladim.Application.Contracts.Persistence;
 
 namespace Mladim.Application.Features.Organizations.Commands.AddOrganization;
 
@@ -23,13 +23,12 @@ public class AddOrganizationHandlerCommand : IRequestHandler<AddOrganizationComm
 
         if (request.AppUserId != null)
         {
-            var applicationUser = await UnitOfWork.MemberRepository
-                .GetMemberById<AppUser>(request.AppUserId);               
+            var appUser = await UnitOfWork.AppUserRepository.FirstOrDefaultAsync(ap => ap.Id == request.AppUserId);                            
 
-            if (applicationUser == null)
+            if (appUser == null)
                 throw new Exception("");
 
-            organization.AppUsers.Add(applicationUser);
+            organization.AppUsers.Add(appUser);
         }        
 
         organization = await UnitOfWork.OrganizationRepository

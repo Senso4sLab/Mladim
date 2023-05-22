@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
@@ -27,19 +27,19 @@ public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery,
     public async Task<IEnumerable<StaffMemberDto>> Handle(GetStaffMembersQuery request, CancellationToken cancellationToken)
     {
         Expression<Func<StaffMember, bool>> predicate = null;
-       
-        if (request.ActivityId != null)        
-            predicate = sm => sm.MemberActivities.Any(mp => mp.ActivityId == request.ActivityId);        
-        else if(request.ProjectId != null)       
-            predicate = sm => sm.MemberProjects.Any(mp => mp.ProjectId == request.ProjectId);            
-        else if(request.OrganizationId != null)        
-            predicate = sm => sm.OrganizationId == request.OrganizationId;        
+
+        if (request.ActivityId != null)
+            predicate = sm => sm.StaffActivities.Any(mp => mp.ActivityId == request.ActivityId);
+        else if (request.ProjectId != null)
+            predicate = sm => sm.StaffProjects.Any(mp => mp.ProjectId == request.ProjectId);
+        else if (request.OrganizationId != null)
+            predicate = sm => sm.OrganizationMembers.Any(om => om.OrganizationId == request.OrganizationId);        
         
         if(predicate == null)
             return Enumerable.Empty<StaffMemberDto>();
 
         var staff = await this.UnitOfWork
-                .GetRepository<StaffMember>().GetAllAsync(predicate);
+                .StaffMemberRepository.GetAllAsync(predicate);
 
         return this.Mapper.Map<IEnumerable<StaffMemberDto>>(staff);
     }

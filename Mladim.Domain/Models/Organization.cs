@@ -13,9 +13,7 @@ public class Organization
     public int? Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-
     public string Address { get; set; }
-
     public string PhoneNumber { get; set; }
     public string Email { get; set; }
     public string WebpageUrl { get; set; }
@@ -29,10 +27,12 @@ public class Organization
     public OrganizationFields Fields { get; set; }
     public OrganizationRegions Regions { get; set; }
     
-    public List<Member> Members { get; set; } = new();
-    public List<Partner> Partners { get; set; } = new();
-    public List<Project> Projects { get; set; } = new();
-    public List<Group> Groups { get; set; } = new();
+    
+    public List<OrganizationPartner> Partners { get; set; } = new();
+    public List<OrganizationMember> Members { get; set; } = new();
+    public List<OrganizationGroup> Groups { get; set; } = new();
+
+    public List<Project> Projects { get; set; } = new();  
     public List<AppUser> AppUsers { get; set; } = new();
 
 }

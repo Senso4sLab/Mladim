@@ -13,10 +13,14 @@ public class Project
     public string Description { get; set; }
     public string WebpageUrl { get; set; }
     public DateTime Start { get; set; }
-    public DateTime End { get; set; }
+    public DateTime End { get; set; }    
 
     public List<Activity> Activities { get; set; } = new();
-    public List<MemberProject> ProjectMembers { get; set; } = new();
+
+    public List<StaffMemberProject> Staff { get; set; } = new();
+    
+
+    public List<ProjectGroup> Groups { get; set; } = new();
 
     public List<Partner> Partners { get; set; } = new();
 

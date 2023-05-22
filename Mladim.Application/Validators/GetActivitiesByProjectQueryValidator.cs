@@ -1,8 +1,9 @@
 ﻿using FluentValidation;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Application.Features.Activities.Queries.GetActivities;
 using Mladim.Application.Features.Organizations.Queries.GetOrganizations;
 using Mladim.Domain.IdentityModels;
+using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Application.Features.Projects.Queries.GetProjects;
+using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

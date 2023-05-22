@@ -6,6 +6,7 @@ using Mladim.Application.Features.Organizations;
 using Mladim.Application.Features.Organizations.Commands.AddOrganization;
 using Mladim.Application.Features.Organizations.Commands.DeleteOrganization;
 using Mladim.Application.Features.Organizations.Commands.UpdateOrganization;
+using Mladim.Application.Features.Organizations.Commands.UserGetOrganization;
 using Mladim.Application.Features.Organizations.Queries.GetOrganization;
 using Mladim.Application.Features.Organizations.Queries.GetOrganizations;
 using Mladim.Domain.Dtos;
@@ -22,12 +23,15 @@ public class OrganizationController : ControllerBase
         this.Mediator = mediator;
     }
 
-    [HttpPost]    
+    [HttpPost]
     public async Task<ActionResult<OrganizationDto?>> AddAsync(AddOrganizationCommand request)
     {
         var response = await this.Mediator.Send(request);
         return Ok(response);
     }
+
+    
+
 
     [HttpPut]
     public async Task<ActionResult<int>> UpdateAsync(UpdateOrganizationCommand request)
@@ -36,27 +40,33 @@ public class OrganizationController : ControllerBase
         return Ok(response);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{orgId}")]
     public async Task<ActionResult<bool>> RemoveAsync(int orgId)
     {
-        var response = await this.Mediator.Send(new RemoveOrganizationCommand { OrganizationId = orgId});
+        var response = await this.Mediator.Send(new RemoveOrganizationCommand { OrganizationId = orgId });
         return Ok(response);
     }
 
-    [HttpGet("{id:int}")]
+    [HttpGet("{ordId}")]
     public async Task<ActionResult<OrganizationDto?>> GetAsync(int orgId)
     {
         var response = await this.Mediator.Send(new GetOrganizationQuery { OrganizationId = orgId });
         return Ok(response);
     }
 
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<OrganizationDto>>> GetAllAsync([FromQuery] string userId)
+    [HttpGet("{orgId}/assignedTo/{userId}")]
+    public async Task<ActionResult<bool>> AssignOrganizationToUser(int orgId, string userId)
     {
-        var response = await this.Mediator.Send(new GetOrganizationsQuery { AppUserId = userId});
+        var response = await this.Mediator.Send(new AssignOrganizationCommand { AppUserId = userId, OrganizationId = orgId });
         return Ok(response);
     }
 
 
 
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<OrganizationDto>>> GetAllAsync([FromQuery] string userId)
+    {
+        var response = await this.Mediator.Send(new GetOrganizationsQuery { AppUserId = userId });
+        return Ok(response);
+    }
 }

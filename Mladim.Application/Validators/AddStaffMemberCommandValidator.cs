@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MediatR.NotificationPublishers;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
 using Mladim.Domain.Models;
 using System;
@@ -36,7 +36,7 @@ public class AddStaffMemberCommandValidator : AbstractValidator<AddStaffMemberCo
 
     private Task<bool> ExistOrganization(int? organizationId, CancellationToken token)
     {
-        return this.UnitOfWork.GetRepository<Organization>().AnyAsync(o => o.Id == organizationId);
+        return this.UnitOfWork.OrganizationRepository.AnyAsync(o => o.Id == organizationId);
     }
 
 }

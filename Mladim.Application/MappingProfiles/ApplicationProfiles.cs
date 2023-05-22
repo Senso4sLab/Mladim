@@ -27,41 +27,62 @@ public class ApplicationProfiles : Profile
 {
 	public ApplicationProfiles()
 	{
-
+        // Organizations
         CreateMap<AddOrganizationCommand, Organization>();
         CreateMap<UpdateOrganizationCommand, Organization>();
-        CreateMap<Organization, OrganizationDto>().ReverseMap();	
+        CreateMap<Organization, OrganizationDto>().ReverseMap();
 
-		CreateMap<AddProjectCommand, Project>();
+
+        // Projects
+
+        CreateMap<AddProjectCommand, Project>();
         CreateMap<UpdateProjectCommand, Project>();
 		CreateMap<Project, ProjectDto>().ReverseMap();
 
+      
+        CreateMap<StaffMemberProjectDto, StaffMemberProject>().ReverseMap(); 
+        CreateMap<ProjectGroupDto, ProjectGroup>().ReverseMap(); 
+    
 
+        CreateMap<GroupDto, Group>().ReverseMap();
+
+        //Activity
+        
         CreateMap<AddActivityCommand, Activity>();
         CreateMap<UpdateActivityCommand, Activity>();
         CreateMap<Activity, ActivityDto>().ReverseMap();
 
 
+        CreateMap<StaffMemberActivityDto, StaffMemberActivity>().ReverseMap();
+        CreateMap<ActivityGroupDto, ActivityGroup>().ReverseMap();
+
+        CreateMap<AnonymousParticipantActivityDto, AnonymousParticipantActivity>().ReverseMap();
         
-       
+
+        //StaffMember
+
         CreateMap<AddStaffMemberCommand, StaffMember>();
         CreateMap<UpdateStaffMemberCommand, StaffMember>();
 
+        CreateMap<StaffMember, StaffMemberDto>().ReverseMap();
+
+        // Partners
         CreateMap<AddPartnerCommand, Partner>();
         CreateMap<UpdatePartnerCommand, Partner>();
 
+        CreateMap<PartnerDto, Partner>().ReverseMap();
+
+        // Participant
         CreateMap<AddParticipantCommand, Participant>();
         CreateMap<UpdateParticipantCommand, Participant>();
 
-
-        CreateMap<PartnerDto, Partner>().ReverseMap();
-        CreateMap<StaffMember, StaffMemberDto>().ReverseMap();
         CreateMap<Participant, ParticipantDto>().ReverseMap();
-        CreateMap<AnonymousParticipantsDto, AnonymousParticipants>().ReverseMap();
 
-        
+        // AnonymousParticipant
 
-        CreateMap<MemberProjectDto, MemberProject>().ReverseMap();
+        CreateMap<AnonymousParticipantDto, AnonymousParticipant>().ReverseMap();
+                
+               
 		CreateMap<MemberDto, Member>()
 			.Include<StaffMemberDto, StaffMember>()
 			.Include<ParticipantDto, Participant>();

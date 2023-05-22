@@ -8,7 +8,6 @@ public class MemberDto
     public string Name { get; set; }
     public string Surname { get; set; }
     public Gender Gender { get; set; }
-
     public int Year { get; set; }
 }
 

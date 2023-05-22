@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
 using Mladim.Application.Features.Members.StaffMembers.Commands.UpdateStaffMember;
@@ -9,7 +8,7 @@ using Mladim.Domain.Dtos;
 
 namespace Mladim.WebAPI.Controllers;
 
-[Route("api/[Controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class StaffMemberController : ControllerBase
 {
@@ -30,7 +29,7 @@ public class StaffMemberController : ControllerBase
     [HttpPut]
     public async Task<ActionResult<int>> UpdateAsync(UpdateStaffMemberCommand request)
     {
-        var response =  await this.Mediator.Send(request);
+        var response = await this.Mediator.Send(request);
         return Ok(response);
     }
 
@@ -42,10 +41,10 @@ public class StaffMemberController : ControllerBase
     }
 
 
-    [HttpGet("/{memId}")]
+    [HttpGet("{memId}")]
     public async Task<ActionResult<StaffMemberDto?>> GetAsync(int memId)
     {
-        var response = await this.Mediator.Send(new GetStaffMemberQuery { StaffMemberId = memId});
+        var response = await this.Mediator.Send(new GetStaffMemberQuery { StaffMemberId = memId });
         return Ok(response);
     }
 }

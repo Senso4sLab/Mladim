@@ -23,3 +23,8 @@ public class IdentityRoleConfigurations : IEntityTypeConfiguration<IdentityRole>
         );
     }
 }
+
+
+
+
+

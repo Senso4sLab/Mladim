@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
+using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,8 @@ public class RemoveActivityCommandHandler : IRequestHandler<RemoveActivityComman
 
     public async Task<bool> Handle(RemoveActivityCommand request, CancellationToken cancellationToken)
     {
-        var activity = await this.UnitOfWork.ActivityRepository.GetByIdAsync(request.ActivityId);
+        var activity = await this.UnitOfWork.ActivityRepository
+            .FirstOrDefaultAsync(a => a.Id == request.ActivityId);  
 
         if (activity == null)
             throw new Exception();

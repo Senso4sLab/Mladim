@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Mladim.Application.Contract;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Models;
 using Mladim.Infrastracture.Persistance;
 using System;
@@ -11,40 +11,18 @@ using System.Threading.Tasks;
 
 namespace Mladim.Infrastracture.Repositories;
 
-public class OrganizationRepository : IOrganizationRepository
+public class OrganizationRepository : GenericRepository<Organization>, IOrganizationRepository
 {
     private ApplicationDbContext Context { get; }
-    public OrganizationRepository(ApplicationDbContext context)
+    public OrganizationRepository(ApplicationDbContext context) : base(context)
     {
-        this.Context = context;
-    }
-
-    public async Task<Organization?> AddAsync(Organization entry)
-    {
-        var organization = await this.Context.Organizations
-            .AddAsync(entry);
         
-        return organization?.Entity;
     }
 
-    public ValueTask<Organization?> GetByIdAsync(int id) =>
-        Context.Organizations.FindAsync(id);
-
-
-    public async Task<IEnumerable<Organization>>GetAllAsync(Expression<Func<Organization, bool>> predicate)
-    {
-        return await Context.Organizations.Where(predicate).AsNoTracking().ToListAsync();
-    }
-
-    public void Remove(Organization organization) =>          
-        this.Context.Organizations.Remove(organization);
-
-    public Task<bool> AnyAsync(Expression<Func<Organization, bool>> predicate) =>    
-        this.Context.Organizations.AnyAsync(predicate);
-
-    public void Update(Organization organization) =>
-        this.Context.Organizations.Update(organization);
     
+
+
+
 }
 
    

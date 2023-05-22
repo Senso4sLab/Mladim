@@ -13,14 +13,8 @@ public class Member
     public string Name { get; set; }
     public string Surname { get; set; }
     public Gender Gender { get; set; }
-
     public int Year { get; set; }
-    public int OrganizationId { get; set; }
-    public Organization Organization { get; set; }
+    public List<OrganizationMember> OrganizationMembers{ get; set; } = new();   
 
-    public List<Group> Groups { get; set; } = new();
-
-    public List<MemberProject> MemberProjects { get; set; } = new();
-    public List<MemberActivity> MemberActivities { get; set; } = new();
 }
 

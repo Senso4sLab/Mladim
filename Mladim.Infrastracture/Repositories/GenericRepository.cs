@@ -2,9 +2,9 @@
 using Mladim.Infrastracture.Persistance;
 using System.Linq.Expressions;
 using Mladim.Infrastracture.Extensions;
-using Mladim.Application.Contract;
 using Microsoft.EntityFrameworkCore.Query;
 using Mladim.Domain.Models;
+using Mladim.Application.Contracts.Persistence;
 
 namespace Mladim.Infrastracture.Repositories;
 
@@ -43,23 +43,13 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate) =>
         await DbSet.AnyAsync(predicate);
 
-    public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+    public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
     {
-        var queryable = DbSet.AsQueryable<T>().Where(predicate);
-      
-        if (includes != null)
-            queryable = includes.Aggregate(queryable, (sequence, element) => sequence.Include(element));   
-
-        return await queryable.ToListAsync() ?? Enumerable.Empty<T>();       
+        return await DbSet.Where(predicate).ToListAsync() ?? Enumerable.Empty<T>();       
     }
 
-    public async Task<T?> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+    public virtual async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
     {
-        var queryable = DbSet.AsQueryable<T>();
-
-        if (includes != null)
-            queryable = includes.Aggregate(queryable, (sequence, element) => sequence.Include(element));
-
-        return await queryable.FirstOrDefaultAsync(predicate);
+        return await DbSet.FirstOrDefaultAsync(predicate);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
@@ -25,8 +25,8 @@ public class GetPartnerQueryHandler : IRequestHandler<GetPartnerQuery, PartnerDt
 
     public async Task<PartnerDto> Handle(GetPartnerQuery request, CancellationToken cancellationToken)
     {
-        var partner = await this.UnitOfWork.GetRepository<Partner>()
-          .GetFirstOrDefaultAsync(sm => sm.Id == request.PartnerId);
+        var partner = await this.UnitOfWork.PartnerRepository
+          .FirstOrDefaultAsync(sm => sm.Id == request.PartnerId);
 
         if (partner == null)
             throw new Exception("");

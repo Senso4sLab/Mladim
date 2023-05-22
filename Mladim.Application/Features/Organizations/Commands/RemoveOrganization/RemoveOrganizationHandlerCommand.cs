@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,8 @@ public class RemoveOrganizationHandlerCommand : IRequestHandler<RemoveOrganizati
 
     public async Task<bool> Handle(RemoveOrganizationCommand request, CancellationToken cancellationToken)
     {
-        var organization = await this.UnitOfWork.OrganizationRepository.GetByIdAsync(request.OrganizationId);
+        var organization = await this.UnitOfWork.OrganizationRepository
+            .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
 
         if (organization == null)
             throw new Exception();

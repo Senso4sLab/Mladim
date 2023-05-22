@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using Mladim.Application.Contracts;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
@@ -24,8 +24,8 @@ public class GetParticipantQueryHandler : IRequestHandler<GetParticipantQuery, P
 
     public async Task<ParticipantDto> Handle(GetParticipantQuery request, CancellationToken cancellationToken)
     {
-        var participant = await this.UnitOfWork.GetRepository<Participant>()
-            .GetFirstOrDefaultAsync(sm => sm.Id == request.ParticipantId);
+        var participant = await this.UnitOfWork.ParticipantRepository
+            .FirstOrDefaultAsync(sm => sm.Id == request.ParticipantId);
 
         if (participant == null)
             throw new Exception("");

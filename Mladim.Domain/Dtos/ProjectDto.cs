@@ -16,8 +16,8 @@ public class ProjectDto
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
 
-    public List<MemberProjectDto> ProjectMembers { get; set; } = new();
-
+    public List<StaffMemberProjectDto> Staff { get; set; } = new();
+    public List<ProjectGroupDto> Groups { get; set; } = new();
     public List<PartnerDto> Partners { get; set; } = new();
 }
 
