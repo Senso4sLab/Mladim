@@ -10,6 +10,13 @@ namespace Mladim.Application.Models;
 public class RegistrationRequest
 {
     [Required]
+    public string Name { get; set; }
+    [Required]
+    public string Surname { get; set; }
+    [Required]
+    public string Nickname { get; set; }
+
+    [Required]
     [EmailAddress]
     public string Email { get; set; }
     [Required]

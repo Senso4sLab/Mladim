@@ -12,7 +12,7 @@ using Mladim.Infrastracture.Persistance;
 namespace Mladim.Infrastracture.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230521091947_Initial")]
+    [Migration("20230522103952_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -367,6 +367,98 @@ namespace Mladim.Infrastracture.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AnonymousParticipants");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AgeGroup = 1,
+                            Gender = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AgeGroup = 1,
+                            Gender = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AgeGroup = 1,
+                            Gender = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AgeGroup = 2,
+                            Gender = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AgeGroup = 2,
+                            Gender = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AgeGroup = 2,
+                            Gender = 3
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AgeGroup = 4,
+                            Gender = 1
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AgeGroup = 4,
+                            Gender = 2
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AgeGroup = 4,
+                            Gender = 3
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AgeGroup = 8,
+                            Gender = 1
+                        },
+                        new
+                        {
+                            Id = 11,
+                            AgeGroup = 8,
+                            Gender = 2
+                        },
+                        new
+                        {
+                            Id = 12,
+                            AgeGroup = 8,
+                            Gender = 3
+                        },
+                        new
+                        {
+                            Id = 13,
+                            AgeGroup = 16,
+                            Gender = 1
+                        },
+                        new
+                        {
+                            Id = 14,
+                            AgeGroup = 16,
+                            Gender = 2
+                        },
+                        new
+                        {
+                            Id = 15,
+                            AgeGroup = 16,
+                            Gender = 3
+                        });
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.AnonymousParticipantActivity", b =>
@@ -402,6 +494,9 @@ namespace Mladim.Infrastracture.Migrations
                     b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GroupType")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -545,11 +640,16 @@ namespace Mladim.Infrastracture.Migrations
                     b.Property<int>("MemberId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PartnerId")
+                        .HasColumnType("int");
+
                     b.HasKey("OrganizationId", "MemberId");
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("OrganizationMembers");
+                    b.HasIndex("PartnerId");
+
+                    b.ToTable("OrganizationMember");
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.OrganizationPartner", b =>
@@ -564,7 +664,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasIndex("PartnerId");
 
-                    b.ToTable("OrganizationPartners");
+                    b.ToTable("OrganizationPartner");
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.Partner", b =>
@@ -907,7 +1007,7 @@ namespace Mladim.Infrastracture.Migrations
                         .IsRequired();
 
                     b.HasOne("Mladim.Domain.Models.Organization", "Organization")
-                        .WithMany("OrganizationGroups")
+                        .WithMany("Groups")
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -926,10 +1026,14 @@ namespace Mladim.Infrastracture.Migrations
                         .IsRequired();
 
                     b.HasOne("Mladim.Domain.Models.Organization", "Organization")
-                        .WithMany("OrganizationMembers")
+                        .WithMany("Members")
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Mladim.Domain.Models.Partner", null)
+                        .WithMany("OrganizationPartners")
+                        .HasForeignKey("PartnerId");
 
                     b.Navigation("Member");
 
@@ -939,13 +1043,13 @@ namespace Mladim.Infrastracture.Migrations
             modelBuilder.Entity("Mladim.Domain.Models.OrganizationPartner", b =>
                 {
                     b.HasOne("Mladim.Domain.Models.Organization", "Organization")
-                        .WithMany("OrganizationPartners")
+                        .WithMany("Partners")
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Mladim.Domain.Models.Partner", "Partner")
-                        .WithMany("OrganizationPartners")
+                        .WithMany()
                         .HasForeignKey("PartnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1060,11 +1164,11 @@ namespace Mladim.Infrastracture.Migrations
 
             modelBuilder.Entity("Mladim.Domain.Models.Organization", b =>
                 {
-                    b.Navigation("OrganizationGroups");
+                    b.Navigation("Groups");
 
-                    b.Navigation("OrganizationMembers");
+                    b.Navigation("Members");
 
-                    b.Navigation("OrganizationPartners");
+                    b.Navigation("Partners");
 
                     b.Navigation("Projects");
                 });

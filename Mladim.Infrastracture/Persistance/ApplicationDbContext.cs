@@ -31,7 +31,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     public DbSet<OrganizationGroup> OrganizationGroups { get; set; }
 
 
-    public DbSet<OrganizationPartner> OrganizationPartners { get; set; }
+    public DbSet<OrganizationMember> OrganizationPartners { get; set; }
     public DbSet<OrganizationMember> OrganizationMembers { get; set; }
 
 

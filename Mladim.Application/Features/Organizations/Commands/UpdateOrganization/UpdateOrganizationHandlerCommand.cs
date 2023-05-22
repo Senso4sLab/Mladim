@@ -17,7 +17,13 @@ public class UpdateOrganizationHandlerCommand : IRequestHandler<UpdateOrganizati
     }
     public async Task<int> Handle(UpdateOrganizationCommand request, CancellationToken cancellationToken)
     {
-        var organization = Mapper.Map<Organization>(request);
+        var organization = await this.UnitOfWork.OrganizationRepository
+             .FirstOrDefaultAsync(o => o.Id == request.Id);
+
+        if (organization == null)
+            throw new Exception("Organizacija ne obstaja");
+
+        organization = this.Mapper.Map(request, organization);
 
         this.UnitOfWork.OrganizationRepository.Update(organization);
 

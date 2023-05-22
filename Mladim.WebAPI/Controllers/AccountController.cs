@@ -18,7 +18,7 @@ public class AccountController : ControllerBase
 
 
     [HttpPost("register")]
-    public async Task<ActionResult<RegistrationResponse>> RegisterAsync( RegistrationRequest request)
+    public async Task<ActionResult<RegistrationResponse>> RegisterAsync(RegistrationRequest request)
     {
         var response = await this.AuthService.RegisterAsync(request);
         return Ok(response);

@@ -75,6 +75,7 @@ namespace Mladim.Infrastracture.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupType = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -336,7 +337,7 @@ namespace Mladim.Infrastracture.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrganizationPartners",
+                name: "OrganizationPartner",
                 columns: table => new
                 {
                     PartnerId = table.Column<int>(type: "int", nullable: false),
@@ -344,15 +345,15 @@ namespace Mladim.Infrastracture.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrganizationPartners", x => new { x.OrganizationId, x.PartnerId });
+                    table.PrimaryKey("PK_OrganizationPartner", x => new { x.OrganizationId, x.PartnerId });
                     table.ForeignKey(
-                        name: "FK_OrganizationPartners_Organizations_OrganizationId",
+                        name: "FK_OrganizationPartner_Organizations_OrganizationId",
                         column: x => x.OrganizationId,
                         principalTable: "Organizations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrganizationPartners_Partners_PartnerId",
+                        name: "FK_OrganizationPartner_Partners_PartnerId",
                         column: x => x.PartnerId,
                         principalTable: "Partners",
                         principalColumn: "Id",
@@ -360,27 +361,33 @@ namespace Mladim.Infrastracture.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrganizationMembers",
+                name: "OrganizationMember",
                 columns: table => new
                 {
                     MemberId = table.Column<int>(type: "int", nullable: false),
-                    OrganizationId = table.Column<int>(type: "int", nullable: false)
+                    OrganizationId = table.Column<int>(type: "int", nullable: false),
+                    PartnerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrganizationMembers", x => new { x.OrganizationId, x.MemberId });
+                    table.PrimaryKey("PK_OrganizationMember", x => new { x.OrganizationId, x.MemberId });
                     table.ForeignKey(
-                        name: "FK_OrganizationMembers_Member_MemberId",
+                        name: "FK_OrganizationMember_Member_MemberId",
                         column: x => x.MemberId,
                         principalTable: "Member",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrganizationMembers_Organizations_OrganizationId",
+                        name: "FK_OrganizationMember_Organizations_OrganizationId",
                         column: x => x.OrganizationId,
                         principalTable: "Organizations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrganizationMember_Partners_PartnerId",
+                        column: x => x.PartnerId,
+                        principalTable: "Partners",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -581,8 +588,8 @@ namespace Mladim.Infrastracture.Migrations
                 name: "AnonymousParticipantActivities",
                 columns: table => new
                 {
-                    AnonymousParticipantId = table.Column<int>(type: "int", nullable: false),
                     ActivityId = table.Column<int>(type: "int", nullable: false),
+                    AnonymousParticipantId = table.Column<int>(type: "int", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -600,6 +607,28 @@ namespace Mladim.Infrastracture.Migrations
                         principalTable: "AnonymousParticipants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AnonymousParticipants",
+                columns: new[] { "Id", "AgeGroup", "Gender" },
+                values: new object[,]
+                {
+                    { 1, 1, 1 },
+                    { 2, 1, 2 },
+                    { 3, 1, 3 },
+                    { 4, 2, 1 },
+                    { 5, 2, 2 },
+                    { 6, 2, 3 },
+                    { 7, 4, 1 },
+                    { 8, 4, 2 },
+                    { 9, 4, 3 },
+                    { 10, 8, 1 },
+                    { 11, 8, 2 },
+                    { 12, 8, 3 },
+                    { 13, 16, 1 },
+                    { 14, 16, 2 },
+                    { 15, 16, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -697,13 +726,18 @@ namespace Mladim.Infrastracture.Migrations
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrganizationMembers_MemberId",
-                table: "OrganizationMembers",
+                name: "IX_OrganizationMember_MemberId",
+                table: "OrganizationMember",
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrganizationPartners_PartnerId",
-                table: "OrganizationPartners",
+                name: "IX_OrganizationMember_PartnerId",
+                table: "OrganizationMember",
+                column: "PartnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrganizationPartner_PartnerId",
+                table: "OrganizationPartner",
                 column: "PartnerId");
 
             migrationBuilder.CreateIndex(
@@ -767,10 +801,10 @@ namespace Mladim.Infrastracture.Migrations
                 name: "OrganizationGroups");
 
             migrationBuilder.DropTable(
-                name: "OrganizationMembers");
+                name: "OrganizationMember");
 
             migrationBuilder.DropTable(
-                name: "OrganizationPartners");
+                name: "OrganizationPartner");
 
             migrationBuilder.DropTable(
                 name: "PartnerProject");

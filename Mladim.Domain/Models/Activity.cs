@@ -14,6 +14,7 @@ public class Activity
     public string Description { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
+    public ActivityTypes ActivityTypes { get; set; }
 
     public List<StaffMemberActivity> Staff { get; set; } = new();
     
@@ -25,7 +26,7 @@ public class Activity
 
     public List<Participant> Participants { get; set; } = new();
 
-    public ActivityTypes ActivityTypes { get; set; }
+    
     public int ProjectId { get; set; }
     public Project Project { get; set; }
 }

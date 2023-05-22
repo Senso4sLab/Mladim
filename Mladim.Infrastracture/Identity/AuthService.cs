@@ -41,10 +41,9 @@ public class AuthService : IAuthService
         var authResponse =  new AuthResponse
         {
             Id     = user.Id,
-            Email  = user.Email
-        };
-
-        authResponse.Token = await CreateTokenAsync(user);
+            Email  = user.Email!,
+            Token  = await CreateTokenAsync(user),
+        };        
 
         return authResponse;          
     }
@@ -83,7 +82,10 @@ public class AuthService : IAuthService
             throw new Exception("Uporabnik že obstaja");
 
         var appUser = new AppUser
-        {               
+        {   
+            Name = request.Name,
+            Surname = request.Surname,
+            Nickname = request.Nickname,
             UserName = request.Email,
             Email = request.Email,
         };

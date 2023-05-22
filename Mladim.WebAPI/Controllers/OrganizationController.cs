@@ -30,9 +30,6 @@ public class OrganizationController : ControllerBase
         return Ok(response);
     }
 
-    
-
-
     [HttpPut]
     public async Task<ActionResult<int>> UpdateAsync(UpdateOrganizationCommand request)
     {
@@ -47,7 +44,7 @@ public class OrganizationController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("{ordId}")]
+    [HttpGet("{orgId}")]
     public async Task<ActionResult<OrganizationDto?>> GetAsync(int orgId)
     {
         var response = await this.Mediator.Send(new GetOrganizationQuery { OrganizationId = orgId });

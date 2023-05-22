@@ -18,11 +18,6 @@ public class OrganizationRepository : GenericRepository<Organization>, IOrganiza
     {
         
     }
-
-    
-
-
-
 }
 
    

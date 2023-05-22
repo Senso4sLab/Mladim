@@ -34,11 +34,16 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, Act
 
         var activity = this.Mapper.Map<Activity>(request);
 
-        this.UnitOfWork.ConfigEntityState(activity.Partners, EntityState.Unchanged);
-        this.UnitOfWork.ConfigEntityState(activity.Groups, EntityState.Unchanged);
-        this.UnitOfWork.ConfigEntityState(activity.Staff.Select(sp => sp.StaffMember), EntityState.Unchanged);
-        this.UnitOfWork.ConfigEntityState(activity.Participants, EntityState.Unchanged);
-        this.UnitOfWork.ConfigEntityState(activity.AnonymousParticipants.Select(ap => ap.AnonymousParticipant), EntityState.Unchanged);        
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, activity.Partners);
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, activity.Groups);
+
+        var staff = activity.Staff.Select(sp => sp.StaffMember);
+
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, staff);
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, activity.Participants);
+
+        var anonymousParticipants = activity.AnonymousParticipants.Select(ap => ap.AnonymousParticipant);
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, anonymousParticipants);        
 
         project.Activities.Add(activity);
 
