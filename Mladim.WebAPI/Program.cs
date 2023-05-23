@@ -40,6 +40,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+app.UseBlazorFrameworkFiles();
+app.UseStaticFiles();
+app.UseRouting();
+app.MapFallbackToFile("index.html");
+
 app.UseAuthentication();
 app.UseAuthorization();
 

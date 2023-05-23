@@ -19,7 +19,7 @@ public class ActivityDto
     public List<PartnerDto> Partners { get; set; } = new();
     public List<ActivityGroupDto> Groups { get; set; } = new(); 
     public List<ParticipantDto> Participants { get; set; } = new();
-    public List<StaffMemberActivityDto> Staff { get; set; } = new();
-    public List<AnonymousParticipantActivityDto> AnonymousParticipants { get; set; } = new();  
-  
+    public List<StaffMemberActivityDto> Staff { get; set; } = new(); 
+    public List<AnonymousParticipantCompactDto> AnonymousParticipants { get; set; } = new();  //AnonymousParticipantActivityDto
+
 }

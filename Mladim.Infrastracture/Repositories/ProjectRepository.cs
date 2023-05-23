@@ -19,6 +19,16 @@ public class ProjectRepository : GenericRepository<Project>,  IProjectRepository
        
     }
 
+    public async Task<Project?> FirstOrDefaultWithoutIncludeAsync(Expression<Func<Project, bool>> predicate, bool tracking = true)
+    {
+        var dbSetQ = this.DbSet.AsQueryable();
+
+        if (!tracking)
+            dbSetQ = dbSetQ.AsNoTracking();
+
+        return await dbSetQ.FirstOrDefaultAsync(predicate);
+    }
+
     public override async Task<Project?> FirstOrDefaultAsync(Expression<Func<Project, bool>> predicate, bool tracking = true)
     {
         var dbSetQ = this.DbSet.AsQueryable();            

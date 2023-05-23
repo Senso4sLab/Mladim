@@ -97,13 +97,6 @@ namespace Mladim.Application.Features.Activities.Commands.UpdateActivity
                  });
 
 
-
-
-
-
-
-
-
             activity.Staff.Where(sm => !request.Staff.Any(smc => smc.StaffMemberId == sm.StaffMemberId))
                 .ToList().ForEach(rsmp =>
                 {

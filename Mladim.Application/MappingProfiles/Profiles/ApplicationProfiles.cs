@@ -68,7 +68,7 @@ public class ApplicationProfiles : Profile
 
         //Activity
 
-       
+        CreateMap<Activity, ActivityDto>();
         CreateMap<AddActivityCommand, Activity>();
         CreateMap<UpdateActivityCommand, Activity>()
              .ForMember(p => p.Groups, m => m.Ignore())
@@ -78,7 +78,13 @@ public class ApplicationProfiles : Profile
              .ForMember(p => p.Participants, m => m.Ignore());
 
 
-        CreateMap<Activity, ActivityDto>().ReverseMap();
+        CreateMap<AnonymousParticipantActivity, AnonymousParticipantCompactDto>()
+            .ConvertUsing<AnonymousParticipantActivityToCompactDto>();
+
+
+
+
+
 
 
         CreateMap<StaffMemberActivityDto, StaffMemberActivity>().ReverseMap();
@@ -91,7 +97,7 @@ public class ApplicationProfiles : Profile
         CreateMap<GroupBaseDto, ActivityGroup>();
 
         CreateMap<AnonymousParticipantActivityDto, AnonymousParticipantActivity>().ReverseMap();
-
+        CreateMap<AnonymousParticipant, AnonymousParticipantDto>();
 
         //StaffMember
 

@@ -26,7 +26,7 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, Act
     public async Task<ActivityDto> Handle(AddActivityCommand request, CancellationToken cancellationToken)
     {
         var project = await this.UnitOfWork.ProjectRepository
-            .FirstOrDefaultAsync(p => p.Id == request.ProjectId);            
+            .FirstOrDefaultWithoutIncludeAsync(p => p.Id == request.ProjectId);            
           
         if (project == null)
             throw new Exception();
