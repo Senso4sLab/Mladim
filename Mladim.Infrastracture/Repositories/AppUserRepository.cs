@@ -9,7 +9,7 @@ namespace Mladim.Infrastracture.Repositories;
 
 public class AppUserRepository : GenericRepository<AppUser>, IAppUserRepository
 {
-    private ApplicationDbContext Context { get; }
+    
     public AppUserRepository(ApplicationDbContext context) : base(context)
     {
         

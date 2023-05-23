@@ -12,7 +12,7 @@ namespace Mladim.Infrastracture.Repositories;
 
 public class StaffMemberRepository : GenericRepository<StaffMember>, IStaffMemberRepository
 {
-    private ApplicationDbContext Context { get; }
+    
     public StaffMemberRepository(ApplicationDbContext context) :base(context)
     {
         

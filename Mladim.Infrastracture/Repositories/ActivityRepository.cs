@@ -13,7 +13,7 @@ namespace Mladim.Infrastracture.Repositories;
 
 public class ActivityRepository : GenericRepository<Activity>, IActivityRepository
 {
-    private ApplicationDbContext Context { get; }
+ 
 
     public ActivityRepository(ApplicationDbContext context) : base(context)
     {
@@ -22,7 +22,7 @@ public class ActivityRepository : GenericRepository<Activity>, IActivityReposito
 
     public async override Task<Activity?> FirstOrDefaultAsync(Expression<Func<Activity, bool>> predicate)
     {
-       return await this.Context.Activities
+       return await this.DbSet
             .Include(a => a.Groups)
                 .ThenInclude(ag => ag.Members)
             .Include(a => a.AnonymousParticipants)

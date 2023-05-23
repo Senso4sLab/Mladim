@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Models;
 using System;
@@ -27,9 +28,56 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
             .FirstOrDefaultAsync(p => p.Id == request.Id);
 
         if (project == null)
-            throw new Exception();
+            throw new Exception();        
 
-        project = this.Mapper.Map(request,project);
+        project = this.Mapper.Map(request, project);        
+
+        project.Partners.Where(p => !request.Partners.Any(pc => pc.Id == p.Id))
+            .ToList().ForEach(rp =>
+            {
+                this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, rp);
+                project.Partners.Remove(rp);
+            });
+
+        request.Partners.Where(pc => !project.Partners.Any(p => p.Id == pc.Id))
+            .Select(apb => this.Mapper.Map<Partner>(apb)).ToList().ForEach(ap =>
+            {               
+                this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, ap);
+                project.Partners.Add(ap);
+            });
+
+        project.Groups.Where(g => !request.Groups.Any(gc => gc.Id == g.Id))
+            .ToList().ForEach(rg =>
+            {
+                this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, rg);
+                project.Groups.Remove(rg);
+            });
+
+        request.Groups.Where(gc => !project.Groups.Any(g => g.Id == gc.Id))
+            .Select(gc => this.Mapper.Map<ProjectGroup>(gc)).ToList().ForEach(ag =>
+            {
+                this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, ag);
+                project.Groups.Add(ag);
+            });
+
+
+
+        project.Staff.Where(sm => !request.Staff.Any(smc => smc.StaffMemberId == sm.StaffMemberId))
+            .ToList().ForEach(rsmp =>
+            {
+                this.UnitOfWork.ConfigEntityState(EntityState.Deleted, rsmp);
+                project.Staff.Remove(rsmp);
+            });      
+           
+
+        request.Staff.Where(smc => !project.Staff.Any(sm => sm.StaffMemberId == smc.StaffMemberId))
+             .Select(smc => this.Mapper.Map<StaffMemberProject>(smc)).ToList().ForEach(asmc =>
+            {
+                this.UnitOfWork.ConfigEntityState(EntityState.Added, asmc);
+                project.Staff.Add(asmc);
+            });
+
+       
 
         return await this.UnitOfWork.SaveChangesAsync();       
     }

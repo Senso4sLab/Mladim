@@ -13,9 +13,7 @@ using System.Threading.Tasks;
 namespace Mladim.Infrastracture.Repositories;
 
 public class ProjectRepository : GenericRepository<Project>,  IProjectRepository
-{
-    private ApplicationDbContext Context { get; }
-   
+{   
     public ProjectRepository(ApplicationDbContext context) : base(context)
 	{
        
@@ -23,12 +21,11 @@ public class ProjectRepository : GenericRepository<Project>,  IProjectRepository
 
     public override async Task<Project?> FirstOrDefaultAsync(Expression<Func<Project, bool>> predicate)
     {
-        return await this.Context.Projects
+        return await this.DbSet
             .Include(p => p.Staff)
                 .ThenInclude(sp => sp.StaffMember)
             .Include(p => p.Partners)
-            .Include(p => p.Groups)
-                .ThenInclude(g => g.Members)
+            .Include(p => p.Groups)               
             .FirstOrDefaultAsync(predicate);       
     }
 }

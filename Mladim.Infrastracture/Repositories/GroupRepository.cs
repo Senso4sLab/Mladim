@@ -12,7 +12,7 @@ namespace Mladim.Infrastracture.Repositories;
 
 public class GroupRepository : GenericRepository<Group> , IGroupRepository
 {
-    private ApplicationDbContext Context { get; }
+   
     public GroupRepository(ApplicationDbContext context) : base(context)
     {
        

@@ -17,7 +17,12 @@ public class UpdateProjectCommand : IRequest<int>
     public string WebpageUrl { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
-    public List<StaffMemberProjectDto> StaffProjects { get; set; } = new();
-    public List<ProjectGroupDto> StaffGroups { get; set; } = new();
-    public List<PartnerDto> Partners { get; set; } = new();
+
+    public List<StaffMemberSubjectBaseDto> Staff { get; set; } = new();
+    public List<GroupBaseDto> Groups { get; set; } = new();
+    public List<PartnerBaseDto> Partners { get; set; } = new();
+
+    //public List<StaffMemberProjectDto> StaffProjects { get; set; } = new();
+    //public List<ProjectGroupDto> StaffGroups { get; set; } = new();
+    //public List<PartnerDto> Partners { get; set; } = new();
 }

@@ -35,24 +35,39 @@ public class ApplicationProfiles : Profile
         CreateMap<AddOrganizationCommand, Organization>();
         CreateMap<UpdateOrganizationCommand, Organization>();
         CreateMap<Organization, OrganizationDto>().ReverseMap();
-
-        
-           
-              
+                     
 
         // Projects
 
         CreateMap<AddProjectCommand, Project>();
-        CreateMap<UpdateProjectCommand, Project>();
+        
+        CreateMap<UpdateProjectCommand, Project>()
+            .ForMember(p => p.Groups, m => m.Ignore())
+            .ForMember(p => p.Staff, m => m.Ignore())
+            .ForMember(p => p.Partners, m => m.Ignore());
+
+
         CreateMap<Project, ProjectDto>().ReverseMap();
 
 
         CreateMap<StaffMemberProjectDto, StaffMemberProject>().ReverseMap();
+        CreateMap<StaffMemberSubjectBaseDto, StaffMemberProject>();
+       
+       
+
         CreateMap<ProjectGroupDto, ProjectGroup>().ReverseMap();
+
+        CreateMap<GroupBaseDto, ProjectGroup>();
+
+        // Groups
         CreateMap<GroupDto, Group>().ReverseMap();
+        CreateMap<GroupBaseDto, Group>();
+
+
 
         //Activity
 
+       
         CreateMap<AddActivityCommand, Activity>();
         CreateMap<UpdateActivityCommand, Activity>();
         CreateMap<Activity, ActivityDto>().ReverseMap();
@@ -60,6 +75,8 @@ public class ApplicationProfiles : Profile
 
         CreateMap<StaffMemberActivityDto, StaffMemberActivity>().ReverseMap();
         CreateMap<ActivityGroupDto, ActivityGroup>().ReverseMap();
+
+        CreateMap<GroupBaseDto, ActivityGroup>();
 
         CreateMap<AnonymousParticipantActivityDto, AnonymousParticipantActivity>().ReverseMap();
 
@@ -77,6 +94,7 @@ public class ApplicationProfiles : Profile
 
         // Partners
         CreateMap<AddPartnerCommand, Partner>();
+        CreateMap<PartnerBaseDto, Partner>();
 
         CreateMap<AddPartnerCommand, OrganizationPartner>()
             .ConvertUsing<AddCommandToOrganizationPartnerConverter>();       

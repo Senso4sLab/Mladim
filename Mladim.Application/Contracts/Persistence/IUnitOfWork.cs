@@ -20,7 +20,8 @@ public interface IUnitOfWork : IDisposable
 
     //IGenericRepository<T> GetRepository<T>() where T : class;
 
-    void ConfigEntityState<T>(EntityState state, params T[] entities);
+    void ConfigEntityState<T>(EntityState state, IEnumerable<T> entities);
+    void ConfigEntityState<T>(EntityState state,  T entity);
     Task<int> SaveChangesAsync();
 }
 

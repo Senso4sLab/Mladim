@@ -39,11 +39,11 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, Act
 
         var staff = activity.Staff.Select(sp => sp.StaffMember);
 
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, staff);
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, staff.ToList());
         this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, activity.Participants);
 
         var anonymousParticipants = activity.AnonymousParticipants.Select(ap => ap.AnonymousParticipant);
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, anonymousParticipants);        
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, anonymousParticipants.ToList());        
 
         project.Activities.Add(activity);
 

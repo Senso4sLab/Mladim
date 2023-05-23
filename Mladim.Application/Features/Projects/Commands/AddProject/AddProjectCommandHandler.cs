@@ -36,11 +36,10 @@ public class AddProjectCommandHandler : IRequestHandler<AddProjectCommand, Proje
         if (project == null)
             throw new Exception();
 
+
+
         this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, project.Partners);
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, project.Groups);
-        
-        var staff = project.Staff.Select(sp => sp.StaffMember);
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, staff);
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, project.Groups);       
 
         organization.Projects.Add(project); 
 

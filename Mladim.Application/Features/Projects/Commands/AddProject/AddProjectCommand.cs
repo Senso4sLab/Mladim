@@ -17,7 +17,7 @@ public class AddProjectCommand : IRequest<ProjectDto>
     public string WebpageUrl { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
-    public List<StaffMemberProjectDto> Staff { get; set; } = new();
-    public List<ProjectGroupDto> Groups { get; set; } = new();
-    public List<PartnerDto> Partners { get; set; } = new();
+    public List<StaffMemberSubjectBaseDto> Staff { get; set; } = new();
+    public List<GroupBaseDto> Groups { get; set; } = new();
+    public List<PartnerBaseDto> Partners { get; set; } = new();
 }
