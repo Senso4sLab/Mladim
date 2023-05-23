@@ -32,6 +32,9 @@ public class UnitOfWork : IUnitOfWork
     public IParticipantRepository ParticipantRepository =>
         participantRepository ??= new ParticipantRepository(this.Context);
 
+    public IAnonymousParticipantRepository AnonymousParticipantRepository =>
+        anonymousParticipantRepository ??= new AnonymousParticipantRepository(this.Context);
+
     private IOrganizationRepository organizationRepository;
     private IActivityRepository activityRepository;
     private IProjectRepository projectRepository;
@@ -40,6 +43,7 @@ public class UnitOfWork : IUnitOfWork
     private IGroupRepository groupRepository;
     private IParticipantRepository participantRepository;
     private IPartnerRepository partnerRepository;
+    private IAnonymousParticipantRepository anonymousParticipantRepository;
 
 
     //private Hashtable repositories = new Hashtable();
@@ -48,7 +52,7 @@ public class UnitOfWork : IUnitOfWork
     //public IGenericRepository<T> GetRepository<T>() where T : class
     //{
     //    var name = typeof(T).Name;
-        
+
     //    if(!repositories.ContainsKey(name))
     //    {
     //        var genericType = typeof(GenericRepository<>);
@@ -68,13 +72,13 @@ public class UnitOfWork : IUnitOfWork
     public async Task<int> SaveChangesAsync() =>
         await this.Context.SaveChangesAsync();
 
-    public void ConfigEntityState<T>(EntityState state, IEnumerable<T> entities)
+    public void ConfigEntityState<T>(EntityState state, IEnumerable<T> entities) where T : class
     {
         foreach (var entity in entities)
-            ConfigEntityState<T>(state, entity);
+            ConfigEntityState(state, entity);
     }
 
-    public void ConfigEntityState<T>(EntityState state, T entity)
+    public void ConfigEntityState<T>(EntityState state, T entity) where T : class
     {
         this.Context.Entry(entity).State = state;
     }

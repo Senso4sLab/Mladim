@@ -21,7 +21,6 @@
     <Folder Include="Features\Groups\Commands\" />
     <Folder Include="Features\Groups\Queries\" />
     <Folder Include="Features\Members\AnonymousParticipants\Commands\" />
-    <Folder Include="Features\Members\AnonymousParticipants\Queries\" />
     <Folder Include="Features\Members\BaseMembers\Commands\AddMemberHandler\NewFolder\" />
     <Folder Include="Features\Members\BaseMembers\Commands\UpdateMember\" />
     <Folder Include="Features\Members\BaseMembers\Queries\GetMember\" />

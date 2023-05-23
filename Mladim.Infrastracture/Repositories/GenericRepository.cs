@@ -43,13 +43,23 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate) =>
         await DbSet.AnyAsync(predicate);
 
-    public virtual async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
+    public virtual async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate, bool tracking = true)
     {
-        return await DbSet.Where(predicate).ToListAsync() ?? Enumerable.Empty<T>();       
+        var dbSetQ = DbSet.Where(predicate);
+
+        if (!tracking)
+            dbSetQ = dbSetQ.AsNoTracking();
+
+        return await dbSetQ.ToListAsync();         
     }
 
-    public virtual async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+    public virtual async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, bool tracking = true)
     {
-        return await DbSet.FirstOrDefaultAsync(predicate);
+        if(tracking)
+            return await DbSet.FirstOrDefaultAsync(predicate);
+        else
+            return await DbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
     }
+
+    
 }

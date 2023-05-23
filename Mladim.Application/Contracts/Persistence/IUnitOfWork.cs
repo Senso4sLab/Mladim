@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,10 +19,12 @@ public interface IUnitOfWork : IDisposable
     IPartnerRepository PartnerRepository { get; }
     IParticipantRepository ParticipantRepository { get; }
 
+    IAnonymousParticipantRepository AnonymousParticipantRepository { get; }
+
     //IGenericRepository<T> GetRepository<T>() where T : class;
 
-    void ConfigEntityState<T>(EntityState state, IEnumerable<T> entities);
-    void ConfigEntityState<T>(EntityState state,  T entity);
+    void ConfigEntityState<T>(EntityState state, IEnumerable<T> entities) where T : class;
+    void ConfigEntityState<T>(EntityState state, T entity) where T : class;
     Task<int> SaveChangesAsync();
 }
 

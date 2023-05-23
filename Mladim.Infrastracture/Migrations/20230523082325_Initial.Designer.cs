@@ -12,7 +12,7 @@ using Mladim.Infrastracture.Persistance;
 namespace Mladim.Infrastracture.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230522103952_Initial")]
+    [Migration("20230523082325_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -563,7 +563,6 @@ namespace Mladim.Infrastracture.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AgeGroups")
@@ -574,7 +573,6 @@ namespace Mladim.Infrastracture.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Fields")
@@ -585,14 +583,12 @@ namespace Mladim.Infrastracture.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Regions")
                         .HasColumnType("int");
 
                     b.Property<string>("RegistrationNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
@@ -602,11 +598,9 @@ namespace Mladim.Infrastracture.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("VatNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WebpageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("YouthSectors")
@@ -640,14 +634,9 @@ namespace Mladim.Infrastracture.Migrations
                     b.Property<int>("MemberId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PartnerId")
-                        .HasColumnType("int");
-
                     b.HasKey("OrganizationId", "MemberId");
 
                     b.HasIndex("MemberId");
-
-                    b.HasIndex("PartnerId");
 
                     b.ToTable("OrganizationMember");
                 });
@@ -1031,10 +1020,6 @@ namespace Mladim.Infrastracture.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mladim.Domain.Models.Partner", null)
-                        .WithMany("OrganizationPartners")
-                        .HasForeignKey("PartnerId");
-
                     b.Navigation("Member");
 
                     b.Navigation("Organization");
@@ -1049,7 +1034,7 @@ namespace Mladim.Infrastracture.Migrations
                         .IsRequired();
 
                     b.HasOne("Mladim.Domain.Models.Partner", "Partner")
-                        .WithMany()
+                        .WithMany("OrganizationPartners")
                         .HasForeignKey("PartnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

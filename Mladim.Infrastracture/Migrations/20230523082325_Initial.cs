@@ -94,12 +94,12 @@ namespace Mladim.Infrastracture.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WebpageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    VatNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RegistrationNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    WebpageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VatNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RegistrationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AgeGroups = table.Column<int>(type: "int", nullable: false),
                     YouthSectors = table.Column<int>(type: "int", nullable: false),
                     Types = table.Column<int>(type: "int", nullable: false),
@@ -365,8 +365,7 @@ namespace Mladim.Infrastracture.Migrations
                 columns: table => new
                 {
                     MemberId = table.Column<int>(type: "int", nullable: false),
-                    OrganizationId = table.Column<int>(type: "int", nullable: false),
-                    PartnerId = table.Column<int>(type: "int", nullable: true)
+                    OrganizationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -383,11 +382,6 @@ namespace Mladim.Infrastracture.Migrations
                         principalTable: "Organizations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrganizationMember_Partners_PartnerId",
-                        column: x => x.PartnerId,
-                        principalTable: "Partners",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -729,11 +723,6 @@ namespace Mladim.Infrastracture.Migrations
                 name: "IX_OrganizationMember_MemberId",
                 table: "OrganizationMember",
                 column: "MemberId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrganizationMember_PartnerId",
-                table: "OrganizationMember",
-                column: "PartnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrganizationPartner_PartnerId",

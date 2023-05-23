@@ -40,11 +40,12 @@ public class ApplicationProfiles : Profile
         // Projects
 
         CreateMap<AddProjectCommand, Project>();
-        
+
         CreateMap<UpdateProjectCommand, Project>()
             .ForMember(p => p.Groups, m => m.Ignore())
-            .ForMember(p => p.Staff, m => m.Ignore())
-            .ForMember(p => p.Partners, m => m.Ignore());
+            .ForMember(p => p.Partners, m => m.Ignore())
+            .ForMember(p => p.Staff, m => m.Ignore());
+
 
 
         CreateMap<Project, ProjectDto>().ReverseMap();
@@ -69,11 +70,22 @@ public class ApplicationProfiles : Profile
 
        
         CreateMap<AddActivityCommand, Activity>();
-        CreateMap<UpdateActivityCommand, Activity>();
+        CreateMap<UpdateActivityCommand, Activity>()
+             .ForMember(p => p.Groups, m => m.Ignore())
+             .ForMember(p => p.Partners, m => m.Ignore())
+             .ForMember(p => p.Staff, m => m.Ignore())
+             .ForMember(p => p.AnonymousParticipants, m => m.Ignore())
+             .ForMember(p => p.Participants, m => m.Ignore());
+
+
         CreateMap<Activity, ActivityDto>().ReverseMap();
 
 
         CreateMap<StaffMemberActivityDto, StaffMemberActivity>().ReverseMap();
+
+        CreateMap<StaffMemberSubjectBaseDto, StaffMemberActivity>();
+
+
         CreateMap<ActivityGroupDto, ActivityGroup>().ReverseMap();
 
         CreateMap<GroupBaseDto, ActivityGroup>();
@@ -112,10 +124,14 @@ public class ApplicationProfiles : Profile
         CreateMap<UpdateParticipantCommand, Participant>();
 
         CreateMap<Participant, ParticipantDto>().ReverseMap();
+        CreateMap<ParticipantBaseDto, Participant>();
+     
 
         // AnonymousParticipant
 
         CreateMap<AnonymousParticipantDto, AnonymousParticipant>().ReverseMap();
+        CreateMap<AnonymousParticipantActivityBaseDto, AnonymousParticipantActivity>();
+        
 
         CreateMap<MemberDto, Member>()
             .Include<StaffMemberDto, StaffMember>()

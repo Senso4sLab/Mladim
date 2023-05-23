@@ -20,11 +20,12 @@ public class ActivityRepository : GenericRepository<Activity>, IActivityReposito
        
     }
 
-    public async override Task<Activity?> FirstOrDefaultAsync(Expression<Func<Activity, bool>> predicate)
+   
+
+    public async override Task<Activity?> FirstOrDefaultAsync(Expression<Func<Activity, bool>> predicate, bool tracking = true)
     {
        return await this.DbSet
-            .Include(a => a.Groups)
-                .ThenInclude(ag => ag.Members)
+            .Include(a => a.Groups)                
             .Include(a => a.AnonymousParticipants)
                 .ThenInclude(ap => ap.AnonymousParticipant)
             .Include(a => a.Participants)

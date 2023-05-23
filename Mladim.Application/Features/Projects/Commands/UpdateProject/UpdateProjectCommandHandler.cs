@@ -28,20 +28,20 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
             .FirstOrDefaultAsync(p => p.Id == request.Id);
 
         if (project == null)
-            throw new Exception();        
+            throw new Exception();
 
-        project = this.Mapper.Map(request, project);        
+        this.Mapper.Map(request, project);
 
         project.Partners.Where(p => !request.Partners.Any(pc => pc.Id == p.Id))
-            .ToList().ForEach(rp =>
-            {
-                this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, rp);
-                project.Partners.Remove(rp);
-            });
+           .ToList().ForEach(rp =>
+           {
+               this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, rp);
+               project.Partners.Remove(rp);
+           });
 
         request.Partners.Where(pc => !project.Partners.Any(p => p.Id == pc.Id))
             .Select(apb => this.Mapper.Map<Partner>(apb)).ToList().ForEach(ap =>
-            {               
+            {
                 this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, ap);
                 project.Partners.Add(ap);
             });
@@ -60,24 +60,26 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
                 project.Groups.Add(ag);
             });
 
-
-
         project.Staff.Where(sm => !request.Staff.Any(smc => smc.StaffMemberId == sm.StaffMemberId))
             .ToList().ForEach(rsmp =>
             {
                 this.UnitOfWork.ConfigEntityState(EntityState.Deleted, rsmp);
                 project.Staff.Remove(rsmp);
-            });      
-           
+            });
+
+        request.Staff.ForEach(s =>
+        {
+            var smp = project.Staff.FirstOrDefault(smp => smp.StaffMemberId == s.StaffMemberId);
+            if(smp != null)
+                this.Mapper.Map(s, smp);
+        });        
 
         request.Staff.Where(smc => !project.Staff.Any(sm => sm.StaffMemberId == smc.StaffMemberId))
              .Select(smc => this.Mapper.Map<StaffMemberProject>(smc)).ToList().ForEach(asmc =>
-            {
-                this.UnitOfWork.ConfigEntityState(EntityState.Added, asmc);
-                project.Staff.Add(asmc);
-            });
-
-       
+             {
+                 this.UnitOfWork.ConfigEntityState(EntityState.Added, asmc);
+                 project.Staff.Add(asmc);
+             });
 
         return await this.UnitOfWork.SaveChangesAsync();       
     }

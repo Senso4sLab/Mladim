@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Mladim.Application.Features.Members.AnonymousParticipants.Queries.GetAnonymousParticipants;
 using Mladim.Application.Features.Members.Participants.Commands.AddParticipant;
 using Mladim.Application.Features.Members.Participants.Commands.UpdateParticipant;
 using Mladim.Application.Features.Members.Participants.Queries.GetParticipant;
@@ -39,6 +40,15 @@ namespace Mladim.WebAPI.Controllers
             var response = await this.Mediator.Send(query);
             return Ok(response);
         }
+
+        [HttpGet("anonymous")]
+        public async Task<ActionResult<IEnumerable<AnonymousParticipantDto>>> GetAsync()
+        {
+            var response = await this.Mediator.Send(new GetAnonymousParticipantsQuery());
+            return Ok(response);
+        }
+
+
 
 
         [HttpGet("{memId}")]
