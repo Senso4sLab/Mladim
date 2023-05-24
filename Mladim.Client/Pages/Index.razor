@@ -1,9 +1,52 @@
 ﻿@page "/"
+@using Mladim.Client.Components.Organization.MemberTabs
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Organizacija</PageTitle>
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<MudStack Class="py-3" Row = "true" AlignItems="AlignItems.Center" Spacing="4">
+    <MudSelect Value="selectedOrganization" ValueChanged="OrganizationValueChanged" ToStringFunc="@(org => org.Name)" T="Organization" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" AdornmentColor="Color.Primary" AdornmentIcon="@Icons.Material.Filled.ArrowDropDown">
+        @foreach (var organization in organizations)
+        {
+            <MudSelectItem T="Organization" Value=@organization>              
+                    @organization.Name              
+            </MudSelectItem>
+        }
+    </MudSelect>
+    @if (selectedOrganization != null)
+    {
+        <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="@(org => EditOrganizationAsync(selectedOrganization))"></MudIconButton>
+            <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddOrganizationAsync" />
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Secondary" OnClick="@(org => RemoveOrganizationAsync(selectedOrganization))"></MudIconButton>
+        </MudButtonGroup>
+    }
+    else
+    {
+        <MudIconButton Color="Color.Primary" Size="Size.Medium" Variant="Variant.Outlined"  Icon="@Icons.Material.Filled.Add" OnClick="AddOrganizationAsync" />
+    }
+</MudStack>
+
+@if (selectedOrganization != null)
+{
+    <MudTabs  Class="py-3" Elevation="4" Color="@Color.Primary">
+        <MudTabPanel Text="Info">        
+          <OrganizationDetailsTab Organization="selectedOrganization" ReadOnly = "true"/>
+        </MudTabPanel>
+        <MudTabPanel Text="Uporabniki">
+            <StaffMemberTab Organization="selectedOrganization" />
+        </MudTabPanel>       
+        <MudTabPanel Text="Partnerji">
+            <PartnerTab Organization="selectedOrganization"></PartnerTab>
+        </MudTabPanel>
+        <MudTabPanel Text="Udeleženci">
+            <ParticipantTab Organization="selectedOrganization"></ParticipantTab>
+        </MudTabPanel>
+    </MudTabs>
+}
+else
+{
+
+}
+

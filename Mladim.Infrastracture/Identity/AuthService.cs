@@ -1,18 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Mladim.Application.Contracts.Identity;
 using Mladim.Application.Models;
 using Mladim.Domain.IdentityModels;
+using Mladim.Domain.Models.Result;
 using Mladim.Domain.Roles;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Mladim.Infrastracture.Identity;
 
@@ -25,27 +21,28 @@ public class AuthService : IAuthService
         this.JwtSettings = jwtSettings.Value;
         this.UserManager = userManager;
     }
-    public async Task<AuthResponse> LoginAsync(AuthRequest request)
-    {          
-
+   
+    public async Task<Result<AuthResponse>> LoginAsync(AuthRequest request)
+    {
         var user = await this.UserManager.FindByEmailAsync(request.Email);
 
         if (user == null)
-            throw new Exception("Vnešeni podatki so napačni");               
+            return new Result<AuthResponse>("Vnešeni podatki so napačni");       
 
         bool passwordCorrect = await this.UserManager.CheckPasswordAsync(user, request.Password);           
 
         if (!await this.UserManager.CheckPasswordAsync(user, request.Password))
-            throw new Exception("Vnešeni podatki so napačni");
+            return new Result<AuthResponse>("Vnešeni podatki so napačni");
 
         var authResponse =  new AuthResponse
         {
             Id     = user.Id,
+            Name   = user.Name,
             Email  = user.Email!,
             Token  = await CreateTokenAsync(user),
         };        
 
-        return authResponse;          
+        return new Result<AuthResponse>(authResponse,true);          
     }
 
 
@@ -74,12 +71,12 @@ public class AuthService : IAuthService
     }
 
 
-    public async Task<RegistrationResponse> RegisterAsync(RegistrationRequest request)
+    public async Task<Result<RegistrationResponse>> RegisterAsync(RegistrationRequest request)
     {
         var user = await this.UserManager.FindByEmailAsync(request.Email);
 
         if (user != null)
-            throw new Exception("Uporabnik že obstaja");
+            return new Result<RegistrationResponse>("Uporabnik že obstaja");       
 
         var appUser = new AppUser
         {   
@@ -93,16 +90,18 @@ public class AuthService : IAuthService
         var result = await this.UserManager.CreateAsync(appUser, request.Password);
 
         if (!result.Succeeded)
-            throw new Exception(string.Join(",", result.Errors.Select(e => e.Description)));
+            return new Result<RegistrationResponse>(string.Join(",", result.Errors.Select(e => e.Description)));      
 
         result = await this.UserManager.AddToRoleAsync(appUser, ApplicationRoles.Worker);
 
         if (!result.Succeeded)
-            throw new Exception(string.Join(",", result.Errors.Select(e => e.Description)));
+            return new Result<RegistrationResponse>(string.Join(",", result.Errors.Select(e => e.Description)));
 
-        return new RegistrationResponse
+        var registrationResponse = new RegistrationResponse
         {
             UserId = appUser.Id,
         };
+
+        return new Result<RegistrationResponse>(registrationResponse, true);      
     }
 }

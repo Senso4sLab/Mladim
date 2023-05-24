@@ -1,0 +1,100 @@
+﻿
+<div class="py-5">
+    <div style="height:150px; width:100%; display:inline-block">
+        <BlazoredTextEditor ReadOnly="@ReadOnly" @ref="@QuillHtml" Placeholder="@Placeholder">
+            <ToolbarContent>
+                <select class="ql-header">
+                    <option selected=""></option>
+                    <option value="1"></option>
+                    <option value="2"></option>
+                    <option value="3"></option>
+                    <option value="4"></option>
+                    <option value="5"></option>
+                </select>
+                <span class="ql-formats">
+                    <button class="ql-bold"></button>
+                    <button class="ql-italic"></button>
+                    <button class="ql-underline"></button>
+                    <button class="ql-strike"></button>
+                </span>
+                <span class="ql-formats">
+                    <select class="ql-color"></select>
+                    <select class="ql-background"></select>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-list" value="ordered"></button>
+                    <button class="ql-list" value="bullet"></button>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-link"></button>
+                </span>
+            </ToolbarContent>
+            <EditorContent>
+
+            </EditorContent>
+        </BlazoredTextEditor>
+    </div>
+</div>
+
+@code
+{
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter]
+    public EventCallback<string> TextChanged { get; set; }
+
+    [Parameter]
+    public bool ReadOnly { get; set; }
+
+    [Parameter]
+    public string Placeholder { get; set; }
+
+    public BlazoredTextEditor? QuillHtml { get; set; } = new BlazoredTextEditor();
+
+    private string lastText;
+
+    private Task showHtmlTextTask;
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (showHtmlTextTask?.IsCompleted == false)
+            return;
+
+        if (this.lastText != this.Text)
+        {
+            showHtmlTextTask = ShowHtmlText();
+            this.lastText = this.Text;
+            await showHtmlTextTask;
+        }
+    }
+
+
+
+    public async Task ShowHtmlText()
+    {
+        if (string.IsNullOrWhiteSpace(Text))
+            return;
+
+        bool loading = true;
+
+        while (loading)
+        {
+            try
+            {
+                await this.QuillHtml?.LoadHTMLContent(Text);
+                loading = false;
+            }
+            catch (Exception ex)
+            {
+                await Task.Delay(10);
+                loading = true;
+            }
+        }
+    }
+    public async Task LoadHtmlText()
+    {
+        var quillHtml = await this.QuillHtml!.GetHTML();
+        await TextChanged.InvokeAsync(quillHtml == "<p><br></p>" ? string.Empty : quillHtml);
+    }
+}

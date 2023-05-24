@@ -1,0 +1,52 @@
+﻿@page "/login"
+@layout AuthLayout
+
+<PageTitle>Login</PageTitle>
+
+
+<MudForm ref="@loginForm" Model="@loginUser" Validation="@(loginUserValidator.ValidateValue)" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="12" md="6" >
+            <MudCard Elevation="4" Class="pa-2">
+                @if (!string.IsNullOrWhiteSpace(_errorMessage))
+                {
+                   <MudAlert Severity="Severity.Error" Variant="Variant.Filled">@_errorMessage</MudAlert>
+                }
+                 <MudCardHeader>                    
+                    <MudText Typo="Typo.h6">Vstop v aplikacijo Mladim</MudText>                                   
+                 </MudCardHeader>
+
+                <MudCardContent>
+                    <MudTextField Label="Email" 
+                                  @bind-Value="loginUser.Email" For="@(() => loginUser.Email)" />
+                    <MudTextField Label="Geslo" Class="mt-3"
+                                  @bind-Value="loginUser.Password" For="@(() => loginUser.Password)"
+                                  InputType="@PasswordInput" 
+                                  Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonPasswordClick" AdornmentAriaLabel="Pokaži geslo"/>
+                </MudCardContent>
+
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" 
+                               Variant="Variant.Filled" 
+                               Color="Color.Primary" 
+                               Disabled="_isBusy" 
+                               Class="ml-auto">
+
+                        <MudStack Row="true" Spacing="4" AlignItems="AlignItems.Center">
+
+                            <MudText Typo="Typo.h6">Vpiši se</MudText>
+                            @if (_isBusy)
+                            {
+                                 <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+                            }
+
+                        </MudStack>
+                    </MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</MudForm>
+
+
