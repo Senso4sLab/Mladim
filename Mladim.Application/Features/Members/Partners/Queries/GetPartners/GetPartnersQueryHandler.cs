@@ -29,11 +29,11 @@ public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumer
         Expression<Func<Partner, bool>> predicate = null;
 
         if (request.ActivityId != null)
-            predicate = sm => sm.Activities.Any(a => a.Id == request.ActivityId);
+            predicate = sm => sm.IsActive == request.IsActive && sm.Activities.Any(a => a.Id == request.ActivityId );
         else if (request.ProjectId != null)
-            predicate = sm => sm.Projects.Any(p => p.Id == request.ProjectId);
+            predicate = sm => sm.IsActive == request.IsActive && sm.Projects.Any(p => p.Id == request.ProjectId);
         else if (request.OrganizationId != null)
-            predicate = sm => sm.OrganizationPartners.Any(op => op.OrganizationId == request.OrganizationId);
+            predicate = sm => sm.IsActive == request.IsActive && sm.OrganizationPartners.Any(op => op.OrganizationId == request.OrganizationId);
 
         if (predicate == null)
             return Enumerable.Empty<PartnerDto>();

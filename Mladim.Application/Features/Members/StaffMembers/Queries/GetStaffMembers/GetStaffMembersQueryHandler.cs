@@ -29,11 +29,11 @@ public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery,
         Expression<Func<StaffMember, bool>> predicate = null;
 
         if (request.ActivityId != null)
-            predicate = sm => sm.StaffActivities.Any(mp => mp.ActivityId == request.ActivityId);
+            predicate = sm => sm.IsActive == request.IsActive && sm.StaffActivities.Any(mp => mp.ActivityId == request.ActivityId);
         else if (request.ProjectId != null)
-            predicate = sm => sm.StaffProjects.Any(mp => mp.ProjectId == request.ProjectId);
+            predicate = sm => sm.IsActive == request.IsActive && sm.StaffProjects.Any(mp => mp.ProjectId == request.ProjectId);
         else if (request.OrganizationId != null)
-            predicate = sm => sm.OrganizationMembers.Any(om => om.OrganizationId == request.OrganizationId);        
+            predicate = sm => sm.IsActive == request.IsActive && sm.OrganizationMembers.Any(om => om.OrganizationId == request.OrganizationId);        
         
         if(predicate == null)
             return Enumerable.Empty<StaffMemberDto>();

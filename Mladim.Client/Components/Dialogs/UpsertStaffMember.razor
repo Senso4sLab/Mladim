@@ -1,0 +1,58 @@
+﻿@using Mladim.Client.Extensions;
+@using Mladim.Domain.Enums;
+
+
+
+<MudDialog Style="min-width:400px;">
+<DialogContent>
+    <MudStack Spacing="4">
+        <MudTextField @bind-Value="StaffMember.Name" Variant="Variant.Outlined" Label="Ime" />
+        <MudTextField @bind-Value="StaffMember.Surname" Variant="Variant.Outlined" Label="Priimek" />
+
+        <MudSelect @bind-Value="StaffMember.Gender" ToStringFunc="GenderToString" Variant="Variant.Outlined" Label="Spol" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var gender in Enum.GetValues<Gender>())
+            {
+                <MudSelectItem Value="gender">@gender.GetDisplayAttribute()</MudSelectItem>
+            }
+        </MudSelect>
+
+        <MudNumericField @bind-Value="StaffMember.Year" Label="Leto rojstva" Variant="Variant.Outlined" />
+        <MudTextField @bind-Value="StaffMember.Email" Variant="Variant.Outlined" Label="Email" />
+        <MudSwitch @bind-Checked="StaffMember.IsActive" Color="Color.Primary">@(StaffMember.IsActive ? "Aktiven" : "Neaktiven")</MudSwitch>
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Prekliči</MudButton>
+        <MudButton OnClick="Submit" Color="Color.Primary">@(StaffMember.Id == null ? "Dodaj" : "Spremeni")</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code
+{
+    [CascadingParameter]
+
+    MudDialogInstance MudDialog { get; set;}
+
+    [Parameter]
+
+    public StaffMember StaffMember { get; set; }
+
+    private string GenderToString(Gender gender)
+    {
+        if (Enum.IsDefined<Gender>(gender))
+            return gender.GetDisplayAttribute();
+
+        return string.Empty;
+    }
+
+    private void Submit()
+    {
+        MudDialog.Close(DialogResult.Ok(StaffMember));
+    }
+
+    void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+}

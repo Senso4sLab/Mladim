@@ -46,7 +46,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStatePr
     builder.Services.AddScoped<IOrganizationService, OrganizationService>();
     builder.Services.AddScoped<IProjectService, ProjectService>();
     builder.Services.AddScoped<IActivityService, ActivityService>();
-    builder.Services.AddScoped(typeof(IGenericHttpService<>), typeof(GenericHttpService<>));
+    builder.Services.AddScoped<IGenericHttpService, GenericHttpService>();
 }
 {
     builder.Services.Configure<MladimApiUrls>(builder.Configuration.GetSection("MladimApiUrls"));

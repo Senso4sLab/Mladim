@@ -42,7 +42,7 @@ public partial class Index
     protected IAuthService AuthService { get; set; }
 
     [Inject]
-    protected IPopUpService PopupService { get; set; }
+    protected IPopupService PopupService { get; set; }
 
     private List<Organization> organizations = new List<Organization>();
 

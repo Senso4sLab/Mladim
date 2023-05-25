@@ -13,4 +13,5 @@ public class GetStaffMembersQuery : IRequest<IEnumerable<StaffMemberDto>>
     public int? OrganizationId { get; set; }
     public int? ProjectId { get; set; }
     public int? ActivityId { get; set; }
+    public bool IsActive { get; set; } = true;
 }

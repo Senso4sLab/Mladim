@@ -13,4 +13,5 @@ public class GetParticipantsQuery : IRequest<IEnumerable<ParticipantDto>>
 {
     public int? OrganizationId { get; set; }    
     public int? ActivityId { get; set; }
+    public bool IsActive { get; set; } = true;
 }

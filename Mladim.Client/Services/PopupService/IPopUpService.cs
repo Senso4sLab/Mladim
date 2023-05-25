@@ -1,8 +1,9 @@
-﻿using Mladim.Domain.Dtos;
+﻿using Mladim.Client.Models;
+using Mladim.Domain.Dtos;
 
 namespace Mladim.Client.Services.PopupService;
 
-public interface IPopUpService
+public interface IPopupService
 {
     //Task<IEnumerable<AnonymousParticipantGroupDto>>? ShowAParticipantDialog(string title, IEnumerable<AnonymousParticipantGroupDto> aparticipantGroup);
     //Task<bool> ShowParticipantDialog(string title, ParticipantDto partner);
@@ -12,6 +13,5 @@ public interface IPopUpService
     Task<bool> ShowSimpleTextDialogAsync(string title, string content);
     void ShowSnackbarError(string content = "Prišlo je do napake, poskusite ponovno");
     void ShowSnackbarSuccess(string content = "Uspešno izvedeno");
-   
-
+    Task<bool> ShowStaffMemberDialog(string title, StaffMember staffMember);
 }

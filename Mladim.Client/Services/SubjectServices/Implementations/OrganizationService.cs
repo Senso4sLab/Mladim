@@ -14,11 +14,11 @@ public class OrganizationService : IOrganizationService
 {
 	private IMapper Mapper { get; }
 	private MladimApiUrls MladimApiUrls { get; }
-	private IGenericHttpService<OrganizationDto> HttpClient { get; }
+	private IGenericHttpService HttpClient { get; }
 	private ILocalStorageService Storage { get; }
     private StorageKeys StorageKeys { get; }
 
-    public OrganizationService(IGenericHttpService<OrganizationDto> httpClient, IOptions<MladimApiUrls> MladimApiUrls,
+    public OrganizationService(IGenericHttpService httpClient, IOptions<MladimApiUrls> MladimApiUrls,
         ILocalStorageService storage, IOptions<StorageKeys>storageKeys,IMapper mapper)
 	{
 		this.Mapper = mapper;
@@ -31,11 +31,14 @@ public class OrganizationService : IOrganizationService
 	public async Task<IEnumerable<Organization>> GetByUserIdAsync(string userId)
 	{
 		string url = string.Format(MladimApiUrls.GetOrganizationsByUserId, userId);
-		var organizations = await HttpClient.GetAllAsync(url);
+		var organizations = await HttpClient.GetAllAsync<IEnumerable<OrganizationDto>>(url);
 		return this.Mapper.Map<IEnumerable<Organization>>(organizations);	        
     }
 
-	public async Task<bool> RemoveAsync(int organiozationId)
+	
+
+
+    public async Task<bool> RemoveAsync(int organiozationId)
 	{
         string url = string.Format(MladimApiUrls.GetOrganizationsByUserId, organiozationId);
 

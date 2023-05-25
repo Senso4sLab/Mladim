@@ -12,14 +12,14 @@ namespace Mladim.Client.Services.Authentication;
 
 public class AuthService : IAuthService
 {
-    private IGenericHttpService<LoginUser> HttpClient { get; }
+    private IGenericHttpService HttpClient { get; }
     private AuthenticationStateProvider AuthStateProvider { get; }
     private ILocalStorageService Storage { get; }
 
     private MladimApiUrls MladimApiUrls {get;}
     private StorageKeys StorageKeys { get; }
 
-    public AuthService(IGenericHttpService<LoginUser> httpClient,
+    public AuthService(IGenericHttpService httpClient,
                        ILocalStorageService storage,
                        AuthenticationStateProvider authProvider,
                        IOptions<MladimApiUrls> mladimApiUrls, 
@@ -34,7 +34,7 @@ public class AuthService : IAuthService
     }
     public async Task<Result<AuthResponse>> LoginAsync(LoginUser loginUser)
     {   
-        var response = await this.HttpClient.PostAsync<Result<AuthResponse>>(this.MladimApiUrls.Login, loginUser);   
+        var response = await this.HttpClient.PostAsync<LoginUser,Result<AuthResponse>>(this.MladimApiUrls.Login, loginUser);   
         
         if (!response.IsSucceed)
             return response;

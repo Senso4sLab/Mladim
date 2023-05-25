@@ -12,7 +12,7 @@ namespace Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMemb
 
 public class AddStaffMemberCommand : IRequest<StaffMemberDto>
 {
-    public int? OrganizationId { get; set; }
+    public int OrganizationId { get; set; }
     public string Name { get; set; }
     public string Surname { get; set; }
     public Gender Gender { get; set; }

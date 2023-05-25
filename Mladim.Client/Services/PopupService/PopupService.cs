@@ -1,9 +1,11 @@
 ﻿using Mladim.Client.Components.Dialogs;
+using Mladim.Client.Models;
+using Mladim.Domain.Dtos;
 using MudBlazor;
 
 namespace Mladim.Client.Services.PopupService
 {
-    public class PopupService : IPopUpService
+    public class PopupService : IPopupService
     {
         private IDialogService DialogService { get; }
 
@@ -32,6 +34,21 @@ namespace Mladim.Client.Services.PopupService
 
             return !result.Canceled;
         }
+
+        public async Task<bool> ShowStaffMemberDialog(string title, StaffMember staffMember)
+        {
+            var parameters = new DialogParameters();
+            
+            parameters.Add("StaffMember", staffMember);
+
+            var dialog = await DialogService.ShowAsync<UpsertStaffMember>(title, parameters, DialogOptions);
+
+            var result = await dialog.Result;
+
+            return !result.Canceled;
+        }
+
+
 
         public void ShowSnackbarError(string content = "Prišlo je do napake, poskusite ponovno")
         {           
