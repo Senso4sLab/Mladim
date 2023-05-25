@@ -8,22 +8,20 @@
 <MudLayout>           
         <MudAppBar Elevation="1">
             <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-            <MudSpacer />
+            <MudSpacer/>
             <UserLoginSettings/>
         </MudAppBar>
         <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
             <MudDrawerHeader>
-                <MudText Typo="Typo.h5" Class="mt-2">MamaLog</MudText>
+                <MudText Typo="Typo.h5" Class="mt-2">Mladim</MudText>
             </MudDrawerHeader>
-            <NavMenu />
-        </MudDrawer>
-        <CascadingValue Value="true">
+            <NavMenu/>
+        </MudDrawer>        
             <MudMainContent>
                 <MudContainer>
                     @Body
                 </MudContainer>             
-            </MudMainContent> 
-        </CascadingValue>
+            </MudMainContent>      
 </MudLayout>
   
 
@@ -33,12 +31,18 @@
 {
     bool _drawerOpen = true;  
 
-   // [Inject]
+    // [Inject]
     //public IAppState AppState{ get; set; }
 
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
-    }    
+    }
+
+
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
 }
 

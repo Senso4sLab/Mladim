@@ -24,9 +24,9 @@ public partial class Login
     private InputType PasswordInput = InputType.Password;
     private string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
-    private MudForm loginForm;
+    private MudForm? loginForm;
 
-    LoginUserValidator loginUserValidator = new LoginUserValidator();
+    LoginUserValidator loginUserValidator = new LoginUserValidator(); 
 
     public async Task OnValidSubmit()
     {

@@ -29,8 +29,7 @@ public class AuthService : IAuthService
         this.Storage = storage;
         this.AuthStateProvider = authProvider;
         this.MladimApiUrls = mladimApiUrls.Value;
-        this.StorageKeys = storageKeys.Value;   
-
+        this.StorageKeys = storageKeys.Value;
     }
     public async Task<Result<AuthResponse>> LoginAsync(LoginUser loginUser)
     {   

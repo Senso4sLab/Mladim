@@ -34,7 +34,7 @@ public class GenericHttpService : IGenericHttpService
 
     public async Task<TOut?> PostAsync<TIn, TOut>(string url, TIn request)
     {
-        var response = await Client.PostAsJsonAsync<TIn>(url, request);
-        return response.IsSuccessStatusCode ? await response.Content.ReadFromJsonAsync<TOut?>() : default(TOut?);
+        var response = await Client.PostAsJsonAsync<TIn>(url, request);        
+        return response.IsSuccessStatusCode ? await response.Content.ReadFromJsonAsync<TOut>() : default(TOut);
     }
 }

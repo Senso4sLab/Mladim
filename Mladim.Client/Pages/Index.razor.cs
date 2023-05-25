@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using Mladim.Client;
-using Mladim.Client.Shared;
+
 using Mladim.Client.Services.Authentication;
 using Mladim.Client.Components;
 using Mladim.Client.Models;
@@ -69,10 +69,6 @@ public partial class Index
        selectedOrganization = organization;
        await this.OrganizationService.SetDefaultOrganizationAsync(organization.Id);    
     }
-
-
-
-
 
     private async Task<List<Organization>> GetOrganizationByUserIdAsync()
     {

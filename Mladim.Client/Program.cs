@@ -8,10 +8,12 @@ using Mladim.Client;
 using Mladim.Client.Models;
 using Mladim.Client.Services.Authentication;
 using Mladim.Client.Services.HttpService.Generic;
+using Mladim.Client.Services.PopupService;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.Services.SubjectServices.Implementations;
 using MudBlazor;
 using MudBlazor.Services;
+using System.Reflection;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -38,19 +40,23 @@ builder.Services.AddHttpClient("MladimHttpClient", client =>
 
 builder.Services.AddScoped(sp => sp.GetService<IHttpClientFactory>()!.CreateClient("MladimHttpClient"));
 
+
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());    
 builder.Services.AddTransient<HttpAuthorizationHandler>();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
+builder.Services.AddScoped<IPopupService, PopupService>(); 
 {
     builder.Services.AddTransient<IAuthService, AuthService>();
+    builder.Services.AddScoped<IGenericHttpService, GenericHttpService>();
     builder.Services.AddScoped<IOrganizationService, OrganizationService>();
     builder.Services.AddScoped<IProjectService, ProjectService>();
     builder.Services.AddScoped<IActivityService, ActivityService>();
-    builder.Services.AddScoped<IGenericHttpService, GenericHttpService>();
+    builder.Services.AddScoped<IStaffMemberService, StaffMemberService>();    
 }
 {
     builder.Services.Configure<MladimApiUrls>(builder.Configuration.GetSection("MladimApiUrls"));
-    builder.Services.Configure<StorageKeys>(builder.Configuration.GetSection("LocalStorage"));
+    builder.Services.Configure<StorageKeys>(builder.Configuration.GetSection("StorageKeys"));
 }
 
    
