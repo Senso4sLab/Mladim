@@ -13,10 +13,11 @@ public class Organization
     public string? WebpageUrl { get; set; }
     public string? VatNumber { get; set; }
     public string? RegistrationNumber { get; set; }
-    public AgeGroups AgeGroups { get; set; }
-    public YouthSectors YouthSectors { get; set; }
-    public OrganizationTypes Types { get; set; }
-    public OrganizationStatus Status { get; set; }
-    public OrganizationFields Fields { get; set; }
-    public OrganizationRegions Regions { get; set; }
+    public IEnumerable<AgeGroups> AgeGroups { get; set; } = new List<AgeGroups>();
+    public IEnumerable<YouthSectors> YouthSectors { get; set; } = new List<YouthSectors>();
+    public IEnumerable<OrganizationTypes> Types { get; set; } = new List<OrganizationTypes>();
+    public IEnumerable<OrganizationStatus> Status { get; set; } = new List<OrganizationStatus>();
+    public IEnumerable<OrganizationFields> Fields { get; set; } = new List<OrganizationFields>();
+    public IEnumerable<OrganizationRegions> Regions { get; set; } = new List<OrganizationRegions>();
+    public IEnumerable<ActivityTypes> ActivityTypes { get; set; } = new List<ActivityTypes>();
 }

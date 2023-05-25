@@ -26,7 +26,7 @@ public class StaffMemberService : IStaffMemberService
 	public async Task<IEnumerable<StaffMember>> GetByOrganizationIdAsync(int organizationId, bool isAcitve)
 	{
 		string url = string.Format(this.ApiUrls.GetStafMembersByOrganizationId, organizationId, isAcitve);
-		var staffDto = await this.HttpService.GetAllAsync<IEnumerable<StaffMemberDto>>(url);
+		var staffDto = await this.HttpService.GetAllAsync<StaffMemberDto>(url);
 		return this.Mapper.Map<IEnumerable<StaffMember>>(staffDto);	
 	}
 

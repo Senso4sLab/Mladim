@@ -32,4 +32,10 @@ public partial class OrganizationDetailsTab
 
     [Parameter]
     public bool ReadOnly { get; set; }
+
+
+    public TextEditor? textEditor;
+    public async Task LoadHtmlFromTextEditor() =>
+        await textEditor!.LoadHtmlText();
+
 }

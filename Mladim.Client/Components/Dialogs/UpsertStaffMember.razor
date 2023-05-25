@@ -1,58 +1,59 @@
 ﻿@using Mladim.Client.Extensions;
+@using Mladim.Client.Validators;
 @using Mladim.Domain.Enums;
 
 
 
 <MudDialog Style="min-width:400px;">
-<DialogContent>
-    <MudStack Spacing="4">
-        <MudTextField @bind-Value="StaffMember.Name" Variant="Variant.Outlined" Label="Ime" />
-        <MudTextField @bind-Value="StaffMember.Surname" Variant="Variant.Outlined" Label="Priimek" />
+    <DialogContent>
+        <MudForm @ref="@staffMemberForm" Model="@staffMember" Validation="@(staffMemberValidator.ValidateValue)" OnValidSubmit="OnValidSubmit">
+            <MudStack Spacing="4">
+                <MudTextField @bind-Value="staffMember.Name" For="@(() => staffMember.Name)" Variant="Variant.Outlined" Label="Ime" />
+                <MudTextField @bind-Value="staffMember.Surname" For="@(() => staffMember.Surname)" Variant="Variant.Outlined" Label="Priimek" />
 
-        <MudSelect @bind-Value="StaffMember.Gender" ToStringFunc="GenderToString" Variant="Variant.Outlined" Label="Spol" AnchorOrigin="Origin.BottomCenter">
-            @foreach (var gender in Enum.GetValues<Gender>())
-            {
-                <MudSelectItem Value="gender">@gender.GetDisplayAttribute()</MudSelectItem>
-            }
-        </MudSelect>
+                <MudSelect @bind-Value="staffMember.Gender" T="Gender" ToStringFunc="@(gender => gender.GetDisplayAttribute())" Variant="Variant.Outlined" Label="Spol" AnchorOrigin="Origin.BottomCenter">
+                    @foreach (var gender in Enum.GetValues<Gender>())
+                    {
+                        <MudSelectItem Value="gender">@gender.GetDisplayAttribute()</MudSelectItem>
+                    }
+                </MudSelect>
 
-        <MudNumericField @bind-Value="StaffMember.Year" Label="Leto rojstva" Variant="Variant.Outlined" />
-        <MudTextField @bind-Value="StaffMember.Email" Variant="Variant.Outlined" Label="Email" />
-        <MudSwitch @bind-Checked="StaffMember.IsActive" Color="Color.Primary">@(StaffMember.IsActive ? "Aktiven" : "Neaktiven")</MudSwitch>
-        </MudStack>
-    </DialogContent>
-    <DialogActions>
-        <MudButton OnClick="Cancel">Prekliči</MudButton>
-        <MudButton OnClick="Submit" Color="Color.Primary">@(StaffMember.Id == null ? "Dodaj" : "Spremeni")</MudButton>
-    </DialogActions>
+                <MudNumericField @bind-Value="staffMember.Year" For="@(() => staffMember.Year)" Label="Leto rojstva" Variant="Variant.Outlined" />
+                <MudTextField @bind-Value="staffMember.Email" For="@(() => staffMember.Email)" Variant="Variant.Outlined" Label="Email" />
+                <MudSwitch @bind-Checked="staffMember.IsActive" Color="Color.Primary">@(staffMember.IsActive ? "Aktiven" : "Neaktiven")</MudSwitch>
+            </MudStack>
+        </MudForm>
+        </DialogContent>
+        <DialogActions>
+            <MudButton OnClick="Cancel">Prekliči</MudButton>
+            <MudButton OnClick="OnValidSubmitAsync" Color="Color.Primary">@(staffMember.Id == null ? "Dodaj" : "Spremeni")</MudButton>
+        </DialogActions>
 </MudDialog>
 
 
 @code
-{
+    {
     [CascadingParameter]
-
     MudDialogInstance MudDialog { get; set;}
 
     [Parameter]
+    public StaffMember staffMember { get; set; }
 
-    public StaffMember StaffMember { get; set; }
+    private MudForm? staffMemberForm;
+    private StaffMemberValidator staffMemberValidator = new StaffMemberValidator();
+       
 
-    private string GenderToString(Gender gender)
+    private async Task OnValidSubmitAsync()
     {
-        if (Enum.IsDefined<Gender>(gender))
-            return gender.GetDisplayAttribute();
+        await staffMemberForm.Validate();
 
-        return string.Empty;
+        if (staffMemberForm.IsValid)
+            MudDialog.Close(DialogResult.Ok(staffMember));       
     }
 
-    private void Submit()
-    {
-        MudDialog.Close(DialogResult.Ok(StaffMember));
-    }
 
-    void Cancel()
-    {
+    void Cancel() =>
         MudDialog.Cancel();
-    }
+    
+
 }

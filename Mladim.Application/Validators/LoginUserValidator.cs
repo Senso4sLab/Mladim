@@ -14,7 +14,7 @@ public class LoginUserValidator : AbstractValidator<LoginUser>
 
         RuleFor(x => x.Email)
             .EmailAddress()
-            .WithMessage("Nepravilni zapis email naslova");     
+            .WithMessage("Nepravilni vnos email naslova");     
 
         RuleFor(x => x.Password)
             .NotEmpty()           

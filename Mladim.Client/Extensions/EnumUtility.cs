@@ -16,4 +16,9 @@ public static class EnumUtility
 
         return string.Empty;
     }
+
+    public static IEnumerable<T> ToEnums<T>(this T value) where T : struct, Enum =>
+        Enum.GetValues<T>()
+            .Where(val => value.HasFlag(val))
+            .ToList() ?? Enumerable.Empty<T>();
 }

@@ -30,9 +30,12 @@ public class OrganizationService : IOrganizationService
 
 	public async Task<IEnumerable<Organization>> GetByUserIdAsync(string userId)
 	{
-		string url = string.Format(MladimApiUrls.GetOrganizationsByUserId, userId);
-		var organizations = await HttpClient.GetAllAsync<IEnumerable<OrganizationDto>>(url);
-		return this.Mapper.Map<IEnumerable<Organization>>(organizations);	        
+		string url = string.Format(MladimApiUrls.GetOrganizationsByUserId, userId);		
+		
+		var organizations = await HttpClient.GetAllAsync<OrganizationDto>(url);	
+
+		return this.Mapper.Map<IEnumerable<Organization>>(organizations);
+		      
     }
 
 	

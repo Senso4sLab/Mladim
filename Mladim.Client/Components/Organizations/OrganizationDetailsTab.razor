@@ -1,3 +1,19 @@
-﻿<h3>OrganizationDetailsTab</h3>
+﻿@using Mladim.Domain.Enums
+@using Mladim.Client.Models;
 
+<MudStack Spacing="4" Class="py-10">    
 
+    <TextEditor @ref="textEditor" ReadOnly="@ReadOnly" @bind-Text="@Organization.Description" />
+
+    <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationTypes" @bind-EnumValues="Organization.Types" Label="Vrste organizacije" />
+
+    <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationFields" @bind-EnumValues="Organization.Fields" Label="Področja delovanja" />
+
+    <MultiSelect ReadOnly="@ReadOnly" TItem="AgeGroups" @bind-EnumValues="Organization.AgeGroups" Label="Starostne skupine" />
+
+    <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationStatus" @bind-EnumValues="Organization.Status" Label="Statusi organizacije" />
+
+    <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationRegions" @bind-EnumValues="Organization.Regions" Label="Statistične regije" />
+
+    <MultiSelect  ReadOnly="@ReadOnly" TItem="YouthSectors" @bind-EnumValues="Organization.YouthSectors" Label="Mladinski sektorji" />
+</MudStack>

@@ -185,11 +185,11 @@ public enum YouthSectors
 public enum Gender
 {
     [Display(Name = "Moški")]
-    Male = 1,
+    Male = 0,
     [Display(Name = "Ženska")]
-    Female = 2,
+    Female = 1,
     [Display(Name ="Drugo")]
-    Other = 3,
+    Other = 2,
 };
 
 [Flags]

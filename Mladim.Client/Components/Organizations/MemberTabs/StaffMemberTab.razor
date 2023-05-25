@@ -1,21 +1,19 @@
 ﻿@using Mladim.Domain.Enums
 @using Mladim.Client.Extensions
 
-<MudStack Class="py-4" Row="true" Justify="Justify.SpaceBetween">
-    <MudButton OnClick="AddStaffMemberAsync" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Dodaj uporabnika</MudButton>
-    <MudSwitch T=bool Checked="IsActive" CheckedChanged="@CheckedChangedAsync" Color="Color.Primary">@(IsActive ? "Aktivni" : "Neaktivni")</MudSwitch>
+
+<MudStack Class="py-10" Spacing="4">
+    <MudStack  Row="true" Justify="Justify.SpaceBetween">
+        <MudButton OnClick="AddStaffMemberAsync" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Dodaj uporabnika</MudButton>
+        <MudSwitch T=bool Checked="IsActive" CheckedChanged="@CheckedChangedAsync" Color="Color.Primary">@(IsActive ? "Aktivni" : "Neaktivni")</MudSwitch>
     </MudStack>
-
-
-    <MudDataGrid Class="py-4" Items="Staff" ReadOnly="false" EditMode="DataGridEditMode.Form"
-             Bordered="true" Dense="true" EditTrigger="DataGridEditTrigger.Manual">
+    <MudDataGrid Items="Staff" ReadOnly="false" EditMode="DataGridEditMode.Form"
+                Bordered="true" Dense="true" EditTrigger="DataGridEditTrigger.Manual">
         <Columns>
             <PropertyColumn Property="x => x.Name" Title="Ime" />
             <PropertyColumn Property="x => x.Surname" Title="Priimek" />
             <PropertyColumn Property="x => x.Gender.GetDisplayAttribute()" Title="Spol" />
-
-
-            <PropertyColumn Property="x => x.Year" Title="Leto rojstva" />
+            <PropertyColumn Property="x => x.Year" Title="Leto rojstva"/>
             <TemplateColumn CellClass="d-flex justify-end">
                 <CellTemplate>
                     <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" @onclick="@(() => UpdateStaffMemberAsync(context.Item))" />
@@ -26,5 +24,6 @@
             <MudDataGridPager T="StaffMember" RowsPerPageString="Št. vrstic na stran" />
         </PagerContent>
     </MudDataGrid>
+</MudStack>
 
 

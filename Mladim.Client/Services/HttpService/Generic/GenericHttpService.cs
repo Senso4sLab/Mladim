@@ -29,7 +29,7 @@ public class GenericHttpService : IGenericHttpService
     public async Task<bool> PutAsync<TIn>(string url, TIn request)
     {
         var response = await Client.PutAsJsonAsync<TIn>(url, request);
-        return response.IsSuccessStatusCode ? await response.Content.ReadFromJsonAsync<bool>() : false;
+        return response.IsSuccessStatusCode ? await response.Content.ReadFromJsonAsync<int>() > 0 : false;
     }
 
     public async Task<TOut?> PostAsync<TIn, TOut>(string url, TIn request)
