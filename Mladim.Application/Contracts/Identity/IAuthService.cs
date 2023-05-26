@@ -1,7 +1,6 @@
 ﻿
 using Mladim.Application.Models;
-using Mladim.Domain.Models.Login;
-using Mladim.Domain.Models.Result;
+using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +11,6 @@ namespace Mladim.Application.Contracts.Identity;
 
 public interface IAuthService
 {    
-    Task<Result<AuthResponse>> LoginAsync(AuthRequest request);
-    Task<Result<RegistrationResponse>> RegisterAsync(RegistrationRequest request);
+    Task<Result<AuthResponse>> LoginAsync(LoginUser request);
+    Task<Result<RegistrationResponse>> RegisterAsync(RegistrationUser request);
 }

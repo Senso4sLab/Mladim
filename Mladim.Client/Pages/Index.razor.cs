@@ -17,7 +17,7 @@ using Mladim.Client;
 
 using Mladim.Client.Services.Authentication;
 using Mladim.Client.Components;
-using Mladim.Client.Models;
+using Mladim.Client.ViewModels;
 using Mladim.Client.Layouts;
 using Blazored.TextEditor;
 using MudBlazor;
@@ -44,9 +44,9 @@ public partial class Index
     [Inject]
     protected IPopupService PopupService { get; set; }
 
-    private List<Organization> organizations = new List<Organization>();
+    private List<OrganizationVM> organizations = new List<OrganizationVM>();
 
-    private Organization selectedOrganization;
+    private OrganizationVM selectedOrganization;
 
     protected async override Task OnInitializedAsync()
     {
@@ -64,18 +64,18 @@ public partial class Index
     }
 
 
-    private async Task OrganizationValueChanged(Organization organization)
+    private async Task OrganizationValueChanged(OrganizationVM organization)
     {
        selectedOrganization = organization;
        await this.OrganizationService.SetDefaultOrganizationAsync(organization.Id);    
     }
 
-    private async Task<List<Organization>> GetOrganizationByUserIdAsync()
+    private async Task<List<OrganizationVM>> GetOrganizationByUserIdAsync()
     {
         var userId = await this.AuthService.GetUserIdentityAsync();
 
         if(userId == null) 
-            return new List<Organization>();    
+            return new List<OrganizationVM>();    
 
         var organizations =  await this.OrganizationService.GetByUserIdAsync(userId);
 
@@ -92,11 +92,11 @@ public partial class Index
             this.Navigation.NavigateTo($"organization/{userId}");
     }
 
-    private void EditOrganizationAsync(Organization organization) =>
+    private void EditOrganizationAsync(OrganizationVM organization) =>
          this.Navigation.NavigateTo($"organization/{organization.Id}");
 
 
-    private async Task RemoveOrganizationAsync(Organization organization)
+    private async Task RemoveOrganizationAsync(OrganizationVM organization)
     {
         var response = await this.PopupService.ShowSimpleTextDialogAsync("Brisanje organizacije", "Ali želite izbrisati organizacijo?");
 

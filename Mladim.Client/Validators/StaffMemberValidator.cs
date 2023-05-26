@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
-using Mladim.Client.Models;
-using Mladim.Domain.Models.Login;
+using Mladim.Client.ViewModels;
+
 
 namespace Mladim.Client.Validators;
 
-public class StaffMemberValidator : AbstractValidator<StaffMember>
+public class StaffMemberValidator : AbstractValidator<StaffMemberVM>
 {
 	public StaffMemberValidator()
 	{
@@ -44,7 +44,7 @@ public class StaffMemberValidator : AbstractValidator<StaffMember>
 
     public Func<object, string, Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>
     {
-        var result = await ValidateAsync(ValidationContext<StaffMember>.CreateWithOptions((StaffMember)model, x => x.IncludeProperties(propertyName)));
+        var result = await ValidateAsync(ValidationContext<StaffMemberVM>.CreateWithOptions((StaffMemberVM)model, x => x.IncludeProperties(propertyName)));
 
         if (result.IsValid)
             return Array.Empty<string>();

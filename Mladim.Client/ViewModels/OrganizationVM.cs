@@ -1,8 +1,8 @@
 ﻿using Mladim.Domain.Enums;
 
-namespace Mladim.Client.Models;
+namespace Mladim.Client.ViewModels;
 
-public class Organization
+public class OrganizationVM
 {
     public int Id { get; set; }
     public string Name { get; set; }

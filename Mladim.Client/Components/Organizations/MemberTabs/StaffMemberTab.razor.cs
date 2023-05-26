@@ -17,7 +17,7 @@ using Mladim.Client;
 using Mladim.Client.Shared;
 using Mladim.Client.Services.Authentication;
 using Mladim.Client.Components;
-using Mladim.Client.Models;
+using Mladim.Client.ViewModels;
 using Mladim.Client.Layouts;
 
 using Blazored.TextEditor;
@@ -37,28 +37,25 @@ public partial class StaffMemberTab
     public IPopupService PopupService { get; set; }
 
     [Parameter]
-    public Organization Organization { get; set; }
+    public OrganizationVM Organization { get; set; }
 
 
     private bool IsActive = true;
 
-    private List<StaffMember> Staff = new List<StaffMember>();
+    private List<StaffMemberVM> Staff = new List<StaffMemberVM>();
 
 
     protected async override Task OnParametersSetAsync() =>       
-        this.Staff = new List<StaffMember>(await GetStaffByOrganizationId());
+        this.Staff = new List<StaffMemberVM>(await GetStaffByOrganizationId());
     
 
-    private Task<IEnumerable<StaffMember>> GetStaffByOrganizationId() =>
+    private Task<IEnumerable<StaffMemberVM>> GetStaffByOrganizationId() =>
         this.StaffService.GetByOrganizationIdAsync(this.Organization.Id, this.IsActive);
    
 
     private async Task AddStaffMemberAsync()
     {
-        var staffMember = new StaffMember()
-        {
-            Year = 2000,            
-        };
+        var staffMember = new StaffMemberVM();
 
         var dialogResponse = await this.PopupService.ShowStaffMemberDialog("Dodaj uporabnika", staffMember);
 
@@ -79,10 +76,10 @@ public partial class StaffMemberTab
     private async Task CheckedChangedAsync(bool isActive)
     {
         this.IsActive = isActive;
-        this.Staff = new List<StaffMember>(await GetStaffByOrganizationId());
+        this.Staff = new List<StaffMemberVM>(await GetStaffByOrganizationId());
     }
 
-    private async Task UpdateStaffMemberAsync(StaffMember staffMember)
+    private async Task UpdateStaffMemberAsync(StaffMemberVM staffMember)
     {
 
         var dialogResponse = await this.PopupService.ShowStaffMemberDialog("Izbrani uporabnik", staffMember);
@@ -98,4 +95,6 @@ public partial class StaffMemberTab
             this.PopupService.ShowSnackbarError();
 
     }
+
+
 }

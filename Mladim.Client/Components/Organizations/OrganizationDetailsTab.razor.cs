@@ -17,25 +17,26 @@ using Mladim.Client;
 using Mladim.Client.Shared;
 using Mladim.Client.Services.Authentication;
 using Mladim.Client.Components;
-using Mladim.Client.Models;
+using Mladim.Client.ViewModels;
 using Mladim.Client.Layouts;
 
 using Blazored.TextEditor;
 using MudBlazor;
+using Mladim.Domain.Dtos;
 
 namespace Mladim.Client.Components.Organizations;
 
 public partial class OrganizationDetailsTab
 {
     [Parameter]
-    public Organization Organization { get; set; }
+    public OrganizationVM Organization { get; set; }
 
     [Parameter]
     public bool ReadOnly { get; set; }
 
-
     public TextEditor? textEditor;
+
+
     public async Task LoadHtmlFromTextEditor() =>
         await textEditor!.LoadHtmlText();
-
 }

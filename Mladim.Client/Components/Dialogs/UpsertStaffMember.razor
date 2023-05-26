@@ -23,21 +23,21 @@
                 <MudSwitch @bind-Checked="staffMember.IsActive" Color="Color.Primary">@(staffMember.IsActive ? "Aktiven" : "Neaktiven")</MudSwitch>
             </MudStack>
         </MudForm>
-        </DialogContent>
-        <DialogActions>
-            <MudButton OnClick="Cancel">Prekliči</MudButton>
-            <MudButton OnClick="OnValidSubmitAsync" Color="Color.Primary">@(staffMember.Id == null ? "Dodaj" : "Spremeni")</MudButton>
-        </DialogActions>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Prekliči</MudButton>
+        <MudButton OnClick="OnValidSubmitAsync" Color="Color.Primary">@(staffMember.Id == null ? "Dodaj" : "Spremeni")</MudButton>
+    </DialogActions>
 </MudDialog>
 
 
 @code
-    {
+{
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set;}
 
     [Parameter]
-    public StaffMember staffMember { get; set; }
+    public StaffMemberVM staffMember { get; set; }
 
     private MudForm? staffMemberForm;
     private StaffMemberValidator staffMemberValidator = new StaffMemberValidator();

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Client;
-using Mladim.Client.Models;
 using Mladim.Client.Services.Authentication;
 using Mladim.Client.Services.HttpService.Generic;
 using Mladim.Client.Services.PopupService;
@@ -14,6 +13,7 @@ using Mladim.Client.Services.SubjectServices.Implementations;
 using MudBlazor;
 using MudBlazor.Services;
 using System.Reflection;
+using Mladim.Client.Models;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");

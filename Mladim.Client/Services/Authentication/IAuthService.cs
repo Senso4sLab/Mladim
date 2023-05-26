@@ -1,6 +1,6 @@
-﻿using Mladim.Client.Models;
-using Mladim.Domain.Models.Login;
-using Mladim.Domain.Models.Result;
+﻿using Mladim.Application.Models;
+using Mladim.Client.ViewModels;
+using Mladim.Domain.Models;
 
 namespace Mladim.Client.Services.Authentication;
 

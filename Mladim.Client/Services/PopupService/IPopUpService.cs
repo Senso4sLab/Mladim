@@ -1,4 +1,4 @@
-﻿using Mladim.Client.Models;
+﻿using Mladim.Client.ViewModels;
 using Mladim.Domain.Dtos;
 
 namespace Mladim.Client.Services.PopupService;
@@ -13,5 +13,7 @@ public interface IPopupService
     Task<bool> ShowSimpleTextDialogAsync(string title, string content);
     void ShowSnackbarError(string content = "Prišlo je do napake, poskusite ponovno");
     void ShowSnackbarSuccess(string content = "Uspešno izvedeno");
-    Task<bool> ShowStaffMemberDialog(string title, StaffMember staffMember);
+    Task<bool> ShowStaffMemberDialog(string title, StaffMemberVM staffMember);
+    Task<bool> ShowParticipantDialog(string title, ParticipantVM partner);
+    Task<bool> ShowPartnerDialog(string title, PartnerVM partner);
 }

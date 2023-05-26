@@ -1,10 +1,10 @@
 ﻿using Mladim.Domain.Enums;
 
-namespace Mladim.Client.Models;
+namespace Mladim.Client.ViewModels;
 
-public class AddStaffMemberCommand
+public class UpdateStaffMemberVM
 {
-    public int OrganizationId { get; set; }
+    public int Id { get; set; }
     public string Name { get; set; }
     public string Surname { get; set; }
     public Gender Gender { get; set; }

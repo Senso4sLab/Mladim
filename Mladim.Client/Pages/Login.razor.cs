@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Components;
 using Mladim.Client.Services.Authentication;
 using MudBlazor;
-using Mladim.Domain.Models.Login;
+
 using Mladim.Application.Validators;
+using Mladim.Domain.Models;
 
 namespace Mladim.Client.Pages;
 

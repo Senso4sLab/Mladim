@@ -11,7 +11,7 @@ namespace Mladim.Application.Features.Members.Participants.Commands.AddParticipa
 
 public class AddParticipantCommand : IRequest<ParticipantDto>
 {
-    public int? OrganizationId { get; set; }
+    public int OrganizationId { get; set; }
     public string Name { get; set; }
     public string Surname { get; set; }
     public Gender Gender { get; set; }

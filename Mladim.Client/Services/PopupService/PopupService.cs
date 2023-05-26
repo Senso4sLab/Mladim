@@ -1,6 +1,7 @@
 ﻿using Mladim.Client.Components.Dialogs;
-using Mladim.Client.Models;
+using Mladim.Client.ViewModels;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Models;
 using MudBlazor;
 
 namespace Mladim.Client.Services.PopupService
@@ -35,18 +36,7 @@ namespace Mladim.Client.Services.PopupService
             return !result.Canceled;
         }
 
-        public async Task<bool> ShowStaffMemberDialog(string title, StaffMember staffMember)
-        {
-            var parameters = new DialogParameters();
-            
-            parameters.Add("StaffMember", staffMember);
-
-            var dialog = await DialogService.ShowAsync<UpsertStaffMember>(title, parameters, DialogOptions);
-
-            var result = await dialog.Result;
-
-            return !result.Canceled;
-        }
+       
 
 
 
@@ -58,6 +48,38 @@ namespace Mladim.Client.Services.PopupService
         public void ShowSnackbarSuccess(string content = "Uspešno izvedeno")
         {
             this.SnackBar.Add(content, Severity.Success);
+        }
+
+
+        public async Task<bool> ShowStaffMemberDialog(string title, StaffMemberVM staffMember)
+        {
+            var parameters = new DialogParameters();
+
+            parameters.Add("StaffMember", staffMember);
+
+            var dialog = await DialogService.ShowAsync<UpsertStaffMember>(title, parameters, DialogOptions);
+
+            var result = await dialog.Result;
+
+            return !result.Canceled;
+        }
+
+        public async Task<bool> ShowParticipantDialog(string title, ParticipantVM participant)
+        {
+            var parameters = new DialogParameters();
+
+            parameters.Add("Participant", participant);
+
+            var dialog = await DialogService.ShowAsync<UpsertParticipant>(title, parameters, DialogOptions);
+
+            var result = await dialog.Result;
+
+            return !result.Canceled;
+        }
+
+        public async Task<bool> ShowPartnerDialog(string title, PartnerVM partner)
+        {
+            throw new NotImplementedException();
         }
     }
 }

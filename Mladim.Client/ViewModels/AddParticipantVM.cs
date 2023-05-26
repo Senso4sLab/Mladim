@@ -1,12 +1,13 @@
 ﻿using Mladim.Domain.Enums;
 
-namespace Mladim.Client.Models;
+namespace Mladim.Client.ViewModels;
 
-public class Member
+public class AddParticipantVM
 {
-    public int? Id { get; set; }
+    public int OrganizationId { get; set; }
     public string Name { get; set; }
     public string Surname { get; set; }
     public Gender Gender { get; set; }
     public int Year { get; set; }
+    public AgeGroups AgeGroup { get; set; }
 }

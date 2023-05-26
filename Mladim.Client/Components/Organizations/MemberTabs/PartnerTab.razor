@@ -1,7 +1,29 @@
-﻿<h3>PartnerTab</h3>
+﻿
 
-@code 
-{
-    [Parameter]
-    public Organization Organization { get; set; }
-}
+
+
+<MudStack Class="py-10" Spacing="4">
+    <MudStack Row="true" Justify="Justify.SpaceBetween">
+        <MudButton OnClick="AddPartnerAsync" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Dodaj partnerja</MudButton>
+        <MudSwitch T=bool Checked="IsActive" CheckedChanged="@CheckedChangedAsync" Color="Color.Primary">@(IsActive ? "Aktivni" : "Neaktivni")</MudSwitch>
+        </MudStack>
+        <MudDataGrid Items="Partners" ReadOnly="false" EditMode="DataGridEditMode.Form"
+                     Bordered="true" Dense="true" EditTrigger="DataGridEditTrigger.Manual">
+            <Columns>
+                <PropertyColumn Property="x => x.Name" Title="Ime" />
+                <PropertyColumn Property="x => x.Description" Title="Opis" />
+                <PropertyColumn Property="x => x.ContactPerson" Title="Kontaktna oseba" />
+                <PropertyColumn Property="x => x.Email" Title="Email" />              
+                <TemplateColumn CellClass="d-flex justify-end">
+                    <CellTemplate>
+                        <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" @onclick="@(() => UpdatePartnerAsync(context.Item))"/>
+                    </CellTemplate>
+                </TemplateColumn>
+        </Columns>
+        <PagerContent>
+            <MudDataGridPager T="PartnerVM" RowsPerPageString="Št. vrstic na stran" />
+        </PagerContent>
+    </MudDataGrid>
+</MudStack>
+
+            

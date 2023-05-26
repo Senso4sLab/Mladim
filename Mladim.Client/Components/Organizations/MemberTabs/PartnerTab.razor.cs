@@ -19,19 +19,19 @@ using Mladim.Client.Services.Authentication;
 using Mladim.Client.Components;
 using Mladim.Client.ViewModels;
 using Mladim.Client.Layouts;
-
+using Mladim.Client.Extensions;
+using Mladim.Client.Components.Organizations;
 using Blazored.TextEditor;
 using MudBlazor;
 using Mladim.Client.Services.PopupService;
 using Mladim.Client.Services.SubjectServices.Contracts;
-using Mladim.Domain.Dtos;
 
 namespace Mladim.Client.Components.Organizations.MemberTabs;
 
-public partial class ParticipantTab
+public partial class PartnerTab
 {
     [Inject]
-    public IParticipantService ParticipantService { get; set; }
+    public IPartnerService PartnerService { get; set; }
 
     [Inject]
     public IPopupService PopupService { get; set; }
@@ -40,33 +40,33 @@ public partial class ParticipantTab
     public OrganizationVM Organization { get; set; }
 
 
-    private IList<ParticipantVM> Participants = new List<ParticipantVM>();
+    private IList<PartnerVM> Partners = new List<PartnerVM>();
 
     private bool IsActive = true;
 
     protected async override Task OnParametersSetAsync() =>
-       this.Participants = new List<ParticipantVM>(await GetParticipantsByOrganizationId());
+       this.Partners = new List<PartnerVM>(await GetPartnersByOrganizationId());
 
 
-    private Task<IEnumerable<ParticipantVM>> GetParticipantsByOrganizationId() =>
-        this.ParticipantService.GetByOrganizationIdAsync(this.Organization.Id, this.IsActive);
+    private Task<IEnumerable<PartnerVM>> GetPartnersByOrganizationId() =>
+        this.PartnerService.GetByOrganizationIdAsync(this.Organization.Id, this.IsActive);
 
 
-    private async Task AddParticipantAsync()
+    private async Task AddPartnerAsync()
     {
-        var participant = new ParticipantVM();
+        var partner = new PartnerVM();
 
-        var dialogResponse = await this.PopupService.ShowParticipantDialog("Dodajanje udeleženca", participant);
+        var dialogResponse = await this.PopupService.ShowPartnerDialog("Dodajanje partnerja", partner);
 
         if (!dialogResponse)
             return;
 
-        participant = await this.ParticipantService.AddAsync(this.Organization.Id, participant);
+        partner = await this.PartnerService.AddAsync(this.Organization.Id, partner);
 
-        if (participant != null)
+        if (partner != null)
         {
-            Participants.Add(participant);
-            this.PopupService.ShowSnackbarSuccess("Udeleženec je uspešno dodan");
+            Partners.Add(partner);
+            this.PopupService.ShowSnackbarSuccess("Partner je uspešno dodan");
         }
         else
             this.PopupService.ShowSnackbarError();
@@ -75,18 +75,18 @@ public partial class ParticipantTab
     private async Task CheckedChangedAsync(bool isActive)
     {
         this.IsActive = isActive;
-        this.Participants = new List<ParticipantVM>(await GetParticipantsByOrganizationId());
+        this.Partners = new List<PartnerVM>(await GetPartnersByOrganizationId());
     }
 
-    private async Task UpdateParticipantAsync(ParticipantVM participant)
+    private async Task UpdatePartnerAsync(PartnerVM partner)
     {
 
-        var dialogResponse = await this.PopupService.ShowParticipantDialog("Posodobitev podatkov udeleženeca", participant);
+        var dialogResponse = await this.PopupService.ShowPartnerDialog("Posodobitev podatkov udeleženeca", partner);
 
         if (!dialogResponse)
             return;
 
-        var succeedResponse = await this.ParticipantService.UpdateAsync(participant);
+        var succeedResponse = await this.PartnerService.UpdateAsync(partner);
 
         if (succeedResponse)
             this.PopupService.ShowSnackbarSuccess("Podatki so uspešno posodobljeni");
@@ -94,9 +94,4 @@ public partial class ParticipantTab
             this.PopupService.ShowSnackbarError();
 
     }
-
-
-
 }
-
-    

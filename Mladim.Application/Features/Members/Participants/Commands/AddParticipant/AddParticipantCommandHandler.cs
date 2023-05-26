@@ -25,9 +25,6 @@ public class AddParticipantCommandHandler : IRequestHandler<AddParticipantComman
    
     public async Task<ParticipantDto> Handle(AddParticipantCommand request, CancellationToken cancellationToken)
     {
-        if (request.OrganizationId == null)
-            throw new Exception("Organizacija ne obstaja");
-
         var organization = await this.UnitOfWork.OrganizationRepository
             .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
 

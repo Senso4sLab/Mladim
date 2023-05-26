@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mladim.Domain.Models.Result;
+namespace Mladim.Domain.Models;
 
 public class Result
 {
@@ -33,11 +33,11 @@ public class Result<T> : Result
 
     public Result(T? value, bool isSucceed, string message = "Uspešno izvedeno") : base(isSucceed, message)
     {
-        this.Value = value;
+        Value = value;
     }
     public Result(string errorMessage) : base(false, errorMessage)
     {
-        
+
     }
-       
+
 }

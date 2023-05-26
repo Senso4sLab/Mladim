@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Mladim.Application.Contracts.Identity;
 using Mladim.Application.Models;
-using Mladim.Domain.Models.Result;
+using Mladim.Domain.Models;
 
 namespace Mladim.WebAPI.Controllers;
 
@@ -19,14 +19,14 @@ public class AccountController : ControllerBase
 
 
     [HttpPost("register")]
-    public async Task<ActionResult<Result<RegistrationResponse>>> RegisterAsync(RegistrationRequest request)
+    public async Task<ActionResult<Result<RegistrationResponse>>> RegisterAsync(RegistrationUser request)
     {
         var response = await this.AuthService.RegisterAsync(request);
         return Ok(response);
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<Result<AuthResponse>>> LoginAsync(AuthRequest userDto)
+    public async Task<ActionResult<Result<AuthResponse>>> LoginAsync(LoginUser userDto)
     {
         var response = await this.AuthService.LoginAsync(userDto);
         return Ok(response);

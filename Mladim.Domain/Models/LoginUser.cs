@@ -5,20 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mladim.Application.Models;
+namespace Mladim.Domain.Models;
 
-public class RegistrationRequest
+public class LoginUser
 {
-    [Required]
-    public string Name { get; set; }
-    [Required]
-    public string Surname { get; set; }
-    [Required]
-    public string Nickname { get; set; }
-
     [Required]
     [EmailAddress]
     public string Email { get; set; }
+
     [Required]
     public string Password { get; set; }
 }
+

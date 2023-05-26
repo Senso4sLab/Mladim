@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Mladim.Application.Contracts.Identity;
-using Mladim.Domain.Models.Login;
+using Mladim.Domain.Models;
 
 namespace Mladim.Application.Validators;
 
@@ -8,13 +8,10 @@ public class LoginUserValidator : AbstractValidator<LoginUser>
 {    
     public LoginUserValidator()
     {
-        RuleFor(x => x.Email)
-            .NotEmpty()
-            .WithMessage("Vnosno polje je obvezno");
-
-        RuleFor(x => x.Email)
+        RuleFor(x => x.Email)            
+            .NotEmpty()                 
             .EmailAddress()
-            .WithMessage("Nepravilni vnos email naslova");     
+            .WithMessage("Neveljavna oblika email naslova");
 
         RuleFor(x => x.Password)
             .NotEmpty()           
@@ -25,10 +22,8 @@ public class LoginUserValidator : AbstractValidator<LoginUser>
     public Func<object, string, Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>
     {
         var result = await ValidateAsync(ValidationContext<LoginUser>.CreateWithOptions((LoginUser)model, x => x.IncludeProperties(propertyName)));
-        
         if (result.IsValid)
             return Array.Empty<string>();
-        
         return result.Errors.Select(e => e.ErrorMessage);
     };
 }

@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Mladim.Application.Contracts.Identity;
 using Mladim.Application.Models;
 using Mladim.Domain.IdentityModels;
-using Mladim.Domain.Models.Result;
+using Mladim.Domain.Models;
 using Mladim.Domain.Roles;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -22,16 +22,16 @@ public class AuthService : IAuthService
         this.UserManager = userManager;
     }
    
-    public async Task<Result<AuthResponse>> LoginAsync(AuthRequest request)
+    public async Task<Result<AuthResponse>> LoginAsync(LoginUser loginUser)
     {
-        var user = await this.UserManager.FindByEmailAsync(request.Email);
+        var user = await this.UserManager.FindByEmailAsync(loginUser.Email);
 
         if (user == null)
             return new Result<AuthResponse>("Vnešeni podatki so napačni");       
 
-        bool passwordCorrect = await this.UserManager.CheckPasswordAsync(user, request.Password);           
+        bool passwordCorrect = await this.UserManager.CheckPasswordAsync(user, loginUser.Password);           
 
-        if (!await this.UserManager.CheckPasswordAsync(user, request.Password))
+        if (!await this.UserManager.CheckPasswordAsync(user, loginUser.Password))
             return new Result<AuthResponse>("Vnešeni podatki so napačni");
 
         var authResponse =  new AuthResponse
@@ -71,7 +71,7 @@ public class AuthService : IAuthService
     }
 
 
-    public async Task<Result<RegistrationResponse>> RegisterAsync(RegistrationRequest request)
+    public async Task<Result<RegistrationResponse>> RegisterAsync(RegistrationUser request)
     {
         var user = await this.UserManager.FindByEmailAsync(request.Email);
 
