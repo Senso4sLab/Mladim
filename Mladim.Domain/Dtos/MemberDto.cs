@@ -2,7 +2,7 @@
 
 namespace Mladim.Domain.Dtos;
 
-public class MemberDto
+public class MemberDto : BaseMemberDto
 {
     public int Id { get; set; }
     public string Name { get; set; }

@@ -34,7 +34,7 @@ public class StaffMemberController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<StaffMemberDto>>> GetAsync([FromQuery] GetStaffMembersQuery query)
+    public async Task<ActionResult<IEnumerable<BaseMemberDto>>> GetAsync([FromQuery] GetStaffMembersQuery query)
     {
         var response = await this.Mediator.Send(query);
         return Ok(response);

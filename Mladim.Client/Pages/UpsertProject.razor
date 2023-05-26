@@ -1,0 +1,51 @@
+﻿@page "/organization/{OrganizationId:int}/project"
+@page "/organization/{OrganizationId:int}/project/{projectId:int}" 
+
+
+<MudStack Class="py-5" Spacing="5">
+    <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+        <MudText Typo="Typo.h5">Vnesi podatke o projektu</MudText>
+
+        <MudStack Row="true" Spacing="2" Justify="Justify.FlexEnd">
+            <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Save" OnClick="SaveProjectAsync" />
+            <MudFab Color="Color.Secondary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Cancel" OnClick="CancelProjectAsync" />
+        </MudStack>
+
+    </MudStack>
+
+    <MudTextField @bind-Value="project.Name" Variant="Variant.Outlined" Label="Ime projekta">@project.Name</MudTextField>
+    <MudDateRangePicker Variant="Variant.Outlined" Label="Trajanje projekta" @bind-DateRange="projectDuration"/>
+
+
+    <TextEditor @ref="textEditor"  @bind-Text="@project.Description" />
+
+    <MudSelect T="BaseMemberVM" MultiSelection="true" ToStringFunc="@((staff)=> staff.Name)"  @bind-SelectedValues="staffleads" Variant="Variant.Outlined" Label="Vodje projekta" AnchorOrigin="Origin.BottomCenter">
+        @foreach (var staffMember in staff)
+        {
+                <MudSelectItem Value="staffMember">@staffMember.Name</MudSelectItem>
+        }
+    </MudSelect>
+
+    <MudSelect MultiSelection="true" T="BaseMemberVM" ToStringFunc="@((staff)=> staff.Name)" @bind-SelectedValues="administrators" Variant="Variant.Outlined" Label="Administracija" AnchorOrigin="Origin.BottomCenter">
+        @foreach (var staffMember in staff)
+        {
+                <MudSelectItem Value="staffMember">@staffMember.Name</MudSelectItem>
+        }
+    </MudSelect>  
+
+
+    <MudStack Row Spacing="5" AlignItems="AlignItems.Center">
+        <MudSelect MultiSelection="true" T="PartnerVM" ToStringFunc="@((partner)=> partner.Name)"  @bind-SelectedValues="selectedPartners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var partner in partners)
+            {
+                    <MudSelectItem Value="partner">@partner.Name</MudSelectItem>
+            }
+        </MudSelect>
+        <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddPartnerAsync" />
+    </MudStack>
+
+
+</MudStack>
+
+
+

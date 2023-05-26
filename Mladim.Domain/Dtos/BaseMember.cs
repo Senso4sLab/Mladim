@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Dtos;
 
-public class StaffMemberDto : MemberDto
+public class BaseMemberDto
 {
-    public string Email { get; set; }
-   
-    public bool IsRegistered { get; set; }   
-    
+    public int? Id { get; set; }
+    public string Name { get; set; }
 }

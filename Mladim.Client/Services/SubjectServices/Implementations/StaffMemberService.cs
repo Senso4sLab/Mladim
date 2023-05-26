@@ -23,14 +23,22 @@ public class StaffMemberService : IStaffMemberService
         this.ApiUrls = mladimApiUrls.Value;
     }
 
-	public async Task<IEnumerable<StaffMemberVM>> GetByOrganizationIdAsync(int organizationId, bool isAcitve)
+	public async Task<IEnumerable<StaffMemberVM>> GetByOrganizationIdAsync(int organizationId, bool isActive)
 	{
-		string url = string.Format(this.ApiUrls.GetStafMembersByOrganizationId, organizationId, isAcitve);
+		string url = string.Format(this.ApiUrls.GetStafMembersByOrganizationId, organizationId, false, isActive);				
 		var staffDto = await this.HttpService.GetAllAsync<IEnumerable<StaffMemberDto>>(url);
 		return this.Mapper.Map<IEnumerable<StaffMemberVM>>(staffDto);	
 	}
 
-	public async Task<StaffMemberVM?> AddAsync(int organizationId, StaffMemberVM staffMember)
+    public async Task<IEnumerable<BaseMemberVM>> GetBaseByOrganizationIdAsync(int organizationId, bool isActive)
+    {
+        string url = string.Format(this.ApiUrls.GetStafMembersByOrganizationId, organizationId, true, isActive);
+        var baseDto = await this.HttpService.GetAllAsync<IEnumerable<BaseMemberDto>>(url);
+        return this.Mapper.Map<IEnumerable<BaseMemberVM>>(baseDto);
+    }
+
+
+    public async Task<StaffMemberVM?> AddAsync(int organizationId, StaffMemberVM staffMember)
 	{
 		var command = this.Mapper.Map<AddStaffMemberVM>(staffMember);
 		command.OrganizationId = organizationId;

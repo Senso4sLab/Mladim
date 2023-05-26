@@ -5,8 +5,8 @@ namespace Mladim.Client.Services.SubjectServices.Contracts;
 
 public interface IOrganizationService
 {
-    Task<int?> DefaultOrganizationIdAsync();
-    Task SetDefaultOrganizationAsync(int orgId);
+    Task<DefaultOrganization?> DefaultOrganizationAsync();
+    Task SetDefaultOrganizationAsync(DefaultOrganization defaultOrganization);
     Task<IEnumerable<OrganizationVM>> GetByUserIdAsync(string userId);
 
     Task<OrganizationVM?> GetByIdAsync(int organizationId);

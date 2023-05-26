@@ -6,6 +6,7 @@ using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,8 +26,10 @@ public class GetActivitiesByProjectQueryHandler : IRequestHandler<GetActivitiesB
 
     public async Task<IEnumerable<ActivityDto>> Handle(GetActivitiesByProjectQuery request, CancellationToken cancellationToken)
     {
+        Expression<Func<Activity, bool>> predicate = a => a.ProjectId == request.ProjectId;
+
         var activities = await this.UnitOfWork.ActivityRepository
-            .GetAllAsync(a => a.ProjectId == request.ProjectId);
+            .GetAllAsync(new[] { predicate });
 
         return this.Mapper.Map<IEnumerable<ActivityDto>>(activities);   
     }

@@ -55,19 +55,19 @@ public partial class Index
         if (organizations.Count == 0)
             return;
 
-        var orgId = await OrganizationService.DefaultOrganizationIdAsync();
+        var defaultOrg = await OrganizationService.DefaultOrganizationAsync();
 
-        selectedOrganization = orgId != null ? organizations.FirstOrDefault(o => o.Id == orgId) ?? organizations.FirstOrDefault()!
+        selectedOrganization = defaultOrg != null ? organizations.FirstOrDefault(o => o.Id == defaultOrg.Id) ?? organizations.FirstOrDefault()!
             : organizations?.FirstOrDefault()!;      
 
-        await this.OrganizationService.SetDefaultOrganizationAsync(selectedOrganization!.Id);
+        await this.OrganizationService.SetDefaultOrganizationAsync(DefaultOrganization.Create(selectedOrganization));
     }
 
 
     private async Task OrganizationValueChanged(OrganizationVM organization)
     {
        selectedOrganization = organization;
-       await this.OrganizationService.SetDefaultOrganizationAsync(organization.Id);    
+       await this.OrganizationService.SetDefaultOrganizationAsync(DefaultOrganization.Create(selectedOrganization));    
     }
 
     private async Task<List<OrganizationVM>> GetOrganizationByUserIdAsync()

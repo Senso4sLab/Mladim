@@ -85,11 +85,11 @@ public partial class UpsertOrganization
 
     private async Task AddOrganizationAsync()
     {
-        var response = await this.OrganizationService.AddAsync(organization, UserId);        
+        var organizationResult = await this.OrganizationService.AddAsync(organization, UserId);        
 
-        if (response != null)
+        if (organizationResult != null)
         {
-            await this.OrganizationService.SetDefaultOrganizationAsync(response.Id);
+            await this.OrganizationService.SetDefaultOrganizationAsync(DefaultOrganization.Create(organizationResult));
             this.PopupService.ShowSnackbarSuccess("Organizacija je uspešno dodana");
         }
         else

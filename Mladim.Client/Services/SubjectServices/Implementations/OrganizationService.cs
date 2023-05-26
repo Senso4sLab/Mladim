@@ -30,37 +30,29 @@ public class OrganizationService : IOrganizationService
         this.MladimApiUrls = MladimApiUrls.Value;
     }
 
-	public async Task<IEnumerable<OrganizationVM>> GetByUserIdAsync(string userId)
-	{
-		string url = string.Format(MladimApiUrls.GetOrganizationsByUserId, userId);
-		var organizations = await HttpClient.GetAllAsync<IEnumerable<OrganizationDto>>(url);
-		return this.Mapper.Map<IEnumerable<OrganizationVM>>(organizations);	        
-    }
-
-    public async Task<bool> RemoveAsync(int organiozationId)
-	{
-        string url = string.Format(MladimApiUrls.GetOrganizationsByUserId, organiozationId);
-
-		if (await HttpClient.DeleteAsync(url))
-		{
-			await RemoveDefaultOrganizationAsync();
-			return true;
-		}
-		return false;
-    }
+	
 
 
-	public Task SetDefaultOrganizationAsync(int orgId) =>
-		Task.FromResult(this.Storage.SetItemAsync<int>(this.StorageKeys.SelectedOrganizationId, orgId));
+	public Task SetDefaultOrganizationAsync(DefaultOrganization defaultOrg) =>
+		Task.FromResult(this.Storage.SetItemAsync(this.StorageKeys.SelectedOrganization, defaultOrg));
 
 	private Task RemoveDefaultOrganizationAsync() =>
-		Task.FromResult(this.Storage.RemoveItemAsync(this.StorageKeys.SelectedOrganizationId));	
+		Task.FromResult(this.Storage.RemoveItemAsync(this.StorageKeys.SelectedOrganization));	
 
 
-	public async Task<int?> DefaultOrganizationIdAsync() =>
-		await this.Storage.ContainKeyAsync(this.StorageKeys.SelectedOrganizationId) ?
-			await this.Storage.GetItemAsync<int>(this.StorageKeys.SelectedOrganizationId) : null;
+	public async Task<DefaultOrganization?> DefaultOrganizationAsync() =>
+		await this.Storage.ContainKeyAsync(this.StorageKeys.SelectedOrganization) ?
+			await this.Storage.GetItemAsync<DefaultOrganization>(this.StorageKeys.SelectedOrganization) : null;
 
+
+    public async Task<IEnumerable<OrganizationVM>> GetByUserIdAsync(string userId)
+    {
+        string url = string.Format(MladimApiUrls.GetOrganizationsByUserId, userId);
+        var organizations = await HttpClient.GetAllAsync<IEnumerable<OrganizationDto>>(url);
+        return this.Mapper.Map<IEnumerable<OrganizationVM>>(organizations);
+    }
+
+   
     public async Task<OrganizationVM?> GetByIdAsync(int organizationId)
     {
         string url = string.Format(MladimApiUrls.GetOrganizationById, organizationId);
@@ -87,5 +79,17 @@ public class OrganizationService : IOrganizationService
             .PutAsync<UpdateOrganizationVM>(MladimApiUrls.OrganizationCommand, command);
 
         return succeedResponse;
+    }
+
+    public async Task<bool> RemoveAsync(int organiozationId)
+    {
+        string url = string.Format(MladimApiUrls.GetOrganizationsByUserId, organiozationId);
+
+        if (await HttpClient.DeleteAsync(url))
+        {
+            await RemoveDefaultOrganizationAsync();
+            return true;
+        }
+        return false;
     }
 }

@@ -6,6 +6,7 @@ using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,8 +26,11 @@ public class GetProjectsByOrganizationQueryHandler : IRequestHandler<GetProjects
 
     public async Task<IEnumerable<ProjectDto>> Handle(GetProjectsByOrganizationQuery request, CancellationToken cancellationToken)
     {
+        Expression<Func<Project, bool>> predicate = p => p.OrganizationId == request.OrganizationId;
+
         var projects =  await this.UnitOfWork.ProjectRepository
-            .GetAllAsync(p => p.OrganizationId == request.OrganizationId);
+            .GetAllAsync(new[] {predicate});
+        
         return this.Mapper.Map<IEnumerable<ProjectDto>>(projects);
     }
 }

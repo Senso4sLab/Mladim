@@ -18,3 +18,6 @@ public class GroupDto
     public string Description { get; set; }
     public List<MemberDto> Members { get; set; }
 }
+
+
+

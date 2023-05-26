@@ -26,20 +26,19 @@ public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumer
 
     public async Task<IEnumerable<PartnerDto>> Handle(GetPartnersQuery request, CancellationToken cancellationToken)
     {
-        Expression<Func<Partner, bool>> predicate = null;
+        List<Expression<Func<Partner, bool>>> predicates = new List<Expression<Func<Partner, bool>>>();
+
+        predicates.Add(sm => sm.IsActive == request.IsActive);
 
         if (request.ActivityId != null)
-            predicate = sm => sm.IsActive == request.IsActive && sm.Activities.Any(a => a.Id == request.ActivityId );
+            predicates.Add(sm => sm.Activities.Any(a => a.Id == request.ActivityId));
         else if (request.ProjectId != null)
-            predicate = sm => sm.IsActive == request.IsActive && sm.Projects.Any(p => p.Id == request.ProjectId);
+            predicates.Add(sm => sm.Projects.Any(p => p.Id == request.ProjectId));
         else if (request.OrganizationId != null)
-            predicate = sm => sm.IsActive == request.IsActive && sm.OrganizationPartners.Any(op => op.OrganizationId == request.OrganizationId);
-
-        if (predicate == null)
-            return Enumerable.Empty<PartnerDto>();
+            predicates.Add(sm => sm.OrganizationPartners.Any(op => op.OrganizationId == request.OrganizationId));               
 
         var partner = await this.UnitOfWork.PartnerRepository
-               .GetAllAsync(predicate);
+               .GetAllAsync(predicates);
 
         return this.Mapper.Map<IEnumerable<PartnerDto>>(partner);
     }

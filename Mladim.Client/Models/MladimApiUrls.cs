@@ -8,6 +8,14 @@ public class MladimApiUrls
     public string RemoveOrganization { get; set; }
     public string OrganizationCommand { get; set; }
 
+
+    public string GetProjectById { get; set; }
+    public string GetProjectsByOrganizationId { get; set; }
+    public string RemoveProject { get; set; }
+    public string ProjectCommand { get; set; }
+
+
+
     public string GetStafMembersByOrganizationId { get; set; }
     public string StaffMemberCommand { get; set; }   
 

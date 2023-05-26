@@ -4,6 +4,7 @@ using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMembers;
 
-public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery, IEnumerable<StaffMemberDto>>
+public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery, IEnumerable<BaseMemberDto>>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -23,24 +24,32 @@ public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery,
         Mapper = mapper;
     }
     
-
-    public async Task<IEnumerable<StaffMemberDto>> Handle(GetStaffMembersQuery request, CancellationToken cancellationToken)
+   
+    public async Task<IEnumerable<BaseMemberDto>> Handle(GetStaffMembersQuery request, CancellationToken cancellationToken)
     {
-        Expression<Func<StaffMember, bool>> predicate = null;
+        List<Expression<Func<StaffMember, bool>>> predicates = new List<Expression<Func<StaffMember, bool>>>();
 
-        if (request.ActivityId != null)
-            predicate = sm => sm.IsActive == request.IsActive && sm.StaffActivities.Any(mp => mp.ActivityId == request.ActivityId);
-        else if (request.ProjectId != null)
-            predicate = sm => sm.IsActive == request.IsActive && sm.StaffProjects.Any(mp => mp.ProjectId == request.ProjectId);
+        predicates.Add(sm => sm.IsActive == request.IsActive);
+
+        if (request.ActivityId != null)           
+            predicates.Add(sm => sm.StaffActivities.Any(mp => mp.ActivityId == request.ActivityId));        
+        else if (request.ProjectId != null)        
+            predicates.Add(sm => sm.StaffProjects.Any(mp => mp.ProjectId == request.ProjectId));       
         else if (request.OrganizationId != null)
-            predicate = sm => sm.IsActive == request.IsActive && sm.OrganizationMembers.Any(om => om.OrganizationId == request.OrganizationId);        
+            predicates.Add(sm => sm.OrganizationMembers.Any(om => om.OrganizationId == request.OrganizationId));
         
-        if(predicate == null)
-            return Enumerable.Empty<StaffMemberDto>();
-
-        var staff = await this.UnitOfWork
-                .StaffMemberRepository.GetAllAsync(predicate);
-
-        return this.Mapper.Map<IEnumerable<StaffMemberDto>>(staff);
+                
+        if(request.BaseResponse)
+        {
+            var staff = await this.UnitOfWork.StaffMemberRepository.GetAllAsync<BaseMemberDto>(predicates, sm => new BaseMemberDto() { Id = sm.Id, Name = sm.Name }, false);
+            return staff;
+        }
+        else
+        {
+            var staff = await this.UnitOfWork.StaffMemberRepository.GetAllAsync(predicates);
+            return this.Mapper.Map<IEnumerable<StaffMemberDto>>(staff);
+        }
+                
+             
     }
 }

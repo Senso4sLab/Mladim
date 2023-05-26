@@ -2,6 +2,8 @@
 using MediatR;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Models;
+using System.Linq.Expressions;
 
 namespace Mladim.Application.Features.Organizations.Queries.GetOrganizations;
 
@@ -17,8 +19,10 @@ public class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuer
 
     public async Task<IEnumerable<OrganizationDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
     {
+        Expression<Func<Organization, bool>> predicate = o => o.AppUsers.Any(au => au.Id == request.AppUserId);
+        
         var organizations = await this.UnitOfWork.OrganizationRepository
-            .GetAllAsync(o => o.AppUsers.Any(au => au.Id == request.AppUserId));
+            .GetAllAsync(new[] { predicate });
 
         return this.Mapper.Map<IEnumerable<OrganizationDto>>(organizations);
     }

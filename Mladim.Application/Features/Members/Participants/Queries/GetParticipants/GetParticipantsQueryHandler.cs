@@ -26,18 +26,17 @@ public class GetParticipantsQueryHandler : IRequestHandler<GetParticipantsQuery,
 
     public async Task<IEnumerable<ParticipantDto>> Handle(GetParticipantsQuery request, CancellationToken cancellationToken)
     {
-        Expression<Func<Participant, bool>> predicate = null;
+        List<Expression<Func<Participant, bool>>> predicates = new List<Expression<Func<Participant, bool>>>();
+
+        predicates.Add(sm => sm.IsActive == request.IsActive);
 
         if (request.ActivityId != null)
-            predicate = sm => sm.IsActive == request.IsActive && sm.Activities.Any(a => a.Id == request.ActivityId);
+            predicates.Add(sm => sm.Activities.Any(a => a.Id == request.ActivityId));
         else if (request.OrganizationId != null)
-            predicate = sm => sm.IsActive == request.IsActive && sm.OrganizationMembers.Any(om => om.OrganizationId == request.OrganizationId);
-
-        if (predicate == null)
-            return Enumerable.Empty<ParticipantDto>();
-
+            predicates.Add(sm => sm.OrganizationMembers.Any(om => om.OrganizationId == request.OrganizationId));
+        
         var participant = await this.UnitOfWork
-                .ParticipantRepository.GetAllAsync(predicate);
+                .ParticipantRepository.GetAllAsync(predicates);
 
         return this.Mapper.Map<IEnumerable<ParticipantDto>>(participant);
     }

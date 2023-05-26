@@ -12,9 +12,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
     protected DbSet<T> DbSet { get; }
 
+   
+    private IQueryable<T> Sequence { get; set; } 
     public GenericRepository(ApplicationDbContext context)
     {
-        this.DbSet = context.Set<T>();
+        this.DbSet = context.Set<T>();       
+
     }
     public virtual async Task<T> AddAsync(T entity)
     {
@@ -43,15 +46,32 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate) =>
         await DbSet.AnyAsync(predicate);
 
-    public virtual async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate, bool tracking = true)
+    public virtual async Task<IEnumerable<T>> GetAllAsync(IEnumerable<Expression<Func<T, bool>>> predicates,        
+        bool tracking = true)
     {
-        var dbSetQ = DbSet.Where(predicate);
+        return await ApplyWhereConditionsToSequence(predicates, tracking).ToListAsync();         
+    }
+
+    private IQueryable<T> ApplyWhereConditionsToSequence(IEnumerable<Expression<Func<T, bool>>> predicates, bool tracking = true)
+    {
+        var dbSetQ = predicates.Aggregate(this.DbSet.AsQueryable(), (sequence, predicate) => sequence.Where(predicate));
 
         if (!tracking)
             dbSetQ = dbSetQ.AsNoTracking();
 
-        return await dbSetQ.ToListAsync();         
+        return dbSetQ;
     }
+
+    public async Task<IEnumerable<TResult>> GetAllAsync<TResult>(IEnumerable<Expression<Func<T, bool>>> predicates,
+       Expression<Func<T,TResult>> selector, bool tracking = true) 
+    {
+        var dbSet = ApplyWhereConditionsToSequence(predicates, tracking);
+        return await dbSet.Select(selector).ToListAsync();
+    }
+
+
+
+   
 
     public virtual async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, bool tracking = true)
     {

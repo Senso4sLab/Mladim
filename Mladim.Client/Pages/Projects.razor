@@ -1,0 +1,41 @@
+﻿@page "/projects"
+@attribute [Authorize]
+
+<PageTitle>Projekti</PageTitle>
+
+@if (defaultOrg != null)
+{
+    <MudStack Class="py-5" Spacing="5">
+        <MudStack Row Justify="Justify.SpaceBetween">
+            <MudTextField Value="@defaultOrg.Name"  Label="Izbrana organizacija" Variant="Variant.Outlined" ReadOnly="true" Margin="Margin.Dense"></MudTextField>
+            <MudButton OnClick="AddNewProjectAsync" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Dodaj projekt</MudButton>
+        </MudStack>
+
+        <MudText Typo="Typo.h5">Seznam projektov</MudText>
+
+        @foreach (var project in projects)
+        {
+            <MudCard Outlined="true" @onclick="(()=> UpdateProjectAsync(project))">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h4">@project.Name</MudText>
+                    </CardHeaderContent>
+                    <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Default" @onclick="@(()=> DeleteProjectAsync(project))" />
+                    </CardHeaderActions>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudText Typo="Typo.h6">@((MarkupString)project.Description)</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudStack Row Spacing="6">
+                            <MudButton @onclick="(()=> AddActivityAsync(project))" Variant="Variant.Filled" Color="Color.Primary">Dodaj aktivnost</MudButton>
+                            <MudButton @onclick="(()=> GetAllActivitiesAsync(project))" Variant="Variant.Filled" Color="Color.Primary">Ogled aktivnosti</MudButton>
+                        </MudStack>
+                    </MudCardActions>
+                </MudCard>
+        }
+    </MudStack>
+}
+
+
