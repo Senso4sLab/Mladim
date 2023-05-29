@@ -131,6 +131,8 @@ namespace Mladim.Client.MappingProfiles.Profiles
             CreateMap<PartnerVM, AddPartnerCommandDto>();
             CreateMap<PartnerVM, UpdatePartnerCommandDto>();
 
+            
+
         }
     }
 }

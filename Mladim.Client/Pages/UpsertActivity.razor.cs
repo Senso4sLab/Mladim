@@ -68,7 +68,7 @@ public partial class UpsertActivity
     private TextEditor? textEditor;
     private bool UpdateState => ActivityId != null;
 
-    private string anonymousParticipantsText = string.Empty;  
+    private string anonymousParticipantsByGender = string.Empty;  
     
     
     private DefaultOrganization defaultOrg;
@@ -76,7 +76,7 @@ public partial class UpsertActivity
     private IEnumerable<MemberBaseVM> staff = new List<MemberBaseVM>();
     private List<MemberBaseVM> partners = new List<MemberBaseVM>();
     private List<MemberBaseVM> participants = new List<MemberBaseVM>();
-    private List<AnonymousParticipantsVM> anonymousParticipantGroups = new List<AnonymousParticipantsVM>();
+    private List<AnonymousParticipantsVM> anonymousParticipantGroups = null;
 
 
 
@@ -93,34 +93,15 @@ public partial class UpsertActivity
         participants = new List<MemberBaseVM>(await ParticipantService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
     }
 
-    protected async override Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender)
-            return;
-        
-        if (UpdateState)            
-            activity = await ActivityService.GetByActivityIdAsync(ActivityId.Value);            
-
-        anonymousParticipantGroups = GetAnnonymousParticipants().ToList();
-       
-    }
+   
 
 
     protected async override Task OnParametersSetAsync()
     {
-        //defaultOrg = await this.OrganizationService.DefaultOrganizationAsync();
+        if (UpdateState)
+            activity = await ActivityService.GetByActivityIdAsync(ActivityId.Value);
 
-        //if (defaultOrg == null)
-        //    return;
-        
-        //staff = new List<MemberBaseVM>(await StaffMemberService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
-        //partners = new List<MemberBaseVM>(await PartnerService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
-        //participants = new List<MemberBaseVM>(await ParticipantService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));           
-        
-        //if (UpdateState)
-        //    activity = await ActivityService.GetByActivityIdAsync(ActivityId.Value);
-
-        //anonymousParticipantGroups = GetAnnonymousParticipants().ToList();
+        anonymousParticipantGroups ??= GetAnnonymousParticipants().ToList();
 
     }
 
@@ -145,22 +126,7 @@ public partial class UpsertActivity
     }
 
 
-    private async Task UpdateUIComponentsAsync()
-    {
-        //activity = await ActivityService.GetByActivityIdAsync(ActivityId.Value);   
-
-        //if (activity == null)
-        //    return;
-
-        //selectedMembers = staff.Where(s => activity.Members.Any(pa => !pa.IsLead && pa.MemberId == s.Id)).ToList();
-        //selectedLeadMembers = staff.Where(s => activity.Members.Any(pa => pa.IsLead && pa.MemberId == s.Id)).ToList();
-        //selectedParticipantMembers = participants.Where(s => activity.Members.Any(pa => pa.MemberId == s.Id)).ToList();
-        //selectedPartners = partners.Where(p => activity.Partners.Any(pa => pa.Id == p.Id)).ToList();
-        //activityDuration = new DateRange(this.activity.Start, this.activity.End);
-        //anonymousParticipantGroups = await GetAnonymousParticipantsAsync(ActivityId!.Value);
-        //anonymousParticipantsText = GetAnonymousParticipantsText(anonymousParticipantGroups);
-    }
-
+   
     
 
 
@@ -170,17 +136,6 @@ public partial class UpsertActivity
     public async Task SaveActivityAsync()
     {
         await textEditor!.LoadHtmlText();
-        //activity.Start = activityDuration.Start!.Value;
-        //activity.End = activityDuration.End!.Value;
-        //activity.Partners = selectedPartners.ToList();
-
-
-        //var leadMembers = selectedLeadMembers.Select(s => new SubjectMemberDto { IsLead = true, MemberId = s.Id.Value });
-        //var members = selectedMembers.Select(s => new SubjectMemberDto { MemberId = s.Id.Value });
-
-        //var participantMembers = selectedParticipantMembers.Select(s => new SubjectMemberDto { MemberId = s.Id.Value });
-        //activity.Members = leadMembers.Union(members).Union(participantMembers).ToList();
-
         activity.AnonymousParticipants = anonymousParticipantGroups;
 
         if (UpdateState)
@@ -235,7 +190,6 @@ public partial class UpsertActivity
 
     public async Task AddParticipantAsync()
     {
-
         var participant = new ParticipantVM();
 
         var dialogResponse = await this.PopupService.ShowParticipantDialog("Dodajanje udeleženca", participant);
@@ -256,20 +210,21 @@ public partial class UpsertActivity
     }
 
 
-    //private string GetAnonymousParticipantsText(List<AnonymousParticipantGroupDto> participantGroups)
-    //{
-    //    if (!participantGroups.Any(p => p.Number > 0))
-    //        return string.Empty;
+    private bool ExistsAnonymousParticipantGroups =>
+        anonymousParticipantGroups?.Any(p => p.Number > 0) == true;
+    private string AnonymousParticipantsByGender()
+    {
+        int apMale = anonymousParticipantGroups!.Where(x => x.Gender == Gender.Male).Sum(x => x.Number);
+        int apFemale = anonymousParticipantGroups!.Where(x => x.Gender == Gender.Female).Sum(x => x.Number);
 
-    //    return $"Št. moških = {participantGroups.Where(x => x.Gender == Gender.Male).Sum(x => x.Number)}, št. žensk = {participantGroups.Where(x => x.Gender == Gender.Female).Sum(x => x.Number)}, skupaj = {participantGroups.Sum(x => x.Number)}";
-    //} 
-
-    
+        return $"Št. moških = {apMale}, št. žensk = {apFemale}, skupaj = {apMale + apFemale}";
+    }
 
     public async Task AddAnonymousParticipantAsync()
     {
         var resultGroups = await this.PopupService.ShowAnonymousParticipantGroupsDialog("Dodajanje udeležencev po starostnih skupinah in spolu", anonymousParticipantGroups);
         anonymousParticipantGroups = resultGroups.ToList();
+        anonymousParticipantsByGender = ExistsAnonymousParticipantGroups ? AnonymousParticipantsByGender() : string.Empty;
     }
 
 }

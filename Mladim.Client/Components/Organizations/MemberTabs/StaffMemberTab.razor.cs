@@ -45,8 +45,12 @@ public partial class StaffMemberTab
     private List<StaffMemberVM> Staff = new List<StaffMemberVM>();
 
 
-    protected async override Task OnParametersSetAsync() =>       
+    protected async override Task OnParametersSetAsync()
+    {
+       
         this.Staff = new List<StaffMemberVM>(await GetStaffByOrganizationId());
+    }
+        
     
 
     private Task<IEnumerable<StaffMemberVM>> GetStaffByOrganizationId() =>

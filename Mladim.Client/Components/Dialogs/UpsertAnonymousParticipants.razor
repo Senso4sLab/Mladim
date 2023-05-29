@@ -36,8 +36,8 @@
        Enum.GetValues<AgeGroups>().Select(ageGroup => new AnonymousParticipantTableElements()
            {
                AgeGroup = ageGroup,
-               Female = aParticipants.Where(p => p.Equals(ageGroup)).Sum(p => p.Number),
-               Male = aParticipants.Where(p => p.Equals(ageGroup)).Sum(p => p.Number),
+               Female = aParticipants.Where(p => p.AgeGroup == ageGroup && p.Gender == Gender.Female).Sum(p => p.Number),
+               Male = aParticipants.Where(p => p.AgeGroup == ageGroup && p.Gender == Gender.Male).Sum(p => p.Number),
 
            }).ToList();
 

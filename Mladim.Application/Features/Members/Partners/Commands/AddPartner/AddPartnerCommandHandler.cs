@@ -22,9 +22,7 @@ public class AddPartnerCommandHandler : IRequestHandler<AddPartnerCommand, Partn
         Mapper = mapper;
     }
     public async Task<PartnerQueryDetailsDto> Handle(AddPartnerCommand request, CancellationToken cancellationToken)
-    {
-        if (request.OrganizationId == null)
-            throw new Exception("Organizacija ne obstaja");
+    {     
 
         var organization = await this.UnitOfWork.OrganizationRepository
             .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
@@ -39,5 +37,7 @@ public class AddPartnerCommandHandler : IRequestHandler<AddPartnerCommand, Partn
         await this.UnitOfWork.SaveChangesAsync();
 
         return this.Mapper.Map<PartnerQueryDetailsDto>(orgPartner.Partner);
+        
+      
     }
 }

@@ -18,24 +18,18 @@ public class AddPartnerCommandValidator : AbstractValidator<AddPartnerCommand>
 
     public AddPartnerCommandValidator(IUnitOfWork unitOfWork)
     {
-        RuleFor(c => c.OrganizationId)
-            .NotNull()
-            .WithMessage("{PropertyName} je zahtevan");
+       
 
         RuleFor(c => c.OrganizationId)
-            .MustAsync(ExistOrganization)
-            .When(WhenOrganizationIsNotNull)
+            .MustAsync(ExistOrganization)           
             .WithMessage("Organizacija ne obstaja");
 
         UnitOfWork = unitOfWork;
     }
 
-    private bool WhenOrganizationIsNotNull(AddPartnerCommand command)
-    {
-        return command.OrganizationId != null;
-    }
+   
 
-    private Task<bool> ExistOrganization(int? organizationId, CancellationToken token)
+    private Task<bool> ExistOrganization(int organizationId, CancellationToken token)
     {
         return this.UnitOfWork.OrganizationRepository.AnyAsync(o => o.Id == organizationId);
     }

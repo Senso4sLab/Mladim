@@ -55,7 +55,7 @@
     </MudStack>
 
     <MudStack Row Spacing="5" AlignItems="AlignItems.Center">
-         <MudTextField @bind-Value="anonymousParticipantsText" Label="Izbira udeležencev glede na starostno skupino in spol" Variant="Variant.Outlined"></MudTextField>
+         <MudTextField  @bind-Value="anonymousParticipantsByGender" Label="Izbira udeležencev glede na starostno skupino in spol" Variant="Variant.Outlined"></MudTextField>
          <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddAnonymousParticipantAsync" />
      </MudStack>
 

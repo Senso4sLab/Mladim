@@ -92,7 +92,8 @@ public class ApplicationProfiles : Profile
         //CreateMap<StaffMemberActivityDto, StaffMemberActivity>().ReverseMap();
 
         CreateMap<StaffMemberSubjectCommandDto, StaffMemberActivity>();
-
+        CreateMap<StaffMemberActivity, StaffMemberSubjectQueryDto>()
+            .ForMember(dto => dto.Name, m => m.MapFrom(sm => sm.StaffMember.Name));
 
         //CreateMap<ActivityGroupDto, ActivityGroup>().ReverseMap();
 
@@ -135,6 +136,8 @@ public class ApplicationProfiles : Profile
 
         CreateMap<Participant, ParticipantDetailsQueryDto>().ReverseMap();
         CreateMap<ParticipantCommandDto, Participant>();
+
+        CreateMap<Participant, ParticipantQueryDto>();
      
 
         // AnonymousParticipant
