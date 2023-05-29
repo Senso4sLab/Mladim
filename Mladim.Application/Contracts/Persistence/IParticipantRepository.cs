@@ -9,4 +9,5 @@ namespace Mladim.Application.Contracts.Persistence;
 
 public interface IParticipantRepository : IGenericRepository<Participant>
 {
+   
 }

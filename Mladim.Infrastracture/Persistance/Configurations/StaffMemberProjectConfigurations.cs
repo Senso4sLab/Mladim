@@ -8,7 +8,7 @@ public class StaffMemberProjectConfigurations : IEntityTypeConfiguration<StaffMe
 {
     public void Configure(EntityTypeBuilder<StaffMemberProject> builder)
     {
-        builder.HasKey(p => new { p.StaffMemberId, p.ProjectId });
+        builder.HasKey(p => new { p.StaffMemberId, p.ProjectId, p.IsLead });
     }
 }
 

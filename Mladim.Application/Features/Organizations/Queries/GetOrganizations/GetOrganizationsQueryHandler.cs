@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace Mladim.Application.Features.Organizations.Queries.GetOrganizations;
 
-public class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuery, IEnumerable<OrganizationDto>>
+public class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuery, IEnumerable<OrganizationQueryDto>>
 {
     public IUnitOfWork UnitOfWork { get; }
     public IMapper Mapper { get; set; }
@@ -17,14 +17,14 @@ public class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuer
         this.UnitOfWork = unitOfWork;
     }
 
-    public async Task<IEnumerable<OrganizationDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<OrganizationQueryDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
     {
         Expression<Func<Organization, bool>> predicate = o => o.AppUsers.Any(au => au.Id == request.AppUserId);
         
         var organizations = await this.UnitOfWork.OrganizationRepository
             .GetAllAsync(new[] { predicate });
 
-        return this.Mapper.Map<IEnumerable<OrganizationDto>>(organizations);
+        return this.Mapper.Map<IEnumerable<OrganizationQueryDto>>(organizations);
     }
         
 }

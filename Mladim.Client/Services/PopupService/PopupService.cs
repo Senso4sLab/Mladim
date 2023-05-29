@@ -79,7 +79,27 @@ namespace Mladim.Client.Services.PopupService
 
         public async Task<bool> ShowPartnerDialog(string title, PartnerVM partner)
         {
-            throw new NotImplementedException();
+            var parameters = new DialogParameters();
+
+            parameters.Add("Partner", partner);
+
+            var dialog = await DialogService.ShowAsync<UpsertPartner>(title, parameters, DialogOptions);
+
+            var result = await dialog.Result;
+
+            return !result.Canceled;
+        }
+
+        public async Task<IEnumerable<AnonymousParticipantsVM>> ShowAnonymousParticipantGroupsDialog(string title, IEnumerable<AnonymousParticipantsVM> anonymousParticipantGroups)
+        {
+            var parameters = new DialogParameters();
+            parameters.Add("AparticipantGroups", anonymousParticipantGroups);
+
+            var dialog = await DialogService.ShowAsync<UpsertAnonymousParticipants>(title, parameters, DialogOptions);
+
+            var result = await dialog.Result;
+
+            return result.Canceled ? null : result.Data as IEnumerable<AnonymousParticipantsVM>;
         }
     }
 }

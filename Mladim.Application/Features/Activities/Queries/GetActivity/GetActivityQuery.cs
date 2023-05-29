@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Activities.Queries.GetActivity;
 
-public class GetActivityQuery : IRequest<ActivityDto>
+public class GetActivityQuery : IRequest<ActivityQueryDto>
 {
     public int ActivityId { get; set; }
 }

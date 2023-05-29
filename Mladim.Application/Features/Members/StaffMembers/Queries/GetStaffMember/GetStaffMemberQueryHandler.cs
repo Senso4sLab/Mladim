@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMember;
 
-public class GetStaffMemberQueryHandler : IRequestHandler<GetStaffMemberQuery, StaffMemberDto>
+public class GetStaffMemberQueryHandler : IRequestHandler<GetStaffMemberQuery, StaffMemberDetailsQueryDto>
 {
     public IUnitOfWork UnitOfWork { get; }
     public IMapper Mapper { get; }
@@ -21,7 +21,7 @@ public class GetStaffMemberQueryHandler : IRequestHandler<GetStaffMemberQuery, S
         Mapper = mapper;
     }
 
-    public async Task<StaffMemberDto> Handle(GetStaffMemberQuery request, CancellationToken cancellationToken)
+    public async Task<StaffMemberDetailsQueryDto> Handle(GetStaffMemberQuery request, CancellationToken cancellationToken)
     {
         var staffMember = await this.UnitOfWork.StaffMemberRepository
             .FirstOrDefaultAsync(sm => sm.Id == request.StaffMemberId);
@@ -29,6 +29,6 @@ public class GetStaffMemberQueryHandler : IRequestHandler<GetStaffMemberQuery, S
         if (staffMember == null)
             throw new Exception("");
 
-        return this.Mapper.Map<StaffMemberDto>(staffMember);
+        return this.Mapper.Map<StaffMemberDetailsQueryDto>(staffMember);
     }
 }

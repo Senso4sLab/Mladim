@@ -25,7 +25,6 @@ public class Activity
     public List<Partner> Partners { get; set; } = new();
 
     public List<Participant> Participants { get; set; } = new();
-
     
     public int ProjectId { get; set; }
     public Project Project { get; set; }

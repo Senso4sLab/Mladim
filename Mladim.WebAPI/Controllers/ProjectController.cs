@@ -26,7 +26,7 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ProjectDto?>> AddAsync(AddProjectCommand request)
+    public async Task<ActionResult<ProjectQueryDto?>> AddAsync(AddProjectCommand request)
     {
         var response = await this.Mediator.Send(request);
         return Ok(response);
@@ -48,14 +48,14 @@ public class ProjectController : ControllerBase
 
 
     [HttpGet("{projectId}")]
-    public async Task<ActionResult<ProjectDto?>> GetAsync(int projectId)
+    public async Task<ActionResult<ProjectQueryDto?>> GetAsync(int projectId)
     {
         var response = await this.Mediator.Send(new GetProjectQuery { ProjectId = projectId });
         return Ok(response);
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProjectDto>>> GetAllByOrganizationAsync([FromQuery] int organizationId)
+    public async Task<ActionResult<IEnumerable<ProjectQueryDto>>> GetAllByOrganizationAsync([FromQuery] int organizationId)
     {
         var response = await this.Mediator.Send(new GetProjectsByOrganizationQuery { OrganizationId = organizationId });
         return Ok(response);

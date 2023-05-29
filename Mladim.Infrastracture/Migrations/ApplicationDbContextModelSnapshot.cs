@@ -370,91 +370,91 @@ namespace Mladim.Infrastracture.Migrations
                         {
                             Id = 1,
                             AgeGroup = 1,
-                            Gender = 1
+                            Gender = 0
                         },
                         new
                         {
                             Id = 2,
                             AgeGroup = 1,
-                            Gender = 2
+                            Gender = 1
                         },
                         new
                         {
                             Id = 3,
                             AgeGroup = 1,
-                            Gender = 3
+                            Gender = 2
                         },
                         new
                         {
                             Id = 4,
                             AgeGroup = 2,
-                            Gender = 1
+                            Gender = 0
                         },
                         new
                         {
                             Id = 5,
                             AgeGroup = 2,
-                            Gender = 2
+                            Gender = 1
                         },
                         new
                         {
                             Id = 6,
                             AgeGroup = 2,
-                            Gender = 3
+                            Gender = 2
                         },
                         new
                         {
                             Id = 7,
                             AgeGroup = 4,
-                            Gender = 1
+                            Gender = 0
                         },
                         new
                         {
                             Id = 8,
                             AgeGroup = 4,
-                            Gender = 2
+                            Gender = 1
                         },
                         new
                         {
                             Id = 9,
                             AgeGroup = 4,
-                            Gender = 3
+                            Gender = 2
                         },
                         new
                         {
                             Id = 10,
                             AgeGroup = 8,
-                            Gender = 1
+                            Gender = 0
                         },
                         new
                         {
                             Id = 11,
                             AgeGroup = 8,
-                            Gender = 2
+                            Gender = 1
                         },
                         new
                         {
                             Id = 12,
                             AgeGroup = 8,
-                            Gender = 3
+                            Gender = 2
                         },
                         new
                         {
                             Id = 13,
                             AgeGroup = 16,
-                            Gender = 1
+                            Gender = 0
                         },
                         new
                         {
                             Id = 14,
                             AgeGroup = 16,
-                            Gender = 2
+                            Gender = 1
                         },
                         new
                         {
                             Id = 15,
                             AgeGroup = 16,
-                            Gender = 3
+                            Gender = 2
                         });
                 });
 
@@ -528,6 +528,9 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.Property<int?>("GroupId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -719,7 +722,6 @@ namespace Mladim.Infrastracture.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("WebpageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -740,7 +742,7 @@ namespace Mladim.Infrastracture.Migrations
                     b.Property<bool>("IsLead")
                         .HasColumnType("bit");
 
-                    b.HasKey("StaffMemberId", "ActivityId");
+                    b.HasKey("StaffMemberId", "ActivityId", "IsLead");
 
                     b.HasIndex("ActivityId");
 
@@ -758,7 +760,7 @@ namespace Mladim.Infrastracture.Migrations
                     b.Property<bool>("IsLead")
                         .HasColumnType("bit");
 
-                    b.HasKey("StaffMemberId", "ProjectId");
+                    b.HasKey("StaffMemberId", "ProjectId", "IsLead");
 
                     b.HasIndex("ProjectId");
 
@@ -826,9 +828,6 @@ namespace Mladim.Infrastracture.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsRegistered")
                         .HasColumnType("bit");

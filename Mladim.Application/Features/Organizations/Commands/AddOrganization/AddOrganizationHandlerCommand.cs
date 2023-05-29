@@ -7,7 +7,7 @@ using Mladim.Application.Contracts.Persistence;
 
 namespace Mladim.Application.Features.Organizations.Commands.AddOrganization;
 
-public class AddOrganizationHandlerCommand : IRequestHandler<AddOrganizationCommand, OrganizationDto>
+public class AddOrganizationHandlerCommand : IRequestHandler<AddOrganizationCommand, OrganizationQueryDto>
 {
     private IMapper Mapper { get; }
     private IUnitOfWork UnitOfWork { get; }
@@ -17,7 +17,7 @@ public class AddOrganizationHandlerCommand : IRequestHandler<AddOrganizationComm
         Mapper = mapper;
         UnitOfWork = unitOfWork;       
     }
-    public async Task<OrganizationDto> Handle(AddOrganizationCommand request, CancellationToken cancellationToken)
+    public async Task<OrganizationQueryDto> Handle(AddOrganizationCommand request, CancellationToken cancellationToken)
     {        
         var organization = Mapper.Map<Organization>(request);
 
@@ -36,6 +36,6 @@ public class AddOrganizationHandlerCommand : IRequestHandler<AddOrganizationComm
 
         await this.UnitOfWork.SaveChangesAsync();
 
-        return Mapper.Map<OrganizationDto>(organization);
+        return Mapper.Map<OrganizationQueryDto>(organization);
     }
 }

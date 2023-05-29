@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMembers;
 
-public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery, IEnumerable<BaseMemberDto>>
+public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery, IEnumerable<MemberBase>>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -25,7 +25,7 @@ public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery,
     }
     
    
-    public async Task<IEnumerable<BaseMemberDto>> Handle(GetStaffMembersQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<MemberBase>> Handle(GetStaffMembersQuery request, CancellationToken cancellationToken)
     {
         List<Expression<Func<StaffMember, bool>>> predicates = new List<Expression<Func<StaffMember, bool>>>();
 
@@ -37,19 +37,14 @@ public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery,
             predicates.Add(sm => sm.StaffProjects.Any(mp => mp.ProjectId == request.ProjectId));       
         else if (request.OrganizationId != null)
             predicates.Add(sm => sm.OrganizationMembers.Any(om => om.OrganizationId == request.OrganizationId));
-        
-                
-        if(request.BaseResponse)
-        {
-            var staff = await this.UnitOfWork.StaffMemberRepository.GetAllAsync<BaseMemberDto>(predicates, sm => new BaseMemberDto() { Id = sm.Id, Name = sm.Name }, false);
-            return staff;
-        }
+
+
+        if (request.ParentClass)        
+            return await this.UnitOfWork.StaffMemberRepository.GetAllAsync<MemberBase>(predicates, sm => new MemberBase { Id = sm.Id, Name = sm.Name});        
         else
         {
             var staff = await this.UnitOfWork.StaffMemberRepository.GetAllAsync(predicates);
-            return this.Mapper.Map<IEnumerable<StaffMemberDto>>(staff);
-        }
-                
-             
+            return this.Mapper.Map<IEnumerable<StaffMemberDetailsQueryDto>>(staff);
+        }              
     }
 }

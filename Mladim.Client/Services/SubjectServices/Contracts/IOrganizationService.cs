@@ -1,4 +1,5 @@
-﻿using Mladim.Client.ViewModels;
+﻿using Mladim.Client.Models;
+using Mladim.Client.ViewModels;
 using System.Threading.Tasks;
 
 namespace Mladim.Client.Services.SubjectServices.Contracts;

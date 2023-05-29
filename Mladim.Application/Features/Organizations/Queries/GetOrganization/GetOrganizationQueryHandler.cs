@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Organizations.Queries.GetOrganization;
 
-public class GetOrganizationQueryHandler : IRequestHandler<GetOrganizationQuery, OrganizationDto>
+public class GetOrganizationQueryHandler : IRequestHandler<GetOrganizationQuery, OrganizationQueryDto>
 {
     private IUnitOfWork UnitOfWork { get; }
     private IMapper Mapper { get; }
@@ -22,7 +22,7 @@ public class GetOrganizationQueryHandler : IRequestHandler<GetOrganizationQuery,
         UnitOfWork = unitOfWork;    
     }   
 
-    public async Task<OrganizationDto> Handle(GetOrganizationQuery request, CancellationToken cancellationToken)
+    public async Task<OrganizationQueryDto> Handle(GetOrganizationQuery request, CancellationToken cancellationToken)
     {
         var organization = await UnitOfWork.OrganizationRepository
             .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);    
@@ -30,6 +30,6 @@ public class GetOrganizationQueryHandler : IRequestHandler<GetOrganizationQuery,
         if (organization == null)
             throw new Exception();
 
-        return this.Mapper.Map<OrganizationDto>(organization);  
+        return this.Mapper.Map<OrganizationQueryDto>(organization);  
     }
 }

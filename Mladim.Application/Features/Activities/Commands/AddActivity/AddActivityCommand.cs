@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Activities.Commands.AddActivity;
 
-public class AddActivityCommand : IRequest<ActivityDto>
+public class AddActivityCommand : IRequest<ActivityQueryDto>
 {
     public int ProjectId { get; set; }
     public string Name { get; set; }
@@ -18,9 +18,9 @@ public class AddActivityCommand : IRequest<ActivityDto>
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
     public ActivityTypes ActivityTypes { get; set; }
-    public List<PartnerBaseDto> Partners { get; set; } = new();
-    public List<StaffMemberSubjectBaseDto> Staff { get; set; } = new();
-    public List<ParticipantBaseDto> Participants { get; set; } = new();
-    public List<AnonymousParticipantActivityBaseDto> AnonymousParticipants { get; set; } = new();
-    public List<GroupBaseDto> Groups { get; set; } = new(); 
+    public List<PartnerCommandDto> Partners { get; set; } = new();
+    public List<StaffMemberSubjectCommandDto> Staff { get; set; } = new();
+    public List<ParticipantCommandDto> Participants { get; set; } = new();
+    public List<AnonymousParticipantCommandDto> AnonymousParticipants { get; set; } = new();
+    public List<GroupCommandDto> Groups { get; set; } = new(); 
 }

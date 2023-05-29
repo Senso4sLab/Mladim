@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Participants.Queries.GetParticipant;
 
-public class GetParticipantQueryHandler : IRequestHandler<GetParticipantQuery, ParticipantDto>
+public class GetParticipantQueryHandler : IRequestHandler<GetParticipantQuery, ParticipantDetailsQueryDto>
 {
     public IUnitOfWork UnitOfWork { get; }
     public IMapper Mapper { get; }
@@ -22,7 +22,7 @@ public class GetParticipantQueryHandler : IRequestHandler<GetParticipantQuery, P
     }
     
 
-    public async Task<ParticipantDto> Handle(GetParticipantQuery request, CancellationToken cancellationToken)
+    public async Task<ParticipantDetailsQueryDto> Handle(GetParticipantQuery request, CancellationToken cancellationToken)
     {
         var participant = await this.UnitOfWork.ParticipantRepository
             .FirstOrDefaultAsync(sm => sm.Id == request.ParticipantId);
@@ -30,6 +30,6 @@ public class GetParticipantQueryHandler : IRequestHandler<GetParticipantQuery, P
         if (participant == null)
             throw new Exception("");
 
-        return this.Mapper.Map<ParticipantDto>(participant);
+        return this.Mapper.Map<ParticipantDetailsQueryDto>(participant);
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Participants.Queries.GetParticipant;
 
-public class GetParticipantQuery : IRequest<ParticipantDto>
+public class GetParticipantQuery : IRequest<ParticipantDetailsQueryDto>
 {
     public int ParticipantId { get; set; }
 }

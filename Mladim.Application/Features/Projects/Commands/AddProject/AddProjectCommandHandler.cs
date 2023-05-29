@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Projects.Commands.AddProject;
 
-public class AddProjectCommandHandler : IRequestHandler<AddProjectCommand, ProjectDto>
+public class AddProjectCommandHandler : IRequestHandler<AddProjectCommand, ProjectQueryDto>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -23,7 +23,7 @@ public class AddProjectCommandHandler : IRequestHandler<AddProjectCommand, Proje
         Mapper = mapper;
     }    
 
-    public async Task<ProjectDto> Handle(AddProjectCommand request, CancellationToken cancellationToken)
+    public async Task<ProjectQueryDto> Handle(AddProjectCommand request, CancellationToken cancellationToken)
     {
         var organization = await this.UnitOfWork.OrganizationRepository
             .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
@@ -41,8 +41,25 @@ public class AddProjectCommandHandler : IRequestHandler<AddProjectCommand, Proje
 
         organization.Projects.Add(project); 
 
-        await this.UnitOfWork.SaveChangesAsync();
-       
-        return this.Mapper.Map<ProjectDto>(project);
+        try
+        {
+            await this.UnitOfWork.SaveChangesAsync();
+
+        }
+        catch(Exception ex) 
+        {
+            var message = ex.Message;
+        }
+        try
+        {
+
+            return this.Mapper.Map<ProjectQueryDto>(project);
+        }
+        catch(Exception ex)
+        {
+            string message = ex.Message;
+            return null;
+        }
+
     }
 }

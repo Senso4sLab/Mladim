@@ -1,32 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using System.Net.Http;
-using System.Net.Http.Json;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.Web.Virtualization;
-using Microsoft.AspNetCore.Components.WebAssembly.Http;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.JSInterop;
-using Mladim.Client;
-using Mladim.Client.Shared;
-using Mladim.Client.Services.Authentication;
 using Mladim.Client.Components;
 using Mladim.Client.ViewModels;
-using Mladim.Client.Layouts;
-using Mladim.Client.Extensions;
-using Mladim.Client.Components.Organizations;
-using Blazored.TextEditor;
-using MudBlazor;
 using Mladim.Client.Services.PopupService;
-using Mladim.Domain.Dtos;
 using Mladim.Client.Services.SubjectServices.Contracts;
-using Mladim.Domain.Models;
 
 namespace Mladim.Client.Pages;
 
@@ -55,67 +31,62 @@ public partial class UpsertProject
     public int? ProjectId { get; set; }
 
 
-    private List<PartnerVM> partners = new List<PartnerVM>();
+    
 
-    private IEnumerable<BaseMemberVM> staff = new List<BaseMemberVM>();
-    private IEnumerable<BaseMemberVM> staffleads = new List<BaseMemberVM>();
-    private IEnumerable<BaseMemberVM> administrators = new List<BaseMemberVM>();
-    private IEnumerable<PartnerVM> selectedPartners = new List<PartnerVM>();
+    private IEnumerable<MemberBaseVM> Staff = new List<MemberBaseVM>();    
+    private List<MemberBaseVM> Partners = new List<MemberBaseVM>();
 
-    private TextEditor? textEditor;
-    private DateRange projectDuration;
 
+    private TextEditor? textEditor;  
     private ProjectVM project = new ProjectVM();
 
     private bool UpdateState => ProjectId != null;
     protected async override Task OnParametersSetAsync()
     {
-        if (UpdateState)        
-           await this.FetchingMembersForProjectUpdate();
-             
+        this.Staff = new List<MemberBaseVM>(await StaffMembersByOrganizationIdAsync());
+        this.Partners = new List<MemberBaseVM>(await PartnersByOrganizationIdAsync());
         
-        projectDuration = new DateRange(project.Start, project.Start);        
+        if (UpdateState)        
+           await this.FetchingMembersForProjectUpdate();      
 
     }
 
+    private Task<IEnumerable<MemberBaseVM>> StaffMembersByOrganizationIdAsync() =>
+        this.StaffService.GetBaseByOrganizationIdAsync(OrganizationId, true);
+
+
+    private Task<IEnumerable<MemberBaseVM>> PartnersByOrganizationIdAsync() =>
+        this.PartnerService.GetBaseByOrganizationIdAsync(OrganizationId, true);
 
     private async Task FetchingMembersForProjectUpdate()
     {
-        staff = new List<BaseMemberVM>(await StaffMembersByOrganizationIdAsync());
-        //partners = await GetActivePartnersAsync();
-        var projectResponse = await this.ProjectService.GetByProjectIdAsync(ProjectId.Value);
+       
+        var projectResponse = await this.ProjectService.GetByProjectIdAsync(ProjectId!.Value);
 
         if (projectResponse == null)
             return;
 
-        administrators = projectResponse.Staff.Where(sm => !sm.IsLead).Select(sm => new BaseMemberVM { Id = sm.StaffMemberId, Name = sm.Name}).ToList();    
-        staffleads = projectResponse.Staff.Where(sm => sm.IsLead).Select(sm => new BaseMemberVM { Id = sm.StaffMemberId, Name = sm.Name }).ToList();       
+        project = projectResponse;
+        //LeadStaffMembers = project.LeadStaff.ToList(); 
+        //Administrators   = project.Administrators.ToList();
+       // projectDurationRange = new DateRange(project.Start, project.Start);
         //selectedPartners = this.partners.Where(p => project.Partners.Any(pa => pa.Id == p.Id)).ToList();
-        
+
     }
 
-    private Task<IEnumerable<BaseMemberVM>> StaffMembersByOrganizationIdAsync() =>
-      this.StaffService.GetBaseByOrganizationIdAsync(OrganizationId, true);
-       
-
-   
-
-
-
+  
 
     public async Task SaveProjectAsync()
     {
         await textEditor!.LoadHtmlText();
 
-        project.Start = projectDuration.Start!.Value;
-        project.End = projectDuration.End!.Value;        
-        
-        project.Partners = selectedPartners.ToList();
-        project.Staff = staffleads.Select(sm => new StaffMemberProjectVM { IsLead = true, StaffMemberId = sm.Id.Value }).ToList();
-        project.Staff.AddRange(administrators.Select(sm => new StaffMemberProjectVM { StaffMemberId = sm.Id.Value }).ToList());
+        //project.Start = projectDurationRange.Start!.Value;
+        //project.End = projectDurationRange.End!.Value;         
+        //project.Partners = Partners.ToList();        
+        //project.Staff = LeadStaffMembers.Select(sm => new StaffMemberProjectVM { IsLead = true, StaffMemberId = sm.MemberId.Value }).ToList();
+        //project.Staff.AddRange(Administrators.Select(sm => new StaffMemberProjectVM { StaffMemberId = sm.MemberId.Value }).ToList());
 
-
-        await this.ProjectService.UpdateAsync(project);
+       
         
         if (UpdateState)
         {
@@ -158,7 +129,7 @@ public partial class UpsertProject
 
         if (partner != null)
         {
-            partners.Add(partner);
+            Partners.Add(partner);
             this.PopupService.ShowSnackbarSuccess("Partner je uspešno dodan");
         }
         else

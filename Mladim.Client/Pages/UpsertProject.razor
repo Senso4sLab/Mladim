@@ -14,20 +14,20 @@
     </MudStack>
 
     <MudTextField @bind-Value="project.Name" Variant="Variant.Outlined" Label="Ime projekta">@project.Name</MudTextField>
-    <MudDateRangePicker Variant="Variant.Outlined" Label="Trajanje projekta" @bind-DateRange="projectDuration"/>
+    <MudDateRangePicker Variant="Variant.Outlined" Label="Trajanje projekta" @bind-DateRange="project.ProjectDateRange"/>
 
 
     <TextEditor @ref="textEditor"  @bind-Text="@project.Description" />
 
-    <MudSelect T="BaseMemberVM" MultiSelection="true" ToStringFunc="@((staff)=> staff.Name)"  @bind-SelectedValues="staffleads" Variant="Variant.Outlined" Label="Vodje projekta" AnchorOrigin="Origin.BottomCenter">
-        @foreach (var staffMember in staff)
+    <MudSelect T="MemberBaseVM" MultiSelection="true" ToStringFunc="@((staff)=> staff.Name)"  @bind-SelectedValues="project.LeadStaff" Variant="Variant.Outlined" Label="Vodje projekta" AnchorOrigin="Origin.BottomCenter">
+         @foreach (var staffMember in Staff)
         {
                 <MudSelectItem Value="staffMember">@staffMember.Name</MudSelectItem>
         }
     </MudSelect>
 
-    <MudSelect MultiSelection="true" T="BaseMemberVM" ToStringFunc="@((staff)=> staff.Name)" @bind-SelectedValues="administrators" Variant="Variant.Outlined" Label="Administracija" AnchorOrigin="Origin.BottomCenter">
-        @foreach (var staffMember in staff)
+    <MudSelect MultiSelection="true" T="MemberBaseVM" ToStringFunc="@((staff)=> staff.Name)" @bind-SelectedValues="project.Administrators" Variant="Variant.Outlined" Label="Administracija" AnchorOrigin="Origin.BottomCenter">
+        @foreach (var staffMember in Staff)
         {
                 <MudSelectItem Value="staffMember">@staffMember.Name</MudSelectItem>
         }
@@ -35,8 +35,8 @@
 
 
     <MudStack Row Spacing="5" AlignItems="AlignItems.Center">
-        <MudSelect MultiSelection="true" T="PartnerVM" ToStringFunc="@((partner)=> partner.Name)"  @bind-SelectedValues="selectedPartners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter">
-            @foreach (var partner in partners)
+         <MudSelect MultiSelection="true" T="MemberBaseVM" ToStringFunc="@((partner)=> partner.Name)" @bind-SelectedValues="project.Partners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var partner in Partners)
             {
                     <MudSelectItem Value="partner">@partner.Name</MudSelectItem>
             }

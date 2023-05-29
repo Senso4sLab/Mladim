@@ -9,9 +9,11 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Participants.Queries.GetParticipants;
 
-public class GetParticipantsQuery : IRequest<IEnumerable<ParticipantDto>>
+public class GetParticipantsQuery : IRequest<IEnumerable<ParticipantDetailsQueryDto>>
 {
     public int? OrganizationId { get; set; }    
     public int? ActivityId { get; set; }
     public bool IsActive { get; set; } = true;
+
+    public bool ParentClass { get; set; }
 }

@@ -14,19 +14,20 @@ public class AnonymousParticipantConfiguration : IEntityTypeConfiguration<Anonym
 {
     public void Configure(EntityTypeBuilder<AnonymousParticipant> builder)
     {
-        int id = 1;
 
-        foreach(var ageGroup in  Enum.GetValues<AgeGroups>())
+        builder.HasKey(x => new {x.Gender, x.AgeGroup});
+       
+
+        foreach (var ageGroup in Enum.GetValues<AgeGroups>())
         {
             foreach (var gender in Enum.GetValues<Gender>())
             {
                 builder.HasData(new AnonymousParticipant
-                {
-                    Id = id++,
+                {                   
                     AgeGroup = ageGroup,
-                    Gender   = gender,
+                    Gender = gender,
                 });
             }
-        }        
+        }
     }
 }

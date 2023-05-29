@@ -15,8 +15,18 @@ public class MladimApiUrls
     public string ProjectCommand { get; set; }
 
 
+    public string GetActivityById { get; set; }
+    public string GetActivitiesByOrganizationId { get; set; }
+    public string GetActivitiesByProjectId { get; set; }
+    public string RemoveActivity { get; set; }
+    public string ActivityCommand { get; set; }
 
-    public string GetStafMembersByOrganizationId { get; set; }
+
+
+
+    public string GetStafMembersByOrganizationId { get; set; }    
+
+   
     public string StaffMemberCommand { get; set; }   
 
     public string GetParticipantsByOrganizationId { get; set; }

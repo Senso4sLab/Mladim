@@ -1,3 +1,44 @@
-﻿<h3>Activities</h3>
+﻿@page "/activities"
+@page "/activities/{projectName}"
+
+
+@attribute [Authorize]
+
+<PageTitle>Aktivnosti</PageTitle>
+
+
+<MudStack Class="py-5" Spacing="5">
+    <MudTextField Value="@defaultOrg?.Name" Label="Izbrana organizacija" Variant="Variant.Outlined" ReadOnly="true" Margin="Margin.Dense"></MudTextField>
+    <MudText Typo="Typo.h5">Seznam aktivnosti</MudText>
+
+    <MudDataGrid Items="activities" Filterable="true" QuickFilter="@_quickFilter" FilterMode="DataGridFilterMode.ColumnFilterRow" FilterCaseSensitivity="DataGridFilterCaseSensitivity.Default">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Ime projekta</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="ProjectName" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
+                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+
+
+        <Columns>
+            <PropertyColumn Property="x => x.Name" Title="Ime aktivnosti" Filterable="false" />
+            <PropertyColumn Property="x => x.Start" Format="dd/MM/yyyy" Title="Pričetek" />
+            <PropertyColumn Property="x => x.End" Format="dd/MM/yyyy" Title="Konec" />
+            <PropertyColumn Property="x => x.ProjectName" Title="Ime projekta" />
+            <TemplateColumn CellClass="d-flex justify-end">
+                <CellTemplate>
+                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" @onclick="@(() => UpdateActivityAsync(context.Item))"></MudIconButton>
+                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" @onclick="@(() => DeleteActivityAsync(context.Item))"></MudIconButton>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+        <PagerContent>
+            <MudDataGridPager T="ActivityWithProjectNameVM" />
+        </PagerContent>
+    </MudDataGrid>
+</MudStack>
+
+
+
 
 

@@ -34,7 +34,7 @@ public class ApplicationProfiles : Profile
         // Organizations
         CreateMap<AddOrganizationCommand, Organization>();
         CreateMap<UpdateOrganizationCommand, Organization>();
-        CreateMap<Organization, OrganizationDto>().ReverseMap();
+        CreateMap<Organization, OrganizationQueryDto>().ReverseMap();
                      
 
         // Projects
@@ -48,27 +48,32 @@ public class ApplicationProfiles : Profile
 
 
 
-        CreateMap<Project, ProjectDto>().ReverseMap();
-
-
-        CreateMap<StaffMemberProjectDto, StaffMemberProject>().ReverseMap();
-        CreateMap<StaffMemberSubjectBaseDto, StaffMemberProject>();
+        CreateMap<Project, ProjectQueryDto>().ReverseMap();
        
+      
+
+
+        //CreateMap<StaffMemberProjectDto, StaffMemberProject>().ReverseMap();
+        CreateMap<StaffMemberSubjectCommandDto, StaffMemberProject>();
+        CreateMap<StaffMemberProject, StaffMemberSubjectQueryDto>()
+            .ForMember(dto => dto.Name, m => m.MapFrom(sm => sm.StaffMember.Name));
        
 
-        CreateMap<ProjectGroupDto, ProjectGroup>().ReverseMap();
+        //CreateMap<ProjectGroupDto, ProjectGroup>().ReverseMap();
 
-        CreateMap<GroupBaseDto, ProjectGroup>();
+        CreateMap<GroupCommandDto, ProjectGroup>();
+       
 
         // Groups
-        CreateMap<GroupDto, Group>().ReverseMap();
-        CreateMap<GroupBaseDto, Group>();
+        CreateMap<GroupDetailsQueryDto, Group>().ReverseMap();
+        CreateMap<GroupCommandDto, Group>();
+        CreateMap<ProjectGroup, GroupQueryDto>();
 
 
 
         //Activity
 
-        CreateMap<Activity, ActivityDto>();
+        CreateMap<Activity, ActivityQueryDto>();
         CreateMap<AddActivityCommand, Activity>();
         CreateMap<UpdateActivityCommand, Activity>()
              .ForMember(p => p.Groups, m => m.Ignore())
@@ -78,26 +83,26 @@ public class ApplicationProfiles : Profile
              .ForMember(p => p.Participants, m => m.Ignore());
 
 
-        CreateMap<AnonymousParticipantActivity, AnonymousParticipantCompactDto>()
+        CreateMap<AnonymousParticipantActivity, AnonymousParticipantDetailsQueryDto>()
             .ConvertUsing<AnonymousParticipantActivityToCompactDto>();
 
 
+        CreateMap<ActivityWithProjectName, ActivityWithProjectNameQueryDto>();
 
 
 
 
+        //CreateMap<StaffMemberActivityDto, StaffMemberActivity>().ReverseMap();
 
-        CreateMap<StaffMemberActivityDto, StaffMemberActivity>().ReverseMap();
-
-        CreateMap<StaffMemberSubjectBaseDto, StaffMemberActivity>();
+        CreateMap<StaffMemberSubjectCommandDto, StaffMemberActivity>();
 
 
-        CreateMap<ActivityGroupDto, ActivityGroup>().ReverseMap();
+        //CreateMap<ActivityGroupDto, ActivityGroup>().ReverseMap();
 
-        CreateMap<GroupBaseDto, ActivityGroup>();
+        CreateMap<GroupCommandDto, ActivityGroup>();
 
-        CreateMap<AnonymousParticipantActivityDto, AnonymousParticipantActivity>().ReverseMap();
-        CreateMap<AnonymousParticipant, AnonymousParticipantDto>();
+        //CreateMap<AnonymousParticipantActivityDto, AnonymousParticipantActivity>().ReverseMap();
+        CreateMap<AnonymousParticipant, AnonymousParticipantQueryDto>();
 
         //StaffMember
 
@@ -108,18 +113,18 @@ public class ApplicationProfiles : Profile
 
         CreateMap<UpdateStaffMemberCommand, StaffMember>();
 
-        CreateMap<StaffMember, StaffMemberDto>().ReverseMap();
+        CreateMap<StaffMember, StaffMemberDetailsQueryDto>().ReverseMap();
 
         // Partners
         CreateMap<AddPartnerCommand, Partner>();
-        CreateMap<PartnerBaseDto, Partner>();
+        CreateMap<PartnerCommandDto, Partner>();
 
         CreateMap<AddPartnerCommand, OrganizationPartner>()
             .ConvertUsing<AddCommandToOrganizationPartnerConverter>();       
 
         CreateMap<UpdatePartnerCommand, Partner>();
 
-        CreateMap<PartnerDto, Partner>().ReverseMap();
+        CreateMap<PartnerQueryDetailsDto, Partner>().ReverseMap();
 
         // Participant
 
@@ -129,23 +134,23 @@ public class ApplicationProfiles : Profile
 
         CreateMap<UpdateParticipantCommand, Participant>();
 
-        CreateMap<Participant, ParticipantDto>().ReverseMap();
-        CreateMap<ParticipantBaseDto, Participant>();
+        CreateMap<Participant, ParticipantDetailsQueryDto>().ReverseMap();
+        CreateMap<ParticipantCommandDto, Participant>();
      
 
         // AnonymousParticipant
 
-        CreateMap<AnonymousParticipantDto, AnonymousParticipant>().ReverseMap();
-        CreateMap<AnonymousParticipantActivityBaseDto, AnonymousParticipantActivity>();
+        CreateMap<AnonymousParticipantQueryDto, AnonymousParticipant>().ReverseMap();
+        CreateMap<AnonymousParticipantCommandDto, AnonymousParticipantActivity>();
         
 
-        CreateMap<MemberDto, Member>()
-            .Include<StaffMemberDto, StaffMember>()
-            .Include<ParticipantDto, Participant>();
+        CreateMap<MemberDetailsDto, Member>()
+            .Include<StaffMemberDetailsQueryDto, StaffMember>()
+            .Include<ParticipantDetailsQueryDto, Participant>();
 
-        CreateMap<Member, MemberDto>()
-            .Include<StaffMember, StaffMemberDto>()
-            .Include<Participant, ParticipantDto>();
+        CreateMap<Member, MemberDetailsDto>()
+            .Include<StaffMember, StaffMemberDetailsQueryDto>()
+            .Include<Participant, ParticipantDetailsQueryDto>();
 
 
     }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMember;
 
-public class GetStaffMemberQuery : IRequest<StaffMemberDto>
+public class GetStaffMemberQuery : IRequest<StaffMemberDetailsQueryDto>
 {
     public int StaffMemberId { get; set; }
 }

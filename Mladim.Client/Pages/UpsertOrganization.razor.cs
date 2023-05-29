@@ -26,6 +26,7 @@ using MudBlazor;
 using Mladim.Client.Services.PopupService;
 using Mladim.Domain.Dtos;
 using Mladim.Client.Services.SubjectServices.Contracts;
+using Mladim.Client.Models;
 
 namespace Mladim.Client.Pages;
 
@@ -44,12 +45,10 @@ public partial class UpsertOrganization
     public string? UserId { get; set; }
 
     [Parameter]
-    public int? OrgId { get; set; }
-
-    //[Inject]
-    //protected IAppState AppState { get; set; }
+    public int? OrgId { get; set; }   
 
     private bool UpdateState => OrgId != null;
+
     private OrganizationVM? organization = new OrganizationVM();
 
     private OrganizationDetailsTab? orgDetailsTab;

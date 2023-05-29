@@ -6,6 +6,7 @@ using Mladim.Application.Features.Members.Participants.Commands.UpdateParticipan
 using Mladim.Application.Features.Members.Participants.Queries.GetParticipant;
 using Mladim.Application.Features.Members.Participants.Queries.GetParticipants;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Models;
 
 namespace Mladim.WebAPI.Controllers
 {
@@ -20,7 +21,7 @@ namespace Mladim.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ParticipantDto?>> AddAsync(AddParticipantCommand request)
+        public async Task<ActionResult<ParticipantDetailsQueryDto?>> AddAsync(AddParticipantCommand request)
         {
             var response = await this.Mediator.Send(request);
             return Ok(response);
@@ -35,14 +36,14 @@ namespace Mladim.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ParticipantDto>>> GetAsync([FromQuery] GetParticipantsQuery query)
+        public async Task<ActionResult<IEnumerable<MemberBase>>> GetAsync([FromQuery] GetParticipantsQuery query)
         {
             var response = await this.Mediator.Send(query);
             return Ok(response);
         }
 
         [HttpGet("anonymous")]
-        public async Task<ActionResult<IEnumerable<AnonymousParticipantDto>>> GetAsync()
+        public async Task<ActionResult<IEnumerable<AnonymousParticipantQueryDto>>> GetAsync()
         {
             var response = await this.Mediator.Send(new GetAnonymousParticipantsQuery());
             return Ok(response);
@@ -52,7 +53,7 @@ namespace Mladim.WebAPI.Controllers
 
 
         [HttpGet("{memId}")]
-        public async Task<ActionResult<ParticipantDto?>> GetAsync(int memId)
+        public async Task<ActionResult<ParticipantDetailsQueryDto?>> GetAsync(int memId)
         {
             var response = await this.Mediator.Send(new GetParticipantQuery { ParticipantId = memId });
             return Ok(response);

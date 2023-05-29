@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Partners.Commands.AddPartner;
 
-public class AddPartnerCommandHandler : IRequestHandler<AddPartnerCommand, PartnerDto>
+public class AddPartnerCommandHandler : IRequestHandler<AddPartnerCommand, PartnerQueryDetailsDto>
 {
     public IUnitOfWork UnitOfWork { get; }
     public IMapper Mapper { get; }
@@ -21,7 +21,7 @@ public class AddPartnerCommandHandler : IRequestHandler<AddPartnerCommand, Partn
         UnitOfWork = unitOfWork;
         Mapper = mapper;
     }
-    public async Task<PartnerDto> Handle(AddPartnerCommand request, CancellationToken cancellationToken)
+    public async Task<PartnerQueryDetailsDto> Handle(AddPartnerCommand request, CancellationToken cancellationToken)
     {
         if (request.OrganizationId == null)
             throw new Exception("Organizacija ne obstaja");
@@ -38,6 +38,6 @@ public class AddPartnerCommandHandler : IRequestHandler<AddPartnerCommand, Partn
 
         await this.UnitOfWork.SaveChangesAsync();
 
-        return this.Mapper.Map<PartnerDto>(orgPartner.Partner);
+        return this.Mapper.Map<PartnerQueryDetailsDto>(orgPartner.Partner);
     }
 }

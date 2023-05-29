@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Organizations.Queries.GetOrganization;
 
-public class GetOrganizationQuery : IRequest<OrganizationDto>
+public class GetOrganizationQuery : IRequest<OrganizationQueryDto>
 {
     public int OrganizationId { get; set; }
 }

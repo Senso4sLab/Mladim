@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Projects.Queries.GetProjectDetails;
 
-public class GetProjectQueryHandler : IRequestHandler<GetProjectQuery, ProjectDto>
+public class GetProjectQueryHandler : IRequestHandler<GetProjectQuery, ProjectQueryDto>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -22,7 +22,7 @@ public class GetProjectQueryHandler : IRequestHandler<GetProjectQuery, ProjectDt
         UnitOfWork = unitOfWork;       
     }    
 
-    public async Task<ProjectDto> Handle(GetProjectQuery request, CancellationToken cancellationToken)
+    public async Task<ProjectQueryDto> Handle(GetProjectQuery request, CancellationToken cancellationToken)
     {
         var project = await this.UnitOfWork.ProjectRepository
                 .FirstOrDefaultAsync(p => p.Id == request.ProjectId);
@@ -30,6 +30,6 @@ public class GetProjectQueryHandler : IRequestHandler<GetProjectQuery, ProjectDt
         if (project == null)
             throw new Exception();
 
-        return this.Mapper.Map<ProjectDto>(project);
+        return this.Mapper.Map<ProjectQueryDto>(project);
     }
 }

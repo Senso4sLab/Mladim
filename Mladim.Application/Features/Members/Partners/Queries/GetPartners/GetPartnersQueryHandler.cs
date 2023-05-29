@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Partners.Queries.GetPartners;
 
-public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumerable<PartnerDto>>
+public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumerable<MemberBase>>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }    
@@ -20,11 +20,9 @@ public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumer
     {
         UnitOfWork = unitOfWork;
         Mapper = mapper;
-    }
+    }   
 
-   
-
-    public async Task<IEnumerable<PartnerDto>> Handle(GetPartnersQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<MemberBase>> Handle(GetPartnersQuery request, CancellationToken cancellationToken)
     {
         List<Expression<Func<Partner, bool>>> predicates = new List<Expression<Func<Partner, bool>>>();
 
@@ -35,11 +33,15 @@ public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumer
         else if (request.ProjectId != null)
             predicates.Add(sm => sm.Projects.Any(p => p.Id == request.ProjectId));
         else if (request.OrganizationId != null)
-            predicates.Add(sm => sm.OrganizationPartners.Any(op => op.OrganizationId == request.OrganizationId));               
+            predicates.Add(sm => sm.OrganizationPartners.Any(op => op.OrganizationId == request.OrganizationId));
 
-        var partner = await this.UnitOfWork.PartnerRepository
-               .GetAllAsync(predicates);
 
-        return this.Mapper.Map<IEnumerable<PartnerDto>>(partner);
+        if (request.ParentClass)
+            return await this.UnitOfWork.PartnerRepository.GetAllAsync<MemberBase>(predicates, sm => new MemberBase { Id = sm.Id, Name = sm.Name });
+        else
+        {
+            var staff = await this.UnitOfWork.PartnerRepository.GetAllAsync(predicates);
+            return this.Mapper.Map<IEnumerable<PartnerQueryDetailsDto>>(staff);
+        }       
     }
 }

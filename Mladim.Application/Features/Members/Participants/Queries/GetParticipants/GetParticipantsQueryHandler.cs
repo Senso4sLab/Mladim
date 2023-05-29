@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Participants.Queries.GetParticipants;
 
-public class GetParticipantsQueryHandler : IRequestHandler<GetParticipantsQuery, IEnumerable<ParticipantDto>>
+public class GetParticipantsQueryHandler : IRequestHandler<GetParticipantsQuery, IEnumerable<MemberBase>>
 {
     public IUnitOfWork UnitOfWork { get; }
     public IMapper Mapper { get; }
@@ -24,7 +24,7 @@ public class GetParticipantsQueryHandler : IRequestHandler<GetParticipantsQuery,
 
    
 
-    public async Task<IEnumerable<ParticipantDto>> Handle(GetParticipantsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<MemberBase>> Handle(GetParticipantsQuery request, CancellationToken cancellationToken)
     {
         List<Expression<Func<Participant, bool>>> predicates = new List<Expression<Func<Participant, bool>>>();
 
@@ -34,10 +34,14 @@ public class GetParticipantsQueryHandler : IRequestHandler<GetParticipantsQuery,
             predicates.Add(sm => sm.Activities.Any(a => a.Id == request.ActivityId));
         else if (request.OrganizationId != null)
             predicates.Add(sm => sm.OrganizationMembers.Any(om => om.OrganizationId == request.OrganizationId));
-        
-        var participant = await this.UnitOfWork
-                .ParticipantRepository.GetAllAsync(predicates);
 
-        return this.Mapper.Map<IEnumerable<ParticipantDto>>(participant);
+
+        if (request.ParentClass)        
+            return await this.UnitOfWork.ParticipantRepository.GetAllAsync<MemberBase>(predicates, p => new MemberBase { Id = p.Id, Name = p.Name });        
+        else
+        {
+            var staff = await this.UnitOfWork.ParticipantRepository.GetAllAsync(predicates);
+            return this.Mapper.Map<IEnumerable<ParticipantDetailsQueryDto>>(staff);
+        }
     }
 }

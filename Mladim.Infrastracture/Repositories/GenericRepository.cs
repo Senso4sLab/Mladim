@@ -13,7 +13,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     protected DbSet<T> DbSet { get; }
 
    
-    private IQueryable<T> Sequence { get; set; } 
+  
     public GenericRepository(ApplicationDbContext context)
     {
         this.DbSet = context.Set<T>();       
@@ -62,12 +62,16 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         return dbSetQ;
     }
 
+
+
     public async Task<IEnumerable<TResult>> GetAllAsync<TResult>(IEnumerable<Expression<Func<T, bool>>> predicates,
-       Expression<Func<T,TResult>> selector, bool tracking = true) 
+       Expression<Func<T, TResult>> selector, bool tracking = true)
     {
         var dbSet = ApplyWhereConditionsToSequence(predicates, tracking);
         return await dbSet.Select(selector).ToListAsync();
     }
+
+   
 
 
 

@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
-public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberCommand, StaffMemberDto>
+public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberCommand, StaffMemberDetailsQueryDto>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -21,7 +21,7 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
         Mapper = mapper;
     }
    
-    public async Task<StaffMemberDto> Handle(AddStaffMemberCommand request, CancellationToken cancellationToken)
+    public async Task<StaffMemberDetailsQueryDto> Handle(AddStaffMemberCommand request, CancellationToken cancellationToken)
     {        
         if (request.OrganizationId == null)
             throw new Exception("Organizacija ne obstaja");
@@ -38,7 +38,7 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
 
         await this.UnitOfWork.SaveChangesAsync();
 
-        return this.Mapper.Map<StaffMemberDto>(orgMember.Member);
+        return this.Mapper.Map<StaffMemberDetailsQueryDto>(orgMember.Member);
 
     }
 }

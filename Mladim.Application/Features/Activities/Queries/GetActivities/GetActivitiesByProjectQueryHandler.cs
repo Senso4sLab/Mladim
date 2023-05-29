@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Activities.Queries.GetActivities;
 
-public class GetActivitiesByProjectQueryHandler : IRequestHandler<GetActivitiesByProjectQuery, IEnumerable<ActivityDto>>
+public class GetActivitiesByProjectQueryHandler : IRequestHandler<GetActivitiesByProjectQuery, IEnumerable<ActivityQueryDto>>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -24,13 +24,25 @@ public class GetActivitiesByProjectQueryHandler : IRequestHandler<GetActivitiesB
     }
  
 
-    public async Task<IEnumerable<ActivityDto>> Handle(GetActivitiesByProjectQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ActivityQueryDto>> Handle(GetActivitiesByProjectQuery request, CancellationToken cancellationToken)
     {
-        Expression<Func<Activity, bool>> predicate = a => a.ProjectId == request.ProjectId;
 
-        var activities = await this.UnitOfWork.ActivityRepository
-            .GetAllAsync(new[] { predicate });
+        if (request.ProjectId != null)
+        {
+            Expression<Func<Activity, bool>> predicate = a => a.ProjectId == request.ProjectId;
 
-        return this.Mapper.Map<IEnumerable<ActivityDto>>(activities);   
+            var activities = await this.UnitOfWork.ActivityRepository
+                .GetAllAsync(new[] { predicate });
+
+            return this.Mapper.Map<IEnumerable<ActivityQueryDto>>(activities);
+        }
+        else if(request.OrganizationId != null)
+        {
+            var activities = await this.UnitOfWork.ProjectRepository.GetActivitiesWithProjectNameByOrganizationId(request.OrganizationId.Value);         
+
+            return this.Mapper.Map<IEnumerable<ActivityWithProjectNameQueryDto>>(activities);
+        }
+        else 
+            return Enumerable.Empty<ActivityQueryDto>();
     }
 }

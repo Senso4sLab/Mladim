@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Partners.Queries.GetPartner;
 
-public class GetPartnerQueryHandler : IRequestHandler<GetPartnerQuery, PartnerDto>
+public class GetPartnerQueryHandler : IRequestHandler<GetPartnerQuery, PartnerQueryDetailsDto>
 {
     public IUnitOfWork UnitOfWork { get; }
     public IMapper Mapper { get; }
@@ -23,7 +23,7 @@ public class GetPartnerQueryHandler : IRequestHandler<GetPartnerQuery, PartnerDt
 
     
 
-    public async Task<PartnerDto> Handle(GetPartnerQuery request, CancellationToken cancellationToken)
+    public async Task<PartnerQueryDetailsDto> Handle(GetPartnerQuery request, CancellationToken cancellationToken)
     {
         var partner = await this.UnitOfWork.PartnerRepository
           .FirstOrDefaultAsync(sm => sm.Id == request.PartnerId);
@@ -31,6 +31,6 @@ public class GetPartnerQueryHandler : IRequestHandler<GetPartnerQuery, PartnerDt
         if (partner == null)
             throw new Exception("");
 
-        return this.Mapper.Map<PartnerDto>(partner);
+        return this.Mapper.Map<PartnerQueryDetailsDto>(partner);
     }
 }

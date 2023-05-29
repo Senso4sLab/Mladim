@@ -26,6 +26,7 @@ using System.Runtime.CompilerServices;
 using System.Net.NetworkInformation;
 using Mladim.Client.Services.PopupService;
 using Mladim.Domain.Dtos;
+using Mladim.Client.Models;
 
 namespace Mladim.Client.Pages;
 

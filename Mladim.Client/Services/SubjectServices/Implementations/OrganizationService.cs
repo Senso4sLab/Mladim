@@ -48,7 +48,7 @@ public class OrganizationService : IOrganizationService
     public async Task<IEnumerable<OrganizationVM>> GetByUserIdAsync(string userId)
     {
         string url = string.Format(MladimApiUrls.GetOrganizationsByUserId, userId);
-        var organizations = await HttpClient.GetAllAsync<IEnumerable<OrganizationDto>>(url);
+        var organizations = await HttpClient.GetAllAsync<OrganizationQueryDto>(url);
         return this.Mapper.Map<IEnumerable<OrganizationVM>>(organizations);
     }
 
@@ -56,27 +56,27 @@ public class OrganizationService : IOrganizationService
     public async Task<OrganizationVM?> GetByIdAsync(int organizationId)
     {
         string url = string.Format(MladimApiUrls.GetOrganizationById, organizationId);
-        var organizations = await HttpClient.GetAsync<OrganizationDto>(url);
+        var organizations = await HttpClient.GetAsync<OrganizationQueryDto>(url);
         return this.Mapper.Map<OrganizationVM>(organizations);
     }
 
     public async Task<OrganizationVM?> AddAsync(OrganizationVM organization, string userId)
     {
-        var command = this.Mapper.Map<AddOrganizationVM>(organization);
-        command.UserId = userId;
+        var command = this.Mapper.Map<AddOrganizationCommandDto>(organization);
+        command.AppUserId = userId;
 
         var organizationDto = await this.HttpClient
-            .PostAsync<AddOrganizationVM, OrganizationDto>(MladimApiUrls.OrganizationCommand, command);
+            .PostAsync<AddOrganizationCommandDto, OrganizationQueryDto>(MladimApiUrls.OrganizationCommand, command);
         
         return organizationDto != null ? this.Mapper.Map<OrganizationVM>(organizationDto) : null;
     }
 
     public async Task<bool> UpdateAsync(OrganizationVM organization)
     {
-        var command = this.Mapper.Map<UpdateOrganizationVM>(organization);
+        var command = this.Mapper.Map<UpdateOrganizationCommandDto>(organization);
 
         var succeedResponse = await this.HttpClient
-            .PutAsync<UpdateOrganizationVM>(MladimApiUrls.OrganizationCommand, command);
+            .PutAsync(MladimApiUrls.OrganizationCommand, command);
 
         return succeedResponse;
     }

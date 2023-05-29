@@ -28,7 +28,7 @@ public class ProjectService : IProjectService
     public async Task<IEnumerable<ProjectVM>> GetByOrganizationIdAsync(int organizationId)
     {
         string url = string.Format(MladimApiUrls.GetProjectsByOrganizationId, organizationId);
-        var projects = await HttpClient.GetAllAsync<IEnumerable<ProjectDto>>(url);
+        var projects = await HttpClient.GetAllAsync<ProjectQueryDto>(url);
         return this.Mapper.Map<IEnumerable<ProjectVM>>(projects);
     }
 
@@ -36,24 +36,24 @@ public class ProjectService : IProjectService
     public async Task<ProjectVM?> GetByProjectIdAsync(int projectId)
     {
         string url = string.Format(MladimApiUrls.GetProjectById, projectId);
-        var project = await HttpClient.GetAsync<ProjectDto>(url);
+        var project = await HttpClient.GetAsync<ProjectQueryDto>(url);
         return this.Mapper.Map<ProjectVM>(project);
     }
 
     public async Task<ProjectVM?> AddAsync(ProjectVM project, int organizationId)
     {
-        var command = this.Mapper.Map<AddProjectVM>(project);
+        var command = this.Mapper.Map<AddProjectCommandDto>(project);
         command.OrganizationId = organizationId;
 
         var projectDto = await this.HttpClient
-            .PostAsync<AddProjectVM, ProjectDto>(MladimApiUrls.ProjectCommand, command);
+            .PostAsync<AddProjectCommandDto, ProjectQueryDto>(MladimApiUrls.ProjectCommand, command);
 
         return projectDto != null ? this.Mapper.Map<ProjectVM>(projectDto) : null;
     }
 
     public async Task<bool> UpdateAsync(ProjectVM project)
     {
-        var command = this.Mapper.Map<UpdateProjectVM>(project);
+        var command = this.Mapper.Map<UpdateProjectCommandDto>(project);
 
         var succeedResponse = await this.HttpClient
             .PutAsync(MladimApiUrls.ProjectCommand, command);

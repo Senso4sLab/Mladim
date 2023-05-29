@@ -1,4 +1,5 @@
-﻿using Mladim.Application.Contracts.Persistence;
+﻿using Microsoft.EntityFrameworkCore;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.IdentityModels;
 using Mladim.Domain.Models;
 using Mladim.Infrastracture.Persistance;
@@ -17,4 +18,6 @@ public class StaffMemberRepository : GenericRepository<StaffMember>, IStaffMembe
     {
         
     }    
+
+   
 }

@@ -1,0 +1,67 @@
+﻿
+@using System.Linq;
+@using Mladim.Domain.Enums;
+
+<MudDialog Style="min-width:500px;">
+    <DialogContent>
+        <MudDataGrid T="AnonymousParticipantTableElements" Items="@Elements" ReadOnly=false EditMode="DataGridEditMode.Cell"
+                     Bordered="true" Dense="false" EditTrigger="DataGridEditTrigger.Manual">
+            <Columns>
+                <PropertyColumn Property="x => x.AgeGroup.GetDisplayAttribute()" Title="Starostna skupina" IsEditable="false" />
+                <PropertyColumn Property="x => x.Male" Title="@Gender.Male.GetDisplayAttribute()" />
+                <PropertyColumn Property="x => x.Female" Title="@Gender.Female.GetDisplayAttribute()" />
+            </Columns>
+        </MudDataGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Prekliči</MudButton>
+        <MudButton OnClick="Submit" Color="Color.Primary">Shrani</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+@code
+{
+    [CascadingParameter]
+    MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public List<AnonymousParticipantsVM> AnonymousParticipantGroups { get; set; }
+
+
+    private List<AnonymousParticipantTableElements> Elements { get; set; }
+
+
+    private List<AnonymousParticipantTableElements> GetTableElements(IEnumerable<AnonymousParticipantsVM> aParticipants) =>
+       Enum.GetValues<AgeGroups>().Select(ageGroup => new AnonymousParticipantTableElements()
+           {
+               AgeGroup = ageGroup,
+               Female = aParticipants.Where(p => p.Equals(ageGroup)).Sum(p => p.Number),
+               Male = aParticipants.Where(p => p.Equals(ageGroup)).Sum(p => p.Number),
+
+           }).ToList();
+
+    protected override void OnParametersSet()
+    {
+        this.Elements = GetTableElements(AnonymousParticipantGroups);
+    }
+
+    private IEnumerable<AnonymousParticipantsVM> GetParticipantFromTable() =>
+        Elements.GroupBy(e => e.AgeGroup)
+            .SelectMany(g => Enum.GetValues<Gender>().Select(gender => new AnonymousParticipantsVM()
+                {
+                    AgeGroup = g.Key,
+                    Gender = gender,
+                    Number = gender == Gender.Male ? g.Sum(x => x.Male) : g.Sum(x => x.Female)
+                }))
+            .ToList();
+
+
+    private void Submit() =>    
+        MudDialog.Close(DialogResult.Ok(GetParticipantFromTable()));
+    
+
+    void Cancel() =>    
+        MudDialog.Close(DialogResult.Ok(AnonymousParticipantGroups));
+    
+}

@@ -55,7 +55,10 @@ public partial class StaffMemberTab
 
     private async Task AddStaffMemberAsync()
     {
-        var staffMember = new StaffMemberVM();
+        var staffMember = new StaffMemberVM()
+        {
+            Year = 2000,
+        };
 
         var dialogResponse = await this.PopupService.ShowStaffMemberDialog("Dodaj uporabnika", staffMember);
 

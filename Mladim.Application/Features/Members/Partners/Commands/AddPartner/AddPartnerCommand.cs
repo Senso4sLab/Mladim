@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Partners.Commands.AddPartner;
 
-public class AddPartnerCommand : IRequest<PartnerDto>
+public class AddPartnerCommand : IRequest<PartnerQueryDetailsDto>
 {
     public int? OrganizationId { get; set; }
     public string Name { get; set; }

@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.AnonymousParticipants.Queries.GetAnonymousParticipants;
 
-public class GetAnonymousParticipantsQuery : IRequest<IEnumerable<AnonymousParticipantDto>>
+public class GetAnonymousParticipantsQuery : IRequest<IEnumerable<AnonymousParticipantQueryDto>>
 {
 }

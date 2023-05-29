@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.AnonymousParticipants.Queries.GetAnonymousParticipants;
 
-public class GetAnonymousParticipantsQueryHandler : IRequestHandler<GetAnonymousParticipantsQuery, IEnumerable<AnonymousParticipantDto>>
+public class GetAnonymousParticipantsQueryHandler : IRequestHandler<GetAnonymousParticipantsQuery, IEnumerable<AnonymousParticipantQueryDto>>
 {
     private IMapper Mapper { get; }
     private IUnitOfWork UnitOfWork { get; }
@@ -21,10 +21,10 @@ public class GetAnonymousParticipantsQueryHandler : IRequestHandler<GetAnonymous
         Mapper = mapper;
     }   
 
-    public async Task<IEnumerable<AnonymousParticipantDto>> Handle(GetAnonymousParticipantsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<AnonymousParticipantQueryDto>> Handle(GetAnonymousParticipantsQuery request, CancellationToken cancellationToken)
     {
         //var ap =  await this.UnitOfWork.AnonymousParticipantRepository.GetAllAsync(x => true, false);
 
-        return this.Mapper.Map<IEnumerable<AnonymousParticipantDto>>(null);   
+        return this.Mapper.Map<IEnumerable<AnonymousParticipantQueryDto>>(null);   
     }
 }

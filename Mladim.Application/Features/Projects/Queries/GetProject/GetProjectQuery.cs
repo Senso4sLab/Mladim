@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Projects.Queries.GetProjectDetails;
 
-public class GetProjectQuery : IRequest<ProjectDto>
+public class GetProjectQuery : IRequest<ProjectQueryDto>
 {
     public int ProjectId { get; set; }
 }

@@ -4,10 +4,10 @@ using Mladim.Domain.Models;
 
 namespace Mladim.Application.MappingProfiles.Converters;
 
-public class AnonymousParticipantActivityToCompactDto : ITypeConverter<AnonymousParticipantActivity, AnonymousParticipantCompactDto>
+public class AnonymousParticipantActivityToCompactDto : ITypeConverter<AnonymousParticipantActivity, AnonymousParticipantDetailsQueryDto>
 {
-    public AnonymousParticipantCompactDto Convert(AnonymousParticipantActivity source, AnonymousParticipantCompactDto destination, ResolutionContext context) =>
-        new AnonymousParticipantCompactDto
+    public AnonymousParticipantDetailsQueryDto Convert(AnonymousParticipantActivity source, AnonymousParticipantDetailsQueryDto destination, ResolutionContext context) =>
+        new AnonymousParticipantDetailsQueryDto
         {
             AgeGroup = source.AnonymousParticipant.AgeGroup,
             Gender = source.AnonymousParticipant.Gender,

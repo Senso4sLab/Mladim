@@ -18,10 +18,10 @@ public class UpdateActivityCommand : IRequest<int>
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
     public ActivityTypes ActivityTypes { get; set; }
-    public List<PartnerBaseDto> Partners { get; set; } = new();
-    public List<StaffMemberSubjectBaseDto> Staff { get; set; } = new();
-    public List<ParticipantBaseDto> Participants { get; set; } = new();    
-    public List<AnonymousParticipantActivityBaseDto> AnonymousParticipants { get; set; } = new();
-    public List<GroupBaseDto> Groups { get; set; } = new();
+    public List<PartnerCommandDto> Partners { get; set; } = new();
+    public List<StaffMemberSubjectCommandDto> Staff { get; set; } = new();
+    public List<ParticipantCommandDto> Participants { get; set; } = new();    
+    public List<AnonymousParticipantCommandDto> AnonymousParticipants { get; set; } = new();
+    public List<GroupCommandDto> Groups { get; set; } = new();
 
 }

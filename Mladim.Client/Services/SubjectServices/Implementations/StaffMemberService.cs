@@ -7,6 +7,7 @@ using Mladim.Client.Services.HttpService.Generic;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Domain.Dtos;
 using Mladim.Client.Models;
+using Mladim.Domain.Models;
 
 namespace Mladim.Client.Services.SubjectServices.Implementations;
 
@@ -26,35 +27,35 @@ public class StaffMemberService : IStaffMemberService
 	public async Task<IEnumerable<StaffMemberVM>> GetByOrganizationIdAsync(int organizationId, bool isActive)
 	{
 		string url = string.Format(this.ApiUrls.GetStafMembersByOrganizationId, organizationId, false, isActive);				
-		var staffDto = await this.HttpService.GetAllAsync<IEnumerable<StaffMemberDto>>(url);
+		var staffDto = await this.HttpService.GetAllAsync<StaffMemberDetailsQueryDto>(url);
 		return this.Mapper.Map<IEnumerable<StaffMemberVM>>(staffDto);	
 	}
 
-    public async Task<IEnumerable<BaseMemberVM>> GetBaseByOrganizationIdAsync(int organizationId, bool isActive)
+    public async Task<IEnumerable<MemberBaseVM>> GetBaseByOrganizationIdAsync(int organizationId, bool isActive)
     {
         string url = string.Format(this.ApiUrls.GetStafMembersByOrganizationId, organizationId, true, isActive);
-        var baseDto = await this.HttpService.GetAllAsync<IEnumerable<BaseMemberDto>>(url);
-        return this.Mapper.Map<IEnumerable<BaseMemberVM>>(baseDto);
+        var baseDto = await this.HttpService.GetAllAsync<MemberBase>(url);
+        return this.Mapper.Map<IEnumerable<MemberBaseVM>>(baseDto);
     }
 
 
     public async Task<StaffMemberVM?> AddAsync(int organizationId, StaffMemberVM staffMember)
 	{
-		var command = this.Mapper.Map<AddStaffMemberVM>(staffMember);
+		var command = this.Mapper.Map<AddStaffMemberCommandDto>(staffMember);
 		command.OrganizationId = organizationId;
 
 		var staffMemberDto = await this.HttpService
-			.PostAsync<AddStaffMemberVM, StaffMemberDto>(ApiUrls.StaffMemberCommand, command);
+			.PostAsync<AddStaffMemberCommandDto, StaffMemberDetailsQueryDto>(ApiUrls.StaffMemberCommand, command);
 		
 		return staffMemberDto != null ? this.Mapper.Map<StaffMemberVM>(staffMemberDto) : null;		
 	}
 
     public async Task<bool> UpdateAsync(StaffMemberVM staffMember)
     {
-        var command = this.Mapper.Map<UpdateStaffMemberVM>(staffMember);       
+        var command = this.Mapper.Map<UpdateStaffMemberCommandDto>(staffMember);       
 
         var succeedResponse = await this.HttpService
-            .PutAsync<UpdateStaffMemberVM>(ApiUrls.StaffMemberCommand, command);
+            .PutAsync<UpdateStaffMemberCommandDto>(ApiUrls.StaffMemberCommand, command);
 
 		return succeedResponse;
     }

@@ -1,4 +1,5 @@
-﻿using Mladim.Application.Contracts.Persistence;
+﻿using Microsoft.EntityFrameworkCore;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Models;
 using Mladim.Infrastracture.Persistance;
 using System;
@@ -14,4 +15,6 @@ public class ParticipantRepository : GenericRepository<Participant>, IParticipan
     public ParticipantRepository(ApplicationDbContext context) : base(context)
     {
     }
+
+   
 }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Projects.Queries.GetProjects;
 
-public class GetProjectsByOrganizationQueryHandler : IRequestHandler<GetProjectsByOrganizationQuery, IEnumerable<ProjectDto>>
+public class GetProjectsByOrganizationQueryHandler : IRequestHandler<GetProjectsByOrganizationQuery, IEnumerable<ProjectQueryDto>>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -24,13 +24,13 @@ public class GetProjectsByOrganizationQueryHandler : IRequestHandler<GetProjects
     }
    
 
-    public async Task<IEnumerable<ProjectDto>> Handle(GetProjectsByOrganizationQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ProjectQueryDto>> Handle(GetProjectsByOrganizationQuery request, CancellationToken cancellationToken)
     {
         Expression<Func<Project, bool>> predicate = p => p.OrganizationId == request.OrganizationId;
 
         var projects =  await this.UnitOfWork.ProjectRepository
             .GetAllAsync(new[] {predicate});
         
-        return this.Mapper.Map<IEnumerable<ProjectDto>>(projects);
+        return this.Mapper.Map<IEnumerable<ProjectQueryDto>>(projects);
     }
 }

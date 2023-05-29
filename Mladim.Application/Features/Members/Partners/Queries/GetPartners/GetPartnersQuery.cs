@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Partners.Queries.GetPartners;
 
-public class GetPartnersQuery : IRequest<IEnumerable<PartnerDto>>
+public class GetPartnersQuery : IRequest<IEnumerable<PartnerQueryDetailsDto>>
 {
     public int? OrganizationId { get; set; }
     public int? ProjectId { get; set; }
     public int? ActivityId { get; set; }
     public bool IsActive { get; set; } = true;
+    public bool ParentClass { get; set; }
 }

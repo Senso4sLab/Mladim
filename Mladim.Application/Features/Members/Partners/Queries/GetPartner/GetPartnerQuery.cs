@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Partners.Queries.GetPartner;
 
-public class GetPartnerQuery : IRequest<PartnerDto>
+public class GetPartnerQuery : IRequest<PartnerQueryDetailsDto>
 {
     public int PartnerId { get; set; }
 }

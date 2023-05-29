@@ -1,4 +1,5 @@
 ﻿using Mladim.Application.Contracts.Persistence;
+using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
 using Mladim.Infrastracture.Persistance;
 using System;
@@ -14,4 +15,6 @@ public class AnonymousParticipantRepository : GenericRepository<AnonymousPartici
     public AnonymousParticipantRepository(ApplicationDbContext context) : base(context)
     {
     }
+
+    
 }

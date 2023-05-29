@@ -21,6 +21,7 @@
                         <MudText Typo="Typo.h4">@project.Name</MudText>
                     </CardHeaderContent>
                     <CardHeaderActions>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Default" @onclick="@(()=> UpdateProjectAsync(project))" />
                         <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Default" @onclick="@(()=> DeleteProjectAsync(project))" />
                     </CardHeaderActions>
                 </MudCardHeader>

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Activities.Commands.AddActivity;
 
-public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, ActivityDto>
+public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, ActivityQueryDto>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -23,7 +23,7 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, Act
         Mapper = mapper;
     }   
 
-    public async Task<ActivityDto> Handle(AddActivityCommand request, CancellationToken cancellationToken)
+    public async Task<ActivityQueryDto> Handle(AddActivityCommand request, CancellationToken cancellationToken)
     {
         var project = await this.UnitOfWork.ProjectRepository
             .FirstOrDefaultWithoutIncludeAsync(p => p.Id == request.ProjectId);            
@@ -44,6 +44,6 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, Act
 
         await this.UnitOfWork.SaveChangesAsync();
 
-        return this.Mapper.Map<ActivityDto>(activity);   
+        return this.Mapper.Map<ActivityQueryDto>(activity);   
     }
 }

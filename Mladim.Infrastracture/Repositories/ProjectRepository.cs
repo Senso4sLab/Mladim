@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Core;
+using Microsoft.EntityFrameworkCore;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Models;
 using Mladim.Infrastracture.Persistance;
@@ -42,5 +43,14 @@ public class ProjectRepository : GenericRepository<Project>,  IProjectRepository
             .Include(p => p.Partners)
             .Include(p => p.Groups)               
             .FirstOrDefaultAsync(predicate);       
+    }
+
+    public async Task<IEnumerable<ActivityWithProjectName>> GetActivitiesWithProjectNameByOrganizationId(int organizationId)
+    {
+        var result = await this.DbSet.Where(p => p.OrganizationId == organizationId)
+            .SelectMany(p => p.Activities.Select(a => ActivityWithProjectName.Create(a, p.Name)))
+            .ToListAsync();
+
+        return result;
     }
 }

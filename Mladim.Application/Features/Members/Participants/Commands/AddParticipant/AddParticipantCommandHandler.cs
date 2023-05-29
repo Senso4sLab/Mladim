@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Participants.Commands.AddParticipant;
 
-public class AddParticipantCommandHandler : IRequestHandler<AddParticipantCommand, ParticipantDto>
+public class AddParticipantCommandHandler : IRequestHandler<AddParticipantCommand, ParticipantDetailsQueryDto>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }    
@@ -23,7 +23,7 @@ public class AddParticipantCommandHandler : IRequestHandler<AddParticipantComman
     }
 
    
-    public async Task<ParticipantDto> Handle(AddParticipantCommand request, CancellationToken cancellationToken)
+    public async Task<ParticipantDetailsQueryDto> Handle(AddParticipantCommand request, CancellationToken cancellationToken)
     {
         var organization = await this.UnitOfWork.OrganizationRepository
             .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
@@ -37,6 +37,6 @@ public class AddParticipantCommandHandler : IRequestHandler<AddParticipantComman
 
         await this.UnitOfWork.SaveChangesAsync();
 
-        return this.Mapper.Map<ParticipantDto>(orgMember.Member);      
+        return this.Mapper.Map<ParticipantDetailsQueryDto>(orgMember.Member);      
     }
 }
