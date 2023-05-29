@@ -75,7 +75,7 @@ namespace Mladim.Application.Features.Activities.Commands.UpdateActivity
                     activity.Groups.Add(ag);
                 });
            
-            activity.AnonymousParticipants.Where(apa => !request.AnonymousParticipants.Any(apac => apac.AnonymousParticipantId == apa.AnonymousParticipantId))
+            activity.AnonymousParticipants.Where(apa => !request.AnonymousParticipants.Any(apac => apac.AgeGroup == apa.AnonymousParticipant.AgeGroup && apac.Gender == apa.AnonymousParticipant.Gender))
                 .ToList().ForEach(apa =>
                 {
                     this.UnitOfWork.ConfigEntityState(EntityState.Deleted, apa);
@@ -84,12 +84,12 @@ namespace Mladim.Application.Features.Activities.Commands.UpdateActivity
 
             request.AnonymousParticipants.ForEach(apac =>
             {
-                var apa = activity.AnonymousParticipants.FirstOrDefault(apa => apa.AnonymousParticipantId == apac.AnonymousParticipantId);
+                var apa = activity.AnonymousParticipants.FirstOrDefault(apa => apac.AgeGroup == apa.AnonymousParticipant.AgeGroup && apac.Gender == apa.AnonymousParticipant.Gender);
                 if (apa != null)
                     this.Mapper.Map(apac, apa);
             });
 
-            request.AnonymousParticipants.Where(apa => !activity.AnonymousParticipants.Any(sm => sm.AnonymousParticipantId == apa.AnonymousParticipantId))
+            request.AnonymousParticipants.Where(apa => !activity.AnonymousParticipants.Any(sm => apa.AgeGroup == sm.AnonymousParticipant.AgeGroup && apa.Gender == sm.AnonymousParticipant.Gender))
                  .Select(smc => this.Mapper.Map<AnonymousParticipantActivity>(smc)).ToList().ForEach(aspac =>
                  {
                      this.UnitOfWork.ConfigEntityState(EntityState.Added, aspac);

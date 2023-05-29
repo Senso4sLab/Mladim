@@ -12,9 +12,8 @@ public class AnonymousParticipantActivityToCompactDto : ITypeConverter<Anonymous
             AgeGroup = source.AnonymousParticipant.AgeGroup,
             Gender = source.AnonymousParticipant.Gender,
             Number = source.Number,
-            AnonymousParticipantId = source.AnonymousParticipantId
         };
-   
+
 }
 
 

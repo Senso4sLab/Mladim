@@ -18,14 +18,14 @@ public class GetActivitiesByProjectQueryValidator : AbstractValidator<GetActivit
     public GetActivitiesByProjectQueryValidator(IUnitOfWork unitOfWork)
 	{	
 			
-		RuleFor(q => q.ProjectId)			
-			.Empty()
-			.MustAsync(ExistProjectId);			
+		//RuleFor(q => q.ProjectId)			
+		//	.Empty()
+		//	.MustAsync(ExistProjectId);			
 
         this.UnitOfWork = unitOfWork;
     }    
 
-    private async Task<bool> ExistProjectId(int projectId, CancellationToken cancellationToken) =>	
+    private async Task<bool> ExistProjectId(int? projectId, CancellationToken cancellationToken) =>	
 		await this.UnitOfWork.ProjectRepository.AnyAsync(p => p.Id == projectId);	
 	
 }
