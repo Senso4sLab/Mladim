@@ -7,8 +7,6 @@ using Mladim.Application.Features.Members.Partners.Commands.AddPartner;
 using Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
 using Mladim.Application.Features.Members.StaffMembers.Commands.UpdatePartner;
 using Mladim.Application.Features.Members.StaffMembers.Commands.UpdateStaffMember;
-using Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMember;
-using Mladim.Application.Features.Organizations;
 using Mladim.Application.Features.Organizations.Commands.AddOrganization;
 using Mladim.Application.Features.Organizations.Commands.UpdateOrganization;
 using Mladim.Application.Features.Projects.Commands.AddProject;
@@ -17,12 +15,6 @@ using Mladim.Application.MappingProfiles.Converters;
 using Mladim.Application.MappingProfiles.Resolvers;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mladim.Application.MappingProfiles.Profiles;
 
@@ -74,12 +66,17 @@ public class ApplicationProfiles : Profile
         //Activity
 
         CreateMap<Activity, ActivityQueryDto>();
-        CreateMap<AddActivityCommand, Activity>();
+        CreateMap<AddActivityCommand, Activity>()
+            .ForMember(a => a.AnonymousParticipantActivities, m => m.MapFrom(ad => ad.AnonymousParticipants));
+           
+            
+
+
         CreateMap<UpdateActivityCommand, Activity>()
              .ForMember(p => p.Groups, m => m.Ignore())
              .ForMember(p => p.Partners, m => m.Ignore())
              .ForMember(p => p.Staff, m => m.Ignore())
-             .ForMember(p => p.AnonymousParticipants, m => m.Ignore())
+             .ForMember(p => p.AnonymousParticipantActivities, m => m.Ignore())
              .ForMember(p => p.Participants, m => m.Ignore());
 
 
@@ -126,6 +123,8 @@ public class ApplicationProfiles : Profile
 
         CreateMap<PartnerQueryDetailsDto, Partner>().ReverseMap();
 
+        CreateMap<Partner, PartnerQueryDto>();
+
         // Participant
 
         CreateMap<AddParticipantCommand, Participant>();
@@ -141,8 +140,10 @@ public class ApplicationProfiles : Profile
         // AnonymousParticipant
 
         CreateMap<AnonymousParticipantQueryDto, AnonymousParticipant>().ReverseMap();
-        CreateMap<AnonymousParticipantCommandDto, AnonymousParticipantActivity>();
-        
+
+        CreateMap<AnonymousParticipantCommandDto, AnonymousParticipantActivity>()
+            .ConvertUsing<AnonymousParticipantCommandDtoToActivity>();
+
 
         CreateMap<MemberDetailsDto, Member>()
             .Include<StaffMemberDetailsQueryDto, StaffMember>()

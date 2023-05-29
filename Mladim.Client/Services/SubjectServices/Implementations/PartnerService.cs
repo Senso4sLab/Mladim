@@ -33,9 +33,9 @@ public class PartnerService : IPartnerService
         return partnerDto != null ? this.Mapper.Map<PartnerVM>(partnerDto) : null;
     }
 
-    public async Task<IEnumerable<PartnerVM>> GetByOrganizationIdAsync(int organizationId, bool isAcitve)
+    public async Task<IEnumerable<PartnerVM>> GetByOrganizationIdAsync(int organizationId, bool isActive)
     {
-        string url = string.Format(this.ApiUrls.GetPartnersByOrganizationId, organizationId, isAcitve);
+        string url = string.Format(this.ApiUrls.GetPartnersByOrganizationId, organizationId, false, isActive);
         var partnerDto = await this.HttpService.GetAllAsync<PartnerQueryDetailsDto>(url);
         return this.Mapper.Map<IEnumerable<PartnerVM>>(partnerDto);
     }

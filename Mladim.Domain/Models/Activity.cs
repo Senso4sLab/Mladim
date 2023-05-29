@@ -20,7 +20,7 @@ public class Activity
     
     public List<ActivityGroup> Groups { get; set; } = new();
 
-    public List<AnonymousParticipantActivity> AnonymousParticipants { get; set; } = new();
+    public List<AnonymousParticipantActivity> AnonymousParticipantActivities { get; set; } = new();
 
     public List<Partner> Partners { get; set; } = new();
 

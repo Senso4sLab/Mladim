@@ -10,4 +10,5 @@ public class AddParticipantCommandDto
     public Gender Gender { get; set; }
     public int Year { get; set; }
     public AgeGroups AgeGroup { get; set; }
+    public bool IsActive { get; set; } = true;
 }

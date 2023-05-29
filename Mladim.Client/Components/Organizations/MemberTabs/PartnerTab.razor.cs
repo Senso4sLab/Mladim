@@ -75,7 +75,7 @@ public partial class PartnerTab
     private async Task CheckedChangedAsync(bool isActive)
     {
         this.IsActive = isActive;
-        this.Partners = new List<PartnerVM>(await GetPartnersByOrganizationId());
+        await OnParametersSetAsync();
     }
 
     private async Task UpdatePartnerAsync(PartnerVM partner)
@@ -89,7 +89,10 @@ public partial class PartnerTab
         var succeedResponse = await this.PartnerService.UpdateAsync(partner);
 
         if (succeedResponse)
+        {
             this.PopupService.ShowSnackbarSuccess("Podatki so uspešno posodobljeni");
+            await OnParametersSetAsync();
+        }
         else
             this.PopupService.ShowSnackbarError();
 

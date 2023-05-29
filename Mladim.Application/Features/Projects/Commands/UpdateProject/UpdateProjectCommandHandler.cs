@@ -52,7 +52,7 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
                 this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, rg);
                 project.Groups.Remove(rg);
             });
-
+       
         request.Groups.Where(gc => !project.Groups.Any(g => g.Id == gc.Id))
             .Select(gc => this.Mapper.Map<ProjectGroup>(gc)).ToList().ForEach(ag =>
             {
@@ -60,25 +60,19 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
                 project.Groups.Add(ag);
             });
 
-        project.Staff.Where(sm => !request.Staff.Any(smc => smc.StaffMemberId == sm.StaffMemberId))
+        // delete
+        project.Staff.Where(sm => !request.Staff.Any(smc => smc.StaffMemberId == sm.StaffMemberId && smc.IsLead == sm.IsLead))
             .ToList().ForEach(rsmp =>
             {
                 this.UnitOfWork.ConfigEntityState(EntityState.Deleted, rsmp);
                 project.Staff.Remove(rsmp);
             });
-
-        request.Staff.ForEach(s =>
-        {
-            var smp = project.Staff.FirstOrDefault(smp => smp.StaffMemberId == s.StaffMemberId);
-            if(smp != null)
-                this.Mapper.Map(s, smp);
-        });        
-
-        request.Staff.Where(smc => !project.Staff.Any(sm => sm.StaffMemberId == smc.StaffMemberId))
+        // add
+        request.Staff.Where(smc => !project.Staff.Any(sm => sm.StaffMemberId == smc.StaffMemberId && sm.IsLead == smc.IsLead))
              .Select(smc => this.Mapper.Map<StaffMemberProject>(smc)).ToList().ForEach(asmc =>
              {
                  this.UnitOfWork.ConfigEntityState(EntityState.Added, asmc);
-                 project.Staff.Add(asmc);
+                 project.Staff.Add(asmc); 
              });
 
         return await this.UnitOfWork.SaveChangesAsync();       

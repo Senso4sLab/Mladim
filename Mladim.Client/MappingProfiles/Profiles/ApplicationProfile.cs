@@ -80,7 +80,8 @@ namespace Mladim.Client.MappingProfiles.Profiles
             CreateMap<AnonymousParticipantDetailsQueryDto, AnonymousParticipantsVM>();
 
 
-            CreateMap<ActivityWithProjectNameQueryDto, ActivityWithProjectNameVM>();
+            CreateMap<ActivityWithProjectNameQueryDto, ActivityWithProjectNameVM>()
+                .ForMember(dto => dto.ActivityTypes, dt => dt.MapFrom(field => field.ActivityTypes.ToEnums()));
 
             CreateMap<ActivityVM, AddActivityCommandDto>()
                .ForMember(db => db.ActivityTypes, dto => dto.MapFrom(field => (ActivityTypes)(field.ActivityTypes.Sum(x => (int)x))))
@@ -107,21 +108,20 @@ namespace Mladim.Client.MappingProfiles.Profiles
                     StaffMemberId = mb.Id,
                 }))));
 
-         
-            CreateMap<ActivityQueryDto, ActivityVM>();
 
-         
+            CreateMap<ActivityQueryDto, ActivityVM>()
+                 .ForMember(dto => dto.ActivityTypes, dt => dt.MapFrom(field => field.ActivityTypes.ToEnums()));
+
 
             CreateMap<MemberBase, MemberBaseVM>()
                 .Include<StaffMemberDetailsQueryDto, StaffMemberVM>()
-                .Include<ParticipantDetailsQueryDto, ParticipantVM>();
+                .Include<ParticipantDetailsQueryDto, ParticipantVM>()
+                .Include<PartnerQueryDetailsDto, PartnerVM>();   
 
 
             CreateMap<StaffMemberDetailsQueryDto, StaffMemberVM>();
             CreateMap<StaffMemberVM, AddStaffMemberCommandDto>();
-            CreateMap<StaffMemberVM, UpdateStaffMemberCommandDto>();
-
-            
+            CreateMap<StaffMemberVM, UpdateStaffMemberCommandDto>();            
 
             CreateMap<ParticipantDetailsQueryDto, ParticipantVM>();
             CreateMap<ParticipantVM, AddParticipantCommandDto>();

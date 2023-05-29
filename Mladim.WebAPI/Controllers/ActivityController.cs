@@ -49,9 +49,9 @@ public class ActivityController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ActivityQueryDto>>> GetAllByProjectAsync([FromQuery] int projectId)
+    public async Task<ActionResult<IEnumerable<ActivityQueryDto>>> GetAllByQueryAsync([FromQuery] GetActivitiesByQuery query)
     {
-        var response = await this.Mediator.Send(new GetActivitiesByProjectQuery { ProjectId = projectId });
+        var response = await this.Mediator.Send(query);
         return Ok(response);
     }
 

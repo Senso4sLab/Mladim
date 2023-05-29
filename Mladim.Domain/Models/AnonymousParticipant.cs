@@ -7,6 +7,6 @@ public class AnonymousParticipant
     public int Id { get; set; }
     public Gender Gender { get; set; }
     public AgeGroups AgeGroup { get; set; }
-    public List<AnonymousParticipantActivity> AnonymousParticipants { get; set; } = new();
+    public List<AnonymousParticipantActivity> AnonymousParticipantActivities { get; set; } = new();
 
 }

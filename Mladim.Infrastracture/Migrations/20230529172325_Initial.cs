@@ -247,11 +247,11 @@ namespace Mladim.Infrastracture.Migrations
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     Year = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GroupId = table.Column<int>(type: "int", nullable: true),
                     AgeGroup = table.Column<int>(type: "int", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true),
                     IsRegistered = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
@@ -320,7 +320,7 @@ namespace Mladim.Infrastracture.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WebpageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WebpageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Start = table.Column<DateTime>(type: "datetime2", nullable: false),
                     End = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OrganizationId = table.Column<int>(type: "int", nullable: false)
@@ -460,13 +460,13 @@ namespace Mladim.Infrastracture.Migrations
                 name: "ProjectStaff",
                 columns: table => new
                 {
+                    IsLead = table.Column<bool>(type: "bit", nullable: false),
                     ProjectId = table.Column<int>(type: "int", nullable: false),
-                    StaffMemberId = table.Column<int>(type: "int", nullable: false),
-                    IsLead = table.Column<bool>(type: "bit", nullable: false)
+                    StaffMemberId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProjectStaff", x => new { x.StaffMemberId, x.ProjectId });
+                    table.PrimaryKey("PK_ProjectStaff", x => new { x.StaffMemberId, x.ProjectId, x.IsLead });
                     table.ForeignKey(
                         name: "FK_ProjectStaff_Member_StaffMemberId",
                         column: x => x.StaffMemberId,
@@ -558,12 +558,12 @@ namespace Mladim.Infrastracture.Migrations
                 columns: table => new
                 {
                     ActivityId = table.Column<int>(type: "int", nullable: false),
-                    StaffMemberId = table.Column<int>(type: "int", nullable: false),
-                    IsLead = table.Column<bool>(type: "bit", nullable: false)
+                    IsLead = table.Column<bool>(type: "bit", nullable: false),
+                    StaffMemberId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ActivityStaff", x => new { x.StaffMemberId, x.ActivityId });
+                    table.PrimaryKey("PK_ActivityStaff", x => new { x.StaffMemberId, x.ActivityId, x.IsLead });
                     table.ForeignKey(
                         name: "FK_ActivityStaff_Activities_ActivityId",
                         column: x => x.ActivityId,
@@ -608,21 +608,21 @@ namespace Mladim.Infrastracture.Migrations
                 columns: new[] { "Id", "AgeGroup", "Gender" },
                 values: new object[,]
                 {
-                    { 1, 1, 1 },
-                    { 2, 1, 2 },
-                    { 3, 1, 3 },
-                    { 4, 2, 1 },
-                    { 5, 2, 2 },
-                    { 6, 2, 3 },
-                    { 7, 4, 1 },
-                    { 8, 4, 2 },
-                    { 9, 4, 3 },
-                    { 10, 8, 1 },
-                    { 11, 8, 2 },
-                    { 12, 8, 3 },
-                    { 13, 16, 1 },
-                    { 14, 16, 2 },
-                    { 15, 16, 3 }
+                    { 33, 1, 32 },
+                    { 34, 2, 32 },
+                    { 36, 4, 32 },
+                    { 40, 8, 32 },
+                    { 48, 16, 32 },
+                    { 65, 1, 64 },
+                    { 66, 2, 64 },
+                    { 68, 4, 64 },
+                    { 72, 8, 64 },
+                    { 80, 16, 64 },
+                    { 129, 1, 128 },
+                    { 130, 2, 128 },
+                    { 132, 4, 128 },
+                    { 136, 8, 128 },
+                    { 144, 16, 128 }
                 });
 
             migrationBuilder.InsertData(

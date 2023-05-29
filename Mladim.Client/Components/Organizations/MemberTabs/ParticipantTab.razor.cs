@@ -46,8 +46,7 @@ public partial class ParticipantTab
 
     protected async override Task OnParametersSetAsync() =>
        this.Participants = new List<ParticipantVM>(await GetParticipantsByOrganizationId());
-
-
+    
     private Task<IEnumerable<ParticipantVM>> GetParticipantsByOrganizationId() =>
         this.ParticipantService.GetByOrganizationIdAsync(this.Organization.Id, this.IsActive);
 
@@ -75,7 +74,7 @@ public partial class ParticipantTab
     private async Task CheckedChangedAsync(bool isActive)
     {
         this.IsActive = isActive;
-        this.Participants = new List<ParticipantVM>(await GetParticipantsByOrganizationId());
+        await OnParametersSetAsync();
     }
 
     private async Task UpdateParticipantAsync(ParticipantVM participant)
@@ -89,7 +88,10 @@ public partial class ParticipantTab
         var succeedResponse = await this.ParticipantService.UpdateAsync(participant);
 
         if (succeedResponse)
+        {
             this.PopupService.ShowSnackbarSuccess("Podatki so uspešno posodobljeni");
+            await OnParametersSetAsync();
+        }
         else
             this.PopupService.ShowSnackbarError();
 

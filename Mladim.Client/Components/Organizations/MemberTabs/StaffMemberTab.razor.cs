@@ -79,7 +79,7 @@ public partial class StaffMemberTab
     private async Task CheckedChangedAsync(bool isActive)
     {
         this.IsActive = isActive;
-        this.Staff = new List<StaffMemberVM>(await GetStaffByOrganizationId());
+        await OnParametersSetAsync();
     }
 
     private async Task UpdateStaffMemberAsync(StaffMemberVM staffMember)
@@ -90,10 +90,13 @@ public partial class StaffMemberTab
         if (!dialogResponse)
             return;
 
-        var succeedResponse  = await this.StaffService.UpdateAsync(staffMember);       
+        var succeedResponse = await this.StaffService.UpdateAsync(staffMember);
 
         if (succeedResponse)
+        {
             this.PopupService.ShowSnackbarSuccess("Podatki so uspešno posodobljeni");
+            await OnParametersSetAsync();
+        }
         else
             this.PopupService.ShowSnackbarError();
 

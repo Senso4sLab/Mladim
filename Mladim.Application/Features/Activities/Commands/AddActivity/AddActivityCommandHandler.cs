@@ -30,20 +30,58 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, Act
           
         if (project == null)
             throw new Exception();
+        try
+        {
 
-        var activity = this.Mapper.Map<Activity>(request);
 
-        if(activity == null)
-            throw new Exception();
+            var activity = this.Mapper.Map<Activity>(request);
 
-        this.UnitOfWork.ConfigEntityState<Partner>(EntityState.Unchanged, activity.Partners);
-        this.UnitOfWork.ConfigEntityState<ActivityGroup>(EntityState.Unchanged, activity.Groups);        
-        this.UnitOfWork.ConfigEntityState<Participant>(EntityState.Unchanged, activity.Participants);            
+            if (activity == null)
+                throw new Exception();
 
-        project.Activities.Add(activity);
 
-        await this.UnitOfWork.SaveChangesAsync();
+            this.UnitOfWork.ConfigEntityState<Partner>(EntityState.Unchanged, activity.Partners);
+            this.UnitOfWork.ConfigEntityState<ActivityGroup>(EntityState.Unchanged, activity.Groups);
+            this.UnitOfWork.ConfigEntityState<Participant>(EntityState.Unchanged, activity.Participants);
 
-        return this.Mapper.Map<ActivityQueryDto>(activity);   
+            //foreach (var anonymousParticipant in activity.AnonymousParticipants)
+            //    this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, anonymousParticipant.AnonymousParticipant);
+
+            //foreach(var ap in request.AnonymousParticipants)
+            //{
+            //    var par = await UnitOfWork.AnonymousParticipantRepository
+            //        .FirstOrDefaultAsync(p => p.AgeGroup == ap.AgeGroup && p.Gender == ap.Gender);
+
+            //    activity.AnonymousParticipants.Add(new AnonymousParticipantActivity
+            //    {
+            //        AnonymousParticipantId = par.Id,
+
+            //    }) ;
+            //}           
+
+            foreach(var anonymousParticipant in activity.AnonymousParticipantActivities)
+                this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, anonymousParticipant.AnonymousParticipant);
+            
+
+
+            project.Activities.Add(activity);
+
+            await this.UnitOfWork.SaveChangesAsync();
+
+            return this.Mapper.Map<ActivityQueryDto>(activity);
+
+        }
+        catch (Exception ex)
+        {
+            string message = ex.Message;
+
+            return null;
+
+
+
+
+
+           
+        }
     }
 }

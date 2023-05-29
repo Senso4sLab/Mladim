@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Activities.Queries.GetActivities;
 
-public class GetActivitiesByProjectQueryHandler : IRequestHandler<GetActivitiesByProjectQuery, IEnumerable<ActivityQueryDto>>
+public class GetActivitiesByProjectQueryHandler : IRequestHandler<GetActivitiesByQuery, IEnumerable<ActivityQueryDto>>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -24,7 +24,7 @@ public class GetActivitiesByProjectQueryHandler : IRequestHandler<GetActivitiesB
     }
  
 
-    public async Task<IEnumerable<ActivityQueryDto>> Handle(GetActivitiesByProjectQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ActivityQueryDto>> Handle(GetActivitiesByQuery request, CancellationToken cancellationToken)
     {
 
         if (request.ProjectId != null)

@@ -22,9 +22,9 @@ public class ParticipantService : IParticipantService
         this.ApiUrls = mladimApiUrls.Value;
     }
 
-    public async Task<IEnumerable<ParticipantVM>> GetByOrganizationIdAsync(int organizationId, bool isAcitve)
+    public async Task<IEnumerable<ParticipantVM>> GetByOrganizationIdAsync(int organizationId, bool isActive)
     {
-        string url = string.Format(this.ApiUrls.GetParticipantsByOrganizationId, organizationId, isAcitve);
+        string url = string.Format(this.ApiUrls.GetParticipantsByOrganizationId, organizationId, false, isActive);
         var staffDto = await this.HttpService.GetAllAsync<ParticipantDetailsQueryDto>(url);
         return this.Mapper.Map<IEnumerable<ParticipantVM>>(staffDto);
     }

@@ -29,7 +29,15 @@ public class GetProjectQueryHandler : IRequestHandler<GetProjectQuery, ProjectQu
 
         if (project == null)
             throw new Exception();
+        try
+        {
 
-        return this.Mapper.Map<ProjectQueryDto>(project);
+            return this.Mapper.Map<ProjectQueryDto>(project);
+        }
+        catch (Exception ex) 
+        { 
+            string message = ex.Message;
+            return null;
+        }
     }
 }

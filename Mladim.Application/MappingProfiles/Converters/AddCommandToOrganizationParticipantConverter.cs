@@ -2,6 +2,7 @@
 using MediatR;
 using Mladim.Application.Features.Members.Participants.Commands.AddParticipant;
 using Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
+using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,22 @@ public class AddCommandToOrganizationParticipantConverter : ITypeConverter<AddPa
         };
 }
 
+public class AnonymousParticipantCommandDtoToActivity : ITypeConverter<AnonymousParticipantCommandDto, AnonymousParticipantActivity>
+{
+    public AnonymousParticipantActivity Convert(AnonymousParticipantCommandDto source, AnonymousParticipantActivity destination, ResolutionContext context) =>
+        new AnonymousParticipantActivity
+        {
+            Number = source.Number,
+            AnonymousParticipant = new AnonymousParticipant
+            {
+                Id = source.Id,
+            },
+        };
+    
+}
 
+
+
+ 
 
 

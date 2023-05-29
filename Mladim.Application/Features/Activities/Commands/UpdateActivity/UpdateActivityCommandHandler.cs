@@ -74,44 +74,67 @@ namespace Mladim.Application.Features.Activities.Commands.UpdateActivity
                     this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, ag);
                     activity.Groups.Add(ag);
                 });
-           
-            activity.AnonymousParticipants.Where(apa => !request.AnonymousParticipants.Any(apac => apac.AgeGroup == apa.AnonymousParticipant.AgeGroup && apac.Gender == apa.AnonymousParticipant.Gender))
+
+
+           // Remove
+            activity.AnonymousParticipantActivities.Where(apa => !request.AnonymousParticipants.Any(apac => apac.Id == apa.AnonymousParticipant.Id))
                 .ToList().ForEach(apa =>
                 {
                     this.UnitOfWork.ConfigEntityState(EntityState.Deleted, apa);
-                    activity.AnonymousParticipants.Remove(apa);
+                    activity.AnonymousParticipantActivities.Remove(apa);
                 });
 
+            // Update potrebno zaradi number property
             request.AnonymousParticipants.ForEach(apac =>
             {
-                var apa = activity.AnonymousParticipants.FirstOrDefault(apa => apac.AgeGroup == apa.AnonymousParticipant.AgeGroup && apac.Gender == apa.AnonymousParticipant.Gender);
+                var apa = activity.AnonymousParticipantActivities.FirstOrDefault(apa => apac.Id == apa.AnonymousParticipant.Id);
                 if (apa != null)
-                    this.Mapper.Map(apac, apa);
+                    apa.Number = apac.Number;
             });
 
-            request.AnonymousParticipants.Where(apa => !activity.AnonymousParticipants.Any(sm => apa.AgeGroup == sm.AnonymousParticipant.AgeGroup && apa.Gender == sm.AnonymousParticipant.Gender))
-                 .Select(smc => this.Mapper.Map<AnonymousParticipantActivity>(smc)).ToList().ForEach(aspac =>
-                 {
-                     this.UnitOfWork.ConfigEntityState(EntityState.Added, aspac);
-                     activity.AnonymousParticipants.Add(aspac);
-                 });
+            // Add
+            request.AnonymousParticipants.Where(apa => !activity.AnonymousParticipantActivities.Any(sm => apa.Id == sm.AnonymousParticipant.Id))
+                  .Select(smc => this.Mapper.Map<AnonymousParticipantActivity>(smc)).ToList().ForEach(aspac =>
+                   {
+                       this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, aspac.AnonymousParticipant);
+                       //this.UnitOfWork.ConfigEntityState(EntityState.Added, aspac);
+                       activity.AnonymousParticipantActivities.Add(aspac);
+                   });
+
+            //.Select(smc => new AnonymousParticipant
+            //{
+            //    AgeGroup = smc.AgeGroup,
+            //    Gender = smc.Gender,
+            //})
+            //.ToList()
+            //.ForEach(ap =>
+            //{
+            //    this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, ap);
+            //    activity.AnonymousParticipants.Add(new AnonymousParticipantActivity
+            //    {
+            //        AnonymousParticipant= ap,
+            //    });
+            //});
 
 
-            activity.Staff.Where(sm => !request.Staff.Any(smc => smc.StaffMemberId == sm.StaffMemberId))
+
+
+
+            activity.Staff.Where(sm => !request.Staff.Any(smc => smc.StaffMemberId == sm.StaffMemberId && smc.IsLead == sm.IsLead))
                 .ToList().ForEach(rsmp =>
                 {
                     this.UnitOfWork.ConfigEntityState(EntityState.Deleted, rsmp);
                     activity.Staff.Remove(rsmp);
                 });
 
-            request.Staff.ForEach(s =>
-            {
-                var smp = activity.Staff.FirstOrDefault(smp => smp.StaffMemberId == s.StaffMemberId);
-                if (smp != null)
-                    this.Mapper.Map(s, smp);
-            });
+            //request.Staff.ForEach(s =>
+            //{
+            //    var smp = activity.Staff.FirstOrDefault(smp => smp.StaffMemberId == s.StaffMemberId);
+            //    if (smp != null)
+            //        this.Mapper.Map(s, smp);
+            //});
 
-            request.Staff.Where(smc => !activity.Staff.Any(sm => sm.StaffMemberId == smc.StaffMemberId))
+            request.Staff.Where(smc => !activity.Staff.Any(sm => sm.StaffMemberId == smc.StaffMemberId && smc.IsLead == sm.IsLead))
                  .Select(smc => this.Mapper.Map<StaffMemberActivity>(smc)).ToList().ForEach(asmc =>
                  {
                      this.UnitOfWork.ConfigEntityState(EntityState.Added, asmc);
