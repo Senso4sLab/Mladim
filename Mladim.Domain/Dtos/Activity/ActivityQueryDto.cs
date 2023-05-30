@@ -20,6 +20,6 @@ public class ActivityQueryDto
     public List<GroupQueryDto> Groups { get; set; } = new(); 
     public List<ParticipantQueryDto> Participants { get; set; } = new();
     public List<StaffMemberSubjectQueryDto> Staff { get; set; } = new(); 
-    public List<AnonymousParticipantDetailsQueryDto> AnonymousParticipants { get; set; } = new();  
+    public List<AnonymousParticipantDetailsQueryDto> AnonymousParticipantActivities { get; set; } = new();  
 
 }

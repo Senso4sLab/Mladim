@@ -66,8 +66,12 @@ public class ApplicationProfiles : Profile
         //Activity
 
         CreateMap<Activity, ActivityQueryDto>();
+
+
+
+
         CreateMap<AddActivityCommand, Activity>()
-            .ForMember(a => a.AnonymousParticipantActivities, m => m.MapFrom(ad => ad.AnonymousParticipants));
+            .ForMember(a => a.AnonymousParticipantActivities, m => m.MapFrom(ad => ad.AnonymousParticipantActivities));
            
             
 

@@ -31,6 +31,8 @@ public class AnonymousParticipantCommandDtoToActivity : ITypeConverter<Anonymous
             AnonymousParticipant = new AnonymousParticipant
             {
                 Id = source.Id,
+                AgeGroup = source.AgeGroup,
+                Gender = source.Gender,
             },
         };
     

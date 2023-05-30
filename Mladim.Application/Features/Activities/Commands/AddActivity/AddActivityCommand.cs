@@ -21,6 +21,6 @@ public class AddActivityCommand : IRequest<ActivityQueryDto>
     public List<PartnerCommandDto> Partners { get; set; } = new();
     public List<StaffMemberSubjectCommandDto> Staff { get; set; } = new();
     public List<ParticipantCommandDto> Participants { get; set; } = new();
-    public List<AnonymousParticipantCommandDto> AnonymousParticipants { get; set; } = new();
+    public List<AnonymousParticipantCommandDto> AnonymousParticipantActivities { get; set; } = new();
     public List<GroupCommandDto> Groups { get; set; } = new(); 
 }

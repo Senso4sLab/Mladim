@@ -47,5 +47,5 @@ public class ActivityVM
     public List<GroupBaseVM> Groups { get; set; } = new();
     public IEnumerable<MemberBaseVM> Participants { get; set; } = new List<MemberBaseVM>();
 
-    public List<AnonymousParticipantsVM> AnonymousParticipants { get; set; } = new();
+    public List<AnonymousParticipantsVM> AnonymousParticipantActivities { get; set; } = new();
 }

@@ -102,7 +102,7 @@ public partial class UpsertActivity
             activity = await ActivityService.GetByActivityIdAsync(ActivityId.Value);
 
         anonymousParticipantGroups ??= GetAnnonymousParticipants().ToList();
-
+        anonymousParticipantsByGender = ExistsAnonymousParticipantGroups ? AnonymousParticipantsByGender() : string.Empty;
     }
 
     public IEnumerable<AnonymousParticipantsVM> GetAnnonymousParticipants()
@@ -118,7 +118,7 @@ public partial class UpsertActivity
                     Number = 0,
                 };
 
-                var existedGroup = activity?.AnonymousParticipants.FirstOrDefault(apg => apg.Equals(apgroup));
+                var existedGroup = activity?.AnonymousParticipantActivities.FirstOrDefault(apg => apg.Equals(apgroup));
                 apgroup.Number = existedGroup != null ? existedGroup.Number : 0;
                 yield return apgroup;
             }
@@ -136,7 +136,7 @@ public partial class UpsertActivity
     public async Task SaveActivityAsync()
     {
         await textEditor!.LoadHtmlText();
-        activity.AnonymousParticipants = anonymousParticipantGroups;
+        activity.AnonymousParticipantActivities = anonymousParticipantGroups;
 
         if (UpdateState)
         {           

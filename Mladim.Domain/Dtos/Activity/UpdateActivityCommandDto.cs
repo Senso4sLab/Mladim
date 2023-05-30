@@ -19,5 +19,5 @@ public class UpdateActivityCommandDto
     public List<GroupCommandDto> Groups { get; set; } = new();
     public List<ParticipantCommandDto> Participants { get; set; } = new();
     public List<StaffMemberSubjectCommandDto> Staff { get; set; } = new();
-    public List<AnonymousParticipantCommandDto> AnonymousParticipants { get; set; } = new();
+    public List<AnonymousParticipantCommandDto> AnonymousParticipantActivities { get; set; } = new();
 }
