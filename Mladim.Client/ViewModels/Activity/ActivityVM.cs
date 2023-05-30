@@ -17,7 +17,12 @@ public class ActivityVM
     public DateRange ActivityDateRange
     {
         get => activityDateRange ??= new DateRange(Start, End);
-        set => activityDateRange = value;
+        set
+        {
+            activityDateRange = value;
+            this.Start = activityDateRange.Start.Value;
+            this.End = activityDateRange.End.Value;
+        }
     }
 
     public List<StaffMemberSubjectVM> Staff { get; set; } = new();

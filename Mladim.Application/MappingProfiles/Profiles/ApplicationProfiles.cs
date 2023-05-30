@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Mladim.Application.Features.Accounts.Commands.UpdateAppUser;
 using Mladim.Application.Features.Activities.Commands.AddActivity;
 using Mladim.Application.Features.Activities.Commands.UpdateActivity;
 using Mladim.Application.Features.Members.Participants.Commands.AddParticipant;
@@ -14,6 +15,7 @@ using Mladim.Application.Features.Projects.Commands.UpdateProject;
 using Mladim.Application.MappingProfiles.Converters;
 using Mladim.Application.MappingProfiles.Resolvers;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.IdentityModels;
 using Mladim.Domain.Models;
 
 namespace Mladim.Application.MappingProfiles.Profiles;
@@ -23,6 +25,14 @@ public class ApplicationProfiles : Profile
     
     public ApplicationProfiles()
     {
+
+        //app user profile
+
+        CreateMap<UpdateAppUserCommand, AppUser>();
+
+        CreateMap<AppUser, AppUserQueryDto>();
+
+
         // Organizations
         CreateMap<AddOrganizationCommand, Organization>();
         CreateMap<UpdateOrganizationCommand, Organization>();

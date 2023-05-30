@@ -37,4 +37,6 @@ public class MladimApiUrls
 
 
     public string Login { get; set; }
+    public string AccountCommand { get; set; }
+    public string GetAccountById { get; set;}
 }

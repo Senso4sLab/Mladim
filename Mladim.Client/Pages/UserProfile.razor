@@ -1,0 +1,25 @@
+﻿@page "/userprofile"
+
+<MudStack Spacing="4" Class="py-4">
+    
+    <MudStack Row Justify="Justify.SpaceBetween">
+        <MudText Typo="Typo.h5">Moj profil</MudText>
+        <MudToggleIconButton ToggledChanged="UpdateAccountIfEditable"
+            Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" 
+            ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary" />
+     
+    </MudStack>
+   
+
+    <MudTextField @bind-Value="appUser.Name" ReadOnly="@(!editableAccount)" Label="Ime" Variant="Variant.Outlined"></MudTextField>
+
+    <MudTextField @bind-Value="appUser.Surname" ReadOnly="@(!editableAccount)" Label="Priimek" Variant="Variant.Outlined"></MudTextField>
+
+    <MudTextField @bind-Value="appUser.Nickname" ReadOnly="@(!editableAccount)" Label="Vzdevek" Variant="Variant.Outlined"></MudTextField>
+
+    <MudTextField @bind-Value="appUser.Email" ReadOnly="@(!editableAccount)" Label="Email" Variant="Variant.Outlined"></MudTextField>
+
+</MudStack>
+
+
+

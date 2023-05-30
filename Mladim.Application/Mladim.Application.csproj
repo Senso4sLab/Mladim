@@ -16,8 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Accounts\Commands\" />
-    <Folder Include="Features\Accounts\Queries\" />
+    <Folder Include="Features\Accounts\Commands\AddAppUser\" />
     <Folder Include="Features\Groups\Commands\" />
     <Folder Include="Features\Groups\Queries\" />
     <Folder Include="Features\Members\AnonymousParticipants\Commands\" />

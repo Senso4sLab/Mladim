@@ -14,6 +14,7 @@ using MudBlazor;
 using MudBlazor.Services;
 using System.Reflection;
 using Mladim.Client.Models;
+using Mladim.Client.Services.AccountService;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -55,6 +56,7 @@ builder.Services.AddScoped<IPopupService, PopupService>();
     builder.Services.AddScoped<IStaffMemberService, StaffMemberService>();
     builder.Services.AddScoped<IParticipantService, ParticipantService>();
     builder.Services.AddScoped<IPartnerService, PartnerService>();
+    builder.Services.AddScoped<IAccountService, AccountService>();  
 }
 {
     builder.Services.Configure<MladimApiUrls>(builder.Configuration.GetSection("MladimApiUrls"));

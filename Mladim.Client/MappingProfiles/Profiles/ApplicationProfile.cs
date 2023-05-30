@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Mladim.Application.Features.Accounts.Queries.GetAppUser;
 using Mladim.Client.Extensions;
 using Mladim.Client.ViewModels;
 
@@ -12,6 +13,12 @@ namespace Mladim.Client.MappingProfiles.Profiles
     {
         public ApplicationProfile()
         {
+            // appUser
+
+            CreateMap<AppUserVM, AppUserDto>();
+            CreateMap<AppUserQueryDto, AppUserVM>();
+
+
             CreateMap<OrganizationVM, AddOrganizationCommandDto>()
                .ForMember(db => db.AgeGroups, dto => dto.MapFrom(field => (AgeGroups)(field.AgeGroups.Sum(x => (int)x))))
                .ForMember(db => db.YouthSectors, dto => dto.MapFrom(field => (YouthSectors)(field.YouthSectors.Sum(x => (int)x))))

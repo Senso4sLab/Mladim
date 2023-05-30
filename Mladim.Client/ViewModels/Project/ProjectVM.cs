@@ -9,6 +9,8 @@ public class ProjectVM
     public string Name { get; set; }
     public string Description { get; set; }
     public string? WebpageUrl { get; set; }
+
+   
     public DateTime Start { get; set; } = DateTime.Now;
     public DateTime End { get; set; } = DateTime.Now;
     
@@ -18,8 +20,13 @@ public class ProjectVM
     private DateRange projectDateRange;
     public DateRange ProjectDateRange
     { 
-        get => projectDateRange ??= new DateRange(Start, End);  
-        set => projectDateRange = value;    
+        get => projectDateRange ??= new DateRange(Start, End);
+        set
+        {
+            projectDateRange = value;
+            this.Start = projectDateRange.Start.Value;
+            this.End = projectDateRange.End.Value;          
+        }
     }      
        
 
