@@ -1,19 +1,41 @@
 ﻿@using Mladim.Domain.Enums
 @using Mladim.Client.ViewModels;
 
-<MudStack Spacing="4" Class="py-10">    
+<MudStack Spacing="4" Class="py-10"> 
 
-    <TextEditor @ref="textEditor" ReadOnly="@ReadOnly" @bind-Text="@Organization.Description" />
-
-    <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationTypes" @bind-EnumValues="Organization.Types" Label="Vrste organizacije" />
-
-    <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationFields" @bind-EnumValues="Organization.Fields" Label="Področja delovanja" />
-
-    <MultiSelect ReadOnly="@ReadOnly" TItem="AgeGroups" @bind-EnumValues="Organization.AgeGroups" Label="Starostne skupine" />
-
-    <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationStatus" @bind-EnumValues="Organization.Status" Label="Statusi organizacije" />
-
-    <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationRegions" @bind-EnumValues="Organization.Regions" Label="Statistične regije" />
-
-    <MultiSelect  ReadOnly="@ReadOnly" TItem="YouthSectors" @bind-EnumValues="Organization.YouthSectors" Label="Mladinski sektorji" />
-</MudStack>
+    <MudExpansionPanels>
+        <MudExpansionPanel Text="Osnovni podatki">
+              <MudStack Spacing="2">
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Address" Label="Naslov" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.PhoneNumber" Label="Telefon" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Email" Label="Email" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.RegistrationNumber" Label="Matična številka" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.VatNumber" Label="Davčna številka stran" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.WebpageUrl" Label="Spletna stran" Variant="Variant.Outlined"></MudTextField>
+            </MudStack>
+        </MudExpansionPanel>
+        
+        <MudExpansionPanel Text="Opis">
+            <TextEditor @ref="textEditor" ReadOnly="@ReadOnly" @bind-Text="@Organization.Description" />
+        </MudExpansionPanel>
+        
+        <MudExpansionPanel Text="Dosegljivost preko spletno družbenih omrežji">
+            <MudStack Spacing="2">
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.SocialMediaUrls.Twiter" Label="Twitter" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.SocialMediaUrls.Facebook" Label="Facebook" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.SocialMediaUrls.Instagram" Label="Instagram" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.SocialMediaUrls.TikTok" Label="TikTok" Variant="Variant.Outlined"></MudTextField>
+            </MudStack>
+        </MudExpansionPanel>
+        <MudExpansionPanel Text="Delovanje">
+             <MudStack Spacing="2">
+                <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationTypes" @bind-EnumValues="Organization.Types" Label="Vrste organizacije" />
+                <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationFields" @bind-EnumValues="Organization.Fields" Label="Področja delovanja" />
+                <MultiSelect ReadOnly="@ReadOnly" TItem="AgeGroups" @bind-EnumValues="Organization.AgeGroups" Label="Starostne skupine" />
+                <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationStatus" @bind-EnumValues="Organization.Status" Label="Statusi organizacije" />
+                <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationRegions" @bind-EnumValues="Organization.Regions" Label="Statistične regije" />
+                <MultiSelect ReadOnly="@ReadOnly" TItem="YouthSectors" @bind-EnumValues="Organization.YouthSectors" Label="Mladinski sektorji" />
+            </MudStack>
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+ </MudStack>

@@ -40,7 +40,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPut("profile")]
-    public async Task<ActionResult<bool>> UserProfileAsync(UpdateAppUserCommand appUserCommand)
+    public async Task<ActionResult<int>> UserProfileAsync(UpdateAppUserCommand appUserCommand)
     {
         var response = await this.Mediater.Send(appUserCommand);
         return Ok(response);

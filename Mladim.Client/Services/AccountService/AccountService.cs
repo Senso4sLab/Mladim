@@ -23,10 +23,10 @@ public class AccountService : IAccountService
         this.MladimApiUrls = MladimApiUrls.Value;
     }
 
-    public Task<bool> UpdateAccountAsync(AppUserVM appUser)
+    public async Task<bool> UpdateAccountAsync(AppUserVM appUser)
     {
-        var appUserDto = this.Mapper.Map<AppUserDto>(appUser);
-        return this.HttpClient.PutAsync(this.MladimApiUrls.AccountCommand, appUserDto);
+        var appUserDto = this.Mapper.Map<AppUserCommandDto>(appUser);
+        return await this.HttpClient.PutAsync(this.MladimApiUrls.AccountCommand, appUserDto);
     }
 
     public async Task<AppUserVM?> GetAccountByIdAsync(string userId)

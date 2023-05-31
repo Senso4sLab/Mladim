@@ -3,21 +3,26 @@
 <MudStack Spacing="4" Class="py-4">
     
     <MudStack Row Justify="Justify.SpaceBetween">
-        <MudText Typo="Typo.h5">Moj profil</MudText>
-        <MudToggleIconButton ToggledChanged="UpdateAccountIfEditable"
-            Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" 
+        <MudText Typo="Typo.h5">Podatki o registraciji</MudText>
+         <MudToggleIconButton ToggledChanged="UpdateAccountIfEditable" Toggled="editableAccount"
+                              Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" 
             ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary" />
      
     </MudStack>
    
+     <MudForm Model="appUser" @ref="@appUserForm" Validation="@(appUserValidator.ValidateValue)">
+         <MudStack Spacing="4">
+         
+             <MudTextField @bind-Value="appUser.Name" For="@(() => appUser.Name)"  ReadOnly="@(!editableAccount)" Label="Ime" Variant="Variant.Outlined"></MudTextField>
 
-    <MudTextField @bind-Value="appUser.Name" ReadOnly="@(!editableAccount)" Label="Ime" Variant="Variant.Outlined"></MudTextField>
+             <MudTextField @bind-Value="appUser.Surname" For="@(() => appUser.Surname)" ReadOnly="@(!editableAccount)" Label="Priimek" Variant="Variant.Outlined"></MudTextField>
 
-    <MudTextField @bind-Value="appUser.Surname" ReadOnly="@(!editableAccount)" Label="Priimek" Variant="Variant.Outlined"></MudTextField>
+             <MudTextField @bind-Value="appUser.Nickname" For="@(() => appUser.Nickname)" ReadOnly="@(!editableAccount)" Label="Vzdevek" Variant="Variant.Outlined"></MudTextField>
 
-    <MudTextField @bind-Value="appUser.Nickname" ReadOnly="@(!editableAccount)" Label="Vzdevek" Variant="Variant.Outlined"></MudTextField>
-
-    <MudTextField @bind-Value="appUser.Email" ReadOnly="@(!editableAccount)" Label="Email" Variant="Variant.Outlined"></MudTextField>
+             <MudTextField @bind-Value="appUser.Email" For="@(() => appUser.Email)" ReadOnly="@(!editableAccount)" Label="Email" Variant="Variant.Outlined"></MudTextField>
+    
+         </MudStack>
+     </MudForm>
 
 </MudStack>
 

@@ -18,6 +18,7 @@
 
 
     <TextEditor @ref="textEditor"  @bind-Text="@project.Description" />
+    <MudTextField  @bind-Value="project.WebpageUrl" Label="Spletna stran" Variant="Variant.Outlined"></MudTextField>
 
     <MudSelect T="MemberBaseVM" MultiSelection="true" ToStringFunc="@((staff)=> staff.Name)"  @bind-SelectedValues="project.LeadStaff" Variant="Variant.Outlined" Label="Vodje projekta" AnchorOrigin="Origin.BottomCenter">
          @foreach (var staffMember in Staff)
@@ -26,7 +27,7 @@
         }
     </MudSelect>
 
-    <MudSelect MultiSelection="true" T="MemberBaseVM" ToStringFunc="@((staff)=> staff.Name)" @bind-SelectedValues="project.Administrators" Variant="Variant.Outlined" Label="Administracija" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect MultiSelection="true" T="MemberBaseVM" ToStringFunc="@((staff)=> staff.Name)" @bind-SelectedValues="project.Administrators" Variant="Variant.Outlined" Label="Administrativno-tehnično osebje" AnchorOrigin="Origin.BottomCenter">
         @foreach (var staffMember in Staff)
         {
                 <MudSelectItem Value="staffMember">@staffMember.Name</MudSelectItem>

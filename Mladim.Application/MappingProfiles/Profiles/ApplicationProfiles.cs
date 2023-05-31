@@ -32,6 +32,11 @@ public class ApplicationProfiles : Profile
 
         CreateMap<AppUser, AppUserQueryDto>();
 
+        //socialurls
+
+        CreateMap<SocialMediaUrlsCommandDto, SocialMediaUrls>();
+        CreateMap<SocialMediaUrls, SocialMediaUrlsQueryDto>();
+
 
         // Organizations
         CreateMap<AddOrganizationCommand, Organization>();

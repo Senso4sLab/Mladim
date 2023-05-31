@@ -1,4 +1,5 @@
 ﻿using Mladim.Domain.Enums;
+using Mladim.Domain.Models;
 
 namespace Mladim.Client.ViewModels;
 
@@ -20,4 +21,6 @@ public class OrganizationVM
     public IEnumerable<OrganizationFields> Fields { get; set; } = new List<OrganizationFields>();
     public IEnumerable<OrganizationRegions> Regions { get; set; } = new List<OrganizationRegions>();
     public IEnumerable<ActivityTypes> ActivityTypes { get; set; } = new List<ActivityTypes>();
+
+    public SocialMediaUrlsVM SocialMediaUrls { get; set;} = new SocialMediaUrlsVM();
 }

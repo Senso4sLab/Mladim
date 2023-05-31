@@ -15,10 +15,15 @@ namespace Mladim.Client.MappingProfiles.Profiles
         {
             // appUser
 
-            CreateMap<AppUserVM, AppUserDto>();
+            CreateMap<AppUserVM, AppUserCommandDto>();
             CreateMap<AppUserQueryDto, AppUserVM>();
 
+            // social urls
 
+            CreateMap<SocialMediaUrlsVM, SocialMediaUrlsCommandDto>();
+            CreateMap<SocialMediaUrlsQueryDto, SocialMediaUrlsVM>();
+
+            //organization
             CreateMap<OrganizationVM, AddOrganizationCommandDto>()
                .ForMember(db => db.AgeGroups, dto => dto.MapFrom(field => (AgeGroups)(field.AgeGroups.Sum(x => (int)x))))
                .ForMember(db => db.YouthSectors, dto => dto.MapFrom(field => (YouthSectors)(field.YouthSectors.Sum(x => (int)x))))

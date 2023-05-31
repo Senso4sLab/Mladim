@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Accounts.Commands.UpdateAppUser;
 
-public class UpdateAppUserHandlerCommand : IRequestHandler<UpdateAppUserCommand, bool>
+public class UpdateAppUserHandlerCommand : IRequestHandler<UpdateAppUserCommand, int>
 {
 
     private IMapper Mapper { get; }
@@ -26,7 +26,7 @@ public class UpdateAppUserHandlerCommand : IRequestHandler<UpdateAppUserCommand,
         UserManager = userManager;   
     }
    
-    public async Task<bool> Handle(UpdateAppUserCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(UpdateAppUserCommand request, CancellationToken cancellationToken)
     {
         var appUser = await this.UserManager.FindByIdAsync(request.Id);
 
@@ -34,6 +34,6 @@ public class UpdateAppUserHandlerCommand : IRequestHandler<UpdateAppUserCommand,
 
         var identityResult  = await this.UserManager.UpdateAsync(appUser);
 
-        return identityResult.Succeeded;      
+        return identityResult.Succeeded ? 1 : 0;      
     }
 }

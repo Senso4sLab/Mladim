@@ -15,6 +15,8 @@ public class ActivityQueryDto
     public string Description { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
+    public TimeSpan? StartHour { get; set; }
+    public TimeSpan? EndHour { get; set; }
     public ActivityTypes ActivityTypes { get; set; }
     public List<PartnerQueryDto> Partners { get; set; } = new();
     public List<GroupQueryDto> Groups { get; set; } = new(); 

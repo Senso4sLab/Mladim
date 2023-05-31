@@ -26,4 +26,5 @@ public class AddOrganizationCommand : IRequest<OrganizationQueryDto>
     public OrganizationStatus Status { get; set; }
     public OrganizationFields Fields { get; set; }
     public OrganizationRegions Regions { get; set; }
+    public SocialMediaUrlsCommandDto SocialMediaUrls { get; set; }
 }

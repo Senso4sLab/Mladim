@@ -17,9 +17,18 @@ public class OrganizationRepository : GenericRepository<Organization>, IOrganiza
     public OrganizationRepository(ApplicationDbContext context) : base(context)
     {
         
+
+        
     }
 
-   
+    public async override Task<Organization?> FirstOrDefaultAsync(Expression<Func<Organization, bool>> predicate, bool tracking = true)
+    {
+
+        return await DbSet.Include(o => o.SocialMediaUrls).FirstOrDefaultAsync(predicate);
+       
+    }
+
+
 }
 
    

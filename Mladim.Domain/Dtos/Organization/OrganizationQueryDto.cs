@@ -18,5 +18,6 @@ public class OrganizationQueryDto
     public OrganizationTypes Types { get; set; }
     public OrganizationStatus Status { get; set; }
     public OrganizationFields Fields { get; set; }
-    public OrganizationRegions Regions { get; set; }    
+    public OrganizationRegions Regions { get; set; }
+    public SocialMediaUrlsQueryDto  SocialMediaUrls{ get; set; } = new SocialMediaUrlsQueryDto();
 }

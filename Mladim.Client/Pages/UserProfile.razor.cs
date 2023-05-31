@@ -28,6 +28,7 @@ using Mladim.Domain.IdentityModels;
 using Mladim.Client.Services.AccountService;
 using Mladim.Client.Services.PopupService;
 using Mladim.Domain.Models;
+using Mladim.Client.Validators;
 
 namespace Mladim.Client.Pages;
 
@@ -45,6 +46,10 @@ public partial class UserProfile
     private bool editableAccount = false;
 
     private AppUserVM appUser = new AppUserVM();
+
+    private MudForm appUserForm;
+
+    private AppUserValidator appUserValidator = new AppUserValidator();
     protected override async Task OnInitializedAsync()
     {
         if (authenticationState is null)
@@ -59,15 +64,23 @@ public partial class UserProfile
 
     private async Task UpdateAccountIfEditable(bool editState)
     {
+        await appUserForm.Validate();
+
+        if (!appUserForm.IsValid)
+            return;
+
         this.editableAccount = editState;
 
         if (editState)
-            return;        
+            return;              
 
-        if (await this.AccountService.UpdateAccountAsync(appUser))           
-            this.PopupService.ShowSnackbarSuccess("Podatki so uspešno posodobljeni");        
+        if (await this.AccountService.UpdateAccountAsync(appUser))
+            this.PopupService.ShowSnackbarSuccess("Podatki so uspešno posodobljeni");
         else
+        {
             this.PopupService.ShowSnackbarError();
+            await OnInitializedAsync();
+        }
     }
 
 }

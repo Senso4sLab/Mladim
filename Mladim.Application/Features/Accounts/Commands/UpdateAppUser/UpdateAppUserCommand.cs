@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Accounts.Commands.UpdateAppUser;
 
-public class UpdateAppUserCommand : IRequest<bool>
+public class UpdateAppUserCommand : IRequest<int>
 {
     public string Id { get; set; }
     public string Name { get; set; }

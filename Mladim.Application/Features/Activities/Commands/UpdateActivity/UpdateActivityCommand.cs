@@ -17,6 +17,8 @@ public class UpdateActivityCommand : IRequest<int>
     public string Description { get; set; }
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
+    public TimeSpan? StartHour { get; set; }
+    public TimeSpan? EndHour { get; set; }
     public ActivityTypes ActivityTypes { get; set; }
     public List<PartnerCommandDto> Partners { get; set; } = new();
     public List<StaffMemberSubjectCommandDto> Staff { get; set; } = new();

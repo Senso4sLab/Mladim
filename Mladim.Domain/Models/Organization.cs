@@ -26,8 +26,9 @@ public class Organization
     public OrganizationStatus Status { get; set; }
     public OrganizationFields Fields { get; set; }
     public OrganizationRegions Regions { get; set; }
-    
-    
+
+    public SocialMediaUrls SocialMediaUrls { get; set; } = null;
+
     public List<OrganizationPartner> Partners { get; set; } = new();
     public List<OrganizationMember> Members { get; set; } = new();
     public List<OrganizationGroup> Groups { get; set; } = new();

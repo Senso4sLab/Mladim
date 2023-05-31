@@ -15,7 +15,20 @@
 
      <MudTextField @bind-Value="activity.Name" Variant="Variant.Outlined" Label="Ime aktivnosti">@activity.Name</MudTextField>
      <MudDateRangePicker Variant="Variant.Outlined" Label="Trajanje aktivnosti" @bind-DateRange="activity.ActivityDateRange" />
-
+     @if(activity.ActivityDateRange.End?.Day == activity.ActivityDateRange.Start?.Day)
+    {
+        <MudGrid>
+            <MudItem xs="6">
+                <MudText Typo="Typo.h6">Začetek aktivnosti</MudText>
+                <MudTimePicker @bind-Time="activity.StartHour" PickerVariant="PickerVariant.Dialog" Label="24 urni prikaz" TimeEditMode="TimeEditMode.OnlyHours" />
+            </MudItem>
+            <MudItem xs="6">
+                <MudText Typo="Typo.h6">Konec aktivnosti</MudText>
+                <MudTimePicker @bind-Time="activity.EndHour" PickerVariant="PickerVariant.Dialog" Label="24 urni prikaz" TimeEditMode="TimeEditMode.OnlyHours" />
+            </MudItem>
+        </MudGrid>     
+        
+    }
 
      <TextEditor @ref="textEditor" @bind-Text="@activity.Description" />
 
@@ -27,7 +40,7 @@
         }
     </MudSelect>
 
-    <MudSelect T="MemberBaseVM" ToStringFunc="@((staff)=> staff.Name)" MultiSelection="true" @bind-SelectedValues="activity.Administrators" Variant="Variant.Outlined" Label="Delavci/prostovoljci" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect T="MemberBaseVM" ToStringFunc="@((staff)=> staff.Name)" MultiSelection="true" @bind-SelectedValues="activity.Administrators" Variant="Variant.Outlined" Label="Drugi sodelujoči" AnchorOrigin="Origin.BottomCenter">
         @foreach (var staffMember in staff)
         {
             <MudSelectItem Value="staffMember">@staffMember.Name</MudSelectItem>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Dtos;
 
-public  class AppUserDto
+public  class AppUserCommandDto
 {
     public string Id { get; set; }
     public string Name { get; set; }

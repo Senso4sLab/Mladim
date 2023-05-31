@@ -12,8 +12,8 @@ using Mladim.Infrastracture.Persistance;
 namespace Mladim.Infrastracture.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230529204857_updatePartner")]
-    partial class updatePartner
+    [Migration("20230531055052_addTimeSpanActivity")]
+    partial class addTimeSpanActivity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -333,6 +333,9 @@ namespace Mladim.Infrastracture.Migrations
                     b.Property<DateTime>("End")
                         .HasColumnType("datetime2");
 
+                    b.Property<TimeSpan?>("EndHour")
+                        .HasColumnType("time");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -342,6 +345,9 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.Property<DateTime>("Start")
                         .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan?>("StartHour")
+                        .HasColumnType("time");
 
                     b.HasKey("Id");
 
@@ -668,7 +674,6 @@ namespace Mladim.Infrastracture.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
 
                     b.Property<string>("ContactPerson")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
@@ -980,6 +985,45 @@ namespace Mladim.Infrastracture.Migrations
                     b.HasOne("Mladim.Domain.Models.Group", null)
                         .WithMany("Members")
                         .HasForeignKey("GroupId");
+                });
+
+            modelBuilder.Entity("Mladim.Domain.Models.Organization", b =>
+                {
+                    b.OwnsOne("Mladim.Domain.Models.SocialMediaUrls", "SocialMediaUrls", b1 =>
+                        {
+                            b1.Property<int>("OrganizationId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Facebook")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Instagram")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("TikTok")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Twiter")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("OrganizationId");
+
+                            b1.ToTable("Organizations");
+
+                            b1.ToJson("SocialMediaUrls");
+
+                            b1.WithOwner("Organization")
+                                .HasForeignKey("OrganizationId");
+
+                            b1.Navigation("Organization");
+                        });
+
+                    b.Navigation("SocialMediaUrls")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.OrganizationGroup", b =>

@@ -12,6 +12,9 @@ public class ActivityVM
     public DateTime Start { get; set; } = DateTime.Now;
     public DateTime End { get; set; } = DateTime.Now;
 
+    public TimeSpan? StartHour { get; set; }
+    public TimeSpan? EndHour { get; set; }
+
 
     private DateRange activityDateRange;
     public DateRange ActivityDateRange
