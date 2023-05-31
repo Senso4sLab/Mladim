@@ -13,6 +13,9 @@ public class AnonymousParticipantTableElements
     public int Male { get; set; }
 
     [Display(Name = "Ženska")]
-    public int Female { get; set; } 
+    public int Female { get; set; }
+
+    [Display(Name = "Drugo")]
+    public int Other { get; set; }
 
 }

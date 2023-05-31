@@ -2,11 +2,11 @@
 @page "/organization/{OrganizationId:int}/project/{projectId:int}" 
 
 
-<MudStack Class="py-5" Spacing="5">
+<MudStack Class="pt-5 pb-8" Spacing="4">
     <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
         <MudText Typo="Typo.h5">Vnesi podatke o projektu</MudText>
 
-        <MudStack Row="true" Spacing="2" Justify="Justify.FlexEnd">
+        <MudStack Row="true" Spacing ="2" Justify="Justify.FlexEnd">
             <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Save" OnClick="SaveProjectAsync" />
             <MudFab Color="Color.Secondary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Cancel" OnClick="CancelProjectAsync" />
         </MudStack>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
 using System;
@@ -12,7 +13,8 @@ using System.Threading.Tasks;
 namespace Mladim.Infrastracture.Persistance.Configurations;
 
 public class AnonymousParticipantConfiguration : IEntityTypeConfiguration<AnonymousParticipant>
-{
+{  
+   
     public void Configure(EntityTypeBuilder<AnonymousParticipant> builder)
     {      
 
@@ -25,7 +27,7 @@ public class AnonymousParticipantConfiguration : IEntityTypeConfiguration<Anonym
                     AgeGroup = ageGroup,
                     Gender = gender,
                     Id = (int)ageGroup + (int)gender,
-                }) ;
+                });
             }
         }
     }

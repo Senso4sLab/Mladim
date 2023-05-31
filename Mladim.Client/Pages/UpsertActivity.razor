@@ -2,7 +2,7 @@
 @page "/activity/{activityId:int}"
 
 
-<MudStack Class="py-5" Spacing="5">
+<MudStack Class="pt-5 pb-8" Spacing="4">
     <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
          <MudText Typo="Typo.h5">Vnesi podatke o aktivnosti</MudText>
 
@@ -66,11 +66,12 @@
         </MudSelect>
         <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddParticipantAsync" />
     </MudStack>
+    
 
-    <MudStack Row Spacing="5" AlignItems="AlignItems.Center">
-         <MudTextField  @bind-Value="anonymousParticipantsByGender" Label="Izbira udeležencev glede na starostno skupino in spol" Variant="Variant.Outlined"></MudTextField>
-         <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddAnonymousParticipantAsync" />
-     </MudStack>
+    <MudStack Row Spacing="5" AlignItems="AlignItems.Baseline" Justify="Justify.SpaceBetween">
+        <MudText Typo="Typo.body2" Align="Align.Center">Izbira udeležencev glede na starostno skupino in spol @TotalAnonymousParticipants</MudText>
+        <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddAnonymousParticipantAsync" />         
+    </MudStack>   
 
  </MudStack>
 

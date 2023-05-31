@@ -18,6 +18,11 @@
                          <MudNumericField @bind-Value="context.Item.Female" Min="0"/>
                     </EditTemplate>               
                 </PropertyColumn>
+                <PropertyColumn Property="x => x.Other" Title="@Gender.Other.GetDisplayAttribute()">
+                    <EditTemplate>
+                        <MudNumericField @bind-Value="context.Item.Other" Min="0" />
+                    </EditTemplate>
+                </PropertyColumn>
             </Columns>
         </MudDataGrid>
     </DialogContent>
@@ -46,6 +51,7 @@
                AgeGroup = ageGroup,
                Female = aParticipants.Where(p => p.AgeGroup == ageGroup && p.Gender == Gender.Female).Sum(p => p.Number),
                Male = aParticipants.Where(p => p.AgeGroup == ageGroup && p.Gender == Gender.Male).Sum(p => p.Number),
+               Other = aParticipants.Where(p => p.AgeGroup == ageGroup && p.Gender == Gender.Other).Sum(p => p.Number),
 
            }).ToList();
 
@@ -60,7 +66,12 @@
                 {
                     AgeGroup = g.Key,
                     Gender = gender,
-                    Number = gender == Gender.Male ? g.Sum(x => x.Male) : g.Sum(x => x.Female)
+                    Number = gender switch
+                    {
+                        Gender.Male => g.Sum(x => x.Male),
+                        Gender.Female => g.Sum(x => x.Female),
+                        Gender.Other => g.Sum(x => x.Other),
+                    }                   
                 }))
             .ToList();
 

@@ -68,17 +68,19 @@ public partial class UpsertActivity
     private TextEditor? textEditor;
     private bool UpdateState => ActivityId != null;
 
-    private string anonymousParticipantsByGender = string.Empty;  
-    
-    
+    private string TotalAnonymousParticipants => ExistAnyAnonymouParticipantGroup ?
+        $" (Št. izbranih udeležencev: {AnonymousParticipants.Sum(ap => ap.Number)})" : string.Empty;
+
+    private bool ExistAnyAnonymouParticipantGroup =>
+        AnonymousParticipants?.Any(p => p.Number > 0) == true;
+
+
     private DefaultOrganization defaultOrg;
 
     private IEnumerable<MemberBaseVM> staff = new List<MemberBaseVM>();
     private List<MemberBaseVM> partners = new List<MemberBaseVM>();
     private List<MemberBaseVM> participants = new List<MemberBaseVM>();
-    private List<AnonymousParticipantsVM> anonymousParticipantGroups = null;
-
-
+    private List<AnonymousParticipantsVM> AnonymousParticipants = null;
 
 
     protected async override Task OnInitializedAsync()
@@ -101,8 +103,7 @@ public partial class UpsertActivity
         if (UpdateState)
             activity = await ActivityService.GetByActivityIdAsync(ActivityId.Value);
 
-        anonymousParticipantGroups ??= GetAnnonymousParticipants().ToList();
-        anonymousParticipantsByGender = ExistsAnonymousParticipantGroups ? AnonymousParticipantsByGender() : string.Empty;
+        AnonymousParticipants ??= GetAnnonymousParticipants().ToList();       
     }
 
     public IEnumerable<AnonymousParticipantsVM> GetAnnonymousParticipants()
@@ -136,7 +137,7 @@ public partial class UpsertActivity
     public async Task SaveActivityAsync()
     {
         await textEditor!.LoadHtmlText();
-        activity.AnonymousParticipantActivities = anonymousParticipantGroups;
+        activity.AnonymousParticipantActivities = AnonymousParticipants;
 
         if (UpdateState)
         {           
@@ -210,21 +211,16 @@ public partial class UpsertActivity
     }
 
 
-    private bool ExistsAnonymousParticipantGroups =>
-        anonymousParticipantGroups?.Any(p => p.Number > 0) == true;
-    private string AnonymousParticipantsByGender()
-    {
-        int apMale = anonymousParticipantGroups!.Where(x => x.Gender == Gender.Male).Sum(x => x.Number);
-        int apFemale = anonymousParticipantGroups!.Where(x => x.Gender == Gender.Female).Sum(x => x.Number);
+    
+  
 
-        return $"Št. moških = {apMale}, št. žensk = {apFemale}, skupaj = {apMale + apFemale}";
-    }
+    
 
     public async Task AddAnonymousParticipantAsync()
     {
-        var resultGroups = await this.PopupService.ShowAnonymousParticipantGroupsDialog("Dodajanje udeležencev po starostnih skupinah in spolu", anonymousParticipantGroups);
-        anonymousParticipantGroups = resultGroups.ToList();
-        anonymousParticipantsByGender = ExistsAnonymousParticipantGroups ? AnonymousParticipantsByGender() : string.Empty;
+        var resultGroups = await this.PopupService.ShowAnonymousParticipantGroupsDialog("Dodajanje udeležencev po starostnih skupinah in spolu", AnonymousParticipants);
+        AnonymousParticipants = resultGroups.ToList();
+        this.StateHasChanged();
     }
 
 }

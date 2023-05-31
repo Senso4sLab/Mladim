@@ -75,13 +75,7 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, Act
         {
             string message = ex.Message;
 
-            return null;
-
-
-
-
-
-           
+            return null;           
         }
     }
 }

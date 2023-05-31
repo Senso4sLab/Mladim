@@ -395,6 +395,8 @@ namespace Mladim.Infrastracture.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Start = table.Column<DateTime>(type: "datetime2", nullable: false),
                     End = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartHour = table.Column<TimeSpan>(type: "time", nullable: true),
+                    EndHour = table.Column<TimeSpan>(type: "time", nullable: true),
                     ActivityTypes = table.Column<int>(type: "int", nullable: false),
                     ProjectId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -602,28 +604,6 @@ namespace Mladim.Infrastracture.Migrations
                         principalTable: "AnonymousParticipants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "AnonymousParticipants",
-                columns: new[] { "Id", "AgeGroup", "Gender" },
-                values: new object[,]
-                {
-                    { 33, 1, 32 },
-                    { 34, 2, 32 },
-                    { 36, 4, 32 },
-                    { 40, 8, 32 },
-                    { 48, 16, 32 },
-                    { 65, 1, 64 },
-                    { 66, 2, 64 },
-                    { 68, 4, 64 },
-                    { 72, 8, 64 },
-                    { 80, 16, 64 },
-                    { 129, 1, 128 },
-                    { 130, 2, 128 },
-                    { 132, 4, 128 },
-                    { 136, 8, 128 },
-                    { 144, 16, 128 }
                 });
 
             migrationBuilder.InsertData(

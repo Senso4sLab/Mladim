@@ -12,8 +12,8 @@ using Mladim.Infrastracture.Persistance;
 namespace Mladim.Infrastracture.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230531055052_addTimeSpanActivity")]
-    partial class addTimeSpanActivity
+    [Migration("20230531075008_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -373,98 +373,6 @@ namespace Mladim.Infrastracture.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AnonymousParticipants");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 33,
-                            AgeGroup = 1,
-                            Gender = 32
-                        },
-                        new
-                        {
-                            Id = 65,
-                            AgeGroup = 1,
-                            Gender = 64
-                        },
-                        new
-                        {
-                            Id = 129,
-                            AgeGroup = 1,
-                            Gender = 128
-                        },
-                        new
-                        {
-                            Id = 34,
-                            AgeGroup = 2,
-                            Gender = 32
-                        },
-                        new
-                        {
-                            Id = 66,
-                            AgeGroup = 2,
-                            Gender = 64
-                        },
-                        new
-                        {
-                            Id = 130,
-                            AgeGroup = 2,
-                            Gender = 128
-                        },
-                        new
-                        {
-                            Id = 36,
-                            AgeGroup = 4,
-                            Gender = 32
-                        },
-                        new
-                        {
-                            Id = 68,
-                            AgeGroup = 4,
-                            Gender = 64
-                        },
-                        new
-                        {
-                            Id = 132,
-                            AgeGroup = 4,
-                            Gender = 128
-                        },
-                        new
-                        {
-                            Id = 40,
-                            AgeGroup = 8,
-                            Gender = 32
-                        },
-                        new
-                        {
-                            Id = 72,
-                            AgeGroup = 8,
-                            Gender = 64
-                        },
-                        new
-                        {
-                            Id = 136,
-                            AgeGroup = 8,
-                            Gender = 128
-                        },
-                        new
-                        {
-                            Id = 48,
-                            AgeGroup = 16,
-                            Gender = 32
-                        },
-                        new
-                        {
-                            Id = 80,
-                            AgeGroup = 16,
-                            Gender = 64
-                        },
-                        new
-                        {
-                            Id = 144,
-                            AgeGroup = 16,
-                            Gender = 128
-                        });
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.AnonymousParticipantActivity", b =>
