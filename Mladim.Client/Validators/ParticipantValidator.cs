@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Mladim.Client.ViewModels;
-
+using Mladim.Domain.Enums;
 
 namespace Mladim.Client.Validators;
 
@@ -16,11 +16,22 @@ public class ParticipantValidator : AbstractValidator<ParticipantVM>
 			.NotEmpty()
 			.WithMessage("Vnosno polje je obvezno");
 
-		RuleFor(x => x.Year)
+		RuleFor(x => x.Age)
 			.GreaterThan(0)
 			.WithMessage("Nepravilni vnos");
-	}
-	
+
+
+		RuleFor(x => x.Gender)
+			.IsInEnum()	
+			.WithMessage("Vnosno polje je obvezno");
+
+
+        
+    }
+
+    private bool IsGenderSelected(Gender gender) =>
+        gender > 0;
+
 
     public Func<object, string, Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>
     {

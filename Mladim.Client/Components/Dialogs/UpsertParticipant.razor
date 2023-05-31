@@ -10,14 +10,14 @@
                 <MudTextField @bind-Value="participant.Name" For="@(() => participant.Name)" Variant="Variant.Outlined" Label="Ime" />
                 <MudTextField @bind-Value="participant.Surname" For="@(() => participant.Surname)" Variant="Variant.Outlined" Label="Priimek" />
 
-                <MudSelect @bind-Value="participant.Gender" T="Gender" ToStringFunc="@(gender => gender.GetDisplayAttribute())" Variant="Variant.Outlined" Label="Spol" AnchorOrigin="Origin.BottomCenter">
+                <MudSelect @bind-Value="participant.Gender" For="@(() => participant.Gender)" T="Gender" ToStringFunc="@(gender => gender.GetDisplayAttribute())" Variant="Variant.Outlined" Label="Spol" AnchorOrigin="Origin.BottomCenter">
                     @foreach (var gender in Enum.GetValues<Gender>())
                     {
                         <MudSelectItem Value="gender">@gender.GetDisplayAttribute()</MudSelectItem>
                     }
                 </MudSelect>
 
-                <MudNumericField @bind-Value="participant.Year" For="@(() => participant.Year)" Label="Starost" Variant="Variant.Outlined" />
+                <MudNumericField @bind-Value="participant.Age" For="@(() => participant.Age)" Label="Starost" Variant="Variant.Outlined" />
                 
                 <MudSwitch @bind-Checked="participant.IsActive" Color="Color.Primary">@(participant.IsActive ? "Aktiven" : "Neaktiven")</MudSwitch>
                 </MudStack>

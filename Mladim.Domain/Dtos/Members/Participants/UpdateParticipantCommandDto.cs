@@ -8,7 +8,7 @@ public class UpdateParticipantCommandDto
     public string Name { get; set; }
     public string Surname { get; set; }
     public Gender Gender { get; set; }
-    public int Year { get; set; }
+    public int Age { get; set; }
     public AgeGroups AgeGroup { get; set; }
     public bool IsActive { get; set; } = true;
 }

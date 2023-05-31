@@ -8,7 +8,7 @@ public class UpdateStaffMemberCommandDto
     public string Name { get; set; }
     public string Surname { get; set; }
     public Gender Gender { get; set; }
-    public int Year { get; set; }
+    public int? YearOfBirth { get; set; }
     public bool IsActive { get; set; } = true;
     public bool IsRegistered { get; set; }
     public string Email { get; set; }

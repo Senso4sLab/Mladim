@@ -13,7 +13,7 @@
             <PropertyColumn Property="x => x.Name" Title="Ime" />
             <PropertyColumn Property="x => x.Surname" Title="Priimek" />
             <PropertyColumn Property="x => x.Gender.GetDisplayAttribute()" Title="Spol" />
-            <PropertyColumn Property="x => x.Year" Title="Leto rojstva"/>
+            <PropertyColumn Property="x => x.YearOfBirth" Title="Leto rojstva"/>
             <TemplateColumn CellClass="d-flex justify-end">
                 <CellTemplate>
                     <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" @onclick="@(() => UpdateStaffMemberAsync(context.Item))" />

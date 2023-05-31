@@ -19,11 +19,10 @@
                     </MudSelect>
                 </EditTemplate>
             </PropertyColumn>
-            <PropertyColumn Property="x => x.Year" Title="Starost" />
+            <PropertyColumn Property="x => x.Age" Title="Starost" />
             <TemplateColumn CellClass="d-flex justify-end">
                 <CellTemplate>
                     <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" @onclick="@(() => UpdateParticipantAsync(context.Item))"></MudIconButton>
-
                 </CellTemplate>
             </TemplateColumn>
         </Columns>

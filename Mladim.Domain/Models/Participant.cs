@@ -9,8 +9,7 @@ namespace Mladim.Domain.Models;
 
 public class Participant : Member
 {
-  
+    public int Age { get; set; }
     public AgeGroups AgeGroup { get; set; }   
-
     public List<Activity> Activities { get; set; } = new ();
 }

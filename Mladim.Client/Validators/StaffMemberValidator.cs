@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Mladim.Client.ViewModels;
-
+using Mladim.Domain.Enums;
 
 namespace Mladim.Client.Validators;
 
@@ -22,12 +22,16 @@ public class StaffMemberValidator : AbstractValidator<StaffMemberVM>
 
         RuleFor(x => x.Email)
 			.EmailAddress()
-			.WithMessage("Nepravilni vnos email naslova");		
+			.WithMessage("Nepravilni vnos email naslova");
 
-		RuleFor(x => x.Year)
-			.Must(ValidBirthYear)
-			.WithMessage("Nepravilna letnica rojstva");
-	}
+        RuleFor(x => x.Gender)
+              .IsInEnum()
+              .WithMessage("Vnosno polje je obvezno");
+    }
+
+	private bool IsGenderSelected(Gender gender) =>
+        gender > 0;
+	
 
 	private bool ValidBirthYear(int userBirthYear)
 	{
