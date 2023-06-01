@@ -43,7 +43,7 @@ public enum OrganizationTypes
 {
     [Display(Name = "Mladinska organizacija")]
     Mladinska = 1,
-    [Display(Name = "Nacionalna mladisnka organizacija")]
+    [Display(Name = "Nacionalna mladinska organizacija")]
     Nacionalna = 2,
     [Display(Name = "Mladinski center")]
     Center = 4,

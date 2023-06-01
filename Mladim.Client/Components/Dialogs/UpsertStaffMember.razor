@@ -18,7 +18,7 @@
                     }
                 </MudSelect>
 
-                <MudNumericField @bind-Value="staffMember.YearOfBirth" For="@(() => staffMember.YearOfBirth)" Label="Leto rojstva" Variant="Variant.Outlined" />
+                <MudNumericField @bind-Value="staffMember.YearOfBirth" For="@(() => staffMember.YearOfBirth)" Label="Leto rojstva" Variant="Variant.Outlined" Min="@(DateTime.Now.Year - 100)" Max="@DateTime.Now.Year"/>
                 <MudTextField @bind-Value="staffMember.Email" For="@(() => staffMember.Email)" Variant="Variant.Outlined" Label="Email" />
                 <MudSwitch @bind-Checked="staffMember.IsActive" Color="Color.Primary">@(staffMember.IsActive ? "Aktiven" : "Neaktiven")</MudSwitch>
             </MudStack>

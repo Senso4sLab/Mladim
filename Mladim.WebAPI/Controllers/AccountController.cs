@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mladim.Application.Contracts.Identity;
@@ -39,6 +40,7 @@ public class AccountController : ControllerBase
         return Ok(response);
     }
 
+    [Authorize]
     [HttpPut("profile")]
     public async Task<ActionResult<int>> UserProfileAsync(UpdateAppUserCommand appUserCommand)
     {
@@ -46,6 +48,7 @@ public class AccountController : ControllerBase
         return Ok(response);
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<AppUserQueryDto>> GetUserAccount(string userId)
     {

@@ -69,7 +69,7 @@ public partial class UpsertActivity
     private bool UpdateState => ActivityId != null;
 
     private string TotalAnonymousParticipants => ExistAnyAnonymouParticipantGroup ?
-        $" (Št. izbranih udeležencev: {AnonymousParticipants.Sum(ap => ap.Number)})" : string.Empty;
+        $"skupaj: {AnonymousParticipants.Sum(ap => ap.Number)}" : string.Empty;
 
     private bool ExistAnyAnonymouParticipantGroup =>
         AnonymousParticipants?.Any(p => p.Number > 0) == true;
@@ -95,7 +95,11 @@ public partial class UpsertActivity
         participants = new List<MemberBaseVM>(await ParticipantService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
     }
 
-   
+
+
+
+
+
 
 
     protected async override Task OnParametersSetAsync()

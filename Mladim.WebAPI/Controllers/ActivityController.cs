@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mladim.Application.Features.Activities.Commands.AddActivity;
 using Mladim.Application.Features.Activities.Commands.RemoveActivity;
@@ -11,6 +12,7 @@ namespace Mladim.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ActivityController : ControllerBase
 {
     private IMediator Mediator { get; }

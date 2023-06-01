@@ -1,12 +1,19 @@
 ﻿@page "/userprofile"
+@attribute [Authorize]
 
 <MudStack Spacing="4" Class="py-4">
     
     <MudStack Row Justify="Justify.SpaceBetween">
-        <MudText Typo="Typo.h5">Podatki o registraciji</MudText>
-         <MudToggleIconButton ToggledChanged="UpdateAccountIfEditable" Toggled="editableAccount"
-                              Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" 
-            ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary" />
+        <MudText Typo="Typo.h5">Moji podatki</MudText>
+
+        <MudStack Row>
+      
+             <MudToggleIconButton ToggledChanged="UpdateAccountIfEditable" Toggled="editableAccount" Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" 
+                ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary" />
+
+            <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="@Color.Secondary" OnClick="CancelButton"/>
+
+         </MudStack>
      
     </MudStack>
    

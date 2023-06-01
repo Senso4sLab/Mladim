@@ -1,6 +1,7 @@
 ﻿@page "/project/{projectId:int}/activity"
 @page "/activity/{activityId:int}"
-
+@using Mladim.Domain.Enums;
+@attribute [Authorize]
 
 <MudStack Class="pt-5 pb-8" Spacing="4">
     <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
@@ -32,6 +33,7 @@
 
      <TextEditor @ref="textEditor" @bind-Text="@activity.Description" />
 
+     <MultiSelect TItem="ActivityTypes" @bind-EnumValues="activity.ActivityTypes" Label="Tip aktivnosti" />
 
      <MudSelect T="MemberBaseVM" ToStringFunc="@((staff)=> staff.Name)" MultiSelection="true" @bind-SelectedValues="activity.LeadStaff" Variant="Variant.Outlined" Label="Vodje aktivnosti" AnchorOrigin="Origin.BottomCenter">
          @foreach (var staffMember in staff)
@@ -69,7 +71,7 @@
     
 
     <MudStack Row Spacing="5" AlignItems="AlignItems.Baseline" Justify="Justify.SpaceBetween">
-        <MudText Typo="Typo.body2" Align="Align.Center">Izbira udeležencev glede na starostno skupino in spol @TotalAnonymousParticipants</MudText>
+        <MudText Typo="Typo.body1" Align="Align.Center">Drugi udeleženci (starostna skupina in spol) - @TotalAnonymousParticipants</MudText>
         <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddAnonymousParticipantAsync" />         
     </MudStack>   
 

@@ -27,21 +27,24 @@ public class StaffMemberValidator : AbstractValidator<StaffMemberVM>
         RuleFor(x => x.Gender)
               .IsInEnum()
               .WithMessage("Vnosno polje je obvezno");
+
+		RuleFor(x => x.YearOfBirth)
+			.Must(ValidBirthYear)
+			.WithMessage("Nepravilni vnos letnice rojstva");
     }
 
-	private bool IsGenderSelected(Gender gender) =>
-        gender > 0;
+
 	
 
-	private bool ValidBirthYear(int userBirthYear)
+	private bool ValidBirthYear(int? userBirthYear)
 	{
+		if (userBirthYear == null)
+			return true;
+
 		var year = DateTime.Now.Year;
 
-		if (year - userBirthYear < 0)
-			return false;
-
-		if (year - userBirthYear > 100)
-			return false;
+		if (year - userBirthYear < 0 || year - userBirthYear > 100)
+			return false;		
 
 		return true;		
 	}

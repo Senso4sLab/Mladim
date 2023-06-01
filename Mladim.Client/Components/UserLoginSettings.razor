@@ -1,12 +1,16 @@
 ﻿@inject IAuthService AuthService
 @inject NavigationManager Navigation
 
-
-@*<MudText>Pozdravljen @context.User.FindFirst(System.Security.Claims.ClaimTypes.Name).Value</MudText>*@
-<MudMenu Class="px-3" Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Direction="Direction.Right">
-    <MudMenuItem OnClick="UserSettings">Moji podatki</MudMenuItem>
-    <MudMenuItem OnClick="LogoutAsync">Izpis</MudMenuItem>
-</MudMenu>
+ 
+<AuthorizeView>
+    <Authorized>
+        <MudText>Zdravo @context.User.FindFirst(System.Security.Claims.ClaimTypes.Name).Value</MudText>
+        <MudMenu Class="px-3" Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Direction="Direction.Right">
+            <MudMenuItem OnClick="UserSettings">Moji podatki</MudMenuItem>
+            <MudMenuItem OnClick="LogoutAsync">Izpis</MudMenuItem>
+        </MudMenu>
+    </Authorized>
+</AuthorizeView>
 
 
 @code 

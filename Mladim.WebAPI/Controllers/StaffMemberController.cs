@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
 using Mladim.Application.Features.Members.StaffMembers.Commands.UpdateStaffMember;
@@ -11,6 +12,7 @@ namespace Mladim.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class StaffMemberController : ControllerBase
 {
     private IMediator Mediator { get; }

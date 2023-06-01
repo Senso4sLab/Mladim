@@ -15,6 +15,7 @@ namespace Mladim.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class OrganizationController : ControllerBase
 {
     private IMediator Mediator { get;}

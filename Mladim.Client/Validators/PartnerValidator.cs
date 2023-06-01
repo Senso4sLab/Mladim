@@ -19,6 +19,8 @@ public class PartnerValidator : AbstractValidator<PartnerVM>
         RuleFor(x => x.Email)
              .EmailAddress()
             .WithMessage("Nepravilna oblika poštnega naslova");
+
+        
     }
 
 

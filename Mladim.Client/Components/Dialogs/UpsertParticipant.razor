@@ -17,7 +17,7 @@
                     }
                 </MudSelect>
 
-                <MudNumericField @bind-Value="participant.Age" For="@(() => participant.Age)" Label="Starost" Variant="Variant.Outlined" />
+                <MudNumericField @bind-Value="participant.Age" For="@(() => participant.Age)" Label="Starost" Variant="Variant.Outlined" Min="0" Max="100"/>
                 
                 <MudSwitch @bind-Checked="participant.IsActive" Color="Color.Primary">@(participant.IsActive ? "Aktiven" : "Neaktiven")</MudSwitch>
                 </MudStack>

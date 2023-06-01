@@ -19,7 +19,7 @@
             <TextEditor @ref="textEditor" ReadOnly="@ReadOnly" @bind-Text="@Organization.Description" />
         </MudExpansionPanel>
         
-        <MudExpansionPanel Text="Dosegljivost preko spletno družbenih omrežji">
+        <MudExpansionPanel Text="Profili na družbenih omrežjih">
             <MudStack Spacing="2">
                 <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.SocialMediaUrls.Twiter" Label="Twitter" Variant="Variant.Outlined"></MudTextField>
                 <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.SocialMediaUrls.Facebook" Label="Facebook" Variant="Variant.Outlined"></MudTextField>
@@ -27,7 +27,7 @@
                 <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.SocialMediaUrls.TikTok" Label="TikTok" Variant="Variant.Outlined"></MudTextField>
             </MudStack>
         </MudExpansionPanel>
-        <MudExpansionPanel Text="Delovanje">
+        <MudExpansionPanel Text="Splošno o organizaciji">
              <MudStack Spacing="2">
                 <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationTypes" @bind-EnumValues="Organization.Types" Label="Vrste organizacije" />
                 <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationFields" @bind-EnumValues="Organization.Fields" Label="Področja delovanja" />

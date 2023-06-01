@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mladim.Application.Features.Members.AnonymousParticipants.Queries.GetAnonymousParticipants;
 using Mladim.Application.Features.Members.Participants.Commands.AddParticipant;
@@ -12,6 +13,7 @@ namespace Mladim.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ParticipantController : ControllerBase
     {
         private IMediator Mediator { get; }

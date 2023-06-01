@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mladim.Application.Features.Members.Partners.Commands.AddPartner;
 using Mladim.Application.Features.Members.Partners.Queries.GetPartner;
@@ -11,6 +12,7 @@ namespace Mladim.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PartnerController : ControllerBase
     {
         private IMediator Mediator { get; }

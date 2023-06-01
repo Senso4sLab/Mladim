@@ -43,6 +43,12 @@ public partial class UserProfile
     [Inject]
     public IPopupService PopupService { get; set; }
 
+
+    [Inject]
+    public NavigationManager Navigation { get; set; }
+
+
+
     private bool editableAccount = false;
 
     private AppUserVM appUser = new AppUserVM();
@@ -60,6 +66,12 @@ public partial class UserProfile
 
         if(userId is not null)        
             appUser = await this.AccountService.GetAccountByIdAsync(userId);        
+    }
+
+
+    private void CancelButton()
+    {
+        Navigation.NavigateTo("/");
     }
 
     private async Task UpdateAccountIfEditable(bool editState)

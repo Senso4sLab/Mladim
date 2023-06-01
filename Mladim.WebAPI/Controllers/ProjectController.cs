@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mladim.Application.Features.Organizations.Commands.AddOrganization;
@@ -17,6 +18,7 @@ namespace Mladim.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ProjectController : ControllerBase
 {
     private IMediator Mediator { get; }
