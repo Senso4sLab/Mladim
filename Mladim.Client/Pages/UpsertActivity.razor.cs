@@ -68,13 +68,9 @@ public partial class UpsertActivity
     private TextEditor? textEditor;
     private bool UpdateState => ActivityId != null;
 
-    private string TotalAnonymousParticipants => ExistAnyAnonymouParticipantGroup ?
-        $"skupaj: {AnonymousParticipants.Sum(ap => ap.Number)}" : string.Empty;
-
-    private bool ExistAnyAnonymouParticipantGroup =>
-        AnonymousParticipants?.Any(p => p.Number > 0) == true;
-
-
+    private int TotalAnonymousParticipants =>
+        AnonymousParticipants?.Sum(ap => ap.Number) ?? 0;   
+    
     private DefaultOrganization defaultOrg;
 
     private IEnumerable<MemberBaseVM> staff = new List<MemberBaseVM>();
@@ -94,12 +90,6 @@ public partial class UpsertActivity
         partners = new List<MemberBaseVM>(await PartnerService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
         participants = new List<MemberBaseVM>(await ParticipantService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
     }
-
-
-
-
-
-
 
 
     protected async override Task OnParametersSetAsync()
@@ -148,7 +138,7 @@ public partial class UpsertActivity
             var httpResponse = await ActivityService.UpdateAsync(activity);
 
             if (httpResponse)
-                this.PopupService.ShowSnackbarSuccess("Aktivnost je uspešno posodobljena");
+                this.PopupService.ShowSnackbarSuccess("Aktivnost uspešno posodobljena");
             else
                 this.PopupService.ShowSnackbarError();
         }
@@ -157,7 +147,7 @@ public partial class UpsertActivity
             var httpResponse = await ActivityService.AddAsync(activity, ProjectId!.Value);
 
             if (httpResponse != null)
-                this.PopupService.ShowSnackbarSuccess("Aktivnost je uspešno dodana");
+                this.PopupService.ShowSnackbarSuccess("Aktivnost uspešno dodana");
             else
                 this.PopupService.ShowSnackbarError();
         }
@@ -174,7 +164,7 @@ public partial class UpsertActivity
     {
         var partner = new PartnerVM();
 
-        var dialogResponse = await this.PopupService.ShowPartnerDialog("Dodajanje partnerja", partner);
+        var dialogResponse = await this.PopupService.ShowPartnerDialog("Nov partner", partner);
 
         if (!dialogResponse)
             return;
@@ -186,7 +176,7 @@ public partial class UpsertActivity
         if (partnerResult != null)
         {
             this.partners.Add(partnerResult);
-            this.PopupService.ShowSnackbarSuccess("Partner je uspešno dodan");
+            this.PopupService.ShowSnackbarSuccess("Partner uspešno dodan");
         }
         else
             this.PopupService.ShowSnackbarError();
@@ -197,7 +187,7 @@ public partial class UpsertActivity
     {
         var participant = new ParticipantVM();
 
-        var dialogResponse = await this.PopupService.ShowParticipantDialog("Dodajanje udeleženca", participant);
+        var dialogResponse = await this.PopupService.ShowParticipantDialog("Nov udeleženec", participant);
 
         if (!dialogResponse)
             return;
@@ -207,7 +197,7 @@ public partial class UpsertActivity
         if (participantResult != null)
         {
             participants.Add(participantResult);
-            this.PopupService.ShowSnackbarSuccess("Udeleženec je uspešno dodan");
+            this.PopupService.ShowSnackbarSuccess("Udeleženec uspešno dodan");
         }
         else
             this.PopupService.ShowSnackbarError();

@@ -40,7 +40,7 @@ public partial class StaffMemberTab
         var staffMember = new StaffMemberVM();
        
 
-        var dialogResponse = await this.PopupService.ShowStaffMemberDialog("Dodaj uporabnika", staffMember);
+        var dialogResponse = await this.PopupService.ShowStaffMemberDialog("Nov uporabnik", staffMember);
 
         if (!dialogResponse)
             return;
@@ -50,7 +50,7 @@ public partial class StaffMemberTab
         if (staffMember != null)
         {
             Staff.Add(staffMember);
-            this.PopupService.ShowSnackbarSuccess("Uporabnik je uspešno dodan");
+            this.PopupService.ShowSnackbarSuccess("Uporabnik uspešno dodan");
         }
         else
             this.PopupService.ShowSnackbarError();
@@ -65,7 +65,7 @@ public partial class StaffMemberTab
     private async Task UpdateStaffMemberAsync(StaffMemberVM staffMember)
     {
 
-        var dialogResponse = await this.PopupService.ShowStaffMemberDialog("Izbrani uporabnik", staffMember);
+        var dialogResponse = await this.PopupService.ShowStaffMemberDialog("Uredi uporabnika", staffMember);
 
         if (!dialogResponse)
             return;
@@ -74,7 +74,7 @@ public partial class StaffMemberTab
 
         if (succeedResponse)
         {
-            this.PopupService.ShowSnackbarSuccess("Podatki so uspešno posodobljeni");
+            this.PopupService.ShowSnackbarSuccess("Podatki uspešno posodobljeni");
             await OnParametersSetAsync();
         }
         else

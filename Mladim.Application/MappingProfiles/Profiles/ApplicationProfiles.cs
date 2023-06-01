@@ -63,8 +63,10 @@ public class ApplicationProfiles : Profile
         //CreateMap<StaffMemberProjectDto, StaffMemberProject>().ReverseMap();
         CreateMap<StaffMemberSubjectCommandDto, StaffMemberProject>();
         CreateMap<StaffMemberProject, StaffMemberSubjectQueryDto>()
-            .ForMember(dto => dto.Name, m => m.MapFrom(sm => sm.StaffMember.Name));
-       
+            .ForMember(dto => dto.Name, m => m.MapFrom(sm => sm.StaffMember.Name))
+            .ForMember(dto => dto.Surname, m => m.MapFrom(sm => sm.StaffMember.Surname));
+
+
 
         //CreateMap<ProjectGroupDto, ProjectGroup>().ReverseMap();
 
@@ -112,8 +114,8 @@ public class ApplicationProfiles : Profile
 
         CreateMap<StaffMemberSubjectCommandDto, StaffMemberActivity>();
         CreateMap<StaffMemberActivity, StaffMemberSubjectQueryDto>()
-            .ForMember(dto => dto.Name, m => m.MapFrom(sm => sm.StaffMember.Name));
-
+            .ForMember(dto => dto.Name, m => m.MapFrom(sm => sm.StaffMember.Name))
+            .ForMember(dto => dto.Surname, m => m.MapFrom(sm => sm.StaffMember.Surname));
         //CreateMap<ActivityGroupDto, ActivityGroup>().ReverseMap();
 
         CreateMap<GroupCommandDto, ActivityGroup>();

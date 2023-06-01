@@ -56,7 +56,7 @@ public partial class PartnerTab
     {
         var partner = new PartnerVM();
 
-        var dialogResponse = await this.PopupService.ShowPartnerDialog("Dodajanje partnerja", partner);
+        var dialogResponse = await this.PopupService.ShowPartnerDialog("Nov partner", partner);
 
         if (!dialogResponse)
             return;
@@ -66,7 +66,7 @@ public partial class PartnerTab
         if (partner != null)
         {
             Partners.Add(partner);
-            this.PopupService.ShowSnackbarSuccess("Partner je uspešno dodan");
+            this.PopupService.ShowSnackbarSuccess("Partner uspešno dodan");
         }
         else
             this.PopupService.ShowSnackbarError();
@@ -81,7 +81,7 @@ public partial class PartnerTab
     private async Task UpdatePartnerAsync(PartnerVM partner)
     {
 
-        var dialogResponse = await this.PopupService.ShowPartnerDialog("Posodobitev podatkov udeleženeca", partner);
+        var dialogResponse = await this.PopupService.ShowPartnerDialog("Uredi partnerja", partner);
 
         if (!dialogResponse)
             return;
@@ -90,7 +90,7 @@ public partial class PartnerTab
 
         if (succeedResponse)
         {
-            this.PopupService.ShowSnackbarSuccess("Podatki so uspešno posodobljeni");
+            this.PopupService.ShowSnackbarSuccess("Podatki uspešno posodobljeni");
             await OnParametersSetAsync();
         }
         else

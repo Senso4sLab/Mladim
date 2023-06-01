@@ -61,6 +61,7 @@ public class AuthService : IAuthService
         if (await this.Storage.ContainKeyAsync(this.StorageKeys.AccessToken))
         {
             await this.Storage.RemoveItemAsync(this.StorageKeys.AccessToken);
+            await this.Storage.RemoveItemAsync(this.StorageKeys.SelectedOrganization);
             await this.AuthStateProvider.GetAuthenticationStateAsync();
         }
     }

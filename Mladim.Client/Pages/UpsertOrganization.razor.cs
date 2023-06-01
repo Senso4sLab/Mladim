@@ -77,7 +77,7 @@ public partial class UpsertOrganization
         var response = await this.OrganizationService.UpdateAsync(organization);
 
         if (response)
-            this.PopupService.ShowSnackbarSuccess("Organizacija je uspešno posodobljena");
+            this.PopupService.ShowSnackbarSuccess("Organizacija uspešno posodobljena");
         else
             this.PopupService.ShowSnackbarError("Prišlo je do napake, poskusite ponovno");
     }
@@ -89,7 +89,7 @@ public partial class UpsertOrganization
         if (organizationResult != null)
         {
             await this.OrganizationService.SetDefaultOrganizationAsync(DefaultOrganization.Create(organizationResult));
-            this.PopupService.ShowSnackbarSuccess("Organizacija je uspešno dodana");
+            this.PopupService.ShowSnackbarSuccess("Organizacija uspešno dodana");
         }
         else
             this.PopupService.ShowSnackbarError("Prišlo je do napake, poskusite ponovno");

@@ -55,7 +55,7 @@ public partial class ParticipantTab
     {
         var participant = new ParticipantVM();
 
-        var dialogResponse = await this.PopupService.ShowParticipantDialog("Dodajanje udeleženca", participant);
+        var dialogResponse = await this.PopupService.ShowParticipantDialog("Nov udeleženec", participant);
 
         if (!dialogResponse)
             return;
@@ -65,7 +65,7 @@ public partial class ParticipantTab
         if (participant != null)
         {
             Participants.Add(participant);
-            this.PopupService.ShowSnackbarSuccess("Udeleženec je uspešno dodan");
+            this.PopupService.ShowSnackbarSuccess("Udeleženec uspešno dodan");
         }
         else
             this.PopupService.ShowSnackbarError();
@@ -80,7 +80,7 @@ public partial class ParticipantTab
     private async Task UpdateParticipantAsync(ParticipantVM participant)
     {
 
-        var dialogResponse = await this.PopupService.ShowParticipantDialog("Posodobitev podatkov udeleženeca", participant);
+        var dialogResponse = await this.PopupService.ShowParticipantDialog("Uredi udeleženca", participant);
 
         if (!dialogResponse)
             return;
@@ -89,7 +89,7 @@ public partial class ParticipantTab
 
         if (succeedResponse)
         {
-            this.PopupService.ShowSnackbarSuccess("Podatki so uspešno posodobljeni");
+            this.PopupService.ShowSnackbarSuccess("Podatki uspešno posodobljeni");
             await OnParametersSetAsync();
         }
         else

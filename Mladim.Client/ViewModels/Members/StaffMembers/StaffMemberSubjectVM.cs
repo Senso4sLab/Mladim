@@ -6,6 +6,7 @@ namespace Mladim.Client.ViewModels
     public class StaffMemberSubjectVM 
     {
         public string Name { get; set; }
+        public string Surname { get; set; }
         public bool IsLead { get; set; }
         public int StaffMemberId { get; set; }
         

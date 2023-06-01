@@ -93,7 +93,7 @@ public partial class UpsertProject
             var httpResponse = await this.ProjectService.UpdateAsync(project);
 
             if (httpResponse)
-                this.PopupService.ShowSnackbarSuccess("Projekt je uspešno posodobljen");
+                this.PopupService.ShowSnackbarSuccess("Projekt uspešno posodobljen");
             else
                 this.PopupService.ShowSnackbarError();
         }
@@ -103,7 +103,7 @@ public partial class UpsertProject
             var httpResponse = await this.ProjectService.AddAsync(project, OrganizationId);
 
             if (httpResponse != null)
-                this.PopupService.ShowSnackbarSuccess("Projekt je uspešno dodan");
+                this.PopupService.ShowSnackbarSuccess("Projekt uspešno dodan");
             else
                 this.PopupService.ShowSnackbarError();
         }
@@ -120,7 +120,7 @@ public partial class UpsertProject
     {
         var partner = new PartnerVM();
 
-        var dialogResponse = await this.PopupService.ShowPartnerDialog("Dodajanje partnerja", partner);
+        var dialogResponse = await this.PopupService.ShowPartnerDialog("Nov partner", partner);
 
         if (!dialogResponse)
             return;
@@ -130,7 +130,7 @@ public partial class UpsertProject
         if (partner != null)
         {
             Partners.Add(partner);
-            this.PopupService.ShowSnackbarSuccess("Partner je uspešno dodan");
+            this.PopupService.ShowSnackbarSuccess("Partner uspešno dodan");
         }
         else
             this.PopupService.ShowSnackbarError();

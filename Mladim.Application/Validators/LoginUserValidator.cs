@@ -8,10 +8,13 @@ public class LoginUserValidator : AbstractValidator<LoginUser>
 {    
     public LoginUserValidator()
     {
-        RuleFor(x => x.Email)            
-            .NotEmpty()                 
+        RuleFor(x => x.Email)                          
             .EmailAddress()
             .WithMessage("Neveljavna oblika email naslova");
+
+        RuleFor(x => x.Email)
+           .NotEmpty()
+           .WithMessage("Vnosno polje je obvezno");
 
         RuleFor(x => x.Password)
             .NotEmpty()           

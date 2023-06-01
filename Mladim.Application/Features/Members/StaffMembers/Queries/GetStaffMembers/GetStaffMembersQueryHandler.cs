@@ -40,7 +40,7 @@ public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery,
 
 
         if (request.ParentClass)        
-            return await this.UnitOfWork.StaffMemberRepository.GetAllAsync<MemberBase>(predicates, sm => new MemberBase { Id = sm.Id, Name = sm.Name});        
+            return await this.UnitOfWork.StaffMemberRepository.GetAllAsync<MemberBase>(predicates, sm => new MemberBase { Id = sm.Id, Name = sm.Name, Surname = sm.Surname});        
         else
         {
             var staff = await this.UnitOfWork.StaffMemberRepository.GetAllAsync(predicates);

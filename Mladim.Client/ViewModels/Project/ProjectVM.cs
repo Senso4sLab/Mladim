@@ -34,7 +34,7 @@ public class ProjectVM
     public IEnumerable<MemberBaseVM> LeadStaff
     {
         get => leadStaff ??= Staff.Where(smp => smp.IsLead)
-                                  .Select(smp => new MemberBaseVM { Id = smp.StaffMemberId, Name = smp.Name })
+                                  .Select(smp => new MemberBaseVM { Id = smp.StaffMemberId, Name = smp.Name, Surname = smp.Surname })
                                   .ToList();
 
         set => leadStaff = value;       
@@ -45,7 +45,7 @@ public class ProjectVM
     public IEnumerable<MemberBaseVM> Administrators
     {
         get => administrators ??= Staff.Where(smp => !smp.IsLead)
-                                  .Select(smp => new MemberBaseVM { Id = smp.StaffMemberId, Name = smp.Name })
+                                  .Select(smp => new MemberBaseVM { Id = smp.StaffMemberId, Name = smp.Name, Surname = smp.Surname })
                                   .ToList();
 
         set => administrators = value;

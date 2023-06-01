@@ -47,7 +47,7 @@ public enum OrganizationTypes
     Nacionalna = 2,
     [Display(Name = "Mladinski center")]
     Center = 4,
-    [Display(Name = "Druge nevladne organizacije")]
+    [Display(Name = "Druga nevladna organizacija")]
     Nevladne = 8,
 };
 
@@ -107,7 +107,7 @@ public enum OrganizationFields
     Kakovost = 32,
     [Display(Name = "Komunikacija")]
     Komunikacija = 64,
-    [Display(Name = "Varovanja zdravja in okolja")]
+    [Display(Name = "Varovanje zdravja in okolja")]
     Varovanje = 128,
 };
 

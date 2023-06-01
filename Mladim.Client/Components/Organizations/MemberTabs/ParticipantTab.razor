@@ -2,7 +2,7 @@
 
 <MudStack Class="py-10" Spacing="4">
     <MudStack  Row="true" Justify="Justify.SpaceBetween">
-        <MudButton OnClick="AddParticipantAsync" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Dodaj udeleženca</MudButton>
+        <MudButton OnClick="AddParticipantAsync" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Nov udeleženec</MudButton>
         <MudSwitch T=bool Checked="IsActive" CheckedChanged="@CheckedChangedAsync" Color="Color.Primary">@(IsActive ? "Aktivni" : "Neaktivni")</MudSwitch>
     </MudStack>
     <MudDataGrid Items="Participants" ReadOnly="false" EditMode="DataGridEditMode.Form"

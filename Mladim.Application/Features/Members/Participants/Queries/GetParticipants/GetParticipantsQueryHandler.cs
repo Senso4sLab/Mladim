@@ -37,7 +37,7 @@ public class GetParticipantsQueryHandler : IRequestHandler<GetParticipantsQuery,
 
 
         if (request.ParentClass)        
-            return await this.UnitOfWork.ParticipantRepository.GetAllAsync<MemberBase>(predicates, p => new MemberBase { Id = p.Id, Name = p.Name });        
+            return await this.UnitOfWork.ParticipantRepository.GetAllAsync<MemberBase>(predicates, p => new MemberBase { Id = p.Id, Name = p.Name, Surname = p.Surname });        
         else
         {
             var staff = await this.UnitOfWork.ParticipantRepository.GetAllAsync(predicates);
