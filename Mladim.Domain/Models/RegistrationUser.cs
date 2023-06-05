@@ -21,4 +21,7 @@ public class RegistrationUser
     public string Email { get; set; }
     [Required]
     public string Password { get; set; }
+
+    // add two number together          
+                
 }
