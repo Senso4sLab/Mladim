@@ -21,16 +21,34 @@ public class Activity
 
     public ActivityTypes ActivityTypes { get; set; }
 
-    public List<StaffMemberActivity> Staff { get; set; } = new();
+    internal List<StaffMemberActivity> Staff { get; set; } = new();    
     
     public List<ActivityGroup> Groups { get; set; } = new();
 
-    public List<AnonymousParticipantActivity> AnonymousParticipantActivities { get; set; } = new();
+    //public List<AnonymousParticipantActivity> AnonymousParticipantActivities { get; set; } = new();
+
+
+    public List<AnonymousParticipantGroup> AnonymousParticipantGroups { get; set; } = new();
 
     public List<Partner> Partners { get; set; } = new();
 
     public List<Participant> Participants { get; set; } = new();
-    
+
+
+    public int OrganizationId { get; set; }
     public int ProjectId { get; set; }
     public Project Project { get; set; }
 }
+
+//public class StaffMemberRole
+//{
+//    public StaffMember StaffMember { get; set; }
+//    public bool IsLead { get; set; }
+
+
+//    public StaffMemberRole(StaffMember sm, bool isLead)
+//    {
+//        this.StaffMember = sm;
+//        this.IsLead = isLead;
+//    }
+//}

@@ -18,8 +18,6 @@ public class Project
     public List<Activity> Activities { get; set; } = new();
 
     public List<StaffMemberProject> Staff { get; set; } = new();
-    
-
     public List<ProjectGroup> Groups { get; set; } = new();
 
     public List<Partner> Partners { get; set; } = new();

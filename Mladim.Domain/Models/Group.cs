@@ -15,6 +15,6 @@ public class Group
     public bool IsActive { get; set; } = true;
     public string Description { get; set; }
     public List<Member> Members { get; set; }
-    public List<OrganizationGroup> OrganizationGroups { get; set; }
+    //public List<OrganizationGroup> OrganizationGroups { get; set; }
    
 }

@@ -9,13 +9,10 @@ using System.Threading.Tasks;
 
 namespace Mladim.Infrastracture.Persistance.Configurations;
 
-public class OrganizationConfigurations : IEntityTypeConfiguration<Organization>
+public class ActivityConfiguration : IEntityTypeConfiguration<Activity>
 {
-    public void Configure(EntityTypeBuilder<Organization> builder)
+    public void Configure(EntityTypeBuilder<Activity> builder)
     {
-        builder.OwnsOne(organization => organization.SocialMediaUrls, builder => 
-        { 
-            builder.ToJson();        
-        });
+        builder.OwnsMany(a => a.AnonymousParticipantGroups).OwnsOne(ag => ag.AnonymousParticipant);
     }
 }

@@ -26,6 +26,7 @@ public class ActivityRepository : GenericRepository<Activity>, IActivityReposito
     {
         return await this.DbSet
              .Include(a => a.Groups)
+             .Include(a => a.S)
              .Include(a => a.AnonymousParticipantActivities)
                  .ThenInclude(ap => ap.AnonymousParticipant)
              .Include(a => a.Participants)
