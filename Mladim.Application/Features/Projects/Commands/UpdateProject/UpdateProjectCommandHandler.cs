@@ -41,23 +41,20 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
 
         // Remove Partners
         project.RemovePartnersIfNotExistIn(request.Partners);
-        
 
-        
 
-        //project.Partners.Where(p => !request.Partners.Any(pc => pc.Id == p.Id))
-        //   .ToList().ForEach(rp =>
-        //   {
-        //       this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, rp);
-        //       project.Partners.Remove(rp);
-        //   });
+        // Add Groups
+        var partnersToAdd = request.Partners.Where(p => !project.ExistsPartner(p.Id))
+            .Select(p => Partner.Create(p.Id))
+            .ToList();
 
-        //request.Partners.Where(pc => !project.Partners.Any(p => p.Id == pc.Id))
-        //    .Select(apb => this.Mapper.Map<Partner>(apb)).ToList().ForEach(ap =>
-        //    {
-        //        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, ap);
-        //        project.Partners.Add(ap);
-        //    });
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, partnersToAdd);
+        project.AddPartners(partnersToAdd);
+
+        // Remove Groups
+        project.RemovePartnersIfNotExistIn(request.Partners);
+
+
 
         project.Groups.Where(g => !request.Groups.Any(gc => gc.Id == g.Id))
             .ToList().ForEach(rg =>

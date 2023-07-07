@@ -83,15 +83,32 @@ public class Project : BaseEntity<int>
         this.RemoveAll(partners);       
     }
 
+    public bool ExistsGroup(int groupId) =>
+        this.Groups.Any(g => g.Id == groupId);
+    public void AddGroup(IEnumerable<ProjectGroup> group) =>
+        this.Groups.AddRange(group);
+
+    public void RemoveGroupsIfNotExistIn(IEnumerable<BaseEntity<int>> groupsIds)
+    {
+        var groups = this.Groups.Where(g => !groupsIds.Any(other => other == g)).ToList();
+        this.RemoveAll(groups);
+    }
+
     private void RemoveAll(IEnumerable<Partner> partners)
     {
         foreach(var partner in partners)
             this.Partners.Remove(partner);
     }
-       
 
-          
-    
+    private void RemoveAll(IEnumerable<ProjectGroup> groups)
+    {
+        foreach (var group in groups)
+            this.Groups.Remove(group);
+    }
+
+
+
+
 
     public int OrganizationId { get; set; }
     public Organization Organization { get; set; } = default!;
