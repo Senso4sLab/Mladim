@@ -46,23 +46,6 @@ public class UnitOfWork : IUnitOfWork
     private IAnonymousParticipantRepository anonymousParticipantRepository;
 
 
-    //private Hashtable repositories = new Hashtable();
-
-
-    //public IGenericRepository<T> GetRepository<T>() where T : class
-    //{
-    //    var name = typeof(T).Name;
-
-    //    if(!repositories.ContainsKey(name))
-    //    {
-    //        var genericType = typeof(GenericRepository<>);
-    //        var instance = Activator.CreateInstance(genericType.MakeGenericType(typeof(T)), this.Context);
-    //        repositories.Add(name, instance);
-    //    }
-
-    //    return (IGenericRepository<T>) repositories[name]!;
-    //}
-
     public UnitOfWork(ApplicationDbContext context)
     {
         this.Context = context; 

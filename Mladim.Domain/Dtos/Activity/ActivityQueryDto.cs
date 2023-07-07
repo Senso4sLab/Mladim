@@ -21,7 +21,7 @@ public class ActivityQueryDto
     public List<PartnerQueryDto> Partners { get; set; } = new();
     public List<GroupQueryDto> Groups { get; set; } = new(); 
     public List<ParticipantQueryDto> Participants { get; set; } = new();
-    public List<StaffMemberSubjectQueryDto> Staff { get; set; } = new(); 
+    public List<StaffMemberQueryDto> Staff { get; set; } = new(); 
     public List<AnonymousParticipantDetailsQueryDto> AnonymousParticipantActivities { get; set; } = new();  
 
 }

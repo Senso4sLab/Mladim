@@ -27,10 +27,11 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
         var project = await this.UnitOfWork.ProjectRepository
             .FirstOrDefaultAsync(p => p.Id == request.Id);
 
-        if (project == null)
-            throw new Exception();
+        ArgumentNullException.ThrowIfNull(project);
 
         this.Mapper.Map(request, project);
+
+        
 
         project.Partners.Where(p => !request.Partners.Any(pc => pc.Id == p.Id))
            .ToList().ForEach(rp =>

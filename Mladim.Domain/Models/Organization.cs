@@ -11,8 +11,8 @@ namespace Mladim.Domain.Models;
 public class Organization
 {
     public int? Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     public string? Address { get; set; }
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }
@@ -27,11 +27,19 @@ public class Organization
     public OrganizationFields Fields { get; set; }
     public OrganizationRegions Regions { get; set; }
 
-    public SocialMediaUrls SocialMediaUrls { get; set; } = null;
+    public SocialMediaUrls SocialMediaUrls { get; set; } = default!;
 
-    public List<OrganizationPartner> Partners { get; set; } = new();
-    public List<OrganizationMember> Members { get; set; } = new();
-    public List<OrganizationGroup> Groups { get; set; } = new();
+    private List<OrganizationPartner> partners { get; set; } = new();
+    public IEnumerable<Partner> Partners => 
+        partners.Select(op => op.Partner);
+        
+    private List<OrganizationMember> members { get; set; } = new();
+    public IEnumerable<Member> Members =>
+        members.Select(om => om.Member);
+
+    private List<OrganizationGroup> groups { get; set; } = new();
+    public IEnumerable<Group> Groups => 
+        groups.Select(groups => groups.Group);
 
     public List<Project> Projects { get; set; } = new();  
     public List<AppUser> AppUsers { get; set; } = new();

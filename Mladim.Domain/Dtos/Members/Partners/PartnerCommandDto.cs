@@ -8,5 +8,5 @@ namespace Mladim.Domain.Dtos;
 
 public class PartnerCommandDto
 {
-    public int? Id { get; set; }    
+    public int Id { get; set; }    
 }

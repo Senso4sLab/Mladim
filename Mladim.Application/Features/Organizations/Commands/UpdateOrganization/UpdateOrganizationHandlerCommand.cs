@@ -20,8 +20,7 @@ public class UpdateOrganizationHandlerCommand : IRequestHandler<UpdateOrganizati
         var organization = await this.UnitOfWork.OrganizationRepository
              .FirstOrDefaultAsync(o => o.Id == request.Id);
 
-        if (organization == null)
-            throw new Exception("Organizacija ne obstaja");
+        ArgumentNullException.ThrowIfNull(organization);
 
         organization = this.Mapper.Map(request, organization);
 

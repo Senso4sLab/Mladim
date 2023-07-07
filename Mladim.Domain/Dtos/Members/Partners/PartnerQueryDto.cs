@@ -1,6 +1,7 @@
 ﻿namespace Mladim.Domain.Dtos;
 
-public class PartnerQueryDto : PartnerCommandDto
+public class PartnerQueryDto 
 {
-    public string Name { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
 }

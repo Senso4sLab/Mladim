@@ -28,8 +28,7 @@ public class RemoveProjectCommandHandler : IRequestHandler<RemoveProjectCommand,
         var project = await this.UnitOfWork.ProjectRepository
             .FirstOrDefaultAsync(p => p.Id == request.ProjectId);
 
-        if (project == null)
-            throw new Exception();
+        ArgumentNullException.ThrowIfNull(project);
 
         this.UnitOfWork.ProjectRepository.Remove(project);
 

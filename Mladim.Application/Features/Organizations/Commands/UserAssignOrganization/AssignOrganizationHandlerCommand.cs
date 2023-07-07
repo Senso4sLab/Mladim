@@ -18,7 +18,7 @@ public class AssignOrganizationHandlerCommand : IRequestHandler<AssignOrganizati
 
     public async Task<bool> Handle(AssignOrganizationCommand request, CancellationToken cancellationToken)
     {
-        if (request.OrganizationId == null)
+        if (request.OrganizationId == default)
             return false;
 
         var organization = await this.UnitOfWork.OrganizationRepository
@@ -40,7 +40,6 @@ public class AssignOrganizationHandlerCommand : IRequestHandler<AssignOrganizati
             return false;
 
         appUser.Organizations.Add(organization);
-        return await this.UnitOfWork.SaveChangesAsync() > 0; 
-       
+        return await this.UnitOfWork.SaveChangesAsync() > 0;        
     }
 }

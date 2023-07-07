@@ -22,19 +22,19 @@ public class ActivityRepository : GenericRepository<Activity>, IActivityReposito
 
 
 
-    public async override Task<Activity?> FirstOrDefaultAsync(Expression<Func<Activity, bool>> predicate, bool tracking = true)
-    {
-        return await this.DbSet
-             .Include(a => a.Groups)
-             .Include(a => a.S)
-             .Include(a => a.AnonymousParticipantActivities)
-                 .ThenInclude(ap => ap.AnonymousParticipant)
-             .Include(a => a.Participants)
-             .Include(a => a.Partners)
-             .Include(a => a.Staff)
-                 .ThenInclude(sa => sa.StaffMember)
-             .FirstOrDefaultAsync(predicate);
-    }
+    //public async override Task<Activity?> FirstOrDefaultAsync(Expression<Func<Activity, bool>> predicate, bool tracking = true)
+    //{
+    //    return await this.DbSet
+    //         .Include(a => a.Groups)
+    //         .Include(a => a.S)
+    //         .Include(a => a.AnonymousParticipantActivities)
+    //             .ThenInclude(ap => ap.AnonymousParticipant)
+    //         .Include(a => a.Participants)
+    //         .Include(a => a.Partners)
+    //         .Include(a => a.Staff)
+    //             .ThenInclude(sa => sa.StaffMember)
+    //         .FirstOrDefaultAsync(predicate);
+    //}
 
 
    

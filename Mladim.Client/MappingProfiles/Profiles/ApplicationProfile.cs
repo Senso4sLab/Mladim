@@ -49,7 +49,7 @@ namespace Mladim.Client.MappingProfiles.Profiles
                     .ForMember(dto => dto.Regions, dt => dt.MapFrom(field => field.Regions.ToEnums()));
           
 
-            CreateMap<StaffMemberSubjectVM, StaffMemberSubjectCommandDto>();
+            CreateMap<StaffMemberSubjectVM, StaffMemberCommandDto>();
             CreateMap<GroupBaseVM, GroupCommandDto>();
             CreateMap<MemberBaseVM, PartnerCommandDto>();
 
@@ -58,29 +58,29 @@ namespace Mladim.Client.MappingProfiles.Profiles
             CreateMap<AnonymousParticipantsVM, AnonymousParticipantCommandDto>();
 
             CreateMap<ProjectVM, UpdateProjectCommandDto>()
-                .ForMember(dto => dto.Staff, dt => dt.MapFrom(field => field.LeadStaff.Select(mb => new StaffMemberSubjectCommandDto
+                .ForMember(dto => dto.Staff, dt => dt.MapFrom(field => field.LeadStaff.Select(mb => new StaffMemberCommandDto
                 {
                     IsLead = true,
                     StaffMemberId= mb.Id,
                 })
-                .Union(field.Administrators.Select(mb => new StaffMemberSubjectCommandDto
+                .Union(field.Administrators.Select(mb => new StaffMemberCommandDto
                 {
                     StaffMemberId = mb.Id,
                 }))));
 
             CreateMap<ProjectVM, AddProjectCommandDto>()
-                 .ForMember(dto => dto.Staff, dt => dt.MapFrom(field => field.LeadStaff.Select(mb => new StaffMemberSubjectCommandDto
+                 .ForMember(dto => dto.Staff, dt => dt.MapFrom(field => field.LeadStaff.Select(mb => new StaffMemberCommandDto
                  {
                      IsLead = true,
                      StaffMemberId = mb.Id,
                  })
-                .Union(field.Administrators.Select(mb => new StaffMemberSubjectCommandDto
+                .Union(field.Administrators.Select(mb => new StaffMemberCommandDto
                 {
                     StaffMemberId = mb.Id,
                 }))));
 
 
-            CreateMap<ProjectQueryDto, ProjectVM>();
+            CreateMap<ProjectQueryDetailsDto, ProjectVM>();
 
 
           
@@ -88,7 +88,7 @@ namespace Mladim.Client.MappingProfiles.Profiles
             CreateMap<PartnerQueryDto, MemberBaseVM>();
             CreateMap<GroupQueryDto, GroupBaseVM>();
             CreateMap<ParticipantQueryDto, MemberBaseVM>();
-            CreateMap<StaffMemberSubjectQueryDto, StaffMemberSubjectVM>();
+            CreateMap<StaffMemberQueryDto, StaffMemberSubjectVM>();
             CreateMap<AnonymousParticipantDetailsQueryDto, AnonymousParticipantsVM>();
 
 
@@ -97,12 +97,12 @@ namespace Mladim.Client.MappingProfiles.Profiles
 
             CreateMap<ActivityVM, AddActivityCommandDto>()
                .ForMember(db => db.ActivityTypes, dto => dto.MapFrom(field => (ActivityTypes)(field.ActivityTypes.Sum(x => (int)x))))
-               .ForMember(dto => dto.Staff, dt => dt.MapFrom(field => field.LeadStaff.Select(mb => new StaffMemberSubjectCommandDto
+               .ForMember(dto => dto.Staff, dt => dt.MapFrom(field => field.LeadStaff.Select(mb => new StaffMemberCommandDto
                {
                    IsLead = true,
                    StaffMemberId = mb.Id,
                })
-                .Union(field.Administrators.Select(mb => new StaffMemberSubjectCommandDto
+                .Union(field.Administrators.Select(mb => new StaffMemberCommandDto
                 {
                     StaffMemberId = mb.Id,
                 }))));
@@ -110,12 +110,12 @@ namespace Mladim.Client.MappingProfiles.Profiles
 
             CreateMap<ActivityVM, UpdateActivityCommandDto>()
                .ForMember(db => db.ActivityTypes, dto => dto.MapFrom(field => (ActivityTypes)(field.ActivityTypes.Sum(x => (int)x))))
-               .ForMember(dto => dto.Staff, dt => dt.MapFrom(field => field.LeadStaff.Select(mb => new StaffMemberSubjectCommandDto
+               .ForMember(dto => dto.Staff, dt => dt.MapFrom(field => field.LeadStaff.Select(mb => new StaffMemberCommandDto
                {
                    IsLead = true,
                    StaffMemberId = mb.Id,
                })
-                .Union(field.Administrators.Select(mb => new StaffMemberSubjectCommandDto
+                .Union(field.Administrators.Select(mb => new StaffMemberCommandDto
                 {
                     StaffMemberId = mb.Id,
                 }))));

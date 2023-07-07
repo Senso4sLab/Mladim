@@ -5,8 +5,8 @@ namespace Mladim.Domain.Dtos;
 public class OrganizationQueryDto
 {
     public int Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     public string? Address { get; set; }
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }
@@ -19,5 +19,5 @@ public class OrganizationQueryDto
     public OrganizationStatus Status { get; set; }
     public OrganizationFields Fields { get; set; }
     public OrganizationRegions Regions { get; set; }
-    public SocialMediaUrlsQueryDto  SocialMediaUrls{ get; set; } = new SocialMediaUrlsQueryDto();
+    public SocialMediaUrlsQueryDto  SocialMediaUrls{ get; set; } =default!
 }

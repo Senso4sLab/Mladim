@@ -9,6 +9,6 @@ namespace Mladim.Application.Features.Organizations.Commands.UserGetOrganization
 
 public class AssignOrganizationCommand : IRequest<bool>
 {
-    public string AppUserId { get; set; }
-    public int? OrganizationId { get; set; }
+    public string AppUserId { get; set; } = string.Empty;
+    public int OrganizationId { get; set; }
 }

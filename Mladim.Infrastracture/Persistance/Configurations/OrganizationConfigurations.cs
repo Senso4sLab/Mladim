@@ -13,9 +13,10 @@ public class OrganizationConfigurations : IEntityTypeConfiguration<Organization>
 {
     public void Configure(EntityTypeBuilder<Organization> builder)
     {
-        builder.OwnsOne(organization => organization.SocialMediaUrls, builder => 
-        { 
-            builder.ToJson();        
-        });
+        builder.OwnsOne(organization => organization.SocialMediaUrls);
+
+        builder.HasMany("partners").WithOne("Organization");
+        builder.HasMany("members").WithOne("Organization");
+        builder.HasMany("groups").WithOne("Organization");
     }
 }

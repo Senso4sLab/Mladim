@@ -12,8 +12,8 @@ namespace Mladim.Application.Features.Organizations.Commands.AddOrganization;
 public class AddOrganizationCommand : IRequest<OrganizationQueryDto>
 {
     public string? AppUserId { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     public string? Address { get; set; }
     public string? PhoneNumber { get; set; }
     public string? Email { get; set; }
@@ -26,5 +26,5 @@ public class AddOrganizationCommand : IRequest<OrganizationQueryDto>
     public OrganizationStatus Status { get; set; }
     public OrganizationFields Fields { get; set; }
     public OrganizationRegions Regions { get; set; }
-    public SocialMediaUrlsCommandDto SocialMediaUrls { get; set; }
+    public SocialMediaUrlsCommandDto SocialMediaUrls { get; set; } = default!;
 }

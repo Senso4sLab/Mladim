@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static FluentValidation.Validators.PredicateValidator<T, TProperty>;
 
 namespace Mladim.Infrastracture.Repositories;
 
@@ -28,6 +29,17 @@ public class ProjectRepository : GenericRepository<Project>,  IProjectRepository
             dbSetQ = dbSetQ.AsNoTracking();
 
         return await dbSetQ.FirstOrDefaultAsync(predicate);
+    }
+
+
+    public async Task<Project?> GetProjectDetailsAsync(int projectId, bool tracking = true)
+    {
+        var projectDbSet = this.DbSet.Include("staff")
+            .Include(p => p.Partners)
+            .Include(p => p.Groups);
+
+        return tracking ? await projectDbSet.AsTracking().FirstOrDefaultAsync()
+            : await projectDbSet.AsNoTracking().FirstOrDefaultAsync();        
     }
 
     public override async Task<Project?> FirstOrDefaultAsync(Expression<Func<Project, bool>> predicate, bool tracking = true)
@@ -53,4 +65,6 @@ public class ProjectRepository : GenericRepository<Project>,  IProjectRepository
 
         return result;
     }
+
+    
 }

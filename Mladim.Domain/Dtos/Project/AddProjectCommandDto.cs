@@ -9,7 +9,7 @@ public class AddProjectCommandDto
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
 
-    public List<StaffMemberSubjectCommandDto> Staff { get; set; } = new();
+    public List<StaffMemberCommandDto> Staff { get; set; } = new();
     public List<GroupCommandDto> Groups { get; set; } = new();
     public List<PartnerCommandDto> Partners { get; set; } = new();
 }

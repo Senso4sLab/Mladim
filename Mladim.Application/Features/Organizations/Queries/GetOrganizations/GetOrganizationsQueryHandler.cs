@@ -18,23 +18,12 @@ public class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuer
     }
 
     public async Task<IEnumerable<OrganizationQueryDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
-    {
-        Expression<Func<Organization, bool>> predicate = o => o.AppUsers.Any(au => au.Id == request.AppUserId);
-        try
-        {
+    { 
+        var organizations = await this.UnitOfWork.OrganizationRepository
+                .GetAllAsync(o => o.AppUsers.Any(a => a.Id == request.AppUserId));
 
-
-            var organizations = await this.UnitOfWork.OrganizationRepository
-                .GetAllAsync(new[] { predicate });
-
-
-            return this.Mapper.Map<IEnumerable<OrganizationQueryDto>>(organizations);
-        }
-        catch (Exception ex) 
-        {
-            return null;
-        }
-       
+        return organizations == null ? Enumerable.Empty<OrganizationQueryDto>() :
+            this.Mapper.Map<IEnumerable<OrganizationQueryDto>>(organizations);                
         
     }
         

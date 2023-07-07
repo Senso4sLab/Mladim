@@ -52,6 +52,6 @@ public class AnonymousParticipantGroup
     public override int GetHashCode() =>
         HashCode.Combine(this.Number, this.AnonymousParticipant);
 
-    public AnonymousParticipantGroup WithNumber(int number) =>
+    public AnonymousParticipantGroup CreateWithNumber(int number) =>
         new AnonymousParticipantGroup(number, AnonymousParticipant);
 }

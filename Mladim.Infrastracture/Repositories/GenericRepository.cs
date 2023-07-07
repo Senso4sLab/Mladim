@@ -11,7 +11,6 @@ namespace Mladim.Infrastracture.Repositories;
 public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
     protected DbSet<T> DbSet { get; }
-
    
   
     public GenericRepository(ApplicationDbContext context)
@@ -85,5 +84,11 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             return await DbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
     }
 
-    
+    public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate, bool tracking = true)
+    {
+        if (tracking)
+            return await DbSet.Where(predicate).ToListAsync();
+        else
+            return await DbSet.Where(predicate).AsNoTracking().ToListAsync();
+    }
 }

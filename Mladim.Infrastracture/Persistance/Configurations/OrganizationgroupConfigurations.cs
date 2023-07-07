@@ -4,7 +4,7 @@ using Mladim.Domain.Models;
 
 namespace Mladim.Infrastracture.Persistance.Configurations;
 
-public class OrganizationgroupConfigurations : IEntityTypeConfiguration<OrganizationGroup>
+public class OrganizationGroupConfigurations : IEntityTypeConfiguration<OrganizationGroup>
 {
     public void Configure(EntityTypeBuilder<OrganizationGroup> builder)
     {

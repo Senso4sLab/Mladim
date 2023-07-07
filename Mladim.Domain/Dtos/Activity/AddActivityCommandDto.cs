@@ -21,7 +21,7 @@ public class AddActivityCommandDto
     public List<PartnerCommandDto> Partners { get; set; } = new();
     public List<GroupCommandDto> Groups { get; set; } = new();
     public List<ParticipantCommandDto> Participants { get; set; } = new();
-    public List<StaffMemberSubjectCommandDto> Staff { get; set; } = new();
+    public List<StaffMemberCommandDto> Staff { get; set; } = new();
     public List<AnonymousParticipantCommandDto> AnonymousParticipantActivities { get; set; } = new();
 
 
