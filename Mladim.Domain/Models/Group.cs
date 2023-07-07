@@ -7,13 +7,29 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Models;
 
-public class Group
+public class Group: BaseEntity<int>
 {
-    public int Id { get; set; }
+    
     public GroupType GroupType { get; set; }
     public string Name { get; set; }
     public bool IsActive { get; set; } = true;
     public string Description { get; set; }
-    public List<Member> Members { get; set; }   
-   
+    public List<Member> Members { get; set; }
+
+    private Group()
+    {
+        
+    }
+
+    private Group(int id)
+    {
+        this.Id = id;
+    }
+
+     public static Group Create(int id) =>
+        new Group(id);
+
+
+     
+
 }

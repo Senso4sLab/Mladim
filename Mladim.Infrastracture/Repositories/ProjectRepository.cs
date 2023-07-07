@@ -42,20 +42,20 @@ public class ProjectRepository : GenericRepository<Project>,  IProjectRepository
             : await projectDbSet.AsNoTracking().FirstOrDefaultAsync();        
     }
 
-    public override async Task<Project?> FirstOrDefaultAsync(Expression<Func<Project, bool>> predicate, bool tracking = true)
-    {
-        var dbSetQ = this.DbSet.AsQueryable();            
+    //public override async Task<Project?> FirstOrDefaultAsync(Expression<Func<Project, bool>> predicate, bool tracking = true)
+    //{
+    //    var dbSetQ = this.DbSet.AsQueryable();            
 
-        if (!tracking)
-            dbSetQ = dbSetQ.AsNoTracking();
+    //    if (!tracking)
+    //        dbSetQ = dbSetQ.AsNoTracking();
 
-        return await dbSetQ
-            .Include(p => p.Staff)
-                .ThenInclude(sp => sp.StaffMember)
-            .Include(p => p.Partners)
-            .Include(p => p.Groups)               
-            .FirstOrDefaultAsync(predicate);       
-    }
+    //    return await dbSetQ
+    //        .Include(p => p.Staff)
+    //            .ThenInclude(sp => sp.StaffMember)
+    //        .Include(p => p.Partners)
+    //        .Include(p => p.Groups)               
+    //        .FirstOrDefaultAsync(predicate);       
+    //}
 
     public async Task<IEnumerable<ActivityWithProjectName>> GetActivitiesWithProjectNameByOrganizationId(int organizationId)
     {

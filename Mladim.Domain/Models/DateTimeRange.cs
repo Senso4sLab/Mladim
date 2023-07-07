@@ -1,4 +1,4 @@
-﻿namespace Mladim.Application.Features.Projects.Commands.UpdateProject;
+﻿namespace Mladim.Domain.Models;
 
 public class DateTimeRange : IEquatable<DateTimeRange>
 {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,10 +75,22 @@ public class Project : BaseEntity<int>
 
     public bool ExistsPartner(int partnerId) =>
         this.Partners.Any(p => p.Id == partnerId);
-    public void AddPartner(int partnerId) =>
-        this.Partners.Add(Partner.Create(partnerId));
-    public void RemovePartner(int index) =>       
-        this.Partners.RemoveAt(index);       
+    public void AddPartners(IEnumerable<Partner> partners) =>
+        this.Partners.AddRange(partners);
+    public void RemovePartnersIfNotExistIn(IEnumerable<BaseEntity<int>> partnerIds)
+    {
+        var partners = this.Partners.Where(p => !partnerIds.Any(other => other == p)).ToList();
+        this.RemoveAll(partners);       
+    }
+
+    private void RemoveAll(IEnumerable<Partner> partners)
+    {
+        foreach(var partner in partners)
+            this.Partners.Remove(partner);
+    }
+       
+
+          
     
 
     public int OrganizationId { get; set; }

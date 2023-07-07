@@ -24,28 +24,40 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
 
     public async Task<int> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
     {
-        var project = await this.UnitOfWork.ProjectRepository
-            .FirstOrDefaultAsync(p => p.Id == request.Id);
+        var project = await this.UnitOfWork.ProjectRepository.GetProjectDetailsAsync(request.Id);            
 
         ArgumentNullException.ThrowIfNull(project);
+      
+        project.PeriodOfImplementation(request.Start, request.End);
+        project.SetBaseAttributes(request.Name, request.Description, request.WebpageUrl);
 
-        this.Mapper.Map(request, project);
+        // Add Partners
+        var partnersToAdd = request.Partners.Where(p => !project.ExistsPartner(p.Id))
+            .Select(p => Partner.Create(p.Id))
+            .ToList();
+        
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, partnersToAdd);
+        project.AddPartners(partnersToAdd);
+
+        // Remove Partners
+        project.RemovePartnersIfNotExistIn(request.Partners);
+        
 
         
 
-        project.Partners.Where(p => !request.Partners.Any(pc => pc.Id == p.Id))
-           .ToList().ForEach(rp =>
-           {
-               this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, rp);
-               project.Partners.Remove(rp);
-           });
+        //project.Partners.Where(p => !request.Partners.Any(pc => pc.Id == p.Id))
+        //   .ToList().ForEach(rp =>
+        //   {
+        //       this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, rp);
+        //       project.Partners.Remove(rp);
+        //   });
 
-        request.Partners.Where(pc => !project.Partners.Any(p => p.Id == pc.Id))
-            .Select(apb => this.Mapper.Map<Partner>(apb)).ToList().ForEach(ap =>
-            {
-                this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, ap);
-                project.Partners.Add(ap);
-            });
+        //request.Partners.Where(pc => !project.Partners.Any(p => p.Id == pc.Id))
+        //    .Select(apb => this.Mapper.Map<Partner>(apb)).ToList().ForEach(ap =>
+        //    {
+        //        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, ap);
+        //        project.Partners.Add(ap);
+        //    });
 
         project.Groups.Where(g => !request.Groups.Any(gc => gc.Id == g.Id))
             .ToList().ForEach(rg =>
@@ -62,14 +74,14 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
             });
 
         // delete
-        project.Staff.Where(sm => !request.Staff.Any(smc => smc.StaffMemberId == sm.StaffMemberId && smc.IsLead == sm.IsLead))
+        project.Staff.Where(sm => !request.Staff.Any(smc => smc.StaffMemberId == sm.Id))
             .ToList().ForEach(rsmp =>
             {
                 this.UnitOfWork.ConfigEntityState(EntityState.Deleted, rsmp);
                 project.Staff.Remove(rsmp);
             });
         // add
-        request.Staff.Where(smc => !project.Staff.Any(sm => sm.StaffMemberId == smc.StaffMemberId && sm.IsLead == smc.IsLead))
+        request.Staff.Where(smc => !project.Staff.Any(sm => sm.Id == smc.StaffMemberId))
              .Select(smc => this.Mapper.Map<StaffMemberProject>(smc)).ToList().ForEach(asmc =>
              {
                  this.UnitOfWork.ConfigEntityState(EntityState.Added, asmc);
