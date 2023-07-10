@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Projects.Commands.AddProject;
 
-public class AddProjectCommand : IRequest<ProjectQueryDetailsDto>
+public class AddProjectCommand : IRequest<bool>
 {
     public int OrganizationId { get; set; }
     public ProjectAttributesCommandDto Attributes { get; set; } = default!;

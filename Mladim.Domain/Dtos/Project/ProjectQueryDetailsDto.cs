@@ -27,8 +27,6 @@ public class ProjectQueryDetailsDto
     public DateTimeRangeQueryDto DateTimeRange { get; set; } = default!;
 
     public List<StaffMemberQueryDto> Staff { get; set; } = new();
-    public List<StaffMemberQueryDto> LeadStaff { get; set; } = new();
-
     public List<GroupQueryDto> Groups { get; set; } = new();
     public List<PartnerQueryDto> Partners { get; set; } = new();
 }
