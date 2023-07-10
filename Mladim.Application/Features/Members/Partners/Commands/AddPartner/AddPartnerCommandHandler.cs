@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Partners.Commands.AddPartner;
 
-public class AddPartnerCommandHandler : IRequestHandler<AddPartnerCommand, PartnerQueryDetailsDto>
+public class AddPartnerCommandHandler : IRequestHandler<AddPartnerCommand, bool>
 {
     public IUnitOfWork UnitOfWork { get; }
     public IMapper Mapper { get; }
@@ -21,7 +21,7 @@ public class AddPartnerCommandHandler : IRequestHandler<AddPartnerCommand, Partn
         UnitOfWork = unitOfWork;
         Mapper = mapper;
     }
-    public async Task<PartnerQueryDetailsDto> Handle(AddPartnerCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(AddPartnerCommand request, CancellationToken cancellationToken)
     {     
 
         var organization = await this.UnitOfWork.OrganizationRepository
@@ -29,14 +29,10 @@ public class AddPartnerCommandHandler : IRequestHandler<AddPartnerCommand, Partn
 
         ArgumentNullException.ThrowIfNull(organization);
 
-        var partner = Partner.Create(request.Name, request.Email, request.Description, request.WebpageUrl, request.ContactPerson, request.PhoneNumber);
+        var organizationPartner = this.Mapper.Map<OrganizationPartner>(request);
 
-        organization.Add(partner);      
+        organization.Partners.Add(organizationPartner);
 
-        await this.UnitOfWork.SaveChangesAsync();
-
-        return this.Mapper.Map<PartnerQueryDetailsDto>(partner);
-        
-      
+        return await this.UnitOfWork.SaveChangesAsync() > 0;    
     }
 }

@@ -9,12 +9,14 @@ namespace Mladim.Domain.Models;
 
 public class Participant : Member
 {
-    public string Name { get; set; }
-    public string Surname { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Surname { get; set; } = string.Empty;
     public int Age { get; set; }
     public AgeGroups AgeGroup { get; set; }
     public Gender Gender { get; set; }
     public List<Activity> Activities { get; set; } = new ();
+
+    public override string FullName => $"{this.Name} {this.Surname}";
 
     private Participant()
     {

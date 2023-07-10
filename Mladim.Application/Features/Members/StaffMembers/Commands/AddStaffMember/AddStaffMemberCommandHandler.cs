@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
-public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberCommand, StaffMemberDetailsQueryDto>
+public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberCommand, bool>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -21,22 +21,18 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
         Mapper = mapper;
     }
    
-    public async Task<StaffMemberDetailsQueryDto> Handle(AddStaffMemberCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(AddStaffMemberCommand request, CancellationToken cancellationToken)
     {        
 
         var organization = await this.UnitOfWork.OrganizationRepository
             .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
 
-
         ArgumentNullException.ThrowIfNull(organization);
 
-        var staffMember = StaffMember.Create(request.Name, request.Surname, request.Gender, request.Email, request.YearOfBirth);
+        var organizationMember = this.Mapper.Map<OrganizationMember>(request);
+        organization.Members.Add(organizationMember);       
 
-        organization.Add(staffMember);        
-
-        await this.UnitOfWork.SaveChangesAsync();
-
-        return this.Mapper.Map<StaffMemberDetailsQueryDto>(staffMember);
+        return await this.UnitOfWork.SaveChangesAsync() > 0;
 
     }
 }

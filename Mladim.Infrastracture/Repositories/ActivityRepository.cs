@@ -35,7 +35,7 @@ public class ActivityRepository : GenericRepository<Activity>, IActivityReposito
 
     public async Task<IEnumerable<ActivityWithProjectName>> GetActivitiesWithProjectName(int organizationId) =>    
          await this.DbSet.Where(a => a.Project.OrganizationId == organizationId)
-            .Select(a => ActivityWithProjectName.Create(a.Id, a.BaseActivityAttributes, a.DateTimeRange, a.Project.BaseProjectAttibutes.Name))
+            .Select(a => ActivityWithProjectName.Create(a.Id, a.Attributes, a.DateTimeRange, a.Project.BaseProjectAttibutes.Name))
             .ToListAsync();
 
 }

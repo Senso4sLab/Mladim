@@ -27,72 +27,76 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
         var project = await this.UnitOfWork.ProjectRepository.GetProjectDetailsAsync(request.Id);            
 
         ArgumentNullException.ThrowIfNull(project);
+
+        project = this.Mapper.Map(request, project);
+
+        this.UnitOfWork.ProjectRepository.Update(project);
       
-        project.PeriodOfImplementation(request.Start, request.End);
-        project.SetBaseAttributes(request.Name, request.Description, request.WebpageUrl);
+        //project.PeriodOfImplementation(request.Start, request.End);
+        //project.SetBaseAttributes(request.Name, request.Description, request.WebpageUrl);
 
-        // Partners
-        var otherPartners = request.Partners
-            .Select(other => Partner.Create(other.Id))
-            .ToList();
+        //// Partners
+        //var otherPartners = request.Partners
+        //    .Select(other => Partner.Create(other.Id))
+        //    .ToList();
 
-        // Add Partners
-        var partnersToAdd = otherPartners
-            .Where(p => !project.Exists(p))            
-            .ToList();
+        //// Add Partners
+        //var partnersToAdd = otherPartners
+        //    .Where(p => !project.Exists(p))            
+        //    .ToList();
         
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, partnersToAdd);
-        project.AddPartners(partnersToAdd);
+        //this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, partnersToAdd);
+        //project.AddPartners(partnersToAdd);
 
-        // Remove Partners
-        var removePartners = project.Partners
-            .Where(p => !otherPartners.Any(rp => rp == p))
-            .ToList();
+        //// Remove Partners
+        //var removePartners = project.Partners
+        //    .Where(p => !otherPartners.Any(rp => rp == p))
+        //    .ToList();
 
-        project.RemoveAll(removePartners);
+        //project.RemoveAll(removePartners);
 
-        // Groups
-        var otherGroups = request.Groups
-            .Select(other => ProjectGroup.Create(other.Id))
-            .ToList();
+        //// Groups
+        //var otherGroups = request.Groups
+        //    .Select(other => ProjectGroup.Create(other.Id))
+        //    .ToList();
 
-        // Add Groups
-        var groupsToAdd = otherGroups
-            .Where(p => !project.Exists(p))            
-            .ToList();
+        //// Add Groups
+        //var groupsToAdd = otherGroups
+        //    .Where(p => !project.Exists(p))            
+        //    .ToList();
 
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, groupsToAdd);
-        project.AddGroups(groupsToAdd);
+        //this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, groupsToAdd);
+        //project.AddGroups(groupsToAdd);
 
-        // Remove Groups
-        var removeGroups = project.Groups
-            .Where(g => !otherGroups.Any(rg => rg == g))
-            .ToList();
+        //// Remove Groups
+        //var removeGroups = project.Groups
+        //    .Where(g => !otherGroups.Any(rg => rg == g))
+        //    .ToList();
 
-        project.RemoveAll(removeGroups);
+        //project.RemoveAll(removeGroups);
 
-        // StaffRole
-        var otherStaff = request.Staff
-            .Select(other => StaffMemberRole.Create(other.StaffMemberId, other.IsLead))
-            .ToList();        
+        //// StaffRole
+        //var otherStaff = request.Staff
+        //    .Select(other => StaffMemberRole.Create(other.StaffMemberId, other.IsLead))
+        //    .ToList();        
 
-        //Remove Staff
-        var removeStaff =  project.Staff
-            .Where(smp => !otherStaff.Any(o => o.StaffMember == smp.StaffMember))
-            .ToList();
+        ////Remove Staff
+        //var removeStaff =  project.Staff
+        //    .Where(smp => !otherStaff.Any(o => o.StaffMember == smp.StaffMember))
+        //    .ToList();
 
-        this.UnitOfWork.ConfigEntityState(EntityState.Deleted, removeStaff);
-        project.RemoveAll(removeStaff);
+        //this.UnitOfWork.ConfigEntityState(EntityState.Deleted, removeStaff);
+        //project.RemoveAll(removeStaff);
 
-        // Modify StaffMemberProjects              
-        otherStaff.ForEach(project.SetStaffMemberRole); 
+        //// Modify StaffMemberProjects              
+        //otherStaff.ForEach(project.SetStaffMemberRole); 
        
-        // Add StaffMemberProjects
-        var addStaffMembers = otherStaff            
-           .Where(sm => !project.Exists(sm.StaffMember))
-           .ToList();        
+        //// Add StaffMemberProjects
+        //var addStaffMembers = otherStaff            
+        //   .Where(sm => !project.Exists(sm.StaffMember))
+        //   .ToList();        
 
-        project.AddStaff(addStaffMembers);    
+        //project.AddStaff(addStaffMembers);    
 
         return await this.UnitOfWork.SaveChangesAsync();       
     }

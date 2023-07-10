@@ -5,7 +5,7 @@ namespace Mladim.Application.Contracts.Persistence;
 
 public interface IProjectRepository : IGenericRepository<Project>
 {
-    Task<Project?> FirstOrDefaultWithoutIncludeAsync(Expression<Func<Project, bool>> predicate, bool tracking = true);
+    //Task<Project?> FirstOrDefaultWithoutIncludeAsync(Expression<Func<Project, bool>> predicate, bool tracking = true);
     
 
     Task<Project?> GetProjectDetailsAsync(int projectId, bool tracking = true);

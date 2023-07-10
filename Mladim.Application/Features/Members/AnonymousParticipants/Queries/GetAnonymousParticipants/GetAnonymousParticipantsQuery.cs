@@ -10,4 +10,5 @@ namespace Mladim.Application.Features.Members.AnonymousParticipants.Queries.GetA
 
 public class GetAnonymousParticipantsQuery : IRequest<IEnumerable<AnonymousParticipantQueryDto>>
 {
+    public int ActivityId { get; set; }
 }

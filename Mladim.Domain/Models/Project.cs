@@ -58,12 +58,12 @@ public class Project : BaseEntity<int>
         this.Groups.Any(g => g == group);
     public bool Exists(StaffMember other) =>
          this.Staff.Any(smp => smp.StaffMember == other);
-    public void AddPartners(IEnumerable<Partner> partners) =>
-        this.Partners.AddRange(partners);     
-    public void AddGroups(IEnumerable<ProjectGroup> group) =>
-        this.Groups.AddRange(group);
-    public void AddStaff(IEnumerable<StaffMemberRole> staff) =>
-       this.Staff.AddRange(staff.Select(sm => StaffMemberProject.Create(sm.StaffMember,this.Id, sm.IsLead)));
+    public void Add(Partner partners) =>
+        this.Partners.Add(partners);     
+    public void Add(ProjectGroup group) =>
+        this.Groups.Add(group);
+    public void Add(StaffMemberRole sm) =>
+       this.Staff.Add(StaffMemberProject.Create(sm.StaffMember,this.Id, sm.IsLead));
     public void RemoveAll(IEnumerable<Partner> partners)
     {
         foreach(var partner in partners)

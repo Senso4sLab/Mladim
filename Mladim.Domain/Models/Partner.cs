@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace Mladim.Domain.Models;
 
 public class Partner : Member
-{   
+{
+    public string Name { get; set; }
     public string? Email { get; set; }
     public string? Description { get; set; }
     public string? WebpageUrl { get; set; }
@@ -17,6 +18,7 @@ public class Partner : Member
 
     public List<Activity> Activities { get; set; } = new();
     public List<Project> Projects { get; set; } = new();
+    public override string FullName => this.Name;
 
 
     private Partner()

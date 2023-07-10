@@ -2,13 +2,6 @@
 
 namespace Mladim.Domain.Models;
 
-
-
-
-
-
-
-
 public class OrganizationAttributes : BaseAttibutes
 {   
     public string? Address { get; private set; }

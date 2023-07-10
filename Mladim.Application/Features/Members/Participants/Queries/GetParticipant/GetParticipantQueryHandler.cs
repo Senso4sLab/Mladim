@@ -25,7 +25,7 @@ public class GetParticipantQueryHandler : IRequestHandler<GetParticipantQuery, P
     public async Task<ParticipantDetailsQueryDto> Handle(GetParticipantQuery request, CancellationToken cancellationToken)
     {
         var participant = await this.UnitOfWork.ParticipantRepository
-            .FirstOrDefaultAsync(sm => sm.Id == request.ParticipantId);
+            .FirstOrDefaultAsync(sm => sm.Id == request.Id);
 
         ArgumentNullException.ThrowIfNull(participant);
 

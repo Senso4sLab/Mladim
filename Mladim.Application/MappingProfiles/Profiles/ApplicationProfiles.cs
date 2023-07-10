@@ -28,154 +28,154 @@ public class ApplicationProfiles : Profile
 
         //app user profile
 
-        CreateMap<UpdateAppUserCommand, AppUser>();
+        //CreateMap<UpdateAppUserCommand, AppUser>();
 
-        CreateMap<AppUser, AppUserQueryDto>();
+        //CreateMap<AppUser, AppUserQueryDto>();
 
         //socialurls
 
-        CreateMap<SocialMediaUrlsCommandDto, SocialMediaUrls>();
-        CreateMap<SocialMediaUrls, SocialMediaUrlsQueryDto>();
+        //CreateMap<SocialMediaUrlsCommandDto, SocialMediaUrls>();
+        //CreateMap<SocialMediaUrls, SocialMediaUrlsQueryDto>();
 
 
-        // Organizations
-        CreateMap<AddOrganizationCommand, Organization>();
-        CreateMap<UpdateOrganizationCommand, Organization>();
-        CreateMap<Organization, OrganizationQueryDto>().ReverseMap();
+        //// Organizations
+        //CreateMap<AddOrganizationCommand, Organization>();
+        //CreateMap<UpdateOrganizationCommand, Organization>();
+        //CreateMap<Organization, OrganizationQueryDto>().ReverseMap();
                      
 
         // Projects
 
-        CreateMap<AddProjectCommand, Project>();
+        //CreateMap<AddProjectCommand, Project>();
 
-        CreateMap<UpdateProjectCommand, Project>()
-            .ForMember(p => p.Groups, m => m.Ignore())
-            .ForMember(p => p.Partners, m => m.Ignore())
-            .ForMember(p => p.Staff, m => m.Ignore());
+        //CreateMap<UpdateProjectCommand, Project>()
+        //    .ForMember(p => p.Groups, m => m.Ignore())
+        //    .ForMember(p => p.Partners, m => m.Ignore())
+        //    .ForMember(p => p.Staff, m => m.Ignore());
 
 
 
-        CreateMap<Project, ProjectQueryDetailsDto>().ReverseMap();
+        //CreateMap<Project, ProjectQueryDetailsDto>().ReverseMap();
        
       
 
 
         //CreateMap<StaffMemberProjectDto, StaffMemberProject>().ReverseMap();
-        CreateMap<StaffMemberCommandDto, StaffMemberProject>();
-        CreateMap<StaffMemberProject, StaffMemberQueryDto>()
-            .ForMember(dto => dto.Name, m => m.MapFrom(sm => sm.StaffMember.FullName))
-            .ForMember(dto => dto.Surname, m => m.MapFrom(sm => sm.StaffMember.Surname));
+        //CreateMap<StaffMemberCommandDto, StaffMemberProject>();
+        //CreateMap<StaffMemberProject, StaffMemberQueryDto>()
+        //    .ForMember(dto => dto.Name, m => m.MapFrom(sm => sm.StaffMember.FullName))
+        //    .ForMember(dto => dto.Surname, m => m.MapFrom(sm => sm.StaffMember.Surname));
 
 
 
         //CreateMap<ProjectGroupDto, ProjectGroup>().ReverseMap();
 
-        CreateMap<GroupCommandDto, ProjectGroup>();
+        //CreateMap<GroupCommandDto, ProjectGroup>();
        
 
-        // Groups
-        CreateMap<GroupDetailsQueryDto, Group>().ReverseMap();
-        CreateMap<GroupCommandDto, Group>();
-        CreateMap<ProjectGroup, GroupQueryDto>();
+        //// Groups
+        //CreateMap<GroupDetailsQueryDto, Group>().ReverseMap();
+        //CreateMap<GroupCommandDto, Group>();
+        //CreateMap<ProjectGroup, GroupQueryDto>();
 
 
 
         //Activity
 
-        CreateMap<Activity, ActivityQueryDto>();
+        //CreateMap<Activity, ActivityQueryDto>();
 
 
 
 
-        CreateMap<AddActivityCommand, Activity>()
-            .ForMember(a => a.AnonymousParticipantActivities, m => m.MapFrom(ad => ad.AnonymousParticipantActivities));
+        //CreateMap<AddActivityCommand, Activity>()
+        //    .ForMember(a => a.AnonymousParticipantActivities, m => m.MapFrom(ad => ad.AnonymousParticipantActivities));
            
             
 
 
-        CreateMap<UpdateActivityCommand, Activity>()
-             .ForMember(p => p.Groups, m => m.Ignore())
-             .ForMember(p => p.Partners, m => m.Ignore())
-             .ForMember(p => p.Staff, m => m.Ignore())
-             .ForMember(p => p.AnonymousParticipantActivities, m => m.Ignore())
-             .ForMember(p => p.Participants, m => m.Ignore());
+        //CreateMap<UpdateActivityCommand, Activity>()
+        //     .ForMember(p => p.Groups, m => m.Ignore())
+        //     .ForMember(p => p.Partners, m => m.Ignore())
+        //     .ForMember(p => p.Staff, m => m.Ignore())
+        //     .ForMember(p => p.AnonymousParticipantActivities, m => m.Ignore())
+        //     .ForMember(p => p.Participants, m => m.Ignore());
 
 
-        CreateMap<AnonymousParticipantActivity, AnonymousParticipantDetailsQueryDto>()
-            .ConvertUsing<AnonymousParticipantActivityToCompactDto>();
+        //CreateMap<AnonymousParticipantActivity, AnonymousParticipantDetailsQueryDto>()
+        //    .ConvertUsing<AnonymousParticipantActivityToCompactDto>();
 
 
-        CreateMap<ActivityWithProjectName, ActivityWithProjectNameQueryDto>();
+        //CreateMap<ActivityWithProjectName, ActivityWithProjectNameQueryDto>();
 
 
 
 
         //CreateMap<StaffMemberActivityDto, StaffMemberActivity>().ReverseMap();
 
-        CreateMap<StaffMemberCommandDto, StaffMemberActivity>();
-        CreateMap<StaffMemberActivity, StaffMemberQueryDto>()
-            .ForMember(dto => dto.Name, m => m.MapFrom(sm => sm.StaffMember.FullName))
-            .ForMember(dto => dto.Surname, m => m.MapFrom(sm => sm.StaffMember.Surname));
+        //CreateMap<StaffMemberCommandDto, StaffMemberActivity>();
+        //CreateMap<StaffMemberActivity, StaffMemberQueryDto>()
+        //    .ForMember(dto => dto.Name, m => m.MapFrom(sm => sm.StaffMember.FullName))
+        //    .ForMember(dto => dto.Surname, m => m.MapFrom(sm => sm.StaffMember.Surname));
         //CreateMap<ActivityGroupDto, ActivityGroup>().ReverseMap();
 
-        CreateMap<GroupCommandDto, ActivityGroup>();
+        //CreateMap<GroupCommandDto, ActivityGroup>();
 
         //CreateMap<AnonymousParticipantActivityDto, AnonymousParticipantActivity>().ReverseMap();
-        CreateMap<AnonymousParticipant, AnonymousParticipantQueryDto>();
+        //CreateMap<AnonymousParticipant, AnonymousParticipantQueryDto>();
 
         //StaffMember
 
-        CreateMap<AddStaffMemberCommand, StaffMember>();
+        //CreateMap<AddStaffMemberCommand, StaffMember>();
 
-        CreateMap<AddStaffMemberCommand, OrganizationMember>()
-          .ConvertUsing<AddCommandToOrganizationStaffMemberConverter>();
+        //CreateMap<AddStaffMemberCommand, OrganizationMember>()
+        //  .ConvertUsing<AddCommandToOrganizationStaffMemberConverter>();
 
-        CreateMap<UpdateStaffMemberCommand, StaffMember>();
+        //CreateMap<UpdateStaffMemberCommand, StaffMember>();
 
-        CreateMap<StaffMember, StaffMemberDetailsQueryDto>().ReverseMap();
+        //CreateMap<StaffMember, StaffMemberDetailsQueryDto>().ReverseMap();
 
         // Partners
-        CreateMap<AddPartnerCommand, Partner>();
-        CreateMap<PartnerCommandDto, Partner>();
+        //CreateMap<AddPartnerCommand, Partner>();
+        //CreateMap<PartnerCommandDto, Partner>();
 
-        CreateMap<AddPartnerCommand, OrganizationPartner>()
-            .ConvertUsing<AddCommandToOrganizationPartnerConverter>();       
+        //CreateMap<AddPartnerCommand, OrganizationPartner>()
+        //    .ConvertUsing<AddCommandToOrganizationPartnerConverter>();       
 
-        CreateMap<UpdatePartnerCommand, Partner>();
+        //CreateMap<UpdatePartnerCommand, Partner>();
 
-        CreateMap<PartnerQueryDetailsDto, Partner>().ReverseMap();
+        //CreateMap<PartnerQueryDetailsDto, Partner>().ReverseMap();
 
-        CreateMap<Partner, PartnerQueryDto>();
+        //CreateMap<Partner, PartnerQueryDto>();
 
         // Participant
 
-        CreateMap<AddParticipantCommand, Participant>();
-        CreateMap<AddParticipantCommand, OrganizationMember>()
-           .ConvertUsing<AddCommandToOrganizationParticipantConverter>();
+        //CreateMap<AddParticipantCommand, Participant>();
+        //CreateMap<AddParticipantCommand, OrganizationMember>()
+        //   .ConvertUsing<AddCommandToOrganizationParticipantConverter>();
 
-        CreateMap<UpdateParticipantCommand, Participant>();
+        //CreateMap<UpdateParticipantCommand, Participant>();
 
-        CreateMap<Participant, ParticipantDetailsQueryDto>().ReverseMap();
-        CreateMap<ParticipantCommandDto, Participant>();
+        //CreateMap<Participant, ParticipantDetailsQueryDto>().ReverseMap();
+        //CreateMap<ParticipantCommandDto, Participant>();
 
-        CreateMap<Participant, ParticipantQueryDto>();
+        //CreateMap<Participant, ParticipantQueryDto>();
      
 
         // AnonymousParticipant
 
-        CreateMap<AnonymousParticipantQueryDto, AnonymousParticipant>().ReverseMap();
+        //CreateMap<AnonymousParticipantQueryDto, AnonymousParticipant>().ReverseMap();
 
-        CreateMap<AnonymousParticipantCommandDto, AnonymousParticipantActivity>()
-            .ConvertUsing<AnonymousParticipantCommandDtoToActivity>();
+        //CreateMap<AnonymousParticipantCommandDto, AnonymousParticipantActivity>()
+        //    .ConvertUsing<AnonymousParticipantCommandDtoToActivity>();
 
 
-        CreateMap<MemberDto, Member>()
-            .Include<StaffMemberDetailsQueryDto, StaffMember>()
-            .Include<ParticipantDetailsQueryDto, Participant>();
+        //CreateMap<MemberDto, Member>()
+        //    .Include<StaffMemberDetailsQueryDto, StaffMember>()
+        //    .Include<ParticipantDetailsQueryDto, Participant>();
 
-        CreateMap<Member, MemberDto>()
-            .Include<StaffMember, StaffMemberDetailsQueryDto>()
-            .Include<Participant, ParticipantDetailsQueryDto>();
+        //CreateMap<Member, MemberDto>()
+        //    .Include<StaffMember, StaffMemberDetailsQueryDto>()
+        //    .Include<Participant, ParticipantDetailsQueryDto>();
 
 
     }

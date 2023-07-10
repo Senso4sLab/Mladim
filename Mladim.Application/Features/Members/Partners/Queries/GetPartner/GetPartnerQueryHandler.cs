@@ -24,7 +24,7 @@ public class GetPartnerQueryHandler : IRequestHandler<GetPartnerQuery, PartnerQu
     public async Task<PartnerQueryDetailsDto> Handle(GetPartnerQuery request, CancellationToken cancellationToken)
     {
         var partner = await this.UnitOfWork.PartnerRepository
-          .FirstOrDefaultAsync(sm => sm.Id == request.PartnerId);
+          .FirstOrDefaultAsync(sm => sm.Id == request.Id);
 
         ArgumentNullException.ThrowIfNull(partner);
 

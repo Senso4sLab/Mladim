@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Activities.Commands.AddActivity;
 
-public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, ActivityQueryDto>
+public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, bool>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -23,7 +23,7 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, Act
         Mapper = mapper;
     }   
 
-    public async Task<ActivityQueryDto> Handle(AddActivityCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(AddActivityCommand request, CancellationToken cancellationToken)
     {
         var project = await this.UnitOfWork.ProjectRepository
             .FirstOrDefaultAsync(p => p.Id == request.ProjectId);
@@ -31,30 +31,21 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, Act
 
         ArgumentNullException.ThrowIfNull(project);
 
-        var partners = request.Partners.Select(o => Partner.Create(o.Id)).ToList();
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, partners);
+        var activity = this.Mapper.Map<Activity>(request);
 
-        var groups = request.Groups.Select(o => ActivityGroup.Create(o.Id)).ToList();
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, groups);
+       
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, activity.Partners);      
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, activity.Groups);       
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, activity.Participants);
 
+        
 
-        var participants = request.Participants.Select(o => Participant.Create(o.Id)).ToList();
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, participants);
+        //var anonymousParticipantGroup = request.AnonymousParticipantActivities
+        //    .Select(a => AnonymousParticipantGroup.Create(a.Number, a.Gender, a.AgeGroup)).ToList();
 
-        var staffMemberRole = request.Staff
-            .Select(o => StaffMemberRole.Create(o.StaffMemberId, o.IsLead))
-            .ToList();
-
-        var anonymousParticipantGroup = request.AnonymousParticipantActivities
-            .Select(a => AnonymousParticipantGroup.Create(a.Number, a.Gender, a.AgeGroup)).ToList();
-
-        var activity = Activity.Create(request.Start, request.End, request.Name, request.Description, request.ActivityTypes,
-            partners, staffMemberRole, groups, participants, anonymousParticipantGroup);
            
         project.Activities.Add(activity);
 
-        await this.UnitOfWork.SaveChangesAsync();
-
-        return this.Mapper.Map<ActivityQueryDto>(activity);      
+        return await this.UnitOfWork.SaveChangesAsync() > 0;
     }
 }

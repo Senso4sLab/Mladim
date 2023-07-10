@@ -9,9 +9,6 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Models;
 
-
-
-
 public class Organization : BaseEntity<int>
 {
     public OrganizationAttributes Attributes { get; private set; } = default!;
@@ -48,7 +45,10 @@ public class Organization : BaseEntity<int>
 
     public void Add(Partner partner) =>
         this.Partners.Add(OrganizationPartner.Create(partner));
-    
+
+    public void Add(Group group) =>
+        this.Groups.Add(OrganizationGroup.Create(group));
+
     public List<OrganizationGroup> Groups { get; set; } = new();    
 
     public List<Project> Projects { get; set; } = new();  

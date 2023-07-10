@@ -10,5 +10,5 @@ namespace Mladim.Application.Features.Members.Participants.Queries.GetParticipan
 
 public class GetParticipantQuery : IRequest<ParticipantDetailsQueryDto>
 {
-    public int ParticipantId { get; set; }
+    public int Id { get; set; }
 }

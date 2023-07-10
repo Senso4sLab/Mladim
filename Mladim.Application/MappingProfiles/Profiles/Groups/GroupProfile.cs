@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Mladim.Application.Features.Groups.Commands.AddGroup;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
@@ -13,10 +14,16 @@ public class GroupProfile : Profile
 {
     public GroupProfile()
     {
+        CreateMap<GroupDetailsQueryDto, Group>()
+            .ReverseMap();
+
         CreateMap<GroupCommandDto, ProjectGroup>();
-       
-        CreateMap<GroupDetailsQueryDto, Group>().ReverseMap();
-       // CreateMap<GroupCommandDto, Group>();
+        CreateMap<GroupCommandDto, ActivityGroup>();
+
         CreateMap<ProjectGroup, GroupQueryDto>();
+        CreateMap<ActivityGroup, GroupQueryDto>();
+
+        //CreateMap<AddOrganizationCommandDto, OrganizationGroup>()
+
     }
 }

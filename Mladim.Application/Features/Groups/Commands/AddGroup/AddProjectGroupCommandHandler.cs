@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
 using Mladim.Domain.Dtos;
@@ -11,24 +12,33 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Groups.Commands.AddGroup;
 
-public class AddProjectGroupCommandHandler : IRequestHandler<AddProjectGroupCommand, GroupQueryDto>
+public class AddProjectGroupCommandHandler : IRequestHandler<AddProjectGroupCommand, bool>
 {
     public IUnitOfWork UnitOfWork { get; }
+    public IMapper Mapper { get; }
 
-    public AddProjectGroupCommandHandler(IUnitOfWork unitOfWork)
+
+    public AddProjectGroupCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {
         this.UnitOfWork = unitOfWork;
+        this.Mapper = mapper;
     }
 
-    public async Task<GroupQueryDto> Handle(AddProjectGroupCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(AddProjectGroupCommand request, CancellationToken cancellationToken)
     {
-        var projectGroup = ProjectGroup.Create(request.Name, request.Description, request.Members.Select(StaffMember.Create));
+        var project = await this.UnitOfWork.ProjectRepository.FirstOrDefaultAsync(o => o.Id == request.ProjectId);
 
-        var addedGroup = await this.UnitOfWork.GroupRepository.AddAsync(projectGroup);
+        ArgumentNullException.ThrowIfNull(project);
+
+        var group = await this.UnitOfWork.GroupRepository.FirstOrDefaultAsync(o => o.Id == request.GroupId) as ProjectGroup;
+
+        ArgumentNullException.ThrowIfNull(group);     
+
+        project.Add(group);       
 
         await this.UnitOfWork.SaveChangesAsync();
 
-        return GroupQueryDto.Create(addedGroup.Id, addedGroup.Name);
+        return await this.UnitOfWork.SaveChangesAsync() > 0; 
 
     }
 }

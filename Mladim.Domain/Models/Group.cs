@@ -8,10 +8,27 @@ using System.Threading.Tasks;
 namespace Mladim.Domain.Models;
 
 public abstract class Group: BaseEntity<int>
-{    
-    //public GroupType GroupType { get; set; }
+{       
     public string Name { get; set; } = string.Empty;
-    //public bool IsActive { get; set; } = true;
     public string Description { get; set; } = string.Empty;
     public List<Member> Members { get; set; } = new(); 
+
+    protected Group() { }
+
+    protected Group(string name, string description, IEnumerable<Member> members)
+    {
+        this.Name = name;
+        this.Description = description;
+        this.Members = members.ToList();
+    }
+
+    public static Group Create(GroupType groupType, string name, string description, IEnumerable<int>memberIds) =>    
+        groupType switch
+        {
+            GroupType.StaffGroup => new ProjectGroup(name, description, memberIds.Select(id => StaffMember.Create(id))),
+            GroupType.ParticipantGroup => new ActivityGroup(name, description, memberIds.Select(id => Participant.Create(id))),
+            _ => throw new NotImplementedException()
+        } ;
+
+    
 }

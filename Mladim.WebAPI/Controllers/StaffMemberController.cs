@@ -47,7 +47,7 @@ public class StaffMemberController : ControllerBase
     [HttpGet("{memId}")]
     public async Task<ActionResult<StaffMemberDetailsQueryDto?>> GetAsync(int memId)
     {
-        var response = await this.Mediator.Send(new GetStaffMemberQuery { StaffMemberId = memId });
+        var response = await this.Mediator.Send(new GetStaffMemberQuery { Id = memId });
         return Ok(response);
     }
 }

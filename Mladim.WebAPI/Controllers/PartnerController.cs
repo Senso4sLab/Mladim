@@ -47,7 +47,7 @@ namespace Mladim.WebAPI.Controllers
         [HttpGet("{memId}")]
         public async Task<ActionResult<PartnerQueryDetailsDto?>> GetAsync(int memId)
         {
-            var response = await this.Mediator.Send(new GetPartnerQuery { PartnerId = memId });
+            var response = await this.Mediator.Send(new GetPartnerQuery { Id = memId });
             return Ok(response);
         }
     }

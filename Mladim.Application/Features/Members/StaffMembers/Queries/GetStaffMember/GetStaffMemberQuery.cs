@@ -11,5 +11,5 @@ namespace Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMembe
 
 public class GetStaffMemberQuery : IRequest<StaffMemberDetailsQueryDto>
 {
-    public int StaffMemberId { get; set; }
+    public int Id { get; set; }
 }

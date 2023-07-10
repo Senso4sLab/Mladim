@@ -10,5 +10,5 @@ namespace Mladim.Application.Features.Members.Partners.Queries.GetPartner;
 
 public class GetPartnerQuery : IRequest<PartnerQueryDetailsDto>
 {
-    public int PartnerId { get; set; }
+    public int Id { get; set; }
 }

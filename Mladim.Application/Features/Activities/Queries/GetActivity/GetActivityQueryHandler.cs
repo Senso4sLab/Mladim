@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Activities.Queries.GetActivity;
 
-public class GetActivityQueryHandler : IRequestHandler<GetActivityQuery, ActivityQueryDto>
+public class GetActivityQueryHandler : IRequestHandler<GetActivityQuery, ActivityQueryDetailsDto>
 {
     public IUnitOfWork UnitOfWork { get; }
     public IMapper Mapper { get; }
@@ -21,13 +21,14 @@ public class GetActivityQueryHandler : IRequestHandler<GetActivityQuery, Activit
         Mapper = mapper;
     }   
 
-    public async Task<ActivityQueryDto> Handle(GetActivityQuery request, CancellationToken cancellationToken)
+    public async Task<ActivityQueryDetailsDto> Handle(GetActivityQuery request, CancellationToken cancellationToken)
     {
         var activity = await this.UnitOfWork.ActivityRepository
-            .FirstOrDefaultAsync(a => a.Id == request.ActivityId);
+            .GetActivityDetailsAsync(request.ActivityId);
+            
 
         ArgumentNullException.ThrowIfNull(activity);       
 
-        return this.Mapper.Map<ActivityQueryDto>(activity);
+        return this.Mapper.Map<ActivityQueryDetailsDto>(activity);
     }
 }

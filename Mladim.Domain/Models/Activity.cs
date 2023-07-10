@@ -11,23 +11,9 @@ namespace Mladim.Domain.Models;
 
 public class Activity : BaseEntity<int>
 {
-    public ActivityAttributes BaseActivityAttributes { get; protected set; } = default!;
+    public ActivityAttributes Attributes { get; protected set; } = default!;
     public DateTimeRange DateTimeRange { get; protected set; } = default!;
    
-
-    //public TimeSpan? StartHour { get; set; }
-    //public TimeSpan? EndHour { get; set; }
-
-    //public ActivityTypes ActivityTypes { get; protected set; }    
-
-
-    public void SetBaseAttributes(string name, string description, ActivityTypes activityTypes) =>
-        this.BaseActivityAttributes = ActivityAttributes.Create(name, description, activityTypes);
-
-    public void PeriodOfImplementation(DateTime start, DateTime end) =>
-        this.DateTimeRange = DateTimeRange.Create(start, end);
-
-
     protected Activity()
     {
             
@@ -36,7 +22,7 @@ public class Activity : BaseEntity<int>
     private Activity(DateTimeRange dateTimeRange, ActivityAttributes baseActivityAttibutes)
     {
         this.DateTimeRange = dateTimeRange;
-        this.BaseActivityAttributes = baseActivityAttibutes;
+        this.Attributes = baseActivityAttibutes;
     }
 
     public static Activity Create(DateTime start, DateTime end, string name,

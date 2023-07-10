@@ -23,7 +23,9 @@ public class UpdateParticipantCommandHandler : IRequestHandler<UpdateParticipant
 
     public async Task<int> Handle(UpdateParticipantCommand request, CancellationToken cancellationToken)
     {
-        var participant = Participant.Create(request.Id, request.Name, request.Surname, request.Gender, request.Age, request.AgeGroup, request.IsActive);
+        var participant = await this.UnitOfWork.ParticipantRepository.FirstOrDefaultAsync(p => p.Id == request.Id);
+
+        ArgumentNullException.ThrowIfNull(participant);
 
         this.UnitOfWork.ParticipantRepository.Update(participant);
 

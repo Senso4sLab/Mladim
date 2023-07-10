@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.StaffMembers.Commands.UpdateStaffMember;
 
-public class UpdatePartnerCommandHandler : IRequestHandler<UpdateStaffMemberCommand, int>
+public class UpdateStaffMemberCommandHandler : IRequestHandler<UpdateStaffMemberCommand, int>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
     
-    public UpdatePartnerCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
+    public UpdateStaffMemberCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {
         UnitOfWork = unitOfWork;
         Mapper = mapper;
@@ -23,7 +23,12 @@ public class UpdatePartnerCommandHandler : IRequestHandler<UpdateStaffMemberComm
 
     public async Task<int> Handle(UpdateStaffMemberCommand request, CancellationToken cancellationToken)
     {
-       var staffMember = StaffMember.Create(request.Id, request.Name, request.Surname, request.Gender, request.Email, request.YearOfBirth, request.IsRegistered);
+       var staffMember = await this.UnitOfWork.StaffMemberRepository
+            .FirstOrDefaultAsync(sm => sm.Id == request.Id);
+
+       ArgumentNullException.ThrowIfNull(staffMember);
+       
+       staffMember = this.Mapper.Map(request, staffMember);
 
        this.UnitOfWork.StaffMemberRepository.Update(staffMember);
 

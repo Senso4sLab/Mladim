@@ -20,9 +20,7 @@ public class GetParticipantsQueryHandler : IRequestHandler<GetParticipantsQuery,
     {
         UnitOfWork = unitOfWork;
         Mapper = mapper;
-    }
-
-   
+    }   
 
     public async Task<IEnumerable<MemberDto>> Handle(GetParticipantsQuery request, CancellationToken cancellationToken)
     {

@@ -9,7 +9,7 @@ namespace Mladim.Domain.Models;
 
 public class Member : BaseEntity<int>
 {
-    public string FullName { get; set; } = string.Empty;    
+    public virtual string FullName { get; }
     public bool IsActive { get; set; } = true;
 
     protected Member()

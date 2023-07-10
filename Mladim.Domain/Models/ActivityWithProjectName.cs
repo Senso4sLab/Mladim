@@ -11,7 +11,7 @@ public class ActivityWithProjectName : Activity
         new ActivityWithProjectName
         {
             Id = id,
-            BaseActivityAttributes = attibutes,
+            Attributes = attibutes,
             DateTimeRange = dateTimeRange,          
             ProjectName = projectName
         };

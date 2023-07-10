@@ -24,7 +24,7 @@ public class GetStaffMemberQueryHandler : IRequestHandler<GetStaffMemberQuery, S
     public async Task<StaffMemberDetailsQueryDto> Handle(GetStaffMemberQuery request, CancellationToken cancellationToken)
     {
         var staffMember = await this.UnitOfWork.StaffMemberRepository
-            .FirstOrDefaultAsync(sm => sm.Id == request.StaffMemberId);
+            .FirstOrDefaultAsync(sm => sm.Id == request.Id);
 
         ArgumentNullException.ThrowIfNull(staffMember);
 

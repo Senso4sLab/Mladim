@@ -20,7 +20,7 @@ public class PartnerProfile : Profile
         CreateMap<PartnerCommandDto, Partner>();
 
         CreateMap<AddPartnerCommand, OrganizationPartner>()
-            .ConvertUsing<AddCommandToOrganizationPartnerConverter>();
+            .ForMember(dest => dest.Partner, m => m.MapFrom(src => src));
 
         CreateMap<UpdatePartnerCommand, Partner>();
 

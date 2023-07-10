@@ -16,9 +16,8 @@ public class StaffMember : Member
     public bool IsRegistered { get; set; }
     public Gender Gender { get; set; }
     public List<StaffMemberActivity> StaffActivities { get; set; } = new();
-    public List<StaffMemberProject> StaffProjects { get; set; } = new();   
-    
-
+    public List<StaffMemberProject> StaffProjects { get; set; } = new();
+    public override string FullName => $"{this.Name} {this.Surname}";
     private StaffMember()
     {
 
