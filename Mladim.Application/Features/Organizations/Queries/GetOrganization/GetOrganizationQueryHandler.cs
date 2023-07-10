@@ -25,10 +25,9 @@ public class GetOrganizationQueryHandler : IRequestHandler<GetOrganizationQuery,
     public async Task<OrganizationQueryDto> Handle(GetOrganizationQuery request, CancellationToken cancellationToken)
     {
         var organization = await UnitOfWork.OrganizationRepository
-            .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);    
+            .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
 
-        if (organization == null)
-            throw new Exception();
+        ArgumentNullException.ThrowIfNull(organization);
 
         return this.Mapper.Map<OrganizationQueryDto>(organization);  
     }

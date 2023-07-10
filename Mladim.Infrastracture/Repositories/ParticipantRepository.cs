@@ -5,6 +5,7 @@ using Mladim.Infrastracture.Persistance;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,5 +17,15 @@ public class ParticipantRepository : GenericRepository<Participant>, IParticipan
     {
     }
 
-   
+    public async Task<IEnumerable<Member>> GetParticipantsAsync(Expression<Func<Participant, bool>> predicate, bool withDetails)
+    {
+        var smQuerable = DbSet.Where(predicate);
+
+        if (!withDetails)
+            return await smQuerable.Select(sm => sm as Member).ToListAsync();
+
+        return await smQuerable.ToListAsync();
+    }
+
+
 }

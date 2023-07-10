@@ -25,18 +25,19 @@ public class AddParticipantCommandHandler : IRequestHandler<AddParticipantComman
    
     public async Task<ParticipantDetailsQueryDto> Handle(AddParticipantCommand request, CancellationToken cancellationToken)
     {
+
         var organization = await this.UnitOfWork.OrganizationRepository
             .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
 
-        if (organization == null)
-            throw new Exception("Organizacija ne obstaja");
+        ArgumentNullException.ThrowIfNull(organization);
 
-        var orgMember = this.Mapper.Map<OrganizationMember>(request);
+        var participant = Participant.Create(request.Name, request.Surname, request.Gender, request.Age, request.AgeGroup);
 
-        organization.Members.Add(orgMember);
+        organization.Add(participant);
 
         await this.UnitOfWork.SaveChangesAsync();
 
-        return this.Mapper.Map<ParticipantDetailsQueryDto>(orgMember.Member);      
+        return this.Mapper.Map<ParticipantDetailsQueryDto>(participant);
+        
     }
 }

@@ -27,8 +27,7 @@ public class GetParticipantQueryHandler : IRequestHandler<GetParticipantQuery, P
         var participant = await this.UnitOfWork.ParticipantRepository
             .FirstOrDefaultAsync(sm => sm.Id == request.ParticipantId);
 
-        if (participant == null)
-            throw new Exception("");
+        ArgumentNullException.ThrowIfNull(participant);
 
         return this.Mapper.Map<ParticipantDetailsQueryDto>(participant);
     }

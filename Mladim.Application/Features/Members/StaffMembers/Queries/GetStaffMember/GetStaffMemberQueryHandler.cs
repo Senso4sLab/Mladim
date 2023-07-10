@@ -26,8 +26,7 @@ public class GetStaffMemberQueryHandler : IRequestHandler<GetStaffMemberQuery, S
         var staffMember = await this.UnitOfWork.StaffMemberRepository
             .FirstOrDefaultAsync(sm => sm.Id == request.StaffMemberId);
 
-        if (staffMember == null)
-            throw new Exception("");
+        ArgumentNullException.ThrowIfNull(staffMember);
 
         return this.Mapper.Map<StaffMemberDetailsQueryDto>(staffMember);
     }

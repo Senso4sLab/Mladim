@@ -7,15 +7,29 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Models;
 
-public class Member
+public class Member : BaseEntity<int>
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Surname { get; set; }
-    public Gender Gender { get; set; }
-    //public int Year { get; set; }
+    public string FullName { get; set; } = string.Empty;    
     public bool IsActive { get; set; } = true;
-    //public List<OrganizationMember> OrganizationMembers{ get; set; } = new();   
+
+    protected Member()
+    {
+        
+    }
+
+    protected Member(int id)
+    {
+        this.Id = id;
+    }
+    protected Member(string fullName, bool isActive)
+    {       
+        this.FullName = fullName;            
+        this.IsActive = isActive;
+    }
+
+    public static Member Create(string fullName, bool isActive) =>
+        new Member(fullName, isActive);
+
 
 }
 

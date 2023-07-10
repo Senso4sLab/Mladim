@@ -31,59 +31,68 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
         project.PeriodOfImplementation(request.Start, request.End);
         project.SetBaseAttributes(request.Name, request.Description, request.WebpageUrl);
 
+        // Partners
+        var otherPartners = request.Partners
+            .Select(other => Partner.Create(other.Id))
+            .ToList();
+
         // Add Partners
-        var partnersToAdd = request.Partners.Where(p => !project.ExistsPartner(p.Id))
-            .Select(p => Partner.Create(p.Id))
+        var partnersToAdd = otherPartners
+            .Where(p => !project.Exists(p))            
             .ToList();
         
         this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, partnersToAdd);
         project.AddPartners(partnersToAdd);
 
         // Remove Partners
-        project.RemovePartnersIfNotExistIn(request.Partners);
-
-
-        // Add Groups
-        var partnersToAdd = request.Partners.Where(p => !project.ExistsPartner(p.Id))
-            .Select(p => Partner.Create(p.Id))
+        var removePartners = project.Partners
+            .Where(p => !otherPartners.Any(rp => rp == p))
             .ToList();
 
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, partnersToAdd);
-        project.AddPartners(partnersToAdd);
+        project.RemoveAll(removePartners);
+
+        // Groups
+        var otherGroups = request.Groups
+            .Select(other => ProjectGroup.Create(other.Id))
+            .ToList();
+
+        // Add Groups
+        var groupsToAdd = otherGroups
+            .Where(p => !project.Exists(p))            
+            .ToList();
+
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, groupsToAdd);
+        project.AddGroups(groupsToAdd);
 
         // Remove Groups
-        project.RemovePartnersIfNotExistIn(request.Partners);
+        var removeGroups = project.Groups
+            .Where(g => !otherGroups.Any(rg => rg == g))
+            .ToList();
 
+        project.RemoveAll(removeGroups);
 
+        // StaffRole
+        var otherStaff = request.Staff
+            .Select(other => StaffMemberRole.Create(other.StaffMemberId, other.IsLead))
+            .ToList();        
 
-        project.Groups.Where(g => !request.Groups.Any(gc => gc.Id == g.Id))
-            .ToList().ForEach(rg =>
-            {
-                this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, rg);
-                project.Groups.Remove(rg);
-            });
+        //Remove Staff
+        var removeStaff =  project.Staff
+            .Where(smp => !otherStaff.Any(o => o.StaffMember == smp.StaffMember))
+            .ToList();
+
+        this.UnitOfWork.ConfigEntityState(EntityState.Deleted, removeStaff);
+        project.RemoveAll(removeStaff);
+
+        // Modify StaffMemberProjects              
+        otherStaff.ForEach(project.SetStaffMemberRole); 
        
-        request.Groups.Where(gc => !project.Groups.Any(g => g.Id == gc.Id))
-            .Select(gc => this.Mapper.Map<ProjectGroup>(gc)).ToList().ForEach(ag =>
-            {
-                this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, ag);
-                project.Groups.Add(ag);
-            });
+        // Add StaffMemberProjects
+        var addStaffMembers = otherStaff            
+           .Where(sm => !project.Exists(sm.StaffMember))
+           .ToList();        
 
-        // delete
-        project.Staff.Where(sm => !request.Staff.Any(smc => smc.StaffMemberId == sm.Id))
-            .ToList().ForEach(rsmp =>
-            {
-                this.UnitOfWork.ConfigEntityState(EntityState.Deleted, rsmp);
-                project.Staff.Remove(rsmp);
-            });
-        // add
-        request.Staff.Where(smc => !project.Staff.Any(sm => sm.Id == smc.StaffMemberId))
-             .Select(smc => this.Mapper.Map<StaffMemberProject>(smc)).ToList().ForEach(asmc =>
-             {
-                 this.UnitOfWork.ConfigEntityState(EntityState.Added, asmc);
-                 project.Staff.Add(asmc); 
-             });
+        project.AddStaff(addStaffMembers);    
 
         return await this.UnitOfWork.SaveChangesAsync();       
     }

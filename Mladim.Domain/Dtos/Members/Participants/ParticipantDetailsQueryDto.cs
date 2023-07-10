@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Dtos;
 
-public class ParticipantDetailsQueryDto : MemberDetailsDto
+public class ParticipantDetailsQueryDto : MemberDto
 {
     public int Age { get; set; }
     public AgeGroups AgeGroup { get; set; }

@@ -1,4 +1,5 @@
-﻿using Mladim.Domain.Enums;
+﻿using Mladim.Domain.Dtos;
+using Mladim.Domain.Enums;
 using Mladim.Domain.IdentityModels;
 using System;
 using System.Collections.Generic;
@@ -8,38 +9,47 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Models;
 
-public class Organization
+
+
+
+public class Organization : BaseEntity<int>
 {
-    public int? Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public string? Address { get; set; }
-    public string? PhoneNumber { get; set; }
-    public string? Email { get; set; }
-    public string? WebpageUrl { get; set; }
-    public string? VatNumber { get; set; }
-    public string? RegistrationNumber { get; set; }
+    public OrganizationAttributes Attributes { get; private set; } = default!;
+    public SocialMediaUrls SocialMediaUrls { get; private set; } = default!;
 
-    public AgeGroups AgeGroups { get; set; }
-    public YouthSectors YouthSectors { get; set; }
-    public OrganizationTypes Types { get; set; }
-    public OrganizationStatus Status { get; set; }
-    public OrganizationFields Fields { get; set; }
-    public OrganizationRegions Regions { get; set; }
 
-    public SocialMediaUrls SocialMediaUrls { get; set; } = default!;
+    private Organization()
+    {
+            
+    }
 
-    private List<OrganizationPartner> partners { get; set; } = new();
-    public IEnumerable<Partner> Partners => 
-        partners.Select(op => op.Partner);
-        
-    private List<OrganizationMember> members { get; set; } = new();
-    public IEnumerable<Member> Members =>
-        members.Select(om => om.Member);
+    public void SetAttributes(OrganizationAttributes attributes) => 
+        this.Attributes = attributes;
 
-    private List<OrganizationGroup> groups { get; set; } = new();
-    public IEnumerable<Group> Groups => 
-        groups.Select(groups => groups.Group);
+    public void SetMedialUrls(SocialMediaUrls urls) =>
+        this.SocialMediaUrls = urls;
+
+    private Organization(OrganizationAttributes organizationAttributes, SocialMediaUrls socialMediaUrls)
+    {
+        this.Attributes = organizationAttributes;
+        this.SocialMediaUrls = socialMediaUrls;
+    }
+
+    public static Organization Create(OrganizationAttributes organizationAttributes, SocialMediaUrls socialMediaUrls) =>
+        new Organization(organizationAttributes, socialMediaUrls);
+
+
+    public List<OrganizationPartner> Partners { get; set; } = new();
+           
+    public List<OrganizationMember> Members { get; set; } = new();
+
+    public void Add(Member member) =>
+        this.Members.Add(OrganizationMember.Create(member));
+
+    public void Add(Partner partner) =>
+        this.Partners.Add(OrganizationPartner.Create(partner));
+    
+    public List<OrganizationGroup> Groups { get; set; } = new();    
 
     public List<Project> Projects { get; set; } = new();  
     public List<AppUser> AppUsers { get; set; } = new();

@@ -23,22 +23,20 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
    
     public async Task<StaffMemberDetailsQueryDto> Handle(AddStaffMemberCommand request, CancellationToken cancellationToken)
     {        
-        if (request.OrganizationId == null)
-            throw new Exception("Organizacija ne obstaja");
 
         var organization = await this.UnitOfWork.OrganizationRepository
             .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
 
-        if (organization == null)
-            throw new Exception("Organizacija ne obstaja");
 
-        var orgMember = this.Mapper.Map<OrganizationMember>(request);
+        ArgumentNullException.ThrowIfNull(organization);
 
-        organization.Members.Add(orgMember);
+        var staffMember = StaffMember.Create(request.Name, request.Surname, request.Gender, request.Email, request.YearOfBirth);
+
+        organization.Add(staffMember);        
 
         await this.UnitOfWork.SaveChangesAsync();
 
-        return this.Mapper.Map<StaffMemberDetailsQueryDto>(orgMember.Member);
+        return this.Mapper.Map<StaffMemberDetailsQueryDto>(staffMember);
 
     }
 }

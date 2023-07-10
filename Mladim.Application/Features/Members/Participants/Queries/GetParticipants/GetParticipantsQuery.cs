@@ -10,11 +10,10 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Participants.Queries.GetParticipants;
 
-public class GetParticipantsQuery : IRequest<IEnumerable<MemberBase>>
+public class GetParticipantsQuery : IRequest<IEnumerable<MemberDto>>
 {
-    public int? OrganizationId { get; set; }    
+    public int? ProjectId { get; set; }
     public int? ActivityId { get; set; }
     public bool IsActive { get; set; } = true;
-
-    public bool ParentClass { get; set; }
+    public bool WithDetails { get; set; }
 }

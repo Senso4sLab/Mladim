@@ -13,8 +13,8 @@ namespace Mladim.Application.Features.Activities.Commands.AddActivity;
 public class AddActivityCommand : IRequest<ActivityQueryDto>
 {
     public int ProjectId { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
 

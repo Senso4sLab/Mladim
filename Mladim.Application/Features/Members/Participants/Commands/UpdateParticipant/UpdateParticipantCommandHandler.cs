@@ -23,7 +23,8 @@ public class UpdateParticipantCommandHandler : IRequestHandler<UpdateParticipant
 
     public async Task<int> Handle(UpdateParticipantCommand request, CancellationToken cancellationToken)
     {
-        var participant = this.Mapper.Map<Participant>(request);
+        var participant = Participant.Create(request.Id, request.Name, request.Surname, request.Gender, request.Age, request.AgeGroup, request.IsActive);
+
         this.UnitOfWork.ParticipantRepository.Update(participant);
 
         return await this.UnitOfWork.SaveChangesAsync();

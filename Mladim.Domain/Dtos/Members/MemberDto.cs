@@ -3,10 +3,11 @@ using Mladim.Domain.Models;
 
 namespace Mladim.Domain.Dtos;
 
-public class MemberDetailsDto : MemberBase
-{    
-    
-    public Gender Gender { get; set; }
+public class MemberDto 
+{
+    public string Name { get; set; } = string.Empty;
+    public string Surname { get; set; } = string.Empty;   
     public bool IsActive { get; set; } = true;   
 }
+
 

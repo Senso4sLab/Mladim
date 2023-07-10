@@ -53,7 +53,7 @@ public class PartnerService : IPartnerService
     public async Task<IEnumerable<MemberBaseVM>> GetBaseByOrganizationIdAsync(int organizationId, bool isActive)
     {
         string url = string.Format(this.ApiUrls.GetPartnersByOrganizationId, organizationId, true, isActive);
-        var baseDto = await this.HttpService.GetAllAsync<MemberBase>(url);
+        var baseDto = await this.HttpService.GetAllAsync<MemberBaseAttributes>(url);
         return this.Mapper.Map<IEnumerable<MemberBaseVM>>(baseDto);
     }
 }

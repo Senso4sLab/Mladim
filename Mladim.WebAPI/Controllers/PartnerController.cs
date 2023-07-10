@@ -37,7 +37,7 @@ namespace Mladim.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberBase>>> GetAsync([FromQuery] GetPartnersQuery query)
+        public async Task<ActionResult<IEnumerable<MemberBaseAttributes>>> GetAsync([FromQuery] GetPartnersQuery query)
         {
             var response = await this.Mediator.Send(query);
             return Ok(response);

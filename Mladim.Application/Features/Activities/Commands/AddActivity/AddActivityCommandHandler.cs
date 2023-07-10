@@ -26,56 +26,35 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, Act
     public async Task<ActivityQueryDto> Handle(AddActivityCommand request, CancellationToken cancellationToken)
     {
         var project = await this.UnitOfWork.ProjectRepository
-            .FirstOrDefaultWithoutIncludeAsync(p => p.Id == request.ProjectId);            
-          
-        if (project == null)
-            throw new Exception();
-        try
-        {
+            .FirstOrDefaultAsync(p => p.Id == request.ProjectId);
 
 
-            var activity = this.Mapper.Map<Activity>(request);
+        ArgumentNullException.ThrowIfNull(project);
 
-            if (activity == null)
-                throw new Exception();
+        var partners = request.Partners.Select(o => Partner.Create(o.Id)).ToList();
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, partners);
 
-
-            this.UnitOfWork.ConfigEntityState<Partner>(EntityState.Unchanged, activity.Partners);
-            this.UnitOfWork.ConfigEntityState<ActivityGroup>(EntityState.Unchanged, activity.Groups);
-            this.UnitOfWork.ConfigEntityState<Participant>(EntityState.Unchanged, activity.Participants);
-
-            //foreach (var anonymousParticipant in activity.AnonymousParticipants)
-            //    this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, anonymousParticipant.AnonymousParticipant);
-
-            //foreach(var ap in request.AnonymousParticipants)
-            //{
-            //    var par = await UnitOfWork.AnonymousParticipantRepository
-            //        .FirstOrDefaultAsync(p => p.AgeGroup == ap.AgeGroup && p.Gender == ap.Gender);
-
-            //    activity.AnonymousParticipants.Add(new AnonymousParticipantActivity
-            //    {
-            //        AnonymousParticipantId = par.Id,
-
-            //    }) ;
-            //}           
-
-            foreach(var anonymousParticipant in activity.AnonymousParticipantActivities)
-                this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, anonymousParticipant.AnonymousParticipant);
-            
+        var groups = request.Groups.Select(o => ActivityGroup.Create(o.Id)).ToList();
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, groups);
 
 
-            project.Activities.Add(activity);
+        var participants = request.Participants.Select(o => Participant.Create(o.Id)).ToList();
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, participants);
 
-            await this.UnitOfWork.SaveChangesAsync();
+        var staffMemberRole = request.Staff
+            .Select(o => StaffMemberRole.Create(o.StaffMemberId, o.IsLead))
+            .ToList();
 
-            return this.Mapper.Map<ActivityQueryDto>(activity);
+        var anonymousParticipantGroup = request.AnonymousParticipantActivities
+            .Select(a => AnonymousParticipantGroup.Create(a.Number, a.Gender, a.AgeGroup)).ToList();
 
-        }
-        catch (Exception ex)
-        {
-            string message = ex.Message;
+        var activity = Activity.Create(request.Start, request.End, request.Name, request.Description, request.ActivityTypes,
+            partners, staffMemberRole, groups, participants, anonymousParticipantGroup);
+           
+        project.Activities.Add(activity);
 
-            return null;           
-        }
+        await this.UnitOfWork.SaveChangesAsync();
+
+        return this.Mapper.Map<ActivityQueryDto>(activity);      
     }
 }

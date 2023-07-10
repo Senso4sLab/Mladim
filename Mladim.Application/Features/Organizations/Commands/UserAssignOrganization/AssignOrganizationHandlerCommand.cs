@@ -17,21 +17,17 @@ public class AssignOrganizationHandlerCommand : IRequestHandler<AssignOrganizati
     } 
 
     public async Task<bool> Handle(AssignOrganizationCommand request, CancellationToken cancellationToken)
-    {
-        if (request.OrganizationId == default)
-            return false;
+    {  
 
         var organization = await this.UnitOfWork.OrganizationRepository
             .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
 
-        if (organization == null)
-            return false;
+        ArgumentNullException.ThrowIfNull(organization);
 
         var appUser = await this.UnitOfWork.AppUserRepository
             .FirstOrDefaultAsync(u => u.Id == request.AppUserId);
 
-        if (appUser == null)
-            return false;
+        ArgumentNullException.ThrowIfNull(appUser);
 
         var existAppUser = await this.UnitOfWork.AppUserRepository
             .FirstOrDefaultAsync(u => u.Organizations.Any(o => o.Id == request.OrganizationId));

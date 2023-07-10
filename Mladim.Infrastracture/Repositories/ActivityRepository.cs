@@ -14,31 +14,29 @@ namespace Mladim.Infrastracture.Repositories;
 public class ActivityRepository : GenericRepository<Activity>, IActivityRepository
 {
 
-
     public ActivityRepository(ApplicationDbContext context) : base(context)
     {
 
     }
 
+    public async Task<Activity?> GetActivityDetailsAsync(int activityId, bool tracking = true)
+    {
+        var activity = this.DbSet
+            .Include(p => p.Staff)
+            .Include(p => p.Partners)
+            .Include(p => p.Groups)
+            .Include(p => p.Participants);
+
+        return tracking ? await activity.AsTracking().FirstOrDefaultAsync(a => a.Id == activityId)
+            : await activity.AsNoTracking().FirstOrDefaultAsync(a => a.Id == activityId);
+    }
 
 
-    //public async override Task<Activity?> FirstOrDefaultAsync(Expression<Func<Activity, bool>> predicate, bool tracking = true)
-    //{
-    //    return await this.DbSet
-    //         .Include(a => a.Groups)
-    //         .Include(a => a.S)
-    //         .Include(a => a.AnonymousParticipantActivities)
-    //             .ThenInclude(ap => ap.AnonymousParticipant)
-    //         .Include(a => a.Participants)
-    //         .Include(a => a.Partners)
-    //         .Include(a => a.Staff)
-    //             .ThenInclude(sa => sa.StaffMember)
-    //         .FirstOrDefaultAsync(predicate);
-    //}
 
-
-   
-
+    public async Task<IEnumerable<ActivityWithProjectName>> GetActivitiesWithProjectName(int organizationId) =>    
+         await this.DbSet.Where(a => a.Project.OrganizationId == organizationId)
+            .Select(a => ActivityWithProjectName.Create(a.Id, a.BaseActivityAttributes, a.DateTimeRange, a.Project.BaseProjectAttibutes.Name))
+            .ToListAsync();
 
 }
 

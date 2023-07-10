@@ -26,94 +26,116 @@ public class UpdateActivityCommandHandler : IRequestHandler<UpdateActivityComman
     public async Task<int> Handle(UpdateActivityCommand request, CancellationToken cancellationToken)
     {
         var activity = await this.UnitOfWork.ActivityRepository
-            .FirstOrDefaultAsync(a => a.Id == request.Id);
+            .GetActivityDetailsAsync(request.Id);
+            
 
-        if (activity == null)
-            throw new Exception();
+        ArgumentNullException.ThrowIfNull(activity);
+       
+        activity.PeriodOfImplementation(request.Start, request.End);        
+        activity.SetBaseAttributes(request.Name, request.Description, request.ActivityTypes);
 
-        activity = this.Mapper.Map(request, activity);
+        // Partners
+        var otherPartners = request.Partners
+            .Select(other => Partner.Create(other.Id))
+            .ToList();
 
-        activity.Partners.Where(p => !request.Partners.Any(pc => pc.Id == p.Id))
-          .ToList().ForEach(rp =>
-          {
-              this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, rp);
-              activity.Partners.Remove(rp);
-          });
+        // Add Partners
+        var partnersToAdd = otherPartners
+            .Where(p => !activity.Exists(p))
+            .ToList();
 
-        request.Partners.Where(pc => !activity.Partners.Any(p => p.Id == pc.Id))
-            .Select(apb => this.Mapper.Map<Partner>(apb)).ToList().ForEach(ap =>
-            {
-                this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, ap);
-                activity.Partners.Add(ap);
-            });
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, partnersToAdd);
+        activity.AddRange(partnersToAdd);
 
-        activity.Participants.Where(p => !request.Participants.Any(pc => pc.Id == p.Id))
-          .ToList().ForEach(rp =>
-          {
-              this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, rp);
-              activity.Participants.Remove(rp);
-          });
+        // Remove Partners
+        var removePartners = activity.Partners
+            .Where(p => !otherPartners.Any(rp => rp == p))
+            .ToList();
 
-        request.Participants.Where(pc => !activity.Participants.Any(p => p.Id == pc.Id))
-            .Select(apb => this.Mapper.Map<Participant>(apb)).ToList().ForEach(ap =>
-            {
-                this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, ap);
-                activity.Participants.Add(ap);
-            });
+        activity.RemoveRange(removePartners);
 
-        activity.Groups.Where(g => !request.Groups.Any(gc => gc.Id == g.Id))
-            .ToList().ForEach(rg =>
-            {
-                this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, rg);
-                activity.Groups.Remove(rg);
-            });
+        // Groups
+        var otherGroups = request.Groups
+            .Select(other => ActivityGroup.Create(other.Id))
+            .ToList();
 
-        request.Groups.Where(gc => !activity.Groups.Any(g => g.Id == gc.Id))
-            .Select(gc => this.Mapper.Map<ActivityGroup>(gc)).ToList().ForEach(ag =>
-            {
-                this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, ag);
-                activity.Groups.Add(ag);
-            });
+        // Add Groups
+        var groupsToAdd = otherGroups
+            .Where(p => !activity.Exists(p))
+            .ToList();
 
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, groupsToAdd);
+        activity.AddRange(groupsToAdd);
 
-       // Remove
-        activity.AnonymousParticipantActivities.Where(apa => !request.AnonymousParticipantActivities.Any(apac => apac.Id == apa.AnonymousParticipant.Id))
-            .ToList().ForEach(apa =>
-            {
-                this.UnitOfWork.ConfigEntityState(EntityState.Deleted, apa);
-                activity.AnonymousParticipantActivities.Remove(apa);
-            });
+        // Remove Groups
+        var removeGroups = activity.Groups
+            .Where(g => !otherGroups.Any(rg => rg == g))
+            .ToList();
 
-        // Update potrebno zaradi number property
-        request.AnonymousParticipantActivities.ForEach(apac =>
-        {
-            var apa = activity.AnonymousParticipantActivities.FirstOrDefault(apa => apac.Id == apa.AnonymousParticipant.Id);
-            if (apa != null)
-                apa.Number = apac.Number;
-        });
+        activity.RemoveRange(removeGroups);
 
-        // Add
-        request.AnonymousParticipantActivities.Where(apa => !activity.AnonymousParticipantActivities.Any(sm => apa.Id == sm.AnonymousParticipant.Id))
-              .Select(smc => this.Mapper.Map<AnonymousParticipantActivity>(smc)).ToList().ForEach(aspac =>
-               {
-                   this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, aspac.AnonymousParticipant);
-                   //this.UnitOfWork.ConfigEntityState(EntityState.Added, aspac);
-                   activity.AnonymousParticipantActivities.Add(aspac);
-               });
-      
-        activity.Staff.Where(sm => !request.Staff.Any(smc => smc.StaffMemberId == sm.StaffMemberId && smc.IsLead == sm.IsLead))
-            .ToList().ForEach(rsmp =>
-            {
-                this.UnitOfWork.ConfigEntityState(EntityState.Deleted, rsmp);
-                activity.Staff.Remove(rsmp);
-            });         
+        // StaffRole
+        var otherStaff = request.Staff
+            .Select(other => StaffMemberRole.Create(other.StaffMemberId, other.IsLead))
+            .ToList();
 
-        request.Staff.Where(smc => !activity.Staff.Any(sm => sm.StaffMemberId == smc.StaffMemberId && smc.IsLead == sm.IsLead))
-             .Select(smc => this.Mapper.Map<StaffMemberActivity>(smc)).ToList().ForEach(asmc =>
-             {
-                 this.UnitOfWork.ConfigEntityState(EntityState.Added, asmc);
-                 activity.Staff.Add(asmc);
-             });
+        //Remove Staff
+        var removeStaff = activity.Staff
+            .Where(smp => !otherStaff.Any(o => o.StaffMember == smp.StaffMember))
+            .ToList();
+
+        this.UnitOfWork.ConfigEntityState(EntityState.Deleted, removeStaff);
+        activity.RemoveRange(removeStaff);
+
+        // Modify StaffMemberProjects              
+        otherStaff.ForEach(activity.SetStaffMemberRole);
+
+        // Add StaffMemberProjects
+        var addStaffMembers = otherStaff
+           .Where(sm => !activity.Exists(sm.StaffMember))
+           .ToList();
+
+        activity.AddRange(addStaffMembers);
+
+        // Participants
+        var otherParticipants = request.Participants
+            .Select(other => Participant.Create(other.Id))
+            .ToList();
+
+        // Add Participants
+        var participantsToAdd = otherParticipants
+            .Where(p => !activity.Exists(p))
+            .ToList();
+
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, participantsToAdd);
+        activity.AddRange(participantsToAdd);
+
+        // Remove Participants
+        var removeParticipants = activity.Participants
+            .Where(g => !otherParticipants.Any(rg => rg == g))
+            .ToList();
+
+        activity.RemoveRange(removeParticipants);
+
+        // AnonymousParticipants
+
+        var otherAnonymousParticipantGroups = request.AnonymousParticipantActivities
+            .Select(other => AnonymousParticipantGroup.Create(other.Number, other.Gender, other.AgeGroup))
+            .ToList();
+
+        // Remove AnonymousParticipants
+        var removeAnonymousParticipants = activity.AnonymousParticipantGroups
+           .Where(ag => !otherAnonymousParticipantGroups.Any(rg => rg == ag))
+           .ToList();
+
+        activity.RemoveRange(removeAnonymousParticipants);
+
+        // Add AnonymousParticipants
+        var addAnonymousParticipants = otherAnonymousParticipantGroups
+          .Where(apg => !activity.Exists(apg))
+          .ToList();
+
+        activity.AddRange(addAnonymousParticipants);       
 
         return await this.UnitOfWork.SaveChangesAsync();
     }

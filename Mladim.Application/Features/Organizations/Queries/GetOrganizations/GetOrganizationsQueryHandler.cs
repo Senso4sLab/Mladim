@@ -23,8 +23,7 @@ public class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuer
                 .GetAllAsync(o => o.AppUsers.Any(a => a.Id == request.AppUserId));
 
         return organizations == null ? Enumerable.Empty<OrganizationQueryDto>() :
-            this.Mapper.Map<IEnumerable<OrganizationQueryDto>>(organizations);                
-        
+            this.Mapper.Map<IEnumerable<OrganizationQueryDto>>(organizations);        
     }
         
 }

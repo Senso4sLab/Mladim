@@ -26,17 +26,16 @@ public class AddPartnerCommandHandler : IRequestHandler<AddPartnerCommand, Partn
 
         var organization = await this.UnitOfWork.OrganizationRepository
             .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
-        
-        if(organization == null)
-            throw new Exception("Organizacija ne obstaja");
-        
-        var orgPartner = this.Mapper.Map<OrganizationPartner>(request);
 
-        organization.Partners.Add(orgPartner);
+        ArgumentNullException.ThrowIfNull(organization);
+
+        var partner = Partner.Create(request.Name, request.Email, request.Description, request.WebpageUrl, request.ContactPerson, request.PhoneNumber);
+
+        organization.Add(partner);      
 
         await this.UnitOfWork.SaveChangesAsync();
 
-        return this.Mapper.Map<PartnerQueryDetailsDto>(orgPartner.Partner);
+        return this.Mapper.Map<PartnerQueryDetailsDto>(partner);
         
       
     }

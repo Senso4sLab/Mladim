@@ -5,17 +5,14 @@ namespace Mladim.Domain.Models;
 
 public class ActivityWithProjectName : Activity
 {
-    public string ProjectName { get; set; }
+    public string ProjectName { get; private set; } = string.Empty;
 
-    public static ActivityWithProjectName Create(Activity activity, string projectName) =>
+    public static ActivityWithProjectName Create(int id, ActivityAttributes attibutes, DateTimeRange dateTimeRange, string projectName) =>
         new ActivityWithProjectName
         {
-            Id = activity.Id,
-            Name = activity.Name,
-            Description = activity.Description,
-            Start = activity.Start,
-            End = activity.End,
-            ActivityTypes = activity.ActivityTypes,
+            Id = id,
+            BaseActivityAttributes = attibutes,
+            DateTimeRange = dateTimeRange,          
             ProjectName = projectName
         };
        

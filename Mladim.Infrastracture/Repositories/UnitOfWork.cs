@@ -57,13 +57,10 @@ public class UnitOfWork : IUnitOfWork
 
    
 
-    public void ConfigEntityState<T>(EntityState state, T entity) where T : class
+    public void ConfigEntityState<T>(EntityState state, IEnumerable<T> entities) where T : class
     {
-        if (entity is IEnumerable<T> listEntity)
-            foreach (var item in listEntity)
-                this.Context.Entry(item).State = state;
-        else
-            this.Context.Entry(entity).State = state;
+        foreach (var entity in entities)
+            this.Context.Entry(entity).State = state;        
     }
 
     public void Dispose() =>    

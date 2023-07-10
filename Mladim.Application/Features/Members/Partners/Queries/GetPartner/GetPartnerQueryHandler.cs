@@ -19,17 +19,14 @@ public class GetPartnerQueryHandler : IRequestHandler<GetPartnerQuery, PartnerQu
     {
         UnitOfWork = unitOfWork;
         Mapper = mapper;
-    }
-
-    
+    }    
 
     public async Task<PartnerQueryDetailsDto> Handle(GetPartnerQuery request, CancellationToken cancellationToken)
     {
         var partner = await this.UnitOfWork.PartnerRepository
           .FirstOrDefaultAsync(sm => sm.Id == request.PartnerId);
 
-        if (partner == null)
-            throw new Exception("");
+        ArgumentNullException.ThrowIfNull(partner);
 
         return this.Mapper.Map<PartnerQueryDetailsDto>(partner);
     }

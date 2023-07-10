@@ -23,7 +23,8 @@ public class UpdatePartnerCommandHandler : IRequestHandler<UpdateStaffMemberComm
 
     public async Task<int> Handle(UpdateStaffMemberCommand request, CancellationToken cancellationToken)
     {
-       var staffMember = this.Mapper.Map<StaffMember>(request);    
+       var staffMember = StaffMember.Create(request.Id, request.Name, request.Surname, request.Gender, request.Email, request.YearOfBirth, request.IsRegistered);
+
        this.UnitOfWork.StaffMemberRepository.Update(staffMember);
 
        return await this.UnitOfWork.SaveChangesAsync();

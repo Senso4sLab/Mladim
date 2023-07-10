@@ -125,7 +125,7 @@ namespace Mladim.Client.MappingProfiles.Profiles
                  .ForMember(dto => dto.ActivityTypes, dt => dt.MapFrom(field => field.ActivityTypes.ToEnums()));
 
 
-            CreateMap<MemberBase, MemberBaseVM>()
+            CreateMap<MemberBaseAttributes, MemberBaseVM>()
                 .Include<StaffMemberDetailsQueryDto, StaffMemberVM>()
                 .Include<ParticipantDetailsQueryDto, ParticipantVM>()
                 .Include<PartnerQueryDetailsDto, PartnerVM>();   

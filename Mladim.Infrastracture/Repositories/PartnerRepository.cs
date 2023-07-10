@@ -17,5 +17,15 @@ public class PartnerRepository : GenericRepository<Partner>, IPartnerRepository
     {
     }
 
-   
+    public async Task<IEnumerable<Member>> GetPartnersAsync(Expression<Func<Partner, bool>> predicate, bool withDetails)
+    {
+        var smQuerable = DbSet.Where(predicate);
+
+        if (!withDetails)
+            return await smQuerable.Select(sm => sm as Member).ToListAsync();
+
+        return await smQuerable.ToListAsync();
+    }
+
+
 }

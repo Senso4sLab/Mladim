@@ -2,7 +2,7 @@
 
 namespace Mladim.Domain.Dtos;
 
-public class PartnerQueryDetailsDto :MemberBase
+public class PartnerQueryDetailsDto :MemberBaseAttributes
 {
   
     public string Description { get; set; }

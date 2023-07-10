@@ -18,9 +18,9 @@ public class AddOrganizationHandlerCommand : IRequestHandler<AddOrganizationComm
         UnitOfWork = unitOfWork;       
     }
     public async Task<OrganizationQueryDto> Handle(AddOrganizationCommand request, CancellationToken cancellationToken)
-    {  
-        var organization = Mapper.Map<Organization>(request);
-
+    {
+        var organization = Mapper.Map<Organization>(request);        
+        
         organization = await UnitOfWork.OrganizationRepository.AddAsync(organization);
 
         if (request.AppUserId is string appUserId)
@@ -34,7 +34,6 @@ public class AddOrganizationHandlerCommand : IRequestHandler<AddOrganizationComm
 
         await this.UnitOfWork.SaveChangesAsync();
 
-        return Mapper.Map<OrganizationQueryDto>(organization);        
-     
+        return Mapper.Map<OrganizationQueryDto>(organization);     
     }
 }

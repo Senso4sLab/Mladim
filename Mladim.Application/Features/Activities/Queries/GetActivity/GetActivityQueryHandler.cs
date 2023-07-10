@@ -19,16 +19,14 @@ public class GetActivityQueryHandler : IRequestHandler<GetActivityQuery, Activit
     {
         UnitOfWork = unitOfWork;
         Mapper = mapper;
-    }
-   
+    }   
 
     public async Task<ActivityQueryDto> Handle(GetActivityQuery request, CancellationToken cancellationToken)
     {
         var activity = await this.UnitOfWork.ActivityRepository
             .FirstOrDefaultAsync(a => a.Id == request.ActivityId);
 
-        if (activity == null)
-            throw new Exception();
+        ArgumentNullException.ThrowIfNull(activity);       
 
         return this.Mapper.Map<ActivityQueryDto>(activity);
     }

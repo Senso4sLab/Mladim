@@ -30,17 +30,15 @@ public class AddProjectCommandHandler : IRequestHandler<AddProjectCommand, Proje
 
         ArgumentNullException.ThrowIfNull(organization);
 
-        var project = this.Mapper.Map<Project>(request);               
-
-        this.UnitOfWork.ConfigEntityState<Partner>(EntityState.Unchanged, project.Partners);
-        this.UnitOfWork.ConfigEntityState<ProjectGroup>(EntityState.Unchanged, project.Groups);       
+        var project = this.Mapper.Map<Project>(request);
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, project.Groups);
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, project.Partners);       
 
         organization.Projects.Add(project);
      
         await this.UnitOfWork.SaveChangesAsync();
         
-        return this.Mapper.Map<ProjectQueryDetailsDto>(project);
-      
+        return this.Mapper.Map<ProjectQueryDetailsDto>(project);     
 
     }
 }

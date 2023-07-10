@@ -21,28 +21,26 @@ public class GetActivitiesByProjectQueryHandler : IRequestHandler<GetActivitiesB
     {
         UnitOfWork = unitOfWork;
         Mapper = mapper;
-    }
- 
+    } 
 
     public async Task<IEnumerable<ActivityQueryDto>> Handle(GetActivitiesByQuery request, CancellationToken cancellationToken)
     {
-
         if (request.ProjectId != null)
         {
-            Expression<Func<Activity, bool>> predicate = a => a.ProjectId == request.ProjectId;
-
             var activities = await this.UnitOfWork.ActivityRepository
-                .GetAllAsync(new[] { predicate });
+                .GetAllAsync(a => a.ProjectId == request.ProjectId);
 
             return this.Mapper.Map<IEnumerable<ActivityQueryDto>>(activities);
         }
-        else if(request.OrganizationId != null)
+        
+        if(request.OrganizationId != null)
         {
-            var activities = await this.UnitOfWork.ProjectRepository.GetActivitiesWithProjectNameByOrganizationId(request.OrganizationId.Value);         
+            var activities = await this.UnitOfWork.ActivityRepository
+                .GetActivitiesWithProjectName(request.OrganizationId.Value);         
 
             return this.Mapper.Map<IEnumerable<ActivityWithProjectNameQueryDto>>(activities);
         }
-        else 
-            return Enumerable.Empty<ActivityQueryDto>();
+        
+        return Enumerable.Empty<ActivityQueryDto>();
     }
 }

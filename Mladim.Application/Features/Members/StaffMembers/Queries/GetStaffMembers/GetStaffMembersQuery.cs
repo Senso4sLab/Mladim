@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,10 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMembers;
 
-public class GetStaffMembersQuery : IRequest<IEnumerable<MemberBase>>
-{
-    public int? OrganizationId { get; set; }
+public class GetStaffMembersQuery : IRequest<IEnumerable<MemberDto>>
+{    
     public int? ProjectId { get; set; }
     public int? ActivityId { get; set; }
     public bool IsActive { get; set; } = true;
-    public bool ParentClass { get; set; } = false;
+    public bool WithDetails { get; set; } = false;
 }

@@ -13,12 +13,18 @@ public class StaffMemberProject
         
     }
 
-    private StaffMemberProject (int staffMemberId, int projectId, bool lead = false)
-    {
-       this.StaffMemberId = staffMemberId;
-       this.ProjectId = projectId; 
-    }
+    public void SetIsLead(bool isLead) => 
+        this.IsLead = isLead;
 
-    public static StaffMemberProject Create(int staffMemberId, int projectId, bool lead) =>
-          new StaffMemberProject(staffMemberId, projectId, lead);
+
+    
+
+    private StaffMemberProject(StaffMember staffMember, int projectId, bool lead = false)
+    {
+        this.StaffMember = staffMember;
+        this.ProjectId = projectId;
+    }   
+
+    public static StaffMemberProject Create(StaffMember staffMember, int projectId, bool lead) =>
+        new StaffMemberProject(staffMember, projectId, lead);
 }

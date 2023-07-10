@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Mladim.Domain.Models;
+using System.Linq.Expressions;
 
 namespace Mladim.Application.Contracts.Persistence;
 
 public interface IStaffMemberRepository : IGenericRepository<StaffMember>
-{
-    //ValueTask<TOut?> GetMemberById<TOut>(object id) where TOut : class;
-    
+{    
+    Task<IEnumerable<Member>> GetStaffMembersAsync(Expression<Func<StaffMember, bool>> predicate, bool withDetails);
 }

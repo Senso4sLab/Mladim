@@ -16,7 +16,7 @@ public class GroupDetailsQueryDto
     public string Name { get; set; }
     public bool IsActive { get; set; } = true;
     public string Description { get; set; }
-    public List<MemberDetailsDto> Members { get; set; }
+    public List<MemberDto> Members { get; set; }
 }
 
 

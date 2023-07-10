@@ -1,4 +1,6 @@
-﻿using Mladim.Domain.Models;
+﻿using Mladim.Domain.Dtos.Attributes;
+using Mladim.Domain.Dtos.DateTimeRange;
+using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +12,9 @@ namespace Mladim.Domain.Dtos;
 public class ProjectQueryDto
 {
     public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public string? WebpageUrl { get; set; }
-    public DateTime Start { get; set; }
-    public DateTime End { get; set; }
+    public ProjectAttributesQueryDto Attributes { get; set; } = default!;
+    public DateTimeRangeQueryDto DateTimeRange { get; set; } = default!;
+
 }
 
 
@@ -23,12 +23,9 @@ public class ProjectQueryDto
 public class ProjectQueryDetailsDto
 {
     public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public string? WebpageUrl { get; set; }
-    public DateTime Start { get; set; }
-    public DateTime End { get; set; }
-   
+    public ProjectAttributesQueryDto Attributes { get; set; } = default!;
+    public DateTimeRangeQueryDto DateTimeRange { get; set; } = default!;
+
     public List<StaffMemberQueryDto> Staff { get; set; } = new();
     public List<StaffMemberQueryDto> LeadStaff { get; set; } = new();
 

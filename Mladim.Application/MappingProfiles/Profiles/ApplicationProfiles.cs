@@ -63,7 +63,7 @@ public class ApplicationProfiles : Profile
         //CreateMap<StaffMemberProjectDto, StaffMemberProject>().ReverseMap();
         CreateMap<StaffMemberCommandDto, StaffMemberProject>();
         CreateMap<StaffMemberProject, StaffMemberQueryDto>()
-            .ForMember(dto => dto.Name, m => m.MapFrom(sm => sm.StaffMember.Name))
+            .ForMember(dto => dto.Name, m => m.MapFrom(sm => sm.StaffMember.FullName))
             .ForMember(dto => dto.Surname, m => m.MapFrom(sm => sm.StaffMember.Surname));
 
 
@@ -114,7 +114,7 @@ public class ApplicationProfiles : Profile
 
         CreateMap<StaffMemberCommandDto, StaffMemberActivity>();
         CreateMap<StaffMemberActivity, StaffMemberQueryDto>()
-            .ForMember(dto => dto.Name, m => m.MapFrom(sm => sm.StaffMember.Name))
+            .ForMember(dto => dto.Name, m => m.MapFrom(sm => sm.StaffMember.FullName))
             .ForMember(dto => dto.Surname, m => m.MapFrom(sm => sm.StaffMember.Surname));
         //CreateMap<ActivityGroupDto, ActivityGroup>().ReverseMap();
 
@@ -169,11 +169,11 @@ public class ApplicationProfiles : Profile
             .ConvertUsing<AnonymousParticipantCommandDtoToActivity>();
 
 
-        CreateMap<MemberDetailsDto, Member>()
+        CreateMap<MemberDto, Member>()
             .Include<StaffMemberDetailsQueryDto, StaffMember>()
             .Include<ParticipantDetailsQueryDto, Participant>();
 
-        CreateMap<Member, MemberDetailsDto>()
+        CreateMap<Member, MemberDto>()
             .Include<StaffMember, StaffMemberDetailsQueryDto>()
             .Include<Participant, ParticipantDetailsQueryDto>();
 

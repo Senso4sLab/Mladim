@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Partners.Queries.GetPartners;
 
-public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumerable<MemberBase>>
+public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumerable<MemberDto>>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }    
@@ -22,26 +22,16 @@ public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumer
         Mapper = mapper;
     }   
 
-    public async Task<IEnumerable<MemberBase>> Handle(GetPartnersQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<MemberDto>> Handle(GetPartnersQuery request, CancellationToken cancellationToken)
     {
-        List<Expression<Func<Partner, bool>>> predicates = new List<Expression<Func<Partner, bool>>>();
+        IEnumerable<Member> members = Enumerable.Empty<Member>();
 
-        predicates.Add(sm => sm.IsActive == request.IsActive);
+        if (request.ActivityId is int activityId)
+            members = await this.UnitOfWork.PartnerRepository.GetPartnersAsync(sm => sm.Activities.Any(mp => mp.Id == activityId), request.WithDetails);
 
-        if (request.ActivityId != null)
-            predicates.Add(sm => sm.Activities.Any(a => a.Id == request.ActivityId));
-        else if (request.ProjectId != null)
-            predicates.Add(sm => sm.Projects.Any(p => p.Id == request.ProjectId));
-        else if (request.OrganizationId != null)
-            predicates.Add(sm => sm.OrganizationPartners.Any(op => op.OrganizationId == request.OrganizationId));
+        if (request.ProjectId is int projectId)
+            members = await this.UnitOfWork.PartnerRepository.GetPartnersAsync(sm => sm.Projects.Any(mp => mp.Id == projectId), request.WithDetails);
 
-
-        if (request.ParentClass)
-            return await this.UnitOfWork.PartnerRepository.GetAllAsync<MemberBase>(predicates, sm => new MemberBase { Id = sm.Id, Name = sm.Name });
-        else
-        {
-            var staff = await this.UnitOfWork.PartnerRepository.GetAllAsync(predicates);
-            return this.Mapper.Map<IEnumerable<PartnerQueryDetailsDto>>(staff);
-        }       
+        return this.Mapper.Map<IEnumerable<MemberDto>>(members);
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Dtos;
 
-public class PartnerCommandDto : BaseEntity<int>
+public class PartnerCommandDto 
 {
     public int Id { get; set; }    
 }

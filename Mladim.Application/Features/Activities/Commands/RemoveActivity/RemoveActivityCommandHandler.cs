@@ -24,10 +24,9 @@ public class RemoveActivityCommandHandler : IRequestHandler<RemoveActivityComman
     public async Task<bool> Handle(RemoveActivityCommand request, CancellationToken cancellationToken)
     {
         var activity = await this.UnitOfWork.ActivityRepository
-            .FirstOrDefaultAsync(a => a.Id == request.ActivityId);  
+            .FirstOrDefaultAsync(a => a.Id == request.ActivityId);
 
-        if (activity == null)
-            throw new Exception();
+        ArgumentNullException.ThrowIfNull(activity);
 
         this.UnitOfWork.ActivityRepository.Remove(activity);
 

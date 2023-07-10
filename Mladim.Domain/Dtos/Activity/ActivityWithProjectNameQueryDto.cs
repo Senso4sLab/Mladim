@@ -2,6 +2,5 @@
 
 public class ActivityWithProjectNameQueryDto : ActivityQueryDto
 {
-    public string ProjectName { get; set; }
-
+    public string ProjectName { get; set; } = string.Empty;
 }
