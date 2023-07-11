@@ -27,8 +27,7 @@ public class Member : BaseEntity<int>
         this.IsActive = isActive;
     }
 
-    public static Member Create(int id) =>
-        new Member(id);
+    
 
 
 }
