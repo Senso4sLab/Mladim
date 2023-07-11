@@ -8,11 +8,7 @@ public class StaffMemberProjectConfigurations : IEntityTypeConfiguration<StaffMe
 {
     public void Configure(EntityTypeBuilder<StaffMemberProject> builder)
     {
-        builder.HasKey(smp => new { smp.StaffMemberId, smp.ProjectId, smp.IsLead });
-
-        builder.HasOne(smp => smp.StaffMember).WithMany(s => s.StaffProjects);
-        builder.HasOne(smp => smp.Project).WithMany("staff");
-        
+        builder.HasKey(smp => new { smp.StaffMemberId, smp.ProjectId, smp.IsLead });        
         builder.Navigation(smp => smp.StaffMember).AutoInclude();
     }
 }

@@ -12,7 +12,7 @@ namespace Mladim.Domain.Models;
 
 public class Project : BaseEntity<int>
 {   
-    public ProjectAttibutes BaseProjectAttibutes { get; private set; }    
+    public ProjectAttibutes Attributes { get; private set; }    
     public DateTimeRange DateTimeRange { get; private set; }
     private Project()
     {
@@ -21,7 +21,7 @@ public class Project : BaseEntity<int>
     private Project(DateTimeRange dateTimeRange, ProjectAttibutes baseProjectAttibutes) 
     {        
         this.DateTimeRange = dateTimeRange;
-        this.BaseProjectAttibutes = baseProjectAttibutes;
+        this.Attributes = baseProjectAttibutes;
     }
 
 
@@ -37,7 +37,7 @@ public class Project : BaseEntity<int>
     
 
     public void SetBaseAttributes(string name, string description, string? webpageUrl = null) =>
-        this.BaseProjectAttibutes = ProjectAttibutes.Create(name, description, webpageUrl);  
+        this.Attributes = ProjectAttibutes.Create(name, description, webpageUrl);  
 
     public void PeriodOfImplementation(DateTime start, DateTime end) => 
         this.DateTimeRange = DateTimeRange.Create(start, end);

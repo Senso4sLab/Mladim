@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Mladim.Application.Contracts.Persistence;
 using System;
 using System.Collections.Generic;
@@ -11,15 +12,23 @@ namespace Mladim.Application.Features.Groups.Commands.UpdateGroup;
 public class UpdateGroupCommandHandler : IRequestHandler<UpdateGroupCommand, int>
 {
     public IUnitOfWork UnitOfWork { get; }
+    public IMapper Mapper { get; set; }
 
-    public UpdateGroupCommandHandler(IUnitOfWork unitOfWork)
+    public UpdateGroupCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {
+        this.Mapper = mapper;
         this.UnitOfWork = unitOfWork;
     }
     public async Task<int> Handle(UpdateGroupCommand request, CancellationToken cancellationToken)
     {
-        var group = await this.UnitOfWork.GroupRepository.FirstOrDefaultAsync(g => g.Id == request.GroupId);
+        var group = await this.UnitOfWork.GroupRepository.GetGroupDetailsAsync(request.GroupId);
 
         ArgumentNullException.ThrowIfNull(group);
+
+        group = this.Mapper.Map(request, group);
+
+        this.UnitOfWork.GroupRepository.Update(group);
+
+        return await this.UnitOfWork.SaveChangesAsync();
     }
 }

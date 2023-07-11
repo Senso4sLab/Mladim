@@ -24,8 +24,7 @@ public class GetActivityQueryHandler : IRequestHandler<GetActivityQuery, Activit
     public async Task<ActivityQueryDetailsDto> Handle(GetActivityQuery request, CancellationToken cancellationToken)
     {
         var activity = await this.UnitOfWork.ActivityRepository
-            .GetActivityDetailsAsync(request.ActivityId);
-            
+            .GetActivityDetailsAsync(request.ActivityId);            
 
         ArgumentNullException.ThrowIfNull(activity);       
 

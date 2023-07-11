@@ -193,8 +193,15 @@ public enum Gender
 };
 
 [Flags]
+public enum MemberType
+{
+    StaffMember = 1,
+    Participant = 2,
+};
+
+[Flags]
 public enum GroupType
 {
-    StaffGroup = 1,
-    ParticipantGroup = 2,
+    ProjectGroup = 1,
+    ActivityGroup = 2,
 };

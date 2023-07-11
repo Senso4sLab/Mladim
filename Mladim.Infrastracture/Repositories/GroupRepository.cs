@@ -1,4 +1,5 @@
-﻿using Mladim.Application.Contracts.Persistence;
+﻿using Microsoft.EntityFrameworkCore;
+using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Models;
 using Mladim.Infrastracture.Persistance;
 using System;
@@ -18,5 +19,11 @@ public class GroupRepository : GenericRepository<Group> , IGroupRepository
        
     }
 
-  
+    public async Task<Group?> GetGroupDetailsAsync(int groupId, bool tracking = true)
+    {
+        var group = this.DbSet.Include(g => g.Members);            
+
+        return tracking ? await group.AsTracking().FirstOrDefaultAsync(g => g.Id == groupId)
+            : await group.AsNoTracking().FirstOrDefaultAsync(a => a.Id == groupId);
+    }
 }

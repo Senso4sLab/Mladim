@@ -9,9 +9,9 @@ namespace Mladim.Domain.Models;
 
 public class StaffMember : Member
 {
-    public string Name { get; set; }
-    public string Surname { get; set; }
-    public string Email { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Surname { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
     public int? YearOfBirth { get; set; }
     public bool IsRegistered { get; set; }
     public Gender Gender { get; set; }
@@ -39,7 +39,7 @@ public class StaffMember : Member
         this.IsRegistered = isRegistered;
     }
 
-    public static StaffMember Create(int id) => 
+    public static StaffMember Create(int id) =>
         new StaffMember(id);
 
     public static StaffMember Create(string name, string surname, Gender gender, string email, int? yearOfBirth) =>

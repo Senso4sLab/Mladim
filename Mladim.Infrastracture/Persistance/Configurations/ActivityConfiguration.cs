@@ -13,6 +13,10 @@ public class ActivityConfiguration : IEntityTypeConfiguration<Activity>
 {
     public void Configure(EntityTypeBuilder<Activity> builder)
     {
-        builder.OwnsMany(a => a.AnonymousParticipantGroups).OwnsOne(ag => ag.AnonymousParticipant);        
+        builder.OwnsMany(a => a.AnonymousParticipantGroups)
+            .OwnsOne(ag => ag.AnonymousParticipant);
+
+        builder.OwnsOne(activity => activity.DateTimeRange);
+        builder.OwnsOne(activity => activity.Attributes);
     }
 }

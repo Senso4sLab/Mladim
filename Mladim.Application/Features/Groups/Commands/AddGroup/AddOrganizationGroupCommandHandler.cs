@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Models;
 using System;
@@ -28,6 +29,8 @@ public class AddOrganizationGroupCommandHandler : IRequestHandler<AddOrganizatio
         ArgumentNullException.ThrowIfNull(organization);
 
         var group = Group.Create(request.GroupType, request.Name, request.Description, request.Members);
+
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, group.Members);        
 
         organization.Add(group);       
 

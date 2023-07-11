@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Mladim.Application.Features.Groups.Commands.AddGroup;
+using Mladim.Application.Features.Groups.Commands.UpdateGroup;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -22,8 +24,10 @@ public class GroupProfile : Profile
 
         CreateMap<ProjectGroup, GroupQueryDto>();
         CreateMap<ActivityGroup, GroupQueryDto>();
-
-        //CreateMap<AddOrganizationCommandDto, OrganizationGroup>()
+       
+        CreateMap<UpdateGroupCommand, Group>()
+            .ForMember(dest => dest.Members, m => m.MapFrom(src => src.Members.ConvertAll(id => src.GroupType == MemberType.StaffMember ? (Member)StaffMember.Create(id) : (Member)Participant.Create(id))));
+       
 
     }
 }

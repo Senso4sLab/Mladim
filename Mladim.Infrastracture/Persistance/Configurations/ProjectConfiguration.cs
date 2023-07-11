@@ -6,15 +6,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Mladim.Infrastracture.Persistance.Configurations;
 
-public class OrganizationConfigurations : IEntityTypeConfiguration<Organization>
+public class ProjectConfiguration : IEntityTypeConfiguration<Project>
 {
-    public void Configure(EntityTypeBuilder<Organization> builder)
+    public void Configure(EntityTypeBuilder<Project> builder)
     {
-        builder.OwnsOne(organization => organization.SocialMediaUrls);
-        builder.OwnsOne(organization => organization.Attributes);
-        
+        builder.OwnsOne(project => project.DateTimeRange);
+        builder.OwnsOne(project => project.Attributes); 
+
+
+
     }
 }

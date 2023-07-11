@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
 using Mladim.Application.Features.Members.StaffMembers.Commands.UpdateStaffMember;
-using Mladim.Application.MappingProfiles.Converters;
+
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
@@ -38,11 +38,6 @@ public class StaffMemberProfile : Profile
         CreateMap<StaffMemberActivity, StaffMemberQueryDto>()
             .ForMember(dest => dest.Id, m => m.MapFrom(src => src.StaffMemberId))
             .ForMember(dest => dest.FullName, m => m.MapFrom(src => src.StaffMember.FullName));
-
-
-
-
-
 
     }
 }

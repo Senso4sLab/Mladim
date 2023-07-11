@@ -22,11 +22,11 @@ public abstract class Group: BaseEntity<int>
         this.Members = members.ToList();
     }
 
-    public static Group Create(GroupType groupType, string name, string description, IEnumerable<int>memberIds) =>    
+    public static Group Create(MemberType groupType, string name, string description, IEnumerable<int>memberIds) =>    
         groupType switch
         {
-            GroupType.StaffGroup => new ProjectGroup(name, description, memberIds.Select(id => StaffMember.Create(id))),
-            GroupType.ParticipantGroup => new ActivityGroup(name, description, memberIds.Select(id => Participant.Create(id))),
+            MemberType.StaffMember => new ProjectGroup(name, description, memberIds.Select(id => StaffMember.Create(id))),
+            MemberType.Participant => new ActivityGroup(name, description, memberIds.Select(id => Participant.Create(id))),
             _ => throw new NotImplementedException()
         } ;
 

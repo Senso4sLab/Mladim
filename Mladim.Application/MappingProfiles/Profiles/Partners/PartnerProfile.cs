@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Mladim.Application.Features.Members.Partners.Commands.AddPartner;
 using Mladim.Application.Features.Members.StaffMembers.Commands.UpdatePartner;
-using Mladim.Application.MappingProfiles.Resolvers;
+
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;

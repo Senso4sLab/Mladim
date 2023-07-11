@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Mladim.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,4 +14,5 @@ public class UpdateGroupCommand : IRequest<int>
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public List<int> Members { get; set; } = new();
+    public MemberType  GroupType { get; set; }
 }

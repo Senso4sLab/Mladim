@@ -55,20 +55,20 @@ public class Activity : BaseEntity<int>
 
     public bool Exists(StaffMember other) =>
          this.Staff.Any(smp => smp.StaffMember == other);
-    public void AddRange(IEnumerable<Partner> partners) =>
-        this.Partners.AddRange(partners);
+    public void Add(Partner partner) =>
+        this.Partners.Add(partner);
 
-    public void AddRange(IEnumerable<AnonymousParticipantGroup> apg) =>
-        this.AnonymousParticipantGroups.AddRange(apg);
+    public void Add(AnonymousParticipantGroup apg) =>
+        this.AnonymousParticipantGroups.Add(apg);
 
-    public void AddRange(IEnumerable<Participant> participants) =>
-     this.Participants.AddRange(participants);
+    public void Add(Participant participant) =>
+     this.Participants.Add(participant);
 
 
-    public void AddRange(IEnumerable<ActivityGroup> group) =>
-        this.Groups.AddRange(group);
-    public void AddRange(IEnumerable<StaffMemberRole> staff) =>
-       this.Staff.AddRange(staff.Select(sm => StaffMemberActivity.Create(sm.StaffMember, this.Id, sm.IsLead)));
+    public void Add(ActivityGroup group) =>
+        this.Groups.Add(group);
+    public void Add(StaffMemberRole sm) =>
+       this.Staff.Add(StaffMemberActivity.Create(sm.StaffMember, this.Id, sm.IsLead));
     public void RemoveRange(IEnumerable<Partner> partners)
     {
         foreach (var partner in partners)
