@@ -4,16 +4,10 @@ namespace Mladim.Domain.Models;
 
 public class AnonymousParticipant
 {
-   
     public Gender Gender { get; set; }
-    public AgeGroups AgeGroup { get; set; }  
-
-  
-    private AnonymousParticipant(Gender gender, AgeGroups ageGroups)
-    {
-        this.Gender = gender;
-        this.AgeGroup = ageGroups;
-    }
+    public AgeGroups AgeGroup { get; set; }
+    private AnonymousParticipant(Gender gender, AgeGroups ageGroups) =>
+        (Gender, AgeGroup) = (gender, ageGroups);    
 
     public static AnonymousParticipant Create(Gender gender, AgeGroups ageGroups) =>
         new AnonymousParticipant(gender, ageGroups);

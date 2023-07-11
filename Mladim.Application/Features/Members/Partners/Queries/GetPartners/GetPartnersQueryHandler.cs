@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Mladim.Application.Contracts.Persistence;
+using Mladim.Domain.Contracts;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
@@ -22,15 +23,15 @@ public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumer
         Mapper = mapper;
     }   
 
-    public async Task<IEnumerable<MemberDto>> Handle(GetPartnersQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<IFullName>> Handle(GetPartnersQuery request, CancellationToken cancellationToken)
     {
-        IEnumerable<Member> members = Enumerable.Empty<Member>();
+       
 
         if (request.ActivityId is int activityId)
-            members = await this.UnitOfWork.PartnerRepository.GetPartnersAsync(sm => sm.Activities.Any(mp => mp.Id == activityId), request.WithDetails);
+            return await this.UnitOfWork.PartnerRepository.GetAllAsync(sm => sm.Activities.Any(mp => mp.Id == activityId), false);
 
         if (request.ProjectId is int projectId)
-            members = await this.UnitOfWork.PartnerRepository.GetPartnersAsync(sm => sm.Projects.Any(mp => mp.Id == projectId), request.WithDetails);
+            members = await this.UnitOfWork.PartnerRepository.GetAllAsync(sm => sm.Projects.Any(mp => mp.Id == projectId), false);
 
         return this.Mapper.Map<IEnumerable<MemberDto>>(members);
     }

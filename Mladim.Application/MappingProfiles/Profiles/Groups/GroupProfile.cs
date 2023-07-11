@@ -26,7 +26,7 @@ public class GroupProfile : Profile
         CreateMap<ActivityGroup, GroupQueryDto>();
        
         CreateMap<UpdateGroupCommand, Group>()
-            .ForMember(dest => dest.Members, m => m.MapFrom(src => src.Members.ConvertAll(id => src.GroupType == MemberType.StaffMember ? (Member)StaffMember.Create(id) : (Member)Participant.Create(id))));
+            .ForMember(dest => dest.Members, m => m.MapFrom(src => src.Members.ConvertAll(id => Member.Create(src.MemberType, id))));
        
 
     }

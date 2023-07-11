@@ -12,12 +12,8 @@ using System.Threading.Tasks;
 namespace Mladim.Infrastracture.Repositories;
 
 public class GroupRepository : GenericRepository<Group> , IGroupRepository
-{
-   
-    public GroupRepository(ApplicationDbContext context) : base(context)
-    {
-       
-    }
+{   
+    public GroupRepository(ApplicationDbContext context) : base(context) { }
 
     public async Task<Group?> GetGroupDetailsAsync(int groupId, bool tracking = true)
     {
@@ -26,4 +22,6 @@ public class GroupRepository : GenericRepository<Group> , IGroupRepository
         return tracking ? await group.AsTracking().FirstOrDefaultAsync(g => g.Id == groupId)
             : await group.AsNoTracking().FirstOrDefaultAsync(a => a.Id == groupId);
     }
+
+    // TODO GetGroupDetailsByFullNameAsync
 }

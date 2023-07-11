@@ -20,10 +20,7 @@ public class StaffMemberProfile : Profile
             .ReverseMap();
 
         CreateMap<AddStaffMemberCommand, StaffMember>();
-        CreateMap<UpdateStaffMemberCommand, StaffMember>();
-
-        CreateMap<AddStaffMemberCommand, OrganizationMember>()
-            .ForMember(dest => dest.Member as StaffMember, m => m.MapFrom(src => src));
+        CreateMap<UpdateStaffMemberCommand, StaffMember>();     
 
         CreateMap<StaffMemberCommandDto, StaffMemberProject>()
             .ForMember(dest => dest.StaffMemberId, m => m.MapFrom(src => src.Id));

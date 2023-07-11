@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Mladim.Application.MappingProfiles.Converters;
+
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
@@ -20,6 +20,7 @@ public class AnonymousParticipantProfile : Profile
            
 
         CreateMap<AnonymousParticipantCommandDto, AnonymousParticipant>();
+
         CreateMap<AnonymousParticipantCommandDto, AnonymousParticipantGroup>()
             .ForMember(dest => dest.Number, m => m.MapFrom(src => src.Number))
             .ForMember(dest => dest.AnonymousParticipant, m => m.MapFrom(src => src));

@@ -1,4 +1,5 @@
-﻿using Mladim.Domain.Models;
+﻿using Mladim.Domain.Contracts;
+using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,5 @@ namespace Mladim.Application.Contracts.Persistence;
 
 public interface IPartnerRepository : IGenericRepository<Partner>
 {
-    Task<IEnumerable<Member>> GetPartnersAsync(Expression<Func<Partner, bool>> predicate, bool withDetails);
+    Task<IEnumerable<IFullName>> GetPartnersByFullNameAsync(Expression<Func<Partner, bool>> predicate);
 }

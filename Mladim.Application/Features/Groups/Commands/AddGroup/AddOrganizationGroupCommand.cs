@@ -12,7 +12,7 @@ namespace Mladim.Application.Features.Groups.Commands.AddGroup;
 public class AddOrganizationGroupCommand : IRequest<bool>
 {
     public int OrganizationId { get; set; }
-    public MemberType GroupType { get; set; }
+    public GroupType GroupType { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public List<int> Members { get; set; } = new();

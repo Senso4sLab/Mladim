@@ -22,16 +22,15 @@ public class AddPartnerCommandHandler : IRequestHandler<AddPartnerCommand, bool>
         Mapper = mapper;
     }
     public async Task<bool> Handle(AddPartnerCommand request, CancellationToken cancellationToken)
-    {     
-
+    {
         var organization = await this.UnitOfWork.OrganizationRepository
             .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
 
         ArgumentNullException.ThrowIfNull(organization);
 
-        var organizationPartner = this.Mapper.Map<OrganizationPartner>(request);
+        var partner = this.Mapper.Map<Partner>(request);
 
-        organization.Partners.Add(organizationPartner);
+        await this.UnitOfWork.PartnerRepository.AddAsync(partner);
 
         return await this.UnitOfWork.SaveChangesAsync() > 0;    
     }

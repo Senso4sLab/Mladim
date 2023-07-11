@@ -6,16 +6,11 @@ public class AnonymousParticipantGroup
 {
     public int Number { get; set; }
     public AnonymousParticipant AnonymousParticipant { get; set; }
-
-    public AnonymousParticipantGroup(int number, AnonymousParticipant anonymousParticipant)
-    {
-        this.Number = number;
-        this.AnonymousParticipant = anonymousParticipant;   
-    }
+    public AnonymousParticipantGroup(int number, AnonymousParticipant anonymousParticipant) =>
+        (Number, AnonymousParticipant) = (number, anonymousParticipant); 
     public override bool Equals(object? obj) =>
         obj is AnonymousParticipantGroup anonymousParticipantGroup ?
             this.Equals(anonymousParticipantGroup) : false;
-
     private bool Equals(AnonymousParticipantGroup anonymousParticipantGroup) =>
        anonymousParticipantGroup.Number == this.Number &&
        anonymousParticipantGroup.AnonymousParticipant.Equals(this.AnonymousParticipant);

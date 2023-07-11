@@ -16,7 +16,7 @@ public class ActivityConfiguration : IEntityTypeConfiguration<Activity>
         builder.OwnsMany(a => a.AnonymousParticipantGroups)
             .OwnsOne(ag => ag.AnonymousParticipant);
 
-        builder.OwnsOne(activity => activity.DateTimeRange);
+        builder.OwnsOne(activity => activity.TimeRange);
         builder.OwnsOne(activity => activity.Attributes);
     }
 }

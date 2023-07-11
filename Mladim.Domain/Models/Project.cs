@@ -11,74 +11,43 @@ namespace Mladim.Domain.Models;
 
 
 public class Project : BaseEntity<int>
-{   
-    public ProjectAttibutes Attributes { get; private set; }    
-    public DateTimeRange DateTimeRange { get; private set; }
-    private Project()
-    {
-        
-    }
-    private Project(DateTimeRange dateTimeRange, ProjectAttibutes baseProjectAttibutes) 
-    {        
-        this.DateTimeRange = dateTimeRange;
-        this.Attributes = baseProjectAttibutes;
-    }
-
-
-    public static Project Create(DateTime start, DateTime end, string name,
-        string description, string? webpageurl, IEnumerable<Partner> partners,
-        IEnumerable<StaffMemberRole> staffRole, IEnumerable<ProjectGroup> groups) =>
-            new Project(DateTimeRange.Create(start, end), ProjectAttibutes.Create(name, description, webpageurl))
-            {              
-                Groups = groups.ToList(),
-                Partners = partners.ToList(),
-                Staff = staffRole.Select(sr => StaffMemberProject.Create(sr.StaffMember, 0, sr.IsLead)).ToList(),               
-            };      
-    
-
-    public void SetBaseAttributes(string name, string description, string? webpageUrl = null) =>
-        this.Attributes = ProjectAttibutes.Create(name, description, webpageUrl);  
-
-    public void PeriodOfImplementation(DateTime start, DateTime end) => 
-        this.DateTimeRange = DateTimeRange.Create(start, end);
-
-    public List<Activity> Activities { get; set; } = new();  
-
+{
+    public ProjectAttibutes Attributes { get; private set; } = default!;
+    public DateTimeRange TimeRange { get; private set; } = default!;
+    private Project() {}
+    public List<Activity> Activities { get; set; } = new();
     public List<StaffMemberProject> Staff { get; set; } = new();
     public List<ProjectGroup> Groups { get; set; } = new();
     public List<Partner> Partners { get; set; } = new();
+  
 
-    public void SetStaffMemberRole(StaffMemberRole smRole) => 
-         Staff.FirstOrDefault(s => s.StaffMember == smRole.StaffMember)?
-              .SetIsLead(smRole.IsLead);   
-
-    public bool Exists(Partner partner) =>
-        this.Partners.Any(p => p == partner);
-    public bool Exists(Group group) =>
-        this.Groups.Any(g => g == group);
-    public bool Exists(StaffMember other) =>
-         this.Staff.Any(smp => smp.StaffMember == other);
+    //public bool Exists(Partner partner) =>
+    //    this.Partners.Any(p => p == partner);
+    //public bool Exists(Group group) =>
+    //    this.Groups.Any(g => g == group);
+    //public bool Exists(StaffMember other) =>
+    //     this.Staff.Any(smp => smp.StaffMember == other);
     public void Add(Partner partners) =>
         this.Partners.Add(partners);     
     public void Add(ProjectGroup group) =>
         this.Groups.Add(group);
     public void Add(StaffMemberRole sm) =>
-       this.Staff.Add(StaffMemberProject.Create(sm.StaffMember,this.Id, sm.IsLead));
-    public void RemoveAll(IEnumerable<Partner> partners)
-    {
-        foreach(var partner in partners)
-            this.Partners.Remove(partner);
-    }
-    public void RemoveAll(IEnumerable<ProjectGroup> groups)
-    {
-        foreach (var group in groups)
-            this.Groups.Remove(group);
-    }
-    public void RemoveAll(IEnumerable<StaffMemberProject> staffMemberProjects)
-    {
-        foreach (var staffmemberProject in staffMemberProjects)
-            this.Staff.Remove(staffmemberProject);        
-    }
+       this.Staff.Add(StaffMemberProject.Create(sm.StaffMember,this, sm.IsLead));
+    //public void RemoveAll(IEnumerable<Partner> partners)
+    //{
+    //    foreach(var partner in partners)
+    //        this.Partners.Remove(partner);
+    //}
+    //public void RemoveAll(IEnumerable<ProjectGroup> groups)
+    //{
+    //    foreach (var group in groups)
+    //        this.Groups.Remove(group);
+    //}
+    //public void RemoveAll(IEnumerable<StaffMemberProject> staffMemberProjects)
+    //{
+    //    foreach (var staffmemberProject in staffMemberProjects)
+    //        this.Staff.Remove(staffmemberProject);        
+    //}
 
     public int OrganizationId { get; set; }
     public Organization Organization { get; set; } = default!;

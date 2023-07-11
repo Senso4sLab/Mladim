@@ -22,15 +22,15 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
     }
    
     public async Task<bool> Handle(AddStaffMemberCommand request, CancellationToken cancellationToken)
-    {        
-
+    {
         var organization = await this.UnitOfWork.OrganizationRepository
             .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
 
         ArgumentNullException.ThrowIfNull(organization);
 
-        var organizationMember = this.Mapper.Map<OrganizationMember>(request);
-        organization.Members.Add(organizationMember);       
+        var staffMember = this.Mapper.Map<StaffMember>(request);
+        
+        await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);
 
         return await this.UnitOfWork.SaveChangesAsync() > 0;
 

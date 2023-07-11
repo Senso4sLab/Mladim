@@ -30,10 +30,10 @@ public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery,
         IEnumerable<Member> members = Enumerable.Empty<Member>();   
 
         if(request.ActivityId is int activityId)        
-            members = await this.UnitOfWork.StaffMemberRepository.GetStaffMembersAsync(sm => sm.StaffActivities.Any(mp => mp.ActivityId == activityId), request.WithDetails);
+            members = await this.UnitOfWork.StaffMemberRepository.GetAllAsync(sm => sm.StaffActivities.Any(mp => mp.ActivityId == activityId), false);
         
         if (request.ProjectId  is int projectId)        
-            members = await this.UnitOfWork.StaffMemberRepository.GetStaffMembersAsync(sm => sm.StaffProjects.Any(mp => mp.ProjectId == projectId), request.WithDetails);        
+            members = await this.UnitOfWork.StaffMemberRepository.GetAllAsync(sm => sm.StaffProjects.Any(mp => mp.ProjectId == projectId), false);        
 
         return this.Mapper.Map<IEnumerable<MemberDto>>(members);              
     }

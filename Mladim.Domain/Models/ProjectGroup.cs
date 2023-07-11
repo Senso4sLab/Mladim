@@ -2,23 +2,8 @@
 
 public class ProjectGroup : Group
 {
-    private ProjectGroup()
-    {
-
-    }
-    public ProjectGroup(int id)
-    {
-        this.Id = id;   
-    }
-
-    internal ProjectGroup(string name, string description, IEnumerable<Member> members) : base(name, description, members)
-    {
-       
-    }
-
+    private ProjectGroup() { }
+    internal ProjectGroup(int id) : base(id) { }
+    internal ProjectGroup(string name, string description, IEnumerable<Member> members) : base(name, description, members) { }  
     public List<Project> Projects { get; set; } = new();
-
-    public static ProjectGroup Create(int id) => 
-        new ProjectGroup(id);
-
 }

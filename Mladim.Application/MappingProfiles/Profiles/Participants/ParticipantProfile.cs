@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Mladim.Application.Features.Members.Participants.Commands.AddParticipant;
 using Mladim.Application.Features.Members.Participants.Commands.UpdateParticipant;
-using Mladim.Application.MappingProfiles.Converters;
+
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;

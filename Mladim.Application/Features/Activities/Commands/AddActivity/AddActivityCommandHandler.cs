@@ -28,22 +28,17 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, boo
         var project = await this.UnitOfWork.ProjectRepository
             .FirstOrDefaultAsync(p => p.Id == request.ProjectId);
 
-
         ArgumentNullException.ThrowIfNull(project);
 
         var activity = this.Mapper.Map<Activity>(request);
-
        
         this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, activity.Partners);      
         this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, activity.Groups);       
         this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, activity.Participants);
-
         
-
         //var anonymousParticipantGroup = request.AnonymousParticipantActivities
         //    .Select(a => AnonymousParticipantGroup.Create(a.Number, a.Gender, a.AgeGroup)).ToList();
-
-           
+                   
         project.Activities.Add(activity);
 
         return await this.UnitOfWork.SaveChangesAsync() > 0;

@@ -20,7 +20,7 @@ public class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuer
     public async Task<IEnumerable<OrganizationQueryDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
     { 
         var organizations = await this.UnitOfWork.OrganizationRepository
-                .GetAllAsync(o => o.AppUsers.Any(a => a.Id == request.AppUserId));
+                .GetAllAsync(o => o.AppUsers.Any(a => a.Id == request.AppUserId), false);
 
         return organizations == null ? Enumerable.Empty<OrganizationQueryDto>() :
             this.Mapper.Map<IEnumerable<OrganizationQueryDto>>(organizations);        

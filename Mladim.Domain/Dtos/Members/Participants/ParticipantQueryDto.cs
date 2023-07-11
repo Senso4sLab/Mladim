@@ -1,7 +1,9 @@
-﻿namespace Mladim.Domain.Dtos;
+﻿using Mladim.Domain.Contracts;
 
-public class ParticipantQueryDto : MemberDto
+namespace Mladim.Domain.Dtos;
+
+public class ParticipantQueryDto : IFullName
 {
-    public string Name { get; set; } = string.Empty;
-    public string Surname { get; set; } = string.Empty;
+    public int Id { get; set; }
+    public string FullName { get; set; } = string.Empty;
 }

@@ -7,14 +7,11 @@ public class ActivityWithProjectName : Activity
 {
     public string ProjectName { get; private set; } = string.Empty;
 
-    public static ActivityWithProjectName Create(int id, ActivityAttributes attibutes, DateTimeRange dateTimeRange, string projectName) =>
-        new ActivityWithProjectName
-        {
-            Id = id,
-            Attributes = attibutes,
-            DateTimeRange = dateTimeRange,          
-            ProjectName = projectName
-        };
+    private ActivityWithProjectName(int id, ActivityAttributes attibutes, DateTimeRange timeRange, string projectName) =>
+        (Id, Attributes, TimeRange, ProjectName) = (id, attibutes, timeRange, projectName);
+
+    public static ActivityWithProjectName Create(string projectName, Activity activity) =>
+        new ActivityWithProjectName(activity.Id, activity.Attributes, activity.TimeRange, projectName);        
        
 }
 

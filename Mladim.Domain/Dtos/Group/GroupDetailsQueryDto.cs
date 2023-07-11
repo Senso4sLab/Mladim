@@ -12,7 +12,7 @@ public class GroupDetailsQueryDto
 {
     public int Id { get; set; }
 
-    public MemberType GroupType { get; set; }
+    public GroupType GroupType { get; set; }
     public string Name { get; set; }
     public bool IsActive { get; set; } = true;
     public string Description { get; set; }

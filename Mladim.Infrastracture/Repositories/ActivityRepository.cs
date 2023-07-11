@@ -13,11 +13,7 @@ namespace Mladim.Infrastracture.Repositories;
 
 public class ActivityRepository : GenericRepository<Activity>, IActivityRepository
 {
-
-    public ActivityRepository(ApplicationDbContext context) : base(context)
-    {
-
-    }
+    public ActivityRepository(ApplicationDbContext context) : base(context) {}
 
     public async Task<Activity?> GetActivityDetailsAsync(int activityId, bool tracking = true)
     {
@@ -31,11 +27,9 @@ public class ActivityRepository : GenericRepository<Activity>, IActivityReposito
             : await activity.AsNoTracking().FirstOrDefaultAsync(a => a.Id == activityId);
     }
 
-
-
     public async Task<IEnumerable<ActivityWithProjectName>> GetActivitiesWithProjectName(int organizationId) =>    
          await this.DbSet.Where(a => a.Project.OrganizationId == organizationId)
-            .Select(a => ActivityWithProjectName.Create(a.Id, a.Attributes, a.DateTimeRange, a.Project.Attributes.Name))
+            .Select(a => ActivityWithProjectName.Create(a.Project.Attributes.Name, a))
             .ToListAsync();
 
 }

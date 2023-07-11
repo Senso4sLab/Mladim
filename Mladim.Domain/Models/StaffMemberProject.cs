@@ -1,5 +1,6 @@
 ﻿namespace Mladim.Domain.Models;
 
+
 public class StaffMemberProject
 {    
     public bool IsLead { get; set; }
@@ -7,24 +8,9 @@ public class StaffMemberProject
     public Project Project { get; set; } = default!;
     public int StaffMemberId { get; set; }
     public StaffMember StaffMember { get; set; } = default!;
-
-    private StaffMemberProject()
-    {
-        
-    }
-
-    public void SetIsLead(bool isLead) => 
-        this.IsLead = isLead;
-
-
-    
-
-    private StaffMemberProject(StaffMember staffMember, int projectId, bool lead = false)
-    {
-        this.StaffMember = staffMember;
-        this.ProjectId = projectId;
-    }   
-
-    public static StaffMemberProject Create(StaffMember staffMember, int projectId, bool lead) =>
-        new StaffMemberProject(staffMember, projectId, lead);
+    private StaffMemberProject() { }
+    private StaffMemberProject(StaffMember staffMember, Project project, bool lead) =>
+       (StaffMember, Project, IsLead) = (staffMember, project, lead);
+    public static StaffMemberProject Create(StaffMember staffMember, Project project, bool lead) =>
+        new StaffMemberProject(staffMember, project, lead);
 }

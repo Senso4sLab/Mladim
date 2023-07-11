@@ -13,17 +13,9 @@ namespace Mladim.Infrastracture.Repositories;
 
 public class OrganizationRepository : GenericRepository<Organization>, IOrganizationRepository
 {
-    
     public OrganizationRepository(ApplicationDbContext context) : base(context)
-    {
-        
-
-        
+    {        
     }
-
-    
-
-
 }
 
    

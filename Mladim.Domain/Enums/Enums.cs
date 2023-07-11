@@ -201,7 +201,7 @@ public enum MemberType
 
 [Flags]
 public enum GroupType
-{
-    ProjectGroup = 1,
-    ActivityGroup = 2,
+{   
+    Project = 1,
+    Activity = 2,
 };

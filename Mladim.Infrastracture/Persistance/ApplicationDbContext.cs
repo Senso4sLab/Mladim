@@ -17,12 +17,10 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     public DbSet<AppUser> AppUsers { get; set; }    
     public DbSet<StaffMember> Staff { get; set; }
     public DbSet<Participant> Participants { get; set; }    
-    public DbSet<Partner> Partners { get; set; }
-    
+    public DbSet<Partner> Partners { get; set; }    
     public DbSet<Organization> Organizations { get; set; }
     public DbSet<Project> Projects { get; set; }
-    public DbSet<Activity> Activities { get; set; }    
-
+    public DbSet<Activity> Activities { get; set; } 
     public DbSet<ProjectGroup> ProjectGroups { get; set; }
     public DbSet<ActivityGroup> ActivityGroups { get; set; }
       

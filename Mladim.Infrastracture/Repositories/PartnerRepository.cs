@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mladim.Application.Contracts.Persistence;
+using Mladim.Domain.Contracts;
 using Mladim.Domain.Models;
 using Mladim.Infrastracture.Persistance;
 using System;
@@ -13,19 +14,8 @@ namespace Mladim.Infrastracture.Repositories;
 
 public class PartnerRepository : GenericRepository<Partner>, IPartnerRepository
 {
-    public PartnerRepository(ApplicationDbContext context) : base(context)
-    {
-    }
+    public PartnerRepository(ApplicationDbContext context) : base(context) {}
 
-    public async Task<IEnumerable<Member>> GetPartnersAsync(Expression<Func<Partner, bool>> predicate, bool withDetails)
-    {
-        var smQuerable = DbSet.Where(predicate);
-
-        if (!withDetails)
-            return await smQuerable.Select(sm => sm as Member).ToListAsync();
-
-        return await smQuerable.ToListAsync();
-    }
-
-
+    public async Task<IEnumerable<IFullName>> GetPartnersByFullNameAsync(Expression<Func<Partner, bool>> predicate) =>
+        await DbSet.Where(predicate).Select(p => p as IFullName).ToListAsync();
 }
