@@ -1,16 +1,9 @@
 ﻿using MediatR;
-using Mladim.Domain.Contracts;
-using Mladim.Domain.Dtos;
-using Mladim.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Mladim.Domain.Dtos.Members;
 
 namespace Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMembers;
 
-public class GetStaffMembersQuery : IRequest<IEnumerable<StaffMemberQueryDto>>
+public class GetStaffMembersQuery : IRequest<IEnumerable<NamedEntityDto>>
 {    
     public int? ProjectId { get; set; }
     public int? ActivityId { get; set; }

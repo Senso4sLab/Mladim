@@ -1,4 +1,4 @@
-﻿using Mladim.Domain.Contracts;
+﻿
 using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -11,5 +11,5 @@ namespace Mladim.Application.Contracts.Persistence;
 
 public interface IPartnerRepository : IGenericRepository<Partner>
 {
-    Task<IEnumerable<INameableEntity>> GetPartnersAsync(Expression<Func<Partner, bool>> predicate, bool isMemberAbbreviated);
+    Task<IEnumerable<NamedEntity>> GetPartnersAsync(Expression<Func<Partner, bool>> predicate, bool isMemberAbbreviated);
 }

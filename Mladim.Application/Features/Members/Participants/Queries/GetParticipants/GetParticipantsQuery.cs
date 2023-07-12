@@ -1,7 +1,8 @@
 ﻿using MediatR;
 using Mladim.Application.Features.Members.Participants.Queries.GetParticipant;
-using Mladim.Domain.Contracts;
+
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.Members;
 using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Participants.Queries.GetParticipants;
 
-public class GetParticipantsQuery : IRequest<IEnumerable<INameableEntity>>
+public class GetParticipantsQuery : IRequest<IEnumerable<NamedEntityDto>>
 {
     public int? ProjectId { get; set; }
     public int? ActivityId { get; set; }

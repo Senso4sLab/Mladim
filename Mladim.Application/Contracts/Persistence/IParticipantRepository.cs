@@ -1,4 +1,4 @@
-﻿using Mladim.Domain.Contracts;
+﻿
 using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -11,5 +11,5 @@ namespace Mladim.Application.Contracts.Persistence;
 
 public interface IParticipantRepository : IGenericRepository<Participant>
 {  
-    Task<IEnumerable<INameableEntity>> GetParticipantsAsync(Expression<Func<Participant, bool>> predicate, bool memberAbbreviated);
+    Task<IEnumerable<NamedEntity>> GetParticipantsAsync(Expression<Func<Participant, bool>> predicate, bool memberAbbreviated);
 }

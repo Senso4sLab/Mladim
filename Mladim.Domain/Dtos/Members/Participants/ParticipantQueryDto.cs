@@ -1,9 +1,9 @@
-﻿using Mladim.Domain.Contracts;
+﻿
+using Mladim.Domain.Models;
 
 namespace Mladim.Domain.Dtos;
 
-public class ParticipantQueryDto : INameableEntity
+public class ParticipantQueryDto : NamedEntity
 {
-    public int Id { get; set; }
-    public string FullName { get; set; } = string.Empty;
+   
 }

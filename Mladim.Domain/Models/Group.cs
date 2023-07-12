@@ -1,4 +1,4 @@
-﻿using Mladim.Domain.Contracts;
+﻿
 using Mladim.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -9,9 +9,8 @@ using System.Xml.Linq;
 
 namespace Mladim.Domain.Models;
 
-public abstract class Group: BaseEntity<int>, IFullName
-{       
-    public string FullName { get; set; } = string.Empty;
+public abstract class Group: NamedEntity
+{    
     public string Description { get; set; } = string.Empty;
     public List<Member> Members { get; set; } = new();
     public int OrganizationId { get; set; }   

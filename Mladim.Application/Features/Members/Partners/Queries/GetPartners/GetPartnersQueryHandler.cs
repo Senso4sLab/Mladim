@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using AutoMapper.Execution;
 using MediatR;
 using Mladim.Application.Contracts.Persistence;
-using Mladim.Domain.Contracts;
+
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.Members;
 using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -13,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Partners.Queries.GetPartners;
 
-public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumerable<INameableEntity>>
+public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumerable<NamedEntityDto>>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }    
@@ -23,19 +25,23 @@ public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumer
         Mapper = mapper;
     }   
 
-    public async Task<IEnumerable<INameableEntity>> Handle(GetPartnersQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<NamedEntityDto>> Handle(GetPartnersQuery request, CancellationToken cancellationToken)
     {
-        IEnumerable<INameableEntity> members = Enumerable.Empty<INameableEntity>();
+        IEnumerable<NamedEntity> members = await GetPartnersAsync(request.ActivityId, request.ProjectId, request.OrganizationId, request.IsMemberAbbreviated);
+        return this.Mapper.Map<IEnumerable<NamedEntityDto>>(members);       
+    }
 
-        if (request.ActivityId is int activityId)
-            members = await this.UnitOfWork.PartnerRepository.GetPartnersAsync(p => p.Activities.Any(a => a.Id == activityId), request.IsMemberAbbreviated);
+    private async Task<IEnumerable<NamedEntity>> GetPartnersAsync(int? activityId, int? projectId, int? organizationId, bool isMemberAbbreviated)
+    {
+        if (activityId is not null)
+            return await this.UnitOfWork.PartnerRepository.GetPartnersAsync(p => p.Activities.Any(a => a.Id == activityId), isMemberAbbreviated);
 
-        if (request.ProjectId is int projectId)
-            members = await this.UnitOfWork.PartnerRepository.GetPartnersAsync(p => p.Activities.Any(a => a.ProjectId == projectId), request.IsMemberAbbreviated);
+        if (projectId is not null)
+            return  await this.UnitOfWork.PartnerRepository.GetPartnersAsync(p => p.Activities.Any(a => a.ProjectId == projectId), isMemberAbbreviated);
 
-        if (request.OrganizationId is int organizationId)
-            members = await this.UnitOfWork.PartnerRepository.GetPartnersAsync(p => p.OrganizationId == organizationId, request.IsMemberAbbreviated);
+        if (organizationId is not null)
+            return  await this.UnitOfWork.PartnerRepository.GetPartnersAsync(p => p.OrganizationId == organizationId, isMemberAbbreviated);
 
-        return this.Mapper.Map<IEnumerable<INameableEntity>>(members);       
+        return Enumerable.Empty<NamedEntity>();
     }
 }

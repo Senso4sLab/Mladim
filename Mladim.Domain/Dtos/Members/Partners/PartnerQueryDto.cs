@@ -1,11 +1,10 @@
-﻿using Mladim.Domain.Contracts;
+﻿
+using Mladim.Domain.Dtos.Members;
 using Mladim.Domain.Models;
 
 namespace Mladim.Domain.Dtos;
 
-public class PartnerQueryDto : INameableEntity
+public class PartnerQueryDto : NamedEntityDto
 {
-    public int Id { get; set; }
-
-    public string FullName { get;  set; } = string.Empty;
+ 
 }

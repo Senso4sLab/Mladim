@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mladim.Application.Contracts.Persistence;
-using Mladim.Domain.Contracts;
+
 using Mladim.Domain.Models;
 using Mladim.Infrastracture.Persistance;
 using System;
@@ -16,7 +16,7 @@ public class PartnerRepository : GenericRepository<Partner>, IPartnerRepository
 {
     public PartnerRepository(ApplicationDbContext context) : base(context) {}
 
-    public async Task<IEnumerable<INameableEntity>> GetPartnersAsync(Expression<Func<Partner, bool>> predicate, bool isMemberAbbreviated) =>
-         isMemberAbbreviated ? await DbSet.Where(predicate).Select(p => p as INameableEntity).AsNoTracking().ToListAsync() :
+    public async Task<IEnumerable<NamedEntity>> GetPartnersAsync(Expression<Func<Partner, bool>> predicate, bool isMemberAbbreviated) =>
+         isMemberAbbreviated ? await DbSet.Where(predicate).Select(p => p as NamedEntity).AsNoTracking().ToListAsync() :
             await DbSet.Where(predicate).AsNoTracking().ToListAsync();
 }
