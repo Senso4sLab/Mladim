@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mladim.Infrastracture.Persistance;
 using System.Linq.Expressions;
-using Mladim.Infrastracture.Extensions;
+
 using Microsoft.EntityFrameworkCore.Query;
 using Mladim.Domain.Models;
 using Mladim.Application.Contracts.Persistence;

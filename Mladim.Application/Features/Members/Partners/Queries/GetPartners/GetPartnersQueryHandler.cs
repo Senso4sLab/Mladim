@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Partners.Queries.GetPartners;
 
-public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumerable<MemberDto>>
+public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumerable<INameableEntity>>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }    
@@ -23,16 +23,19 @@ public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumer
         Mapper = mapper;
     }   
 
-    public async Task<IEnumerable<IFullName>> Handle(GetPartnersQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<INameableEntity>> Handle(GetPartnersQuery request, CancellationToken cancellationToken)
     {
-       
+        IEnumerable<INameableEntity> members = Enumerable.Empty<INameableEntity>();
 
         if (request.ActivityId is int activityId)
-            return await this.UnitOfWork.PartnerRepository.GetAllAsync(sm => sm.Activities.Any(mp => mp.Id == activityId), false);
+            members = await this.UnitOfWork.PartnerRepository.GetPartnersAsync(p => p.Activities.Any(a => a.Id == activityId), request.IsMemberAbbreviated);
 
         if (request.ProjectId is int projectId)
-            members = await this.UnitOfWork.PartnerRepository.GetAllAsync(sm => sm.Projects.Any(mp => mp.Id == projectId), false);
+            members = await this.UnitOfWork.PartnerRepository.GetPartnersAsync(p => p.Activities.Any(a => a.ProjectId == projectId), request.IsMemberAbbreviated);
 
-        return this.Mapper.Map<IEnumerable<MemberDto>>(members);
+        if (request.OrganizationId is int organizationId)
+            members = await this.UnitOfWork.PartnerRepository.GetPartnersAsync(p => p.OrganizationId == organizationId, request.IsMemberAbbreviated);
+
+        return this.Mapper.Map<IEnumerable<INameableEntity>>(members);       
     }
 }

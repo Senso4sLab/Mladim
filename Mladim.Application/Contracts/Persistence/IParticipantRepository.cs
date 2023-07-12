@@ -10,6 +10,6 @@ using System.Threading.Tasks;
 namespace Mladim.Application.Contracts.Persistence;
 
 public interface IParticipantRepository : IGenericRepository<Participant>
-{
-    Task<IEnumerable<IFullName>> GetParticipantsByFullNameAsync(Expression<Func<Participant, bool>> predicate);
+{  
+    Task<IEnumerable<INameableEntity>> GetParticipantsAsync(Expression<Func<Participant, bool>> predicate, bool memberAbbreviated);
 }

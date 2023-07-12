@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Models;
 
-public class Partner : BaseEntity<int>, IFullName
+public class Partner : BaseEntity<int>, INameableEntity
 {
     public string FullName { get; set; } = string.Empty;
     public string? Email { get; set; }
@@ -17,7 +17,8 @@ public class Partner : BaseEntity<int>, IFullName
     public string? ContactPerson { get; set; }    
     public string? PhoneNumber { get; set; } 
     public List<Activity> Activities { get; set; } = new();
-    public List<Project> Projects { get; set; } = new();   
+    public List<Project> Projects { get; set; } = new();
+    public int OrganizationId { get; set; }
     private Partner() { }    
     private Partner(int id) : base() { } 
     public static Partner Create(int parnetId) =>

@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Contracts;
 
-public interface IFullName
+
+
+
+public interface INameableEntity
 {
     public int Id { get; }
     public string FullName { get; }

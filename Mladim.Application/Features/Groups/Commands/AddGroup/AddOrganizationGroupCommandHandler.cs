@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Mladim.Application.Contracts.Persistence;
+using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -28,14 +29,23 @@ public class AddOrganizationGroupCommandHandler : IRequestHandler<AddOrganizatio
 
         ArgumentNullException.ThrowIfNull(organization);
 
-        var group = Group.Create(request.GroupType, request.Name, request.Description, request.Members);
+        var group = CreateGroup(request.GroupType, request.Name, request.Description, request.Members);
+        
+        ArgumentNullException.ThrowIfNull(group);
 
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, group.Members);        
-
-        organization.Add(group);       
-
-        await this.UnitOfWork.SaveChangesAsync();
+        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, group.Members);
+        
+        await this.UnitOfWork.GroupRepository.AddAsync(group);       
 
         return await this.UnitOfWork.SaveChangesAsync() > 0;
     }
+
+    private Group? CreateGroup(GroupType groupType, string name, string description, IEnumerable<int> memberIds) =>
+        groupType switch
+        {
+            GroupType.Project => Group.Create(MemberType.StaffMember, name, description, memberIds),
+            GroupType.Activity => Group.Create(MemberType.Participant, name, description, memberIds),
+            _ => null
+        };
+    
 }

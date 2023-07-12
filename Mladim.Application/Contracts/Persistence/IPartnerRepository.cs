@@ -11,5 +11,5 @@ namespace Mladim.Application.Contracts.Persistence;
 
 public interface IPartnerRepository : IGenericRepository<Partner>
 {
-    Task<IEnumerable<IFullName>> GetPartnersByFullNameAsync(Expression<Func<Partner, bool>> predicate);
+    Task<IEnumerable<INameableEntity>> GetPartnersAsync(Expression<Func<Partner, bool>> predicate, bool isMemberAbbreviated);
 }

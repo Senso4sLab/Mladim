@@ -7,26 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Features\Groups\Queries\**" />
     <Compile Remove="Features\Members\AnonymousParticipants\Commands\**" />
+    <Compile Remove="Features\Members\BaseMembers\**" />
     <Compile Remove="Features\Members\Commands\**" />
     <Compile Remove="Features\Members\Queries\**" />
-    <EmbeddedResource Remove="Features\Groups\Queries\**" />
     <EmbeddedResource Remove="Features\Members\AnonymousParticipants\Commands\**" />
+    <EmbeddedResource Remove="Features\Members\BaseMembers\**" />
     <EmbeddedResource Remove="Features\Members\Commands\**" />
     <EmbeddedResource Remove="Features\Members\Queries\**" />
-    <None Remove="Features\Groups\Queries\**" />
     <None Remove="Features\Members\AnonymousParticipants\Commands\**" />
+    <None Remove="Features\Members\BaseMembers\**" />
     <None Remove="Features\Members\Commands\**" />
     <None Remove="Features\Members\Queries\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Features\Accounts\Commands\AddAppUser\" />
-    <Folder Include="Features\Members\BaseMembers\Commands\AddMemberHandler\NewFolder\" />
-    <Folder Include="Features\Members\BaseMembers\Commands\UpdateMember\" />
-    <Folder Include="Features\Members\BaseMembers\Queries\GetMember\" />
-    <Folder Include="Features\Members\BaseMembers\Queries\GetMembers\" />
   </ItemGroup>
 
   <ItemGroup>

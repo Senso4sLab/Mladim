@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Contracts;
+using Mladim.Domain.Dtos;
 using Mladim.Domain.IdentityModels;
 using Mladim.Domain.Models;
 using Mladim.Infrastracture.Persistance;
@@ -16,10 +17,10 @@ namespace Mladim.Infrastracture.Repositories;
 
 public class StaffMemberRepository : GenericRepository<StaffMember>, IStaffMemberRepository
 {    
-    public StaffMemberRepository(ApplicationDbContext context) : base(context) {}     
+    public StaffMemberRepository(ApplicationDbContext context) : base(context) {}
 
-    public async Task<IEnumerable<IFullName>> GetStaffMemberByFullNameAsync(Expression<Func<StaffMember, bool>> predicate) =>
-      await DbSet.Where(predicate).Select(p => p as IFullName).ToListAsync();
-
+    public async Task<IEnumerable<INameableEntity>> GetStaffMembersAsync(Expression<Func<StaffMember, bool>> predicate, bool memberAbbreviated) =>
+        memberAbbreviated ? await DbSet.Where(predicate).Select(p => p as INameableEntity).AsNoTracking().ToListAsync() :
+            await DbSet.Where(predicate).AsNoTracking().ToListAsync();
 
 }

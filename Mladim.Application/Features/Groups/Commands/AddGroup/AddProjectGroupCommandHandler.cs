@@ -34,9 +34,7 @@ public class AddProjectGroupCommandHandler : IRequestHandler<AddProjectGroupComm
 
         ArgumentNullException.ThrowIfNull(group);     
 
-        project.Add(group);       
-
-        await this.UnitOfWork.SaveChangesAsync();
+        project.Add(group);        
 
         return await this.UnitOfWork.SaveChangesAsync() > 0; 
 

@@ -1,6 +1,10 @@
-﻿namespace Mladim.Domain.Dtos;
+﻿using Mladim.Domain.Contracts;
 
-public class StaffMemberQueryDto : MemberDto
+namespace Mladim.Domain.Dtos;
+
+public class StaffMemberQueryDto : INameableEntity
 {   
-    public bool IsLead { get; set; }   
+    public bool IsLead { get; set; }
+    public int Id { get; set; }
+    public string FullName { get; set; } = string.Empty;
 }

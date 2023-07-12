@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Mladim.Application.Contracts.Persistence;
+using Mladim.Domain.Contracts;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMembers;
 
-public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery, IEnumerable<MemberDto>>
+public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery, IEnumerable<StaffMemberQueryDto>>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -22,19 +23,21 @@ public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery,
 	{
         UnitOfWork = unitOfWork;
         Mapper = mapper;
-    }
-    
-   
-    public async Task<IEnumerable<MemberDto>> Handle(GetStaffMembersQuery request, CancellationToken cancellationToken)
+    }    
+ 
+    public async Task<IEnumerable<StaffMemberQueryDto>> Handle(GetStaffMembersQuery request, CancellationToken cancellationToken)
     {
-        IEnumerable<Member> members = Enumerable.Empty<Member>();   
+        IEnumerable<INameableEntity> members = Enumerable.Empty<StaffMemberQueryDto>();
 
         if(request.ActivityId is int activityId)        
-            members = await this.UnitOfWork.StaffMemberRepository.GetAllAsync(sm => sm.StaffActivities.Any(mp => mp.ActivityId == activityId), false);
+            members = await this.UnitOfWork.StaffMemberRepository.GetStaffMembersAsync(sm => sm.StaffActivities.Any(mp => mp.ActivityId == activityId), request.IsMemberAbbreviated);
         
         if (request.ProjectId  is int projectId)        
-            members = await this.UnitOfWork.StaffMemberRepository.GetAllAsync(sm => sm.StaffProjects.Any(mp => mp.ProjectId == projectId), false);        
+            members = await this.UnitOfWork.StaffMemberRepository.GetStaffMembersAsync(sm => sm.StaffProjects.Any(mp => mp.ProjectId == projectId), request.IsMemberAbbreviated);
+        
+        if(request.OrganizationId is  int organizationId)
+            members = await this.UnitOfWork.StaffMemberRepository.GetStaffMembersAsync(sm => sm.OrganizationId == organizationId, request.IsMemberAbbreviated);
 
-        return this.Mapper.Map<IEnumerable<MemberDto>>(members);              
+        return this.Mapper.Map<IEnumerable<StaffMemberQueryDto>>(members);              
     }
 }

@@ -19,8 +19,8 @@ public class PartnerProfile : Profile
         CreateMap<AddPartnerCommand, Partner>();
         CreateMap<PartnerCommandDto, Partner>();
 
-        CreateMap<AddPartnerCommand, OrganizationPartner>()
-            .ForMember(dest => dest.Partner, m => m.MapFrom(src => src));
+        //CreateMap<AddPartnerCommand, OrganizationPartner>()
+        //    .ForMember(dest => dest.Partner, m => m.MapFrom(src => src));
 
         CreateMap<UpdatePartnerCommand, Partner>();
 

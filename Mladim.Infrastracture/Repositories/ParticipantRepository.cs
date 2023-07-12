@@ -14,10 +14,9 @@ namespace Mladim.Infrastracture.Repositories;
 
 public class ParticipantRepository : GenericRepository<Participant>, IParticipantRepository
 {
-    public ParticipantRepository(ApplicationDbContext context) : base(context) { }
+    public ParticipantRepository(ApplicationDbContext context) : base(context) { }    
 
-    public async Task<IEnumerable<IFullName>> GetParticipantsByFullNameAsync(Expression<Func<Participant, bool>> predicate) =>    
-       await DbSet.Where(predicate).Select(p => p as IFullName).ToListAsync();  
-
-
+    public async Task<IEnumerable<INameableEntity>> GetParticipantsAsync(Expression<Func<Participant, bool>> predicate, bool memberAbbreviated) =>
+       memberAbbreviated ? await DbSet.Where(predicate).Select(p => p as INameableEntity).AsNoTracking().ToListAsync() :
+           await DbSet.Where(predicate).AsNoTracking().ToListAsync();
 }

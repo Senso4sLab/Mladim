@@ -8,10 +8,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Models;
 
-
-
-
-public class Member : BaseEntity<int>, IFullName
+public class Member : BaseEntity<int>, INameableEntity
 {
     public string Name { get; set; } = string.Empty;
     public string Surname { get; set; } = string.Empty;

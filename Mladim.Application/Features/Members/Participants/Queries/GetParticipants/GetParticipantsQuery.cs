@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Mladim.Application.Features.Members.Participants.Queries.GetParticipant;
+using Mladim.Domain.Contracts;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
 using System;
@@ -10,10 +11,11 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Participants.Queries.GetParticipants;
 
-public class GetParticipantsQuery : IRequest<IEnumerable<MemberDto>>
+public class GetParticipantsQuery : IRequest<IEnumerable<INameableEntity>>
 {
     public int? ProjectId { get; set; }
     public int? ActivityId { get; set; }
+    public int? OrganizationId { get; set; }
     public bool IsActive { get; set; } = true;
-    public bool WithDetails { get; set; }
+    public bool IsMemberAbbreviated { get; set; }
 }

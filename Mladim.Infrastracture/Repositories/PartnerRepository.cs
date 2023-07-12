@@ -16,6 +16,7 @@ public class PartnerRepository : GenericRepository<Partner>, IPartnerRepository
 {
     public PartnerRepository(ApplicationDbContext context) : base(context) {}
 
-    public async Task<IEnumerable<IFullName>> GetPartnersByFullNameAsync(Expression<Func<Partner, bool>> predicate) =>
-        await DbSet.Where(predicate).Select(p => p as IFullName).ToListAsync();
+    public async Task<IEnumerable<INameableEntity>> GetPartnersAsync(Expression<Func<Partner, bool>> predicate, bool isMemberAbbreviated) =>
+         isMemberAbbreviated ? await DbSet.Where(predicate).Select(p => p as INameableEntity).AsNoTracking().ToListAsync() :
+            await DbSet.Where(predicate).AsNoTracking().ToListAsync();
 }

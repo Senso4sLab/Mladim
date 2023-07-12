@@ -32,9 +32,7 @@ public class AddActivityGroupCommandHandler : IRequestHandler<AddActivityGroupCo
 
         ArgumentNullException.ThrowIfNull(group);
 
-        activity.Add(group);
-
-        await this.UnitOfWork.SaveChangesAsync();
+        activity.Add(group);       
 
         return await this.UnitOfWork.SaveChangesAsync() > 0;
     }
