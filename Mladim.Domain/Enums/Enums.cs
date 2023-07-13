@@ -202,6 +202,7 @@ public enum MemberType
 [Flags]
 public enum GroupType
 {   
+    Parent = 0,
     Project = 1,
     Activity = 2,
 };

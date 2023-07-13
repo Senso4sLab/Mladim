@@ -16,11 +16,11 @@ public class GroupProfile : Profile
 {
     public GroupProfile()
     {
-        CreateMap<GroupDetailsQueryDto, Group>()
-            .ReverseMap();
+        CreateMap<Group, GroupDetailsQueryDto>();
+            
 
-        CreateMap<GroupCommandDto, ProjectGroup>();
-        CreateMap<GroupCommandDto, ActivityGroup>();
+        CreateMap<GroupCommandDto, Group>()
+            .ForAllMembers(dest => dest.MapFrom(src => Group.Create(src.GroupType, src.Id)));      
 
         CreateMap<ProjectGroup, GroupQueryDto>();
         CreateMap<ActivityGroup, GroupQueryDto>();

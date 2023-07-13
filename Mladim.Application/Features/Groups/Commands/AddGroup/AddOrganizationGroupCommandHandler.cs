@@ -43,8 +43,8 @@ public class AddOrganizationGroupCommandHandler : IRequestHandler<AddOrganizatio
     private Group? CreateGroup(GroupType groupType, string name, string description, IEnumerable<int> memberIds) =>
         groupType switch
         {
-            GroupType.Project => Group.Create(MemberType.StaffMember, name, description, memberIds),
-            GroupType.Activity => Group.Create(MemberType.Participant, name, description, memberIds),
+            GroupType.Project => Group.Create(GroupType.Project, name, description, memberIds),
+            GroupType.Activity => Group.Create(GroupType.Activity, name, description, memberIds),
             _ => null
         };
     

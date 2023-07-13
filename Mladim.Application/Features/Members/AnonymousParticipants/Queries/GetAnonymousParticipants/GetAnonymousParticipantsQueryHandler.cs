@@ -24,9 +24,7 @@ public class GetAnonymousParticipantsQueryHandler : IRequestHandler<GetAnonymous
     public async Task<IEnumerable<AnonymousParticipantQueryDto>> Handle(GetAnonymousParticipantsQuery request, CancellationToken cancellationToken)
     {
         var activity = await this.UnitOfWork.ActivityRepository.FirstOrDefaultAsync(a => a.Id == request.ActivityId);
-
         ArgumentNullException.ThrowIfNull(activity);
-
-        return this.Mapper.Map<IEnumerable<AnonymousParticipantQueryDto>>(activity.AnonymousParticipantGroups);   
+        return this.Mapper.Map<IEnumerable<AnonymousParticipantQueryDto>>(activity.AnonymousParticipantGroups);
     }
 }

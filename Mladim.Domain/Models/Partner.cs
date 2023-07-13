@@ -1,4 +1,4 @@
-﻿using Mladim.Domain.Contracts;
+﻿
 
 namespace Mladim.Domain.Models;
 
@@ -12,10 +12,7 @@ public class Partner : NamedEntity
     public List<Activity> Activities { get; set; } = new();
     public List<Project> Projects { get; set; } = new();   
     public int OrganizationId { get; set; }
-    private Partner() 
-    {         
-
-    }    
+    private Partner() {}    
     private Partner(int id) : base() { } 
     public static Partner Create(int parnetId) =>
         new Partner(parnetId);  

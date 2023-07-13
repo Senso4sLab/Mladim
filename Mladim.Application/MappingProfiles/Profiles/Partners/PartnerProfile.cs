@@ -17,14 +17,11 @@ public class PartnerProfile : Profile
     public PartnerProfile()
     {
         CreateMap<AddPartnerCommand, Partner>();
-        CreateMap<PartnerCommandDto, Partner>();
-
-        //CreateMap<AddPartnerCommand, OrganizationPartner>()
-        //    .ForMember(dest => dest.Partner, m => m.MapFrom(src => src));
+        CreateMap<PartnerCommandDto, Partner>();        
 
         CreateMap<UpdatePartnerCommand, Partner>();
 
-        CreateMap<PartnerQueryDetailsDto, Partner>().ReverseMap();
+        CreateMap<Partner, PartnerQueryDetailsDto>().ReverseMap();
 
         CreateMap<Partner, PartnerQueryDto>();
     }

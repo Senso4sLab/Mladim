@@ -18,7 +18,8 @@ public class MemberProfile : Profile
             .Include<StaffMember, StaffMemberDetailsQueryDto>()
             .Include<Participant, ParticipantDetailsQueryDto>()
             .Include<Partner, PartnerQueryDetailsDto>();
-      
+
+        CreateMap<Member, NamedEntityDto>();
 
         //CreateMap<MemberDto, Member>()
         //    .Include<StaffMemberDetailsQueryDto, StaffMember>()
