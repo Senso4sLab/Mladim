@@ -62,6 +62,5 @@ builder.Services.AddScoped<IPopupService, PopupService>();
     builder.Services.Configure<MladimApiUrls>(builder.Configuration.GetSection("MladimApiUrls"));
     builder.Services.Configure<StorageKeys>(builder.Configuration.GetSection("StorageKeys"));
 }
-
    
 await builder.Build().RunAsync();

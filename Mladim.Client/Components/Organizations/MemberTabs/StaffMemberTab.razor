@@ -12,7 +12,7 @@
         <Columns>
             <PropertyColumn Property="x => x.Name" Title="Ime" />
             <PropertyColumn Property="x => x.Surname" Title="Priimek" />
-            <PropertyColumn Property="x => x.Gender.GetDisplayAttribute()" Title="Spol" />
+            <PropertyColumn Property="x => x.Gender.GetDisplayAttributeString()" Title="Spol" />
             <PropertyColumn Property="x => x.YearOfBirth" Title="Leto rojstva"/>
             <TemplateColumn CellClass="d-flex justify-end">
                 <CellTemplate>

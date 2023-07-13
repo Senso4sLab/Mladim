@@ -5,18 +5,11 @@ namespace Mladim.Client.Extensions;
 
 public static class EnumUtility
 {
-    public static string GetDisplayAttribute(this Enum value)
-    {
-        var type = value.GetType();
-
-        var fi = type.GetField(value.ToString());
-
-        if (fi.GetCustomAttribute(typeof(DisplayAttribute)) is DisplayAttribute displayAttribute)
-            return displayAttribute.Name;
-
-        return string.Empty;
-    }
-
+    public static string GetDisplayAttributeString(this Enum value) =>
+        TryGetDisplayAttribute(value) is DisplayAttribute displayAttribute ?
+            displayAttribute.Name ?? string.Empty : string.Empty;
+    private static Attribute? TryGetDisplayAttribute(this Enum value) =>
+        value.GetType().GetField(value.ToString())?.GetCustomAttribute(typeof(DisplayAttribute));
     public static IEnumerable<T> ToEnums<T>(this T value) where T : struct, Enum =>
         Enum.GetValues<T>()
             .Where(val => value.HasFlag(val))

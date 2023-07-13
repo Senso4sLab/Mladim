@@ -3,40 +3,40 @@
 public class MladimApiUrls
 {
 
-    public string GetOrganizationById { get; set; }
-    public string GetOrganizationsByUserId { get; set; }
-    public string RemoveOrganization { get; set; }
-    public string OrganizationCommand { get; set; }
+    public string GetOrganizationById { get; set; } = string.Empty;
+    public string GetOrganizationsByUserId { get; set; } = string.Empty;
+    public string RemoveOrganization { get; set; } = string.Empty;
+    public string OrganizationCommand { get; set; } = string.Empty;
 
 
-    public string GetProjectById { get; set; }
-    public string GetProjectsByOrganizationId { get; set; }
-    public string RemoveProject { get; set; }
-    public string ProjectCommand { get; set; }
+    public string GetProjectById { get; set; } = string.Empty;
+    public string GetProjectsByOrganizationId { get; set; } = string.Empty;
+    public string RemoveProject { get; set; } = string.Empty;
+    public string ProjectCommand { get; set; } = string.Empty;
 
 
-    public string GetActivityById { get; set; }
-    public string GetActivitiesByOrganizationId { get; set; }
-    public string GetActivitiesByProjectId { get; set; }
-    public string RemoveActivity { get; set; }
-    public string ActivityCommand { get; set; }
+    public string GetActivityById { get; set; } = string.Empty;
+    public string GetActivitiesByOrganizationId { get; set; } = string.Empty;
+    public string GetActivitiesByProjectId { get; set; } = string.Empty;
+    public string RemoveActivity { get; set; } = string.Empty;
+    public string ActivityCommand { get; set; } = string.Empty;
 
 
 
 
-    public string GetStafMembersByOrganizationId { get; set; }    
-
-   
-    public string StaffMemberCommand { get; set; }   
-
-    public string GetParticipantsByOrganizationId { get; set; }
-    public string ParticipantCommand { get; set; }
-
-    public string GetPartnersByOrganizationId { get; set; }
-    public string PartnerCommand { get; set; }
+    public string GetStafMembersByOrganizationId { get; set; } = string.Empty;
 
 
-    public string Login { get; set; }
-    public string AccountCommand { get; set; }
-    public string GetAccountById { get; set;}
+    public string StaffMemberCommand { get; set; } = string.Empty;
+
+    public string GetParticipantsByOrganizationId { get; set; } = string.Empty;
+    public string ParticipantCommand { get; set; } = string.Empty;
+
+    public string GetPartnersByOrganizationId { get; set; } = string.Empty;
+    public string PartnerCommand { get; set; } = string.Empty;
+
+
+    public string Login { get; set; } = string.Empty;
+    public string AccountCommand { get; set; } = string.Empty;
+    public string GetAccountById { get; set; } = string.Empty;
 }

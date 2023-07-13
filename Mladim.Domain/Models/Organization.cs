@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 namespace Mladim.Domain.Models;
 
 public class Organization : BaseEntity<int>
-{    public OrganizationAttributes Attributes { get; private set; } = default!;
+{    
+    public OrganizationAttributes Attributes { get; private set; } = default!;
     public SocialMediaUrls SocialMediaUrls { get; private set; } = default!;
     private Organization() { } 
     private Organization(OrganizationAttributes attributes, SocialMediaUrls urls) =>
