@@ -28,20 +28,23 @@ public class GetParticipantsQueryHandler : IRequestHandler<GetParticipantsQuery,
 
     public async Task<IEnumerable<NamedEntityDto>> Handle(GetParticipantsQuery request, CancellationToken cancellationToken)
     {
-        IEnumerable<NamedEntity> members = await GetParticipantsAsync(request.ActivityId, request.ProjectId, request.OrganizationId, request.IsMemberAbbreviated);
+        IEnumerable<NamedEntity> members = await GetParticipantsAsync(request);
         return this.Mapper.Map<IEnumerable<NamedEntityDto>>(members);
     }
 
-    private async Task<IEnumerable<NamedEntity>> GetParticipantsAsync(int? activityId, int? projectId, int? organizationId, bool isMemberAbbreviated)
+    private async Task<IEnumerable<NamedEntity>> GetParticipantsAsync(GetParticipantsQuery request)
     {
-        if (activityId is not null)
-            return await this.UnitOfWork.ParticipantRepository.GetParticipantsAsync(p => p.Activities.Any(a => a.Id == activityId), isMemberAbbreviated);
+        if (request.ActivityId is int activityId)
+            return await this.UnitOfWork.ParticipantRepository.
+                GetParticipantsAsync(p => p.IsActive == request.IsActive && p.Activities.Any(a => a.Id == activityId), request.IsMemberAbbreviated);
 
-        if (projectId is not null)
-           return await this.UnitOfWork.ParticipantRepository.GetParticipantsAsync(p => p.Activities.Any(a => a.ProjectId == projectId), isMemberAbbreviated);
+        if (request.ProjectId is int projectId)
+           return await this.UnitOfWork.ParticipantRepository.
+                GetParticipantsAsync(p => p.IsActive == request.IsActive && p.Activities.Any(a => a.ProjectId == projectId), request.IsMemberAbbreviated);
 
-        if (organizationId is not null)
-          return await this.UnitOfWork.ParticipantRepository.GetParticipantsAsync(p => p.OrganizationId == organizationId, isMemberAbbreviated);
+        if (request.OrganizationId is int organizationId)
+          return await this.UnitOfWork.ParticipantRepository.
+                GetParticipantsAsync(p => p.IsActive == request.IsActive && p.OrganizationId == organizationId, request.IsMemberAbbreviated);
 
         return Enumerable.Empty<NamedEntity>();
     }

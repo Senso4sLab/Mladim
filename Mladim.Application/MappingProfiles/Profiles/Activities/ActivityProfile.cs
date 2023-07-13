@@ -21,10 +21,7 @@ public class ActivityProfile : Profile
         CreateMap<Activity, ActivityQueryDetailsDto>();
         CreateMap<AddActivityCommand, Activity>();
         CreateMap<UpdateActivityCommand, Activity>();
-
-        CreateMap<ActivityWithProjectName, ActivityWithProjectNameQueryDto>();
-
-        
+        CreateMap<ActivityWithProjectName, ActivityWithProjectNameQueryDto>();    
 
     }
 }

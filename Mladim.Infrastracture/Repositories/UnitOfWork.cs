@@ -26,7 +26,6 @@ public class UnitOfWork : IUnitOfWork
        groupRepository ??= new GroupRepository(this.Context);
     public IAppUserRepository AppUserRepository =>
        appUserRepository ??= new AppUserRepository(this.Context);
-
     public IPartnerRepository PartnerRepository => 
         partnerRepository ??= new PartnerRepository(this.Context);
     public IParticipantRepository ParticipantRepository =>
@@ -53,9 +52,7 @@ public class UnitOfWork : IUnitOfWork
     }    
 
     public async Task<int> SaveChangesAsync() =>
-        await this.Context.SaveChangesAsync();
-
-   
+        await this.Context.SaveChangesAsync();   
 
     public void ConfigEntityState<T>(EntityState state, IEnumerable<T> entities) where T : class
     {

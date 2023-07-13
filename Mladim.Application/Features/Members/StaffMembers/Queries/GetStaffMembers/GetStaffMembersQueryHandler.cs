@@ -29,24 +29,24 @@ public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery,
  
     public async Task<IEnumerable<NamedEntityDto>> Handle(GetStaffMembersQuery request, CancellationToken cancellationToken)
     {
-        IEnumerable<NamedEntity> members = await GetStaffMembersAsync(request.ActivityId, request.ProjectId, request.OrganizationId, request.IsMemberAbbreviated);
+        IEnumerable<NamedEntity> members = await GetStaffMembersAsync(request);
         return this.Mapper.Map<IEnumerable<NamedEntityDto>>(members);              
     }
 
 
-    private async Task<IEnumerable<NamedEntity>> GetStaffMembersAsync(int? activityId, int? projectId, int? organizationId, bool isMemberAbbreviated)
+    private async Task<IEnumerable<NamedEntity>> GetStaffMembersAsync(GetStaffMembersQuery request)
     {
-        if (activityId is not null)
+        if (request.ActivityId is int activityId)
             return await this.UnitOfWork.StaffMemberRepository
-                .GetStaffMembersAsync(sm => sm.StaffActivities.Any(mp => mp.ActivityId == activityId), isMemberAbbreviated);
+                .GetStaffMembersAsync(sm => sm.IsActive == request.IsActive && sm.StaffActivities.Any(mp => mp.ActivityId == activityId), request.IsMemberAbbreviated);
 
-        if (projectId is not null)
+        if (request.ProjectId is int projectId)
             return await this.UnitOfWork.StaffMemberRepository
-                .GetStaffMembersAsync(sm => sm.StaffProjects.Any(mp => mp.ProjectId == projectId), isMemberAbbreviated);
+                .GetStaffMembersAsync(sm => sm.IsActive == request.IsActive && sm.StaffProjects.Any(mp => mp.ProjectId == projectId), request.IsMemberAbbreviated);
 
-        if (organizationId is not null)
+        if (request.OrganizationId is int organizationId)
             return await this.UnitOfWork.StaffMemberRepository
-                .GetStaffMembersAsync(sm => sm.OrganizationId == organizationId, isMemberAbbreviated);
+                .GetStaffMembersAsync(sm => sm.IsActive == request.IsActive && sm.OrganizationId == organizationId, request.IsMemberAbbreviated);
 
         return Enumerable.Empty<NamedEntity>();
     }

@@ -13,6 +13,7 @@ public class Group: NamedEntity
 {    
     public string Description { get; set; } = string.Empty;
     public List<Member> Members { get; set; } = new();
+    public bool IsActive { get; set; }
     public int OrganizationId { get; set; }   
 
     protected Group() { }   

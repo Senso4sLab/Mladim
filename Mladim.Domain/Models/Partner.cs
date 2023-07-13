@@ -8,7 +8,8 @@ public class Partner : NamedEntity
     public string? Description { get; set; }
     public string? WebpageUrl { get; set; }
     public string? ContactPerson { get; set; }    
-    public string? PhoneNumber { get; set; } 
+    public string? PhoneNumber { get; set; }
+    public bool IsActive { get; set; } = true;
     public List<Activity> Activities { get; set; } = new();
     public List<Project> Projects { get; set; } = new();   
     public int OrganizationId { get; set; }

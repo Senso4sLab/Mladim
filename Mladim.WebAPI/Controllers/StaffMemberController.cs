@@ -6,6 +6,7 @@ using Mladim.Application.Features.Members.StaffMembers.Commands.UpdateStaffMembe
 using Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMember;
 using Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMembers;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.Members;
 using Mladim.Domain.Models;
 
 namespace Mladim.WebAPI.Controllers;
@@ -22,7 +23,7 @@ public class StaffMemberController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<StaffMemberDetailsQueryDto?>> AddAsync(AddStaffMemberCommand request)
+    public async Task<ActionResult<bool>> AddAsync(AddStaffMemberCommand request)
     {
         var response = await this.Mediator.Send(request);
         return Ok(response);
@@ -37,7 +38,7 @@ public class StaffMemberController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<MemberBaseAttributes>>> GetAsync([FromQuery] GetStaffMembersQuery query)
+    public async Task<ActionResult<IEnumerable<NamedEntityDto>>> GetAsync([FromQuery] GetStaffMembersQuery query)
     {
         var response = await this.Mediator.Send(query);
         return Ok(response);

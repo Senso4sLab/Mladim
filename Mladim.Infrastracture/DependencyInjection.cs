@@ -60,9 +60,6 @@ public static class DependencyInjection
             };
         });
 
-
-
-
         return collection;
     }
 }

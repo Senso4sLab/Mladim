@@ -25,7 +25,7 @@ public class OrganizationController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<OrganizationQueryDto?>> AddAsync(AddOrganizationCommand request)
+    public async Task<ActionResult<bool>> AddAsync(AddOrganizationCommand request)
     {
         var response = await this.Mediator.Send(request);
         return Ok(response);

@@ -16,9 +16,7 @@ public class ParticipantProfile : Profile
 {
 	public ParticipantProfile()
 	{
-        CreateMap<AddParticipantCommand, Participant>();
-        CreateMap<AddParticipantCommand, OrganizationMember>()
-           .ForMember(dest => dest.Member as Participant, m => m.MapFrom(src => src));
+        CreateMap<AddParticipantCommand, Participant>();       
 
         CreateMap<UpdateParticipantCommand, Participant>();
 

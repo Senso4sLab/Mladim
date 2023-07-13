@@ -13,12 +13,12 @@ public class Activity : BaseEntity<int>
 {
     public ActivityAttributes Attributes { get; protected set; } = default!;
     public DateTimeRange TimeRange { get; protected set; } = default!;
-   
-    protected Activity() {}
+
+    protected Activity() { }
 
     private Activity(DateTimeRange timeRange, ActivityAttributes attributes) =>
         (Attributes, TimeRange) = (attributes, TimeRange);
-       
+
 
     //public bool Exists(Partner partner) =>
     //    this.Partners.Any(p => p == partner);
@@ -28,16 +28,25 @@ public class Activity : BaseEntity<int>
     //public bool Exists(Participant participant) =>
     //    this.Participants.Any(p => p == participant);
 
-    //public bool Exists(AnonymousParticipantGroup anonymousParticipantGroup) =>
-    //   this.AnonymousParticipantGroups.Any(apg => apg == anonymousParticipantGroup);
+   
 
     //public bool Exists(StaffMember other) =>
     //     this.Staff.Any(smp => smp.StaffMember == other);
     public void Add(Partner partner) =>
         this.Partners.Add(partner);
 
-    public void Add(AnonymousParticipantGroup apg) =>
-        this.AnonymousParticipantGroups.Add(apg);
+    public void Add(AnonymousParticipantGroup apg)
+    {
+        var anonymousParticipant = this.AnonymousParticipantGroups.FirstOrDefault(apg => apg.AnonymousParticipant == apg.AnonymousParticipant);
+        
+        if (anonymousParticipant != null)        
+            anonymousParticipant.Number += apg.Number;        
+        else
+           this.AnonymousParticipantGroups.Add(apg);
+    }
+
+    
+
 
     public void Add(Participant participant) =>
      this.Participants.Add(participant);

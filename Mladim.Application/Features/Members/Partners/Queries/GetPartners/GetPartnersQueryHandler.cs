@@ -27,20 +27,20 @@ public class GetPartnersQueryHandler : IRequestHandler<GetPartnersQuery, IEnumer
 
     public async Task<IEnumerable<NamedEntityDto>> Handle(GetPartnersQuery request, CancellationToken cancellationToken)
     {
-        IEnumerable<NamedEntity> members = await GetPartnersAsync(request.ActivityId, request.ProjectId, request.OrganizationId, request.IsMemberAbbreviated);
+        IEnumerable<NamedEntity> members = await GetPartnersAsync(request);
         return this.Mapper.Map<IEnumerable<NamedEntityDto>>(members);       
     }
 
-    private async Task<IEnumerable<NamedEntity>> GetPartnersAsync(int? activityId, int? projectId, int? organizationId, bool isMemberAbbreviated)
+    private async Task<IEnumerable<NamedEntity>> GetPartnersAsync(GetPartnersQuery request)
     {
-        if (activityId is not null)
-            return await this.UnitOfWork.PartnerRepository.GetPartnersAsync(p => p.Activities.Any(a => a.Id == activityId), isMemberAbbreviated);
+        if (request.ActivityId is int activityId)
+            return await this.UnitOfWork.PartnerRepository.GetPartnersAsync(p => p.IsActive == request.IsActive && p.Activities.Any(a => a.Id == activityId), request.IsMemberAbbreviated);
 
-        if (projectId is not null)
-            return  await this.UnitOfWork.PartnerRepository.GetPartnersAsync(p => p.Activities.Any(a => a.ProjectId == projectId), isMemberAbbreviated);
+        if (request.ProjectId is int projectId)
+            return  await this.UnitOfWork.PartnerRepository.GetPartnersAsync(p => p.IsActive == request.IsActive && p.Activities.Any(a => a.ProjectId == projectId), request.IsMemberAbbreviated);
 
-        if (organizationId is not null)
-            return  await this.UnitOfWork.PartnerRepository.GetPartnersAsync(p => p.OrganizationId == organizationId, isMemberAbbreviated);
+        if (request.OrganizationId is int organizationId)
+            return  await this.UnitOfWork.PartnerRepository.GetPartnersAsync(p => p.IsActive == request.IsActive && p.OrganizationId == organizationId, request.IsMemberAbbreviated);
 
         return Enumerable.Empty<NamedEntity>();
     }

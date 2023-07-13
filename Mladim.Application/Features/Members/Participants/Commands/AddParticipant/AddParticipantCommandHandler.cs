@@ -25,15 +25,14 @@ public class AddParticipantCommandHandler : IRequestHandler<AddParticipantComman
    
     public async Task<bool> Handle(AddParticipantCommand request, CancellationToken cancellationToken)
     {
-
         var organization = await this.UnitOfWork.OrganizationRepository
             .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
 
         ArgumentNullException.ThrowIfNull(organization);
 
-        var organizationParticipant = this.Mapper.Map<OrganizationMember>(request);
+        var participant = this.Mapper.Map<Participant>(request);
 
-        organization.Members.Add(organizationParticipant);
+        await this.UnitOfWork.ParticipantRepository.AddAsync(participant);
 
         return await this.UnitOfWork.SaveChangesAsync() > 0;      
         

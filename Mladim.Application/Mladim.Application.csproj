@@ -7,15 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Features\Members\AnonymousParticipants\Commands\**" />
     <Compile Remove="Features\Members\BaseMembers\**" />
     <Compile Remove="Features\Members\Commands\**" />
     <Compile Remove="Features\Members\Queries\**" />
-    <EmbeddedResource Remove="Features\Members\AnonymousParticipants\Commands\**" />
     <EmbeddedResource Remove="Features\Members\BaseMembers\**" />
     <EmbeddedResource Remove="Features\Members\Commands\**" />
     <EmbeddedResource Remove="Features\Members\Queries\**" />
-    <None Remove="Features\Members\AnonymousParticipants\Commands\**" />
     <None Remove="Features\Members\BaseMembers\**" />
     <None Remove="Features\Members\Commands\**" />
     <None Remove="Features\Members\Queries\**" />

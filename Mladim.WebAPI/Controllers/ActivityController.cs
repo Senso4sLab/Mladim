@@ -22,7 +22,7 @@ public class ActivityController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ActivityQueryDto?>> AddAsync(AddActivityCommand request)
+    public async Task<ActionResult<bool>> AddAsync(AddActivityCommand request)
     {
         var response = await this.Mediator.Send(request);
         return Ok(response);
@@ -44,7 +44,7 @@ public class ActivityController : ControllerBase
 
 
     [HttpGet("{activityId}")]
-    public async Task<ActionResult<ActivityQueryDto?>> GetAsync(int activityId)
+    public async Task<ActionResult<ActivityQueryDetailsDto?>> GetAsync(int activityId)
     {
         var response = await this.Mediator.Send(new GetActivityQuery { ActivityId = activityId });
         return Ok(response);

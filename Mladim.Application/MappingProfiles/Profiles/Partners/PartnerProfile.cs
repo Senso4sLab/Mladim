@@ -21,7 +21,8 @@ public class PartnerProfile : Profile
 
         CreateMap<UpdatePartnerCommand, Partner>();
 
-        CreateMap<Partner, PartnerQueryDetailsDto>().ReverseMap();
+        CreateMap<Partner, PartnerQueryDetailsDto>()
+            .ReverseMap();
 
         CreateMap<Partner, PartnerQueryDto>();
     }

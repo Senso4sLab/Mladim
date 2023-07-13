@@ -6,6 +6,7 @@ using Mladim.Application.Features.Members.Partners.Queries.GetPartner;
 using Mladim.Application.Features.Members.Partners.Queries.GetPartners;
 using Mladim.Application.Features.Members.StaffMembers.Commands.UpdatePartner;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.Members;
 using Mladim.Domain.Models;
 
 namespace Mladim.WebAPI.Controllers
@@ -22,7 +23,7 @@ namespace Mladim.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PartnerQueryDetailsDto?>> AddAsync(AddPartnerCommand request)
+        public async Task<ActionResult<bool>> AddAsync(AddPartnerCommand request)
         {
             var response = await this.Mediator.Send(request);
             return Ok(response);
@@ -37,7 +38,7 @@ namespace Mladim.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberBaseAttributes>>> GetAsync([FromQuery] GetPartnersQuery query)
+        public async Task<ActionResult<IEnumerable<NamedEntityDto>>> GetAsync([FromQuery] GetPartnersQuery query)
         {
             var response = await this.Mediator.Send(query);
             return Ok(response);
