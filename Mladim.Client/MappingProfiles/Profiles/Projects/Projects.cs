@@ -4,6 +4,7 @@ using Mladim.Client.ViewModels.Organization;
 using Mladim.Client.ViewModels.Project;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Dtos.Attributes;
+using Mladim.Domain.Dtos.DateTimeRange;
 
 namespace Mladim.Client.MappingProfiles.Profiles.Projects;
 
@@ -12,10 +13,15 @@ public class Projects : Profile
     public Projects()
     {
         CreateMap<ProjectVM, UpdateProjectCommandDto>()
-            .ForMember(dest => dest.Staff, m => m.MapFrom(src => src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true)).Concat(src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true))).ToList()));
+            .ForMember(dest => dest.Staff, m => m.MapFrom(src => src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true))
+                .Concat(src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true))).ToList()))
+                .ForMember(dest => dest.DateTimeRange, m => m.MapFrom(src => DateTimeRangeCommandDto.Create(src.DateRange.Start.Value, src.DateRange.End.Value, TimeSpan.Zero, TimeSpan.Zero)));
+
 
         CreateMap<ProjectVM, AddProjectCommandDto>()
-            .ForMember(dest => dest.Staff, m => m.MapFrom(src => src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true)).Concat(src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true))).ToList()));
+            .ForMember(dest => dest.Staff, m => m.MapFrom(src => src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true))
+                .Concat(src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true))).ToList()))
+                .ForMember(dest => dest.DateTimeRange, m => m.MapFrom(src => DateTimeRangeCommandDto.Create(src.DateRange.Start.Value, src.DateRange.End.Value, TimeSpan.Zero, TimeSpan.Zero)));
         
 
         CreateMap<ProjectQueryDetailsDto, ProjectVM>()

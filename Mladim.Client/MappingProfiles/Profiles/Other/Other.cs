@@ -17,6 +17,8 @@ public class Other : Profile
         CreateMap<DateTimeRangeVM, DateTimeRangeCommandDto>();
         CreateMap<DateTimeRangeQueryDto, DateTimeRangeVM>();
 
+        
+
         CreateMap<NamedEntityDto, NamedEntityVM>()
             .ReverseMap();
     }

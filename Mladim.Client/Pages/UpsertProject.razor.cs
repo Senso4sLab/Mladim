@@ -29,8 +29,6 @@ public partial class UpsertProject
 
     [Parameter]
     public int? ProjectId { get; set; }
-
-
     
 
     private IEnumerable<NamedEntityVM> Staff = new List<NamedEntityVM>();    
