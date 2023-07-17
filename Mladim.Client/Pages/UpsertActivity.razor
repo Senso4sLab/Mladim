@@ -14,56 +14,56 @@
 
      </MudStack>
 
-     <MudTextField @bind-Value="activity.Name" Variant="Variant.Outlined" Label="Ime aktivnosti">@activity.Name</MudTextField>
-     <MudDateRangePicker Variant="Variant.Outlined" Label="Trajanje aktivnosti" @bind-DateRange="activity.ActivityDateRange" />
-     @if(activity.ActivityDateRange.End?.Day == activity.ActivityDateRange.Start?.Day)
+     <MudTextField @bind-Value="activity.Attributes.Name" Variant="Variant.Outlined" Label="Ime aktivnosti">@activity.Attributes.Name</MudTextField>
+     <MudDateRangePicker Variant="Variant.Outlined" Label="Trajanje aktivnosti" @bind-DateRange="activity.DateRange" />
+     @if (activity.DateRange.End?.Day == activity.DateRange.Start?.Day)
     {
         <MudGrid>
             <MudItem xs="6">
                 <MudText Typo="Typo.h6">Začetek aktivnosti</MudText>
-                <MudTimePicker @bind-Time="activity.StartHour" PickerVariant="PickerVariant.Dialog" Label="24 urni prikaz" TimeEditMode="TimeEditMode.OnlyHours" />
+                <MudTimePicker @bind-Time="activity.StartTime" PickerVariant="PickerVariant.Dialog" Label="24 urni prikaz" TimeEditMode="TimeEditMode.OnlyHours" />
             </MudItem>
             <MudItem xs="6">
                 <MudText Typo="Typo.h6">Konec aktivnosti</MudText>
-                <MudTimePicker @bind-Time="activity.EndHour" PickerVariant="PickerVariant.Dialog" Label="24 urni prikaz" TimeEditMode="TimeEditMode.OnlyHours" />
+                <MudTimePicker @bind-Time="activity.EndTime" PickerVariant="PickerVariant.Dialog" Label="24 urni prikaz" TimeEditMode="TimeEditMode.OnlyHours" />
             </MudItem>
         </MudGrid>     
         
     }
 
-     <TextEditor @ref="textEditor" @bind-Text="@activity.Description" />
+     <TextEditor @ref="textEditor" @bind-Text="@activity.Attributes.Description" />
 
-     <MultiSelect TItem="ActivityTypes" @bind-EnumValues="activity.ActivityTypes" Label="Tip aktivnosti" />
+     <MultiSelect TItem="ActivityTypes" @bind-EnumValues="activity.Attributes.ActivityTypes" Label="Tip aktivnosti" />
 
-    <MudSelect T="MemberBaseVM" ToStringFunc="@((staff)=> staff.CompleteName)" MultiSelection="true" @bind-SelectedValues="activity.LeadStaff" Variant="Variant.Outlined" Label="Vodje aktivnosti" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Staff" Variant="Variant.Outlined" Label="Vodje aktivnosti" AnchorOrigin="Origin.BottomCenter">
          @foreach (var staffMember in staff)
         {
-            <MudSelectItem Value="staffMember">@staffMember.CompleteName</MudSelectItem>
+            <MudSelectItem Value="staffMember">@staffMember.FullName</MudSelectItem>
         }
     </MudSelect>
 
-    <MudSelect T="MemberBaseVM" ToStringFunc="@((staff)=> staff.CompleteName)" MultiSelection="true" @bind-SelectedValues="activity.Administrators" Variant="Variant.Outlined" Label="Drugi sodelujoči" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Administration" Variant="Variant.Outlined" Label="Drugi sodelujoči" AnchorOrigin="Origin.BottomCenter">
         @foreach (var staffMember in staff)
         {
-            <MudSelectItem Value="staffMember">@staffMember.CompleteName</MudSelectItem>
+            <MudSelectItem Value="staffMember">@staffMember.FullName</MudSelectItem>
         }
     </MudSelect>
 
     <MudStack Row Spacing="5" AlignItems="AlignItems.Center">
-         <MudSelect T="MemberBaseVM" ToStringFunc="@((partner)=> partner.Name)" MultiSelection="true" @bind-SelectedValues="activity.Partners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter">
+         <MudSelect T="NamedEntityVM" ToStringFunc="@((partner)=> partner.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Partners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter">
              @foreach (var partner in partners)
             {
-                <MudSelectItem Value="partner">@partner.Name</MudSelectItem>
+                <MudSelectItem Value="partner">@partner.FullName</MudSelectItem>
             }
         </MudSelect>
         <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddPartnerAsync" />
     </MudStack>
 
     <MudStack Row Spacing="5" AlignItems="AlignItems.Center">
-        <MudSelect T="MemberBaseVM" ToStringFunc="@((participant)=> participant.CompleteName)" MultiSelection="true" @bind-SelectedValues="activity.Participants" Variant="Variant.Outlined" Label="Udeleženci" AnchorOrigin="Origin.BottomCenter">
+        <MudSelect T="NamedEntityVM" ToStringFunc="@((participant)=> participant.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Participants" Variant="Variant.Outlined" Label="Udeleženci" AnchorOrigin="Origin.BottomCenter">
              @foreach (var participant in participants)
             {
-                <MudSelectItem Value="participant">@participant.CompleteName</MudSelectItem>
+                <MudSelectItem Value="participant">@participant.FullName</MudSelectItem>
             }
         </MudSelect>
         <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddParticipantAsync" />

@@ -24,7 +24,7 @@ namespace Mladim.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<bool>> AddAsync(AddParticipantCommand request)
+        public async Task<ActionResult<ParticipantDetailsQueryDto?>> AddAsync(AddParticipantCommand request)
         {
             var response = await this.Mediator.Send(request);
             return Ok(response);

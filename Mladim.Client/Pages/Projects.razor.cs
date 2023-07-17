@@ -28,10 +28,8 @@ public partial class Projects
     {
         defaultOrg = await this.OrganizationService.DefaultOrganizationAsync();
         
-        if (defaultOrg == null)
-            return;
-
-        this.projects = await GetProjects();
+        if (defaultOrg != null)
+            this.projects = await GetProjects();
     }
 
     private async Task<List<ProjectVM>> GetProjects()
@@ -76,7 +74,7 @@ public partial class Projects
 
     public void GetAllActivitiesAsync(ProjectVM project)
     {
-        this.Navigation.NavigateTo($"/activities/{project.Name}");
+        this.Navigation.NavigateTo($"/activities/{project.Attributes.Name}");
     }
 
 

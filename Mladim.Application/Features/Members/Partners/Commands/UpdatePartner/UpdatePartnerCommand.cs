@@ -11,7 +11,7 @@ namespace Mladim.Application.Features.Members.StaffMembers.Commands.UpdatePartne
 public class UpdatePartnerCommand : IRequest<int>
 {
     public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
+    public string FullName { get; set; } = string.Empty;
     public string? Description { get; set; }
     public string? WebpageUrl { get; set; }
     public string? ContactPerson { get; set; }

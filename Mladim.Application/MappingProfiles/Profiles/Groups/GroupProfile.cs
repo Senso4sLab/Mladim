@@ -16,18 +16,28 @@ public class GroupProfile : Profile
 {
     public GroupProfile()
     {
+
         CreateMap<Group, GroupDetailsQueryDto>();
-            
 
-        CreateMap<GroupCommandDto, Group>()
-            .ForAllMembers(dest => dest.MapFrom(src => Group.Create(src.GroupType, src.Id)));      
+        CreateMap<GroupCommandDto, ProjectGroup>()
+            .ForAllMembers(dest => dest.MapFrom(src => Group.Create(GroupType.Project, src.Id)));
 
+        CreateMap<GroupCommandDto, ActivityGroup>()
+            .ForAllMembers(dest => dest.MapFrom(src => Group.Create(GroupType.Activity, src.Id)));
+      
         CreateMap<ProjectGroup, GroupQueryDto>();
-        CreateMap<ActivityGroup, GroupQueryDto>();
-       
-        CreateMap<UpdateGroupCommand, Group>()
-            .ForMember(dest => dest.Members, m => m.MapFrom(src => src.Members.ConvertAll(id => Member.Create(src.MemberType, id))));
-       
+        CreateMap<ActivityGroup, GroupQueryDto>();        
+        
+        CreateMap<UpdateGroupCommand, ProjectGroup>()
+            .ForMember(dest => dest.Members, m => m.MapFrom(src => Member.Create(MemberType.StaffMember, src.Id)));
+
+        CreateMap<UpdateGroupCommand, ActivityGroup>()
+            .ForMember(dest => dest.Members, m => m.MapFrom(src => Member.Create(MemberType.Participant, src.Id)));
+
+
+        //CreateMap<UpdateGroupCommand, ProjectGroup>(); ProjectGroup.Create()
+        //CreateMap<UpdateGroupCommand, ActivityGroup>(); ActivityGroup.Create
+
 
     }
 }

@@ -55,7 +55,7 @@ public partial class UpsertOrganization
 
     protected async override Task OnInitializedAsync()
     {       
-        if (this.UpdateState)
+        if (this.UpdateState && OrgId != null)
             organization = await this.OrganizationService.GetByIdAsync(OrgId.Value);
 
     }
@@ -74,7 +74,7 @@ public partial class UpsertOrganization
 
     private async Task UpdateOrganizationAsync()
     {
-        var response = await this.OrganizationService.UpdateAsync(organization);
+        var response = await this.OrganizationService.UpdateAsync(organization!);
 
         if (response)
             this.PopupService.ShowSnackbarSuccess("Organizacija uspešno posodobljena");
@@ -84,11 +84,11 @@ public partial class UpsertOrganization
 
     private async Task AddOrganizationAsync()
     {
-        var organizationResult = await this.OrganizationService.AddAsync(organization, UserId);        
+        var orgResponse= await this.OrganizationService.AddAsync(organization!, UserId!);        
 
-        if (organizationResult != null)
+        if (orgResponse != null)
         {
-            await this.OrganizationService.SetDefaultOrganizationAsync(DefaultOrganization.Create(organizationResult));
+            await this.OrganizationService.SetDefaultOrganizationAsync(DefaultOrganization.Create(orgResponse));
             this.PopupService.ShowSnackbarSuccess("Organizacija uspešno dodana");
         }
         else

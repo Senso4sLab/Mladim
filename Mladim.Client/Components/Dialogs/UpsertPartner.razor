@@ -5,7 +5,7 @@
     <DialogContent>
         <MudForm @ref="@partnerForm" Model="@partner" Validation="@(partnerValidator.ValidateValue)" OnValidSubmit="OnValidSubmit">
             <MudStack Spacing="4">
-                <MudTextField @bind-Value="partner.Name" For="@(() => partner.Name)" Variant="Variant.Outlined" Label="Ime" />
+                <MudTextField @bind-Value="partner.FullName" For="@(() => partner.FullName)" Variant="Variant.Outlined" Label="Ime" />
                 <MudTextField @bind-Value="partner.Description" For="@(() => partner.Description)" Variant="Variant.Outlined" Label="Opis" />
                 <MudTextField @bind-Value="partner.WebpageUrl" For="@(() => partner.WebpageUrl)" Variant="Variant.Outlined" Label="Spletna stran" />
                 <MudTextField @bind-Value="partner.ContactPerson" For="@(() => partner.ContactPerson)" Variant="Variant.Outlined" Label="Kontaktna oseba" />
@@ -17,7 +17,7 @@
         </DialogContent>
         <DialogActions>
             <MudButton OnClick="Cancel">Prekliči</MudButton>
-            <MudButton OnClick="OnValidSubmitAsync" Color="Color.Primary">@(partner.Id == null ? "Dodaj" : "Spremeni")</MudButton>
+            <MudButton OnClick="OnValidSubmitAsync" Color="Color.Primary">@(partner.Id == 0 ? "Dodaj" : "Spremeni")</MudButton>
         </DialogActions>      
 </MudDialog>
 

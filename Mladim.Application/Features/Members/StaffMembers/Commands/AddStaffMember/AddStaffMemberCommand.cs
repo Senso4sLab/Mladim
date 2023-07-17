@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
 
-public class AddStaffMemberCommand : IRequest<bool>
+public class AddStaffMemberCommand : IRequest<StaffMemberDetailsQueryDto>
 {
     public int OrganizationId { get; set; }
     public string Name { get; set; } = string.Empty;

@@ -4,6 +4,7 @@ using Mladim.Client.ViewModels;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.Services.PopupService;
 using Mladim.Client.Models;
+using Mladim.Client.ViewModels.Organization;
 
 namespace Mladim.Client.Pages;
 
@@ -24,22 +25,23 @@ public partial class Index
 
     private List<OrganizationVM> organizations = new List<OrganizationVM>();
 
-    private OrganizationVM selectedOrganization;
+    private OrganizationVM? selectedOrganization = default!;
 
     protected async override Task OnInitializedAsync()
     {
-        organizations = await GetOrganizationByUserIdAsync();
+        await LoadOrganizationsByUserIdAsync();       
 
-        if (organizations.Count == 0)
-            return;
+        var lastSelectedOrg = await OrganizationService.DefaultOrganizationAsync();
 
-        var defaultOrg = await OrganizationService.DefaultOrganizationAsync();
+        selectedOrganization = FindSelectedOrganization(lastSelectedOrg);  
 
-        selectedOrganization = defaultOrg != null ? organizations.FirstOrDefault(o => o.Id == defaultOrg.Id) ?? organizations.FirstOrDefault()!
-            : organizations?.FirstOrDefault()!;      
-
-        await this.OrganizationService.SetDefaultOrganizationAsync(DefaultOrganization.Create(selectedOrganization));
+        if(selectedOrganization != null)
+            await this.OrganizationService.SetDefaultOrganizationAsync(DefaultOrganization.Create(selectedOrganization));
     }
+
+    private OrganizationVM? FindSelectedOrganization(DefaultOrganization? lastSelectedOrg) =>    
+        lastSelectedOrg != null ? organizations.FirstOrDefault(o => o.Id == lastSelectedOrg.Id) ?? organizations.FirstOrDefault()
+            : organizations?.FirstOrDefault();    
 
 
     private async Task OrganizationValueChanged(OrganizationVM organization)
@@ -48,19 +50,15 @@ public partial class Index
        await this.OrganizationService.SetDefaultOrganizationAsync(DefaultOrganization.Create(selectedOrganization));    
     }
 
-    private async Task<List<OrganizationVM>> GetOrganizationByUserIdAsync()
+    private async Task LoadOrganizationsByUserIdAsync()
     {
         var userId = await this.AuthService.GetUserIdentityAsync();
 
-        if(userId == null) 
-            return new List<OrganizationVM>();    
-
-        var organizations =  await this.OrganizationService.GetByUserIdAsync(userId);
-
-        return organizations.ToList();
+        if (userId is null)
+            organizations.Clear();
+        else
+            organizations = new List<OrganizationVM>(await this.OrganizationService.GetByUserIdAsync(userId));           
     }
-
-
 
     private async Task AddOrganizationAsync()
     {
@@ -87,8 +85,7 @@ public partial class Index
         {
             this.PopupService.ShowSnackbarSuccess("Organizacija je uspešno odstranjena");
             organizations.Remove(organization);
-            selectedOrganization = null;
-           
+            selectedOrganization = null;           
         }
         else
             this.PopupService.ShowSnackbarError();

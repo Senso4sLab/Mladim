@@ -12,7 +12,7 @@ using Mladim.Infrastracture.Persistance;
 namespace Mladim.Infrastracture.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230531075008_Initial")]
+    [Migration("20230716103145_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -323,31 +323,8 @@ namespace Mladim.Infrastracture.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ActivityTypes")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("End")
-                        .HasColumnType("datetime2");
-
-                    b.Property<TimeSpan?>("EndHour")
-                        .HasColumnType("time");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("Start")
-                        .HasColumnType("datetime2");
-
-                    b.Property<TimeSpan?>("StartHour")
-                        .HasColumnType("time");
 
                     b.HasKey("Id");
 
@@ -356,44 +333,7 @@ namespace Mladim.Infrastracture.Migrations
                     b.ToTable("Activities");
                 });
 
-            modelBuilder.Entity("Mladim.Domain.Models.AnonymousParticipant", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AgeGroup")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AnonymousParticipants");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.AnonymousParticipantActivity", b =>
-                {
-                    b.Property<int>("AnonymousParticipantId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ActivityId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.HasKey("AnonymousParticipantId", "ActivityId");
-
-                    b.HasIndex("ActivityId");
-
-                    b.ToTable("AnonymousParticipantActivities");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Group", b =>
+            modelBuilder.Entity("Mladim.Domain.Models.ActivityGroup", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -405,27 +345,19 @@ namespace Mladim.Infrastracture.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
+                    b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("GroupType")
-                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Group");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Group");
-
-                    b.UseTphMappingStrategy();
+                    b.ToTable("ActivityGroups");
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.Member", b =>
@@ -436,14 +368,18 @@ namespace Mladim.Infrastracture.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("ActivityGroupId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("GroupId")
+                    b.Property<int>("Gender")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
@@ -453,16 +389,21 @@ namespace Mladim.Infrastracture.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProjectGroupId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("ActivityGroupId");
+
+                    b.HasIndex("ProjectGroupId");
 
                     b.ToTable("Member");
 
@@ -473,113 +414,24 @@ namespace Mladim.Infrastracture.Migrations
 
             modelBuilder.Entity("Mladim.Domain.Models.Organization", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AgeGroups")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Fields")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Regions")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RegistrationNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Types")
-                        .HasColumnType("int");
-
-                    b.Property<string>("VatNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("WebpageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("YouthSectors")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.HasKey("Id");
 
                     b.ToTable("Organizations");
                 });
 
-            modelBuilder.Entity("Mladim.Domain.Models.OrganizationGroup", b =>
-                {
-                    b.Property<int>("OrganizationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GroupId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrganizationId", "GroupId");
-
-                    b.HasIndex("GroupId");
-
-                    b.ToTable("OrganizationGroups");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.OrganizationMember", b =>
-                {
-                    b.Property<int>("OrganizationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrganizationId", "MemberId");
-
-                    b.HasIndex("MemberId");
-
-                    b.ToTable("OrganizationMember");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.OrganizationPartner", b =>
-                {
-                    b.Property<int>("OrganizationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PartnerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrganizationId", "PartnerId");
-
-                    b.HasIndex("PartnerId");
-
-                    b.ToTable("OrganizationPartner");
-                });
-
             modelBuilder.Entity("Mladim.Domain.Models.Partner", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ContactPerson")
                         .HasColumnType("nvarchar(max)");
@@ -590,12 +442,15 @@ namespace Mladim.Infrastracture.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
@@ -616,31 +471,41 @@ namespace Mladim.Infrastracture.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("End")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("OrganizationId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("Start")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("WebpageUrl")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("Mladim.Domain.Models.ProjectGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("OrganizationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProjectGroups");
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.StaffMemberActivity", b =>
@@ -658,7 +523,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasIndex("ActivityId");
 
-                    b.ToTable("ActivityStaff");
+                    b.ToTable("StaffMemberActivity");
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.StaffMemberProject", b =>
@@ -676,7 +541,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("ProjectStaff");
+                    b.ToTable("StaffMemberProject");
                 });
 
             modelBuilder.Entity("PartnerProject", b =>
@@ -709,23 +574,12 @@ namespace Mladim.Infrastracture.Migrations
                     b.ToTable("ProjectProjectGroup");
                 });
 
-            modelBuilder.Entity("Mladim.Domain.Models.ActivityGroup", b =>
-                {
-                    b.HasBaseType("Mladim.Domain.Models.Group");
-
-                    b.HasDiscriminator().HasValue("ActivityGroup");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.ProjectGroup", b =>
-                {
-                    b.HasBaseType("Mladim.Domain.Models.Group");
-
-                    b.HasDiscriminator().HasValue("ProjectGroup");
-                });
-
             modelBuilder.Entity("Mladim.Domain.Models.Participant", b =>
                 {
                     b.HasBaseType("Mladim.Domain.Models.Member");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
 
                     b.Property<int>("AgeGroup")
                         .HasColumnType("int");
@@ -743,6 +597,9 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.Property<bool>("IsRegistered")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("YearOfBirth")
+                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("StaffMember");
                 });
@@ -866,129 +723,213 @@ namespace Mladim.Infrastracture.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("Mladim.Domain.Models.DateTimeRange", "TimeRange", b1 =>
+                        {
+                            b1.Property<int>("ActivityId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("EndDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<TimeSpan?>("EndTime")
+                                .HasColumnType("time");
+
+                            b1.Property<DateTime>("StartDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<TimeSpan?>("StartTime")
+                                .HasColumnType("time");
+
+                            b1.HasKey("ActivityId");
+
+                            b1.ToTable("Activities");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ActivityId");
+                        });
+
+                    b.OwnsOne("Mladim.Domain.Models.ActivityAttributes", "Attributes", b1 =>
+                        {
+                            b1.Property<int>("ActivityId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("ActivityTypes")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Description")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ActivityId");
+
+                            b1.ToTable("Activities");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ActivityId");
+                        });
+
+                    b.OwnsMany("Mladim.Domain.Models.AnonymousParticipantGroup", "AnonymousParticipantGroups", b1 =>
+                        {
+                            b1.Property<int>("ActivityId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<int>("Number")
+                                .HasColumnType("int");
+
+                            b1.HasKey("ActivityId", "Id");
+
+                            b1.ToTable("AnonymousParticipantGroup");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ActivityId");
+
+                            b1.OwnsOne("Mladim.Domain.Models.AnonymousParticipant", "AnonymousParticipant", b2 =>
+                                {
+                                    b2.Property<int>("AnonymousParticipantGroupActivityId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<int>("AnonymousParticipantGroupId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<int>("AgeGroup")
+                                        .HasColumnType("int");
+
+                                    b2.Property<int>("Gender")
+                                        .HasColumnType("int");
+
+                                    b2.HasKey("AnonymousParticipantGroupActivityId", "AnonymousParticipantGroupId");
+
+                                    b2.ToTable("AnonymousParticipantGroup");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("AnonymousParticipantGroupActivityId", "AnonymousParticipantGroupId");
+                                });
+
+                            b1.Navigation("AnonymousParticipant")
+                                .IsRequired();
+                        });
+
+                    b.Navigation("AnonymousParticipantGroups");
+
+                    b.Navigation("Attributes")
+                        .IsRequired();
+
                     b.Navigation("Project");
-                });
 
-            modelBuilder.Entity("Mladim.Domain.Models.AnonymousParticipantActivity", b =>
-                {
-                    b.HasOne("Mladim.Domain.Models.Activity", "Activity")
-                        .WithMany("AnonymousParticipantActivities")
-                        .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.Navigation("TimeRange")
                         .IsRequired();
-
-                    b.HasOne("Mladim.Domain.Models.AnonymousParticipant", "AnonymousParticipant")
-                        .WithMany("AnonymousParticipantActivities")
-                        .HasForeignKey("AnonymousParticipantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Activity");
-
-                    b.Navigation("AnonymousParticipant");
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.Member", b =>
                 {
-                    b.HasOne("Mladim.Domain.Models.Group", null)
+                    b.HasOne("Mladim.Domain.Models.ActivityGroup", null)
                         .WithMany("Members")
-                        .HasForeignKey("GroupId");
+                        .HasForeignKey("ActivityGroupId");
+
+                    b.HasOne("Mladim.Domain.Models.ProjectGroup", null)
+                        .WithMany("Members")
+                        .HasForeignKey("ProjectGroupId");
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.Organization", b =>
                 {
+                    b.OwnsOne("Mladim.Domain.Models.OrganizationAttributes", "Attributes", b1 =>
+                        {
+                            b1.Property<int>("OrganizationId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Address")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("AgeGroups")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Description")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Email")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("Fields")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PhoneNumber")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("Regions")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("RegistrationNumber")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("Status")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Types")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("VatNumber")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("WebpageUrl")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("YouthSectors")
+                                .HasColumnType("int");
+
+                            b1.HasKey("OrganizationId");
+
+                            b1.ToTable("Organizations");
+
+                            b1.WithOwner()
+                                .HasForeignKey("OrganizationId");
+                        });
+
                     b.OwnsOne("Mladim.Domain.Models.SocialMediaUrls", "SocialMediaUrls", b1 =>
                         {
                             b1.Property<int>("OrganizationId")
                                 .HasColumnType("int");
 
                             b1.Property<string>("Facebook")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Instagram")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("TikTok")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Twiter")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("OrganizationId");
 
                             b1.ToTable("Organizations");
 
-                            b1.ToJson("SocialMediaUrls");
-
-                            b1.WithOwner("Organization")
+                            b1.WithOwner()
                                 .HasForeignKey("OrganizationId");
-
-                            b1.Navigation("Organization");
                         });
+
+                    b.Navigation("Attributes")
+                        .IsRequired();
 
                     b.Navigation("SocialMediaUrls")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.OrganizationGroup", b =>
-                {
-                    b.HasOne("Mladim.Domain.Models.Group", "Group")
-                        .WithMany("OrganizationGroups")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mladim.Domain.Models.Organization", "Organization")
-                        .WithMany("Groups")
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Group");
-
-                    b.Navigation("Organization");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.OrganizationMember", b =>
-                {
-                    b.HasOne("Mladim.Domain.Models.Member", "Member")
-                        .WithMany("OrganizationMembers")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mladim.Domain.Models.Organization", "Organization")
-                        .WithMany("Members")
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Member");
-
-                    b.Navigation("Organization");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.OrganizationPartner", b =>
-                {
-                    b.HasOne("Mladim.Domain.Models.Organization", "Organization")
-                        .WithMany("Partners")
-                        .HasForeignKey("OrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mladim.Domain.Models.Partner", "Partner")
-                        .WithMany("OrganizationPartners")
-                        .HasForeignKey("PartnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Organization");
-
-                    b.Navigation("Partner");
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.Project", b =>
@@ -999,7 +940,62 @@ namespace Mladim.Infrastracture.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsOne("Mladim.Domain.Models.DateTimeRange", "TimeRange", b1 =>
+                        {
+                            b1.Property<int>("ProjectId")
+                                .HasColumnType("int");
+
+                            b1.Property<DateTime>("EndDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<TimeSpan?>("EndTime")
+                                .HasColumnType("time");
+
+                            b1.Property<DateTime>("StartDate")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<TimeSpan?>("StartTime")
+                                .HasColumnType("time");
+
+                            b1.HasKey("ProjectId");
+
+                            b1.ToTable("Projects");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProjectId");
+                        });
+
+                    b.OwnsOne("Mladim.Domain.Models.ProjectAttibutes", "Attributes", b1 =>
+                        {
+                            b1.Property<int>("ProjectId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Description")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("WebpageUrl")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ProjectId");
+
+                            b1.ToTable("Projects");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProjectId");
+                        });
+
+                    b.Navigation("Attributes")
+                        .IsRequired();
+
                     b.Navigation("Organization");
+
+                    b.Navigation("TimeRange")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.StaffMemberActivity", b =>
@@ -1072,42 +1068,17 @@ namespace Mladim.Infrastracture.Migrations
 
             modelBuilder.Entity("Mladim.Domain.Models.Activity", b =>
                 {
-                    b.Navigation("AnonymousParticipantActivities");
-
                     b.Navigation("Staff");
                 });
 
-            modelBuilder.Entity("Mladim.Domain.Models.AnonymousParticipant", b =>
-                {
-                    b.Navigation("AnonymousParticipantActivities");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Group", b =>
+            modelBuilder.Entity("Mladim.Domain.Models.ActivityGroup", b =>
                 {
                     b.Navigation("Members");
-
-                    b.Navigation("OrganizationGroups");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Member", b =>
-                {
-                    b.Navigation("OrganizationMembers");
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.Organization", b =>
                 {
-                    b.Navigation("Groups");
-
-                    b.Navigation("Members");
-
-                    b.Navigation("Partners");
-
                     b.Navigation("Projects");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Partner", b =>
-                {
-                    b.Navigation("OrganizationPartners");
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.Project", b =>
@@ -1115,6 +1086,11 @@ namespace Mladim.Infrastracture.Migrations
                     b.Navigation("Activities");
 
                     b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("Mladim.Domain.Models.ProjectGroup", b =>
+                {
+                    b.Navigation("Members");
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.StaffMember", b =>

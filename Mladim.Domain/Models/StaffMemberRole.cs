@@ -14,6 +14,6 @@ public class StaffMemberRole
         (StaffMember, IsLead) =(staffMember, islead);   
 
     public static StaffMemberRole Create(int staffMemberId, bool isLead = false) =>
-        new StaffMemberRole((StaffMember)Member.Create(Enums.GroupType.StaffMember, staffMemberId), isLead);
+        new StaffMemberRole((StaffMember)Member.Create(Enums.MemberType.StaffMember, staffMemberId), isLead);
 
 }

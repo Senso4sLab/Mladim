@@ -5,6 +5,7 @@ using Mladim.Client.Services.HttpService.Generic;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.ViewModels;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.Members;
 using Mladim.Domain.Models;
 
 namespace Mladim.Client.Services.SubjectServices.Implementations;
@@ -51,11 +52,11 @@ public class ParticipantService : IParticipantService
     }
 
 
-    public async Task<IEnumerable<MemberBaseVM>> GetBaseByOrganizationIdAsync(int organizationId, bool isActive)
+    public async Task<IEnumerable<NamedEntityVM>> GetBaseByOrganizationIdAsync(int organizationId, bool isActive)
     {
         string url = string.Format(this.ApiUrls.GetParticipantsByOrganizationId, organizationId, true, isActive);
-        var baseDto = await this.HttpService.GetAllAsync<MemberBaseAttributes>(url);
-        return this.Mapper.Map<IEnumerable<MemberBaseVM>>(baseDto);
+        var baseDto = await this.HttpService.GetAllAsync<NamedEntityDto>(url);
+        return this.Mapper.Map<IEnumerable<NamedEntityVM>>(baseDto);
     }
    
 }

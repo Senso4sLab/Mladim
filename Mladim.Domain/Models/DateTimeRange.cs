@@ -2,24 +2,26 @@
 
 public class DateTimeRange : IEquatable<DateTimeRange>
 {
-    public DateTime Start { get; private set; }
-    public DateTime End { get; private set; }
+    public DateTime StartDate { get; private set; }
+    public DateTime EndDate { get; private set; }
+    public TimeSpan? StartTime { get; private set; } = TimeSpan.Zero;
+    public TimeSpan? EndTime { get; private set; } = TimeSpan.Zero;
 
     private DateTimeRange() { }
-    private DateTimeRange(DateTime start, DateTime end) =>
-        (Start, End) = (start, end);  
+    private DateTimeRange(DateTime startDate, DateTime endDate, TimeSpan startTime, TimeSpan endTime) =>
+        (StartDate, EndDate, StartTime, EndTime) = (startDate, endDate, startTime, endTime);   
 
-    private DateTimeRange(DateTime start, TimeSpan timeSpan) : this(start, start + timeSpan) { }
-
-    public static DateTimeRange Create(DateTime start, DateTime end) => 
-        new DateTimeRange(start, end);
-    public static DateTimeRange Create(DateTime start, TimeSpan timeSpan) =>
-       new DateTimeRange(start, timeSpan);
+    public static DateTimeRange Create(DateTime start, DateTime end, int startHour = 0, int endHour = 0) => 
+        new DateTimeRange(start, end, TimeSpan.FromHours(startHour), TimeSpan.FromHours(endHour));
+    
     public override bool Equals(object? obj) =>
         obj is DateTimeRange && Equals((DateTimeRange)obj);
     public bool Equals(DateTimeRange? other) =>
-        other?.Start == this.Start && other?.End == this.End;
+        other?.StartDate == this.StartDate &&
+        other?.EndDate == this.EndDate &&
+        other?.StartTime == this.StartTime &&
+        other?.EndTime == this.EndTime;
     public override int GetHashCode() =>
-        HashCode.Combine(this.Start, this.End);
+        HashCode.Combine(this.StartDate, this.EndDate, this.StartTime, this.EndTime);
     
 }

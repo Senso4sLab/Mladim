@@ -73,9 +73,9 @@ public partial class UpsertActivity
     
     private DefaultOrganization defaultOrg;
 
-    private IEnumerable<MemberBaseVM> staff = new List<MemberBaseVM>();
-    private List<MemberBaseVM> partners = new List<MemberBaseVM>();
-    private List<MemberBaseVM> participants = new List<MemberBaseVM>();
+    private IEnumerable<NamedEntityVM> staff = new List<NamedEntityVM>();
+    private List<NamedEntityVM> partners = new List<NamedEntityVM>();
+    private List<NamedEntityVM> participants = new List<NamedEntityVM>();
     private List<AnonymousParticipantsVM> AnonymousParticipants = null;
 
 
@@ -86,16 +86,18 @@ public partial class UpsertActivity
         if (defaultOrg == null)
             return;
 
-        staff = new List<MemberBaseVM>(await StaffMemberService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
-        partners = new List<MemberBaseVM>(await PartnerService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
-        participants = new List<MemberBaseVM>(await ParticipantService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
+        staff = new List<NamedEntityVM>(await StaffMemberService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
+        partners = new List<NamedEntityVM>(await PartnerService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
+        participants = new List<NamedEntityVM>(await ParticipantService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
     }
 
 
     protected async override Task OnParametersSetAsync()
     {
         if (UpdateState)
+        {
             activity = await ActivityService.GetByActivityIdAsync(ActivityId.Value);
+        }
 
         AnonymousParticipants ??= GetAnnonymousParticipants().ToList();       
     }
@@ -113,25 +115,19 @@ public partial class UpsertActivity
                     Number = 0,
                 };
 
-                var existedGroup = activity?.AnonymousParticipantActivities.FirstOrDefault(apg => apg.Equals(apgroup));
+                var existedGroup = activity?.AnonymousParticipants.FirstOrDefault(apg => apg.Equals(apgroup));
                 apgroup.Number = existedGroup != null ? existedGroup.Number : 0;
                 yield return apgroup;
             }
         }
     }
 
-
-   
-    
-
-
-
-
-
     public async Task SaveActivityAsync()
     {
         await textEditor!.LoadHtmlText();
-        activity.AnonymousParticipantActivities = AnonymousParticipants;
+
+        activity.AnonymousParticipants = AnonymousParticipants;
+     
 
         if (UpdateState)
         {           
@@ -202,13 +198,7 @@ public partial class UpsertActivity
         else
             this.PopupService.ShowSnackbarError();
 
-    }
-
-
-    
-  
-
-    
+    }    
 
     public async Task AddAnonymousParticipantAsync()
     {

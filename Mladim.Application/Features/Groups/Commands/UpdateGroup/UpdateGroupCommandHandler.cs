@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using Mladim.Application.Contracts.Persistence;
+using Mladim.Domain.Enums;
+using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,14 +23,26 @@ public class UpdateGroupCommandHandler : IRequestHandler<UpdateGroupCommand, int
     }
     public async Task<int> Handle(UpdateGroupCommand request, CancellationToken cancellationToken)
     {
-        var group = await this.UnitOfWork.GroupRepository.GetGroupDetailsAsync(request.GroupId);
+        var oldGroup = await this.UnitOfWork.GroupRepository.GetGroupDetailsAsync(request.Id);
 
-        ArgumentNullException.ThrowIfNull(group);
+        ArgumentNullException.ThrowIfNull(oldGroup);
 
-        group = this.Mapper.Map(request, group);
+       //var newGroup = GetGroupFromUpdateCommand(request, oldGroup);
 
-        this.UnitOfWork.GroupRepository.Update(group);
+        oldGroup = this.Mapper.Map(request, oldGroup);
+
+        this.UnitOfWork.GroupRepository.Update(oldGroup);
 
         return await this.UnitOfWork.SaveChangesAsync();
     }
+
+    //private Group GetGroupFromUpdateCommand(UpdateGroupCommand request, Group oldGroup) =>
+    //    oldGroup switch
+    //    {
+    //        ProjectGroup => ProjectGroup.Create(GroupType.Project, request.FullName, request.Description, request.Members),
+    //        ActivityGroup => ActivityGroup.Create(GroupType.Activity, request.FullName, request.Description, request.Members),
+    //        _ => throw new NotImplementedException()
+    //    };
+
+    
 }

@@ -18,7 +18,7 @@ public class GetGroupsQueryHandler : IRequestHandler<GetGroupsQuery, IEnumerable
     {
         var groups = await this.UnitOfWork.GroupRepository.GetAllAsync(g => g.IsActive == request.IsActive && g.OrganizationId == request.OrganizationId);      
 
-        return groups.Select(g => CreateGroupQueryDto(g)).ToList() ?? Enumerable.Empty<GroupQueryDto>();    
+        return groups.Select(CreateGroupQueryDto).ToList() ?? Enumerable.Empty<GroupQueryDto>();    
     }
 
     private GroupQueryDto CreateGroupQueryDto(Group group) =>

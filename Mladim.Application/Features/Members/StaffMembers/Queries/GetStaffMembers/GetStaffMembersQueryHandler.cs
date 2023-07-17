@@ -45,8 +45,12 @@ public class GetStaffMembersQueryHandler : IRequestHandler<GetStaffMembersQuery,
                 .GetStaffMembersAsync(sm => sm.IsActive == request.IsActive && sm.StaffProjects.Any(mp => mp.ProjectId == projectId), request.IsMemberAbbreviated);
 
         if (request.OrganizationId is int organizationId)
-            return await this.UnitOfWork.StaffMemberRepository
+        {
+            var result = await this.UnitOfWork.StaffMemberRepository
                 .GetStaffMembersAsync(sm => sm.IsActive == request.IsActive && sm.OrganizationId == organizationId, request.IsMemberAbbreviated);
+
+            return result;
+        }
 
         return Enumerable.Empty<NamedEntity>();
     }

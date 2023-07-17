@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Organizations.Commands.AddOrganization;
 
-public class AddOrganizationCommand : IRequest<bool>
+public class AddOrganizationCommand : IRequest<OrganizationQueryDto>
 {
     public string? AppUserId { get; set; }
     public OrganizationAttributesCommandDto Attributes { get; set; } = default!;   

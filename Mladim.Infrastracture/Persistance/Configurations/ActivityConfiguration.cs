@@ -18,5 +18,7 @@ public class ActivityConfiguration : IEntityTypeConfiguration<Activity>
 
         builder.OwnsOne(activity => activity.TimeRange);
         builder.OwnsOne(activity => activity.Attributes);
+
+     
     }
 }

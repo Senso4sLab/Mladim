@@ -30,8 +30,6 @@ public class OrganizationService : IOrganizationService
         this.MladimApiUrls = MladimApiUrls.Value;
     }
 
-	
-
 
 	public Task SetDefaultOrganizationAsync(DefaultOrganization defaultOrg) =>
 		Task.FromResult(this.Storage.SetItemAsync(this.StorageKeys.SelectedOrganization, defaultOrg));

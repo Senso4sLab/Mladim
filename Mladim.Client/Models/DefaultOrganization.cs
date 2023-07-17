@@ -5,6 +5,6 @@ namespace Mladim.Client.Models;
 public record DefaultOrganization(string Name, int Id)
 {
     public static DefaultOrganization Create(OrganizationVM organization) =>
-        new DefaultOrganization(organization.Name, organization.Id);
+        new DefaultOrganization(organization.Attributes.Name, organization.Id);
 
 }

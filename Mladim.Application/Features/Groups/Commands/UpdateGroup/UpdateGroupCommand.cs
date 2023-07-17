@@ -10,9 +10,11 @@ namespace Mladim.Application.Features.Groups.Commands.UpdateGroup;
 
 public class UpdateGroupCommand : IRequest<int>
 {
-    public int GroupId { get; set; }
-    public string Name { get; set; } = string.Empty;
+    public int Id { get; set; }
+    public string FullName { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public List<int> Members { get; set; } = new();
-    public MemberType MemberType { get; set; }
+    public int OrganizationId { get; set; }
+    public bool IsActive { get; set; } = true;
+    
 }

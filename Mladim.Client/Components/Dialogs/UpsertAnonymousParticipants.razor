@@ -49,11 +49,14 @@
        Enum.GetValues<AgeGroups>().Select(ageGroup => new AnonymousParticipantTableElements()
            {
                AgeGroup = ageGroup,
-               Female = aParticipants.Where(p => p.AgeGroup == ageGroup && p.Gender == Gender.Female).Sum(p => p.Number),
-               Male = aParticipants.Where(p => p.AgeGroup == ageGroup && p.Gender == Gender.Male).Sum(p => p.Number),
-               Other = aParticipants.Where(p => p.AgeGroup == ageGroup && p.Gender == Gender.Other).Sum(p => p.Number),
+               Female = aParticipants.Where(p => p.AgeGroup == ageGroup && p.Gender == Gender.Female)
+                .Sum(p => p.Number),
+               Male = aParticipants.Where(p => p.AgeGroup == ageGroup && p.Gender == Gender.Male)
+                .Sum(p => p.Number),
+               Other = aParticipants.Where(p => p.AgeGroup == ageGroup && p.Gender == Gender.Other)
+                .Sum(p => p.Number),
+           }).ToList();   
 
-           }).ToList();
 
     protected override void OnParametersSet()
     {

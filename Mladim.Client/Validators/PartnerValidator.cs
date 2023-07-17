@@ -8,7 +8,7 @@ public class PartnerValidator : AbstractValidator<PartnerVM>
 {
     public PartnerValidator()
     {
-        RuleFor(x => x.Name)
+        RuleFor(x => x.FullName)
         .NotEmpty()
         .WithMessage("Vnosno polje je obvezno");
 

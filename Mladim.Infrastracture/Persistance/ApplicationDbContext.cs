@@ -22,8 +22,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     public DbSet<Project> Projects { get; set; }
     public DbSet<Activity> Activities { get; set; } 
     public DbSet<ProjectGroup> ProjectGroups { get; set; }
-    public DbSet<ActivityGroup> ActivityGroups { get; set; }
-      
+    public DbSet<ActivityGroup> ActivityGroups { get; set; }      
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

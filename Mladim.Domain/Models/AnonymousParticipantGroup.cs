@@ -6,6 +6,11 @@ public class AnonymousParticipantGroup
 {
     public int Number { get; set; }
     public AnonymousParticipant AnonymousParticipant { get; set; }
+
+    private AnonymousParticipantGroup()
+    {
+        
+    }
     public AnonymousParticipantGroup(int number, AnonymousParticipant anonymousParticipant) =>
         (Number, AnonymousParticipant) = (number, anonymousParticipant); 
     public override bool Equals(object? obj) =>

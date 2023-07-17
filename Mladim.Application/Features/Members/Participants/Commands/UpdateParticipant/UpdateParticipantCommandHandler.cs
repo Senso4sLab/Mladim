@@ -27,6 +27,8 @@ public class UpdateParticipantCommandHandler : IRequestHandler<UpdateParticipant
 
         ArgumentNullException.ThrowIfNull(participant);
 
+        participant = this.Mapper.Map(request, participant);
+
         this.UnitOfWork.ParticipantRepository.Update(participant);
 
         return await this.UnitOfWork.SaveChangesAsync();

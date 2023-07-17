@@ -6,12 +6,11 @@ public class GroupQueryDto
 {
     public int Id { get; set; }
     public GroupType GroupType { get; set; }
-    public string Name { get; set; } = string.Empty;    
-
+    public string FullName { get; set; } = string.Empty;
     private GroupQueryDto(int id,  string name, GroupType groupType)
     {
         this.Id = id;
-        this.Name = name;
+        this.FullName = name;
         this.GroupType = groupType;
     }
 

@@ -21,6 +21,15 @@ public class Group: NamedEntity
     protected Group(int id) =>
        this.Id = id;
 
+    protected Group(string name, string description, IEnumerable<Member> members, int organizationId)
+    {
+        FullName = name;
+        Description = description;
+        Members = members.ToList();
+        IsActive = true;
+        OrganizationId = organizationId;
+    }
+
     public static Group Create(GroupType groupType, int id) =>
            groupType switch
            {
@@ -29,11 +38,11 @@ public class Group: NamedEntity
                _ => throw new NotImplementedException()
            };
 
-    public static Group Create(GroupType groupType, string name, string description, IEnumerable<int>memberIds) =>    
+    public static Group Create(GroupType groupType, string name, string description, IEnumerable<int>memberIds, int organizationId) =>    
         groupType switch
         {
-            GroupType.Project => new ProjectGroup(name, description, memberIds.Select(id => Member.Create(MemberType.StaffMember, id))),
-            GroupType.Activity => new ActivityGroup(name, description, memberIds.Select(id => Member.Create(MemberType.Participant,id))),            
+            GroupType.Project => new ProjectGroup(name, description, memberIds.Select(id => Member.Create(MemberType.StaffMember, id)), organizationId),
+            GroupType.Activity => new ActivityGroup(name, description, memberIds.Select(id => Member.Create(MemberType.Participant,id)), organizationId),            
             _ => throw new NotImplementedException()
         } ;    
 }

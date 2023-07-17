@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace Mladim.Client.Services.HttpService.Generic;
 
@@ -18,8 +19,9 @@ public class GenericHttpService : IGenericHttpService
     }
 
     public async Task<IEnumerable<TOut>> GetAllAsync<TOut>(string url)
-    {
-        return await this.Client.GetFromJsonAsync<IEnumerable<TOut>>(url) ?? Enumerable.Empty<TOut>();
+    {      
+
+        return await this.Client.GetFromJsonAsync<IEnumerable<TOut>>(url) ?? Enumerable.Empty<TOut>();    
     }
 
     public Task<TOut?> GetAsync<TOut>(string url) =>    

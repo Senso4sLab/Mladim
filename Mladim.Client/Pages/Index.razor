@@ -6,11 +6,11 @@
 
 
 <MudStack Class="py-3" Row = "true" AlignItems="AlignItems.Center" Spacing="4">
-    <MudSelect Value="selectedOrganization" ValueChanged="OrganizationValueChanged" ToStringFunc="@(org => org.Name)" T="OrganizationVM" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" AdornmentColor="Color.Primary" AdornmentIcon="@Icons.Material.Filled.ArrowDropDown">
+    <MudSelect Value="selectedOrganization" ValueChanged="OrganizationValueChanged" ToStringFunc="@(org => org.Attributes.Name)" T="OrganizationVM" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" AdornmentColor="Color.Primary" AdornmentIcon="@Icons.Material.Filled.ArrowDropDown">
         @foreach (var organization in organizations)
         {
             <MudSelectItem T="OrganizationVM" Value=@organization>              
-                    @organization.Name              
+                    @organization.Attributes.Name              
             </MudSelectItem>
         }
     </MudSelect>

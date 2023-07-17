@@ -12,8 +12,8 @@ namespace Mladim.Application.Features.Members.Participants.Commands.UpdatePartic
 public class UpdateParticipantCommand : IRequest<int>
 {
     public int Id { get; set; }
-    public string Name { get; set; }
-    public string Surname { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Surname { get; set; } = string.Empty;
     public Gender Gender { get; set; }
     public int Age { get; set; }
     public bool IsActive { get; set; } 

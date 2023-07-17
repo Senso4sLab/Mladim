@@ -7,7 +7,7 @@ namespace Mladim.Client.ViewModels;
 public class OrganizationVM
 {
     public int Id { get; set; }
-    public SocialMediaUrlsVM SocialMediaUrls { get; set; } = default!;
-    public OrganizationAttributesVM Attributes { get; private set; } = default!;    
+    public SocialMediaUrlsVM SocialMediaUrls { get; set; } = new SocialMediaUrlsVM();
+    public OrganizationAttributesVM Attributes { get; set; } = new OrganizationAttributesVM();   
 
 }

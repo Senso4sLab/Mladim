@@ -5,10 +5,10 @@
 @typeparam TItem where TItem : struct, Enum
 
 
-<MudSelect MultiSelection="true" T="TItem" SelectedValues="EnumValues" SelectedValuesChanged="EnumValuesChanged" ToStringFunc="@(item => DisplayAttribute(item))" Label="@Label" ReadOnly="@ReadOnly" AdornmentColor="Color.Primary" Variant="Variant.Outlined">
+<MudSelect MultiSelection="true" T="TItem" SelectedValues="EnumValues" SelectedValuesChanged="EnumValuesChanged" ToStringFunc="@(item => item.GetDisplayAttributeString())" Label="@Label" ReadOnly="@ReadOnly" AdornmentColor="Color.Primary" Variant="Variant.Outlined">
     @foreach (var item in Enum.GetValues<TItem>())
     {
-        <MudSelectItem Value="@item">@DisplayAttribute(item)</MudSelectItem>
+        <MudSelectItem Value="@item">@item.GetDisplayAttributeString()</MudSelectItem>
     }
 </MudSelect>
 
@@ -24,27 +24,6 @@
     [Parameter]
     public IEnumerable<TItem> EnumValues { get; set; }
     [Parameter]
-    public EventCallback<IEnumerable<TItem>> EnumValuesChanged { get; set; }
-
-
-    private string DisplayAttribute(TItem value)
-    {
-        var type = value.GetType();
-
-        var fi = type.GetField(value.ToString());
-
-        if (fi == null)
-            return string.Empty;
-
-        if (fi.GetCustomAttribute(typeof(DisplayAttribute)) is DisplayAttribute displayAttribute)
-            return displayAttribute.Name!;
-        else
-            return value.ToString();
-    }
-
-    private IEnumerable<TItem> InitialValues(TItem value) =>
-        Enum.GetValues<TItem>()
-          .Where(val => value.HasFlag(val))
-          .ToList() ?? Enumerable.Empty<TItem>();    
+    public EventCallback<IEnumerable<TItem>> EnumValuesChanged { get; set; } 
 
 }

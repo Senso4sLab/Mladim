@@ -1,13 +1,13 @@
 ﻿
+using Mladim.Domain.Dtos.Attributes;
+using Mladim.Domain.Dtos.DateTimeRange;
+
 namespace Mladim.Domain.Dtos;
 public class AddProjectCommandDto
 {
-    public int OrganizationId { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    public string? WebpageUrl { get; set; }
-    public DateTime Start { get; set; }
-    public DateTime End { get; set; }
+    public int OrganizationId { get; set; }    
+    public ProjectAttributesCommandDto Attributes { get; set; } = default!;
+    public DateTimeRangeCommandDto DateTimeRange { get; set; } = default!;     
 
     public List<StaffMemberCommandDto> Staff { get; set; } = new();
     public List<GroupCommandDto> Groups { get; set; } = new();

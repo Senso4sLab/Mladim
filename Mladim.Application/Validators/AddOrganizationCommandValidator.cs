@@ -15,11 +15,11 @@ public class AddOrganizationCommandValidator : AbstractValidator<AddOrganization
 {   
 	public AddOrganizationCommandValidator()
 	{       
-        RuleFor(c => c.Name)
+        RuleFor(c => c.Attributes.Name)
             .NotEmpty()
             .WithMessage("{PropertyName} je zahtevan.");
         
-        RuleFor(c => c.Description)
+        RuleFor(c => c.Attributes.Description)
             .NotEmpty()
             .WithMessage("{PropertyName} je zahtevan.");
     }    

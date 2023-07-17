@@ -1,4 +1,6 @@
-﻿using Mladim.Domain.Enums;
+﻿using Mladim.Domain.Dtos.Attributes;
+using Mladim.Domain.Dtos.DateTimeRange;
+using Mladim.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +12,9 @@ namespace Mladim.Domain.Dtos;
 public class UpdateActivityCommandDto
 {
     public int Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public DateTime Start { get; set; }
-    public DateTime End { get; set; }
-    public TimeSpan? StartHour { get; set; }
-    public TimeSpan? EndHour { get; set; }
-    public ActivityTypes ActivityTypes { get; set; }
+    public ActivityAttributesCommandDto Attributes { get; set; } = default!;
+    public DateTimeRangeCommandDto DateTimeRange { get; set; } = default!;
+   
     public List<PartnerCommandDto> Partners { get; set; } = new();
     public List<GroupCommandDto> Groups { get; set; } = new();
     public List<ParticipantCommandDto> Participants { get; set; } = new();

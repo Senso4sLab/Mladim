@@ -13,7 +13,7 @@
  </MudStack>
 @if (organization != null)
 {
-    <MudTextField @bind-Value="@organization.Name" Label="Ime organizacije" Variant="Variant.Outlined" Margin="Margin.Dense"/>
+    <MudTextField @bind-Value="@organization.Attributes.Name" Label="Ime organizacije" Variant="Variant.Outlined" Margin="Margin.Dense"/>
     <OrganizationDetailsTab @ref="orgDetailsTab" Organization="organization" />
 }
 

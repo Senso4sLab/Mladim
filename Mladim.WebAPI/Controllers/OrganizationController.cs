@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Azure;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ public class OrganizationController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<bool>> AddAsync(AddOrganizationCommand request)
+    public async Task<ActionResult<OrganizationQueryDto?>> AddAsync(AddOrganizationCommand request)
     {
         var response = await this.Mediator.Send(request);
         return Ok(response);
@@ -63,8 +64,9 @@ public class OrganizationController : ControllerBase
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<OrganizationQueryDto>>> GetAllAsync([FromQuery] string userId)
-    {
+    {       
         var response = await this.Mediator.Send(new GetOrganizationsQuery { AppUserId = userId });
+       
         return Ok(response);
     }
 }

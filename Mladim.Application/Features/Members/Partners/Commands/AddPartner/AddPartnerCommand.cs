@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Partners.Commands.AddPartner;
 
-public class AddPartnerCommand : IRequest<bool>
+public class AddPartnerCommand : IRequest<PartnerQueryDetailsDto>
 {
     public int OrganizationId { get; set; }
-    public string Name { get; set; } = string.Empty;
+    public string FullName { get; set; } = string.Empty;
     public string? Description { get; set; }
     public string? WebpageUrl { get; set; }
     public string? ContactPerson { get; set; }

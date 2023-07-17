@@ -4,6 +4,7 @@ public class ProjectGroup : Group
 {
     private ProjectGroup() { }
     internal ProjectGroup(int id) : base(id) { }
-    internal ProjectGroup(string name, string description, IEnumerable<Member> members) : base(name, description, members) { }  
+    public ProjectGroup(string name, string description, IEnumerable<Member> members, int organizationId) 
+        : base(name, description, members, organizationId) { }
     public List<Project> Projects { get; set; } = new();
 }

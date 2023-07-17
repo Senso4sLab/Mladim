@@ -8,6 +8,17 @@ namespace Mladim.Domain.Dtos.DateTimeRange;
 
 public class DateTimeRangeCommandDto
 {
-    public DateTime Start { get; set; }
-    public DateTime End { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public TimeSpan? StartTime { get; set; } = TimeSpan.Zero;
+    public TimeSpan? EndTime { get; set; } = TimeSpan.Zero;
+
+
+    private DateTimeRangeCommandDto() { }
+    private DateTimeRangeCommandDto(DateTime startDate, DateTime endDate, TimeSpan? startTime, TimeSpan? endTime) =>
+        (StartDate, EndDate, StartTime, EndTime) = (startDate, endDate, startTime, endTime);
+   
+
+    public static DateTimeRangeCommandDto Create(DateTime startDate, DateTime endDate,  TimeSpan? startTime, TimeSpan? endTime) =>
+        new DateTimeRangeCommandDto(startDate, endDate, startTime, endTime);
 }

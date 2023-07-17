@@ -6,17 +6,17 @@
     <MudExpansionPanels>
         <MudExpansionPanel Text="Osnovni podatki">
               <MudStack Spacing="2">
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Address" Label="Naslov" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.PhoneNumber" Label="Telefon" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Email" Label="Email" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.RegistrationNumber" Label="Matična številka" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.VatNumber" Label="Davčna številka" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.WebpageUrl" Label="Spletna stran" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.Address" Label="Naslov" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.PhoneNumber" Label="Telefon" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.Email" Label="Email" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.RegistrationNumber" Label="Matična številka" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.VatNumber" Label="Davčna številka" Variant="Variant.Outlined"></MudTextField>
+                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.WebpageUrl" Label="Spletna stran" Variant="Variant.Outlined"></MudTextField>
             </MudStack>
         </MudExpansionPanel>
         
         <MudExpansionPanel Text="Opis">
-            <TextEditor @ref="textEditor" ReadOnly="@ReadOnly" @bind-Text="@Organization.Description" />
+            <TextEditor @ref="textEditor" ReadOnly="@ReadOnly" @bind-Text="@Organization.Attributes.Description" />
         </MudExpansionPanel>
         
         <MudExpansionPanel Text="Profili na družbenih omrežjih">
@@ -29,12 +29,12 @@
         </MudExpansionPanel>
         <MudExpansionPanel Text="Splošno o organizaciji">
              <MudStack Spacing="2">
-                <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationTypes" @bind-EnumValues="Organization.Types" Label="Vrsta organizacije" />
-                <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationFields" @bind-EnumValues="Organization.Fields" Label="Področje delovanja" />
-                <MultiSelect ReadOnly="@ReadOnly" TItem="AgeGroups" @bind-EnumValues="Organization.AgeGroups" Label="Starostne skupine" />
-                <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationStatus" @bind-EnumValues="Organization.Status" Label="Status organizacije" />
-                <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationRegions" @bind-EnumValues="Organization.Regions" Label="Statistična regija" />
-                <MultiSelect ReadOnly="@ReadOnly" TItem="YouthSectors" @bind-EnumValues="Organization.YouthSectors" Label="Mladinski sektor" />
+                <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationTypes" @bind-EnumValues="Organization.Attributes.Types" Label="Vrsta organizacije" />
+                <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationFields" @bind-EnumValues="Organization.Attributes.Fields" Label="Področje delovanja" />
+                <MultiSelect ReadOnly="@ReadOnly" TItem="AgeGroups" @bind-EnumValues="Organization.Attributes.AgeGroups" Label="Starostne skupine" />
+                <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationStatus" @bind-EnumValues="Organization.Attributes.Status" Label="Status organizacije" />
+                <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationRegions" @bind-EnumValues="Organization.Attributes.Regions" Label="Statistična regija" />
+                <MultiSelect ReadOnly="@ReadOnly" TItem="YouthSectors" @bind-EnumValues="Organization.Attributes.YouthSectors" Label="Mladinski sektor" />
             </MudStack>
         </MudExpansionPanel>
     </MudExpansionPanels>

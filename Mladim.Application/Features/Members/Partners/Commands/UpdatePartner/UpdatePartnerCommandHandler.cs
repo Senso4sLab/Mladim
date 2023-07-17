@@ -21,8 +21,13 @@ public class UpdatePartnerCommandHandler : IRequestHandler<UpdatePartnerCommand,
     } 
 
     public async Task<int> Handle(UpdatePartnerCommand request, CancellationToken cancellationToken)
-    {      
-       var partner = this.Mapper.Map<Partner>(request);
+    {
+        var partner = await this.UnitOfWork.PartnerRepository.FirstOrDefaultAsync(p => p.Id == request.Id);
+
+       ArgumentNullException.ThrowIfNull(partner);
+
+       partner = this.Mapper.Map(request, partner); 
+
        this.UnitOfWork.PartnerRepository.Update(partner);
        return await this.UnitOfWork.SaveChangesAsync();
     }

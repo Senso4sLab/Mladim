@@ -26,7 +26,7 @@
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">Prekliči</MudButton>
-        <MudButton OnClick="OnValidSubmitAsync" Color="Color.Primary">@(staffMember.Id == null ? "Dodaj" : "Spremeni")</MudButton>
+        <MudButton OnClick="OnValidSubmitAsync" Color="Color.Primary">@(staffMember.Id == 0 ? "Dodaj" : "Spremeni")</MudButton>
     </DialogActions>
 </MudDialog>
 

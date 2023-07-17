@@ -29,9 +29,7 @@ public class AddOrganizationGroupCommandHandler : IRequestHandler<AddOrganizatio
 
         ArgumentNullException.ThrowIfNull(organization);
 
-        var group = CreateGroup(request.GroupType, request.Name, request.Description, request.Members);
-        
-        ArgumentNullException.ThrowIfNull(group);
+        var group = Group.Create(request.GroupType, request.Name, request.Description, request.Members, request.OrganizationId);        
 
         this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, group.Members);
         
@@ -40,12 +38,6 @@ public class AddOrganizationGroupCommandHandler : IRequestHandler<AddOrganizatio
         return await this.UnitOfWork.SaveChangesAsync() > 0;
     }
 
-    private Group? CreateGroup(GroupType groupType, string name, string description, IEnumerable<int> memberIds) =>
-        groupType switch
-        {
-            GroupType.Project => Group.Create(GroupType.Project, name, description, memberIds),
-            GroupType.Activity => Group.Create(GroupType.Activity, name, description, memberIds),
-            _ => null
-        };
+  
     
 }

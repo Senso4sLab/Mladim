@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.Participants.Commands.AddParticipant;
 
-public class AddParticipantCommand : IRequest<bool>
+public class AddParticipantCommand : IRequest<ParticipantDetailsQueryDto>
 {
     public int OrganizationId { get; set; }
     public string Name { get; set; } = string.Empty;

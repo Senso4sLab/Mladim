@@ -8,6 +8,7 @@ using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Domain.Dtos;
 using Mladim.Client.Models;
 using Mladim.Domain.Models;
+using Mladim.Domain.Dtos.Members;
 
 namespace Mladim.Client.Services.SubjectServices.Implementations;
 
@@ -31,11 +32,11 @@ public class StaffMemberService : IStaffMemberService
 		return this.Mapper.Map<IEnumerable<StaffMemberVM>>(staffDto);	
 	}
 
-    public async Task<IEnumerable<MemberBaseVM>> GetBaseByOrganizationIdAsync(int organizationId, bool isActive)
+    public async Task<IEnumerable<NamedEntityVM>> GetBaseByOrganizationIdAsync(int organizationId, bool isActive)
     {
         string url = string.Format(this.ApiUrls.GetStafMembersByOrganizationId, organizationId, true, isActive);
-        var baseDto = await this.HttpService.GetAllAsync<MemberBaseAttributes>(url);
-        return this.Mapper.Map<IEnumerable<MemberBaseVM>>(baseDto);
+        var baseDto = await this.HttpService.GetAllAsync<NamedEntityDto>(url);
+        return this.Mapper.Map<IEnumerable<NamedEntityVM>>(baseDto);
     }
 
 

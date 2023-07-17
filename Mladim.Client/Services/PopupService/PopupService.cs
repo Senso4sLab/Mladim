@@ -90,10 +90,10 @@ namespace Mladim.Client.Services.PopupService
             return !result.Canceled;
         }
 
-        public async Task<IEnumerable<AnonymousParticipantsVM>> ShowAnonymousParticipantGroupsDialog(string title, IEnumerable<AnonymousParticipantsVM> anonymousParticipantGroups)
+        public async Task<IEnumerable<AnonymousParticipantsVM>> ShowAnonymousParticipantGroupsDialog(string title, IEnumerable<AnonymousParticipantsVM> anonymousParticipants)
         {
             var parameters = new DialogParameters();
-            parameters.Add("AnonymousParticipantGroups", anonymousParticipantGroups);
+            parameters.Add("AnonymousParticipantGroups", anonymousParticipants);
 
             var dialog = await DialogService.ShowAsync<UpsertAnonymousParticipants>(title, parameters, DialogOptions);
 

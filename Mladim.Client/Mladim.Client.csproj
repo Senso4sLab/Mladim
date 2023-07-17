@@ -37,16 +37,6 @@
   <ItemGroup>
     <Folder Include="Components\Activity\" />
     <Folder Include="Components\Project\" />
-    <Folder Include="MappingProfiles\Profiles\Activities\" />
-    <Folder Include="MappingProfiles\Profiles\AnonymousParticipants\" />
-    <Folder Include="MappingProfiles\Profiles\Groups\" />
-    <Folder Include="MappingProfiles\Profiles\Members\" />
-    <Folder Include="MappingProfiles\Profiles\Staff\" />
-    <Folder Include="MappingProfiles\Profiles\Projects\" />
-    <Folder Include="MappingProfiles\Profiles\Partners\" />
-    <Folder Include="MappingProfiles\Profiles\Participants\" />
-    <Folder Include="MappingProfiles\Profiles\Other\" />
-    <Folder Include="MappingProfiles\Profiles\Organizations\" />
   </ItemGroup>
 
 	

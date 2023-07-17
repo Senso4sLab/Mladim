@@ -1,8 +1,7 @@
 ﻿namespace Mladim.Client.ViewModels;
 
-public class PartnerVM : MemberBaseVM
-{
-   
+public class PartnerVM : NamedEntityVM
+{   
     public string? Description { get; set; }
     public string? WebpageUrl { get; set; }
     public string? ContactPerson { get; set; }

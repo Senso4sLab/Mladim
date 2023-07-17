@@ -6,7 +6,7 @@ public interface IParticipantService
 {
     Task<ParticipantVM?> AddAsync(int organizationId, ParticipantVM participant);
 
-    Task<IEnumerable<MemberBaseVM>> GetBaseByOrganizationIdAsync(int organizationId, bool isActive);
+    Task<IEnumerable<NamedEntityVM>> GetBaseByOrganizationIdAsync(int organizationId, bool isActive);
     Task<IEnumerable<ParticipantVM>> GetByOrganizationIdAsync(int organizationId, bool isAcitve);
     Task<bool> UpdateAsync(ParticipantVM participant);
 

@@ -14,17 +14,19 @@ namespace Mladim.Infrastracture.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AnonymousParticipants",
+                name: "ActivityGroups",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Gender = table.Column<int>(type: "int", nullable: false),
-                    AgeGroup = table.Column<int>(type: "int", nullable: false)
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    OrganizationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AnonymousParticipants", x => x.Id);
+                    table.PrimaryKey("PK_ActivityGroups", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -70,43 +72,29 @@ namespace Mladim.Infrastracture.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Group",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    GroupType = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Group", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Organizations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    WebpageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    VatNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RegistrationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AgeGroups = table.Column<int>(type: "int", nullable: false),
-                    YouthSectors = table.Column<int>(type: "int", nullable: false),
-                    Types = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    Fields = table.Column<int>(type: "int", nullable: false),
-                    Regions = table.Column<int>(type: "int", nullable: false),
-                    SocialMediaUrls = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Attributes_Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Attributes_PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Attributes_Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Attributes_WebpageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Attributes_VatNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Attributes_RegistrationNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Attributes_AgeGroups = table.Column<int>(type: "int", nullable: false),
+                    Attributes_YouthSectors = table.Column<int>(type: "int", nullable: false),
+                    Attributes_Types = table.Column<int>(type: "int", nullable: false),
+                    Attributes_Status = table.Column<int>(type: "int", nullable: false),
+                    Attributes_Fields = table.Column<int>(type: "int", nullable: false),
+                    Attributes_Regions = table.Column<int>(type: "int", nullable: false),
+                    Attributes_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Attributes_Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SocialMediaUrls_Twiter = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SocialMediaUrls_Facebook = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SocialMediaUrls_Instagram = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SocialMediaUrls_TikTok = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -119,17 +107,34 @@ namespace Mladim.Infrastracture.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WebpageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ContactPerson = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    OrganizationId = table.Column<int>(type: "int", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Partners", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProjectGroups",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    OrganizationId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProjectGroups", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -239,33 +244,6 @@ namespace Mladim.Infrastracture.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Member",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Gender = table.Column<int>(type: "int", nullable: false),
-                    Year = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GroupId = table.Column<int>(type: "int", nullable: true),
-                    AgeGroup = table.Column<int>(type: "int", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsRegistered = table.Column<bool>(type: "bit", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Member", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Member_Group_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "Group",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AppUserOrganization",
                 columns: table => new
                 {
@@ -290,40 +268,18 @@ namespace Mladim.Infrastracture.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrganizationGroups",
-                columns: table => new
-                {
-                    OrganizationId = table.Column<int>(type: "int", nullable: false),
-                    GroupId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrganizationGroups", x => new { x.OrganizationId, x.GroupId });
-                    table.ForeignKey(
-                        name: "FK_OrganizationGroups_Group_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "Group",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrganizationGroups_Organizations_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalTable: "Organizations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Projects",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    WebpageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Start = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    End = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Attributes_WebpageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Attributes_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Attributes_Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TimeRange_StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeRange_EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeRange_StartTime = table.Column<TimeSpan>(type: "time", nullable: true),
+                    TimeRange_EndTime = table.Column<TimeSpan>(type: "time", nullable: true),
                     OrganizationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -338,51 +294,39 @@ namespace Mladim.Infrastracture.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrganizationPartner",
+                name: "Member",
                 columns: table => new
                 {
-                    PartnerId = table.Column<int>(type: "int", nullable: false),
-                    OrganizationId = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    OrganizationId = table.Column<int>(type: "int", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ActivityGroupId = table.Column<int>(type: "int", nullable: true),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProjectGroupId = table.Column<int>(type: "int", nullable: true),
+                    Age = table.Column<int>(type: "int", nullable: true),
+                    AgeGroup = table.Column<int>(type: "int", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    YearOfBirth = table.Column<int>(type: "int", nullable: true),
+                    IsRegistered = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrganizationPartner", x => new { x.OrganizationId, x.PartnerId });
+                    table.PrimaryKey("PK_Member", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrganizationPartner_Organizations_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalTable: "Organizations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Member_ActivityGroups_ActivityGroupId",
+                        column: x => x.ActivityGroupId,
+                        principalTable: "ActivityGroups",
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_OrganizationPartner_Partners_PartnerId",
-                        column: x => x.PartnerId,
-                        principalTable: "Partners",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OrganizationMember",
-                columns: table => new
-                {
-                    MemberId = table.Column<int>(type: "int", nullable: false),
-                    OrganizationId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrganizationMember", x => new { x.OrganizationId, x.MemberId });
-                    table.ForeignKey(
-                        name: "FK_OrganizationMember_Member_MemberId",
-                        column: x => x.MemberId,
-                        principalTable: "Member",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrganizationMember_Organizations_OrganizationId",
-                        column: x => x.OrganizationId,
-                        principalTable: "Organizations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_Member_ProjectGroups_ProjectGroupId",
+                        column: x => x.ProjectGroupId,
+                        principalTable: "ProjectGroups",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -391,13 +335,13 @@ namespace Mladim.Infrastracture.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Start = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    End = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StartHour = table.Column<TimeSpan>(type: "time", nullable: true),
-                    EndHour = table.Column<TimeSpan>(type: "time", nullable: true),
-                    ActivityTypes = table.Column<int>(type: "int", nullable: false),
+                    Attributes_ActivityTypes = table.Column<int>(type: "int", nullable: false),
+                    Attributes_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Attributes_Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TimeRange_StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeRange_EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TimeRange_StartTime = table.Column<TimeSpan>(type: "time", nullable: true),
+                    TimeRange_EndTime = table.Column<TimeSpan>(type: "time", nullable: true),
                     ProjectId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -446,9 +390,9 @@ namespace Mladim.Infrastracture.Migrations
                 {
                     table.PrimaryKey("PK_ProjectProjectGroup", x => new { x.GroupsId, x.ProjectsId });
                     table.ForeignKey(
-                        name: "FK_ProjectProjectGroup_Group_GroupsId",
+                        name: "FK_ProjectProjectGroup_ProjectGroups_GroupsId",
                         column: x => x.GroupsId,
-                        principalTable: "Group",
+                        principalTable: "ProjectGroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -460,7 +404,7 @@ namespace Mladim.Infrastracture.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProjectStaff",
+                name: "StaffMemberProject",
                 columns: table => new
                 {
                     IsLead = table.Column<bool>(type: "bit", nullable: false),
@@ -469,15 +413,15 @@ namespace Mladim.Infrastracture.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProjectStaff", x => new { x.StaffMemberId, x.ProjectId, x.IsLead });
+                    table.PrimaryKey("PK_StaffMemberProject", x => new { x.StaffMemberId, x.ProjectId, x.IsLead });
                     table.ForeignKey(
-                        name: "FK_ProjectStaff_Member_StaffMemberId",
+                        name: "FK_StaffMemberProject_Member_StaffMemberId",
                         column: x => x.StaffMemberId,
                         principalTable: "Member",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProjectStaff_Projects_ProjectId",
+                        name: "FK_StaffMemberProject_Projects_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
@@ -501,9 +445,9 @@ namespace Mladim.Infrastracture.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ActivityActivityGroup_Group_GroupsId",
+                        name: "FK_ActivityActivityGroup_ActivityGroups_GroupsId",
                         column: x => x.GroupsId,
-                        principalTable: "Group",
+                        principalTable: "ActivityGroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -557,7 +501,29 @@ namespace Mladim.Infrastracture.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ActivityStaff",
+                name: "AnonymousParticipantGroup",
+                columns: table => new
+                {
+                    ActivityId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    AnonymousParticipant_Gender = table.Column<int>(type: "int", nullable: false),
+                    AnonymousParticipant_AgeGroup = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AnonymousParticipantGroup", x => new { x.ActivityId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_AnonymousParticipantGroup_Activities_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StaffMemberActivity",
                 columns: table => new
                 {
                     ActivityId = table.Column<int>(type: "int", nullable: false),
@@ -566,42 +532,17 @@ namespace Mladim.Infrastracture.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ActivityStaff", x => new { x.StaffMemberId, x.ActivityId, x.IsLead });
+                    table.PrimaryKey("PK_StaffMemberActivity", x => new { x.StaffMemberId, x.ActivityId, x.IsLead });
                     table.ForeignKey(
-                        name: "FK_ActivityStaff_Activities_ActivityId",
+                        name: "FK_StaffMemberActivity_Activities_ActivityId",
                         column: x => x.ActivityId,
                         principalTable: "Activities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ActivityStaff_Member_StaffMemberId",
+                        name: "FK_StaffMemberActivity_Member_StaffMemberId",
                         column: x => x.StaffMemberId,
                         principalTable: "Member",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AnonymousParticipantActivities",
-                columns: table => new
-                {
-                    ActivityId = table.Column<int>(type: "int", nullable: false),
-                    AnonymousParticipantId = table.Column<int>(type: "int", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AnonymousParticipantActivities", x => new { x.AnonymousParticipantId, x.ActivityId });
-                    table.ForeignKey(
-                        name: "FK_AnonymousParticipantActivities_Activities_ActivityId",
-                        column: x => x.ActivityId,
-                        principalTable: "Activities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AnonymousParticipantActivities_AnonymousParticipants_AnonymousParticipantId",
-                        column: x => x.AnonymousParticipantId,
-                        principalTable: "AnonymousParticipants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -635,16 +576,6 @@ namespace Mladim.Infrastracture.Migrations
                 name: "IX_ActivityPartner_PartnersId",
                 table: "ActivityPartner",
                 column: "PartnersId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ActivityStaff_ActivityId",
-                table: "ActivityStaff",
-                column: "ActivityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AnonymousParticipantActivities_ActivityId",
-                table: "AnonymousParticipantActivities",
-                column: "ActivityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppUserOrganization_OrganizationsId",
@@ -691,24 +622,14 @@ namespace Mladim.Infrastracture.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Member_GroupId",
+                name: "IX_Member_ActivityGroupId",
                 table: "Member",
-                column: "GroupId");
+                column: "ActivityGroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrganizationGroups_GroupId",
-                table: "OrganizationGroups",
-                column: "GroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrganizationMember_MemberId",
-                table: "OrganizationMember",
-                column: "MemberId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrganizationPartner_PartnerId",
-                table: "OrganizationPartner",
-                column: "PartnerId");
+                name: "IX_Member_ProjectGroupId",
+                table: "Member",
+                column: "ProjectGroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PartnerProject_ProjectsId",
@@ -726,8 +647,13 @@ namespace Mladim.Infrastracture.Migrations
                 column: "OrganizationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectStaff_ProjectId",
-                table: "ProjectStaff",
+                name: "IX_StaffMemberActivity_ActivityId",
+                table: "StaffMemberActivity",
+                column: "ActivityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StaffMemberProject_ProjectId",
+                table: "StaffMemberProject",
                 column: "ProjectId");
         }
 
@@ -744,10 +670,7 @@ namespace Mladim.Infrastracture.Migrations
                 name: "ActivityPartner");
 
             migrationBuilder.DropTable(
-                name: "ActivityStaff");
-
-            migrationBuilder.DropTable(
-                name: "AnonymousParticipantActivities");
+                name: "AnonymousParticipantGroup");
 
             migrationBuilder.DropTable(
                 name: "AppUserOrganization");
@@ -768,28 +691,16 @@ namespace Mladim.Infrastracture.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "OrganizationGroups");
-
-            migrationBuilder.DropTable(
-                name: "OrganizationMember");
-
-            migrationBuilder.DropTable(
-                name: "OrganizationPartner");
-
-            migrationBuilder.DropTable(
                 name: "PartnerProject");
 
             migrationBuilder.DropTable(
                 name: "ProjectProjectGroup");
 
             migrationBuilder.DropTable(
-                name: "ProjectStaff");
+                name: "StaffMemberActivity");
 
             migrationBuilder.DropTable(
-                name: "Activities");
-
-            migrationBuilder.DropTable(
-                name: "AnonymousParticipants");
+                name: "StaffMemberProject");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -801,13 +712,19 @@ namespace Mladim.Infrastracture.Migrations
                 name: "Partners");
 
             migrationBuilder.DropTable(
+                name: "Activities");
+
+            migrationBuilder.DropTable(
                 name: "Member");
 
             migrationBuilder.DropTable(
                 name: "Projects");
 
             migrationBuilder.DropTable(
-                name: "Group");
+                name: "ActivityGroups");
+
+            migrationBuilder.DropTable(
+                name: "ProjectGroups");
 
             migrationBuilder.DropTable(
                 name: "Organizations");

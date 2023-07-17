@@ -33,8 +33,8 @@ public partial class UpsertProject
 
     
 
-    private IEnumerable<MemberBaseVM> Staff = new List<MemberBaseVM>();    
-    private List<MemberBaseVM> Partners = new List<MemberBaseVM>();
+    private IEnumerable<NamedEntityVM> Staff = new List<NamedEntityVM>();    
+    private List<NamedEntityVM> Partners = new List<NamedEntityVM>();
 
 
     private TextEditor? textEditor;  
@@ -43,19 +43,19 @@ public partial class UpsertProject
     private bool UpdateState => ProjectId != null;
     protected async override Task OnParametersSetAsync()
     {
-        this.Staff = new List<MemberBaseVM>(await StaffMembersByOrganizationIdAsync());
-        this.Partners = new List<MemberBaseVM>(await PartnersByOrganizationIdAsync());
+        this.Staff = new List<NamedEntityVM>(await StaffMembersByOrganizationIdAsync());
+        this.Partners = new List<NamedEntityVM>(await PartnersByOrganizationIdAsync());
         
         if (UpdateState)        
            await this.FetchingMembersForProjectUpdate();      
 
     }
 
-    private Task<IEnumerable<MemberBaseVM>> StaffMembersByOrganizationIdAsync() =>
+    private Task<IEnumerable<NamedEntityVM>> StaffMembersByOrganizationIdAsync() =>
         this.StaffService.GetBaseByOrganizationIdAsync(OrganizationId, true);
 
 
-    private Task<IEnumerable<MemberBaseVM>> PartnersByOrganizationIdAsync() =>
+    private Task<IEnumerable<NamedEntityVM>> PartnersByOrganizationIdAsync() =>
         this.PartnerService.GetBaseByOrganizationIdAsync(OrganizationId, true);
 
     private async Task FetchingMembersForProjectUpdate()
@@ -63,10 +63,10 @@ public partial class UpsertProject
        
         var projectResponse = await this.ProjectService.GetByProjectIdAsync(ProjectId!.Value);
 
-        if (projectResponse == null)
-            return;
+        if (projectResponse != null)
+            project = projectResponse;
 
-        project = projectResponse;
+
         //LeadStaffMembers = project.LeadStaff.ToList(); 
         //Administrators   = project.Administrators.ToList();
        // projectDurationRange = new DateRange(project.Start, project.Start);

@@ -12,9 +12,6 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 
-
-
-
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
@@ -32,7 +29,6 @@ builder.Services.AddSwaggerGen(options =>
 
 
 var app = builder.Build();
-
 
 
 // Configure the HTTP request pipeline.
