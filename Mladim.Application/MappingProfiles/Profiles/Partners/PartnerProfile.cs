@@ -17,12 +17,30 @@ public class PartnerProfile : Profile
     public PartnerProfile()
     {
         CreateMap<AddPartnerCommand, Partner>();
-        CreateMap<PartnerCommandDto, Partner>();        
-
         CreateMap<UpdatePartnerCommand, Partner>();
 
-        CreateMap<Partner, PartnerQueryDetailsDto>()
-            .ReverseMap();
+       
+
+        CreateMap<PartnerCommandDto, Partner>();      
+
+
+        //CreateMap<PartnerCommandDto, NamedEntity>();
+        //CreateMap<PartnerCommandDto, Partner>();
+        //CreateMap<PartnerCommandDto, BaseEntity<int>>();
+
+
+        
+
+
+
+
+
+       
+
+      
+
+        CreateMap<Partner, PartnerQueryDetailsDto>();
+           
 
         CreateMap<Partner, PartnerQueryDto>();
     }

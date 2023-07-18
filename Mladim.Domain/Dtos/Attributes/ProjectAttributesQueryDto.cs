@@ -8,7 +8,7 @@ namespace Mladim.Domain.Dtos.Attributes;
 
 public class ProjectAttributesQueryDto
 {
-    public string Name { get; protected set; } = string.Empty;
-    public string Description { get; protected set; } = string.Empty;
+    public string Name { get;  set; } = string.Empty;
+    public string Description { get;  set; } = string.Empty;
     public string? WebpageUrl { get; set; }
 }

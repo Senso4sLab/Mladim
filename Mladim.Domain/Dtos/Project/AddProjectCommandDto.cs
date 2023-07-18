@@ -7,7 +7,7 @@ public class AddProjectCommandDto
 {
     public int OrganizationId { get; set; }    
     public ProjectAttributesCommandDto Attributes { get; set; } = default!;
-    public DateTimeRangeCommandDto DateTimeRange { get; set; } = default!;     
+    public DateTimeRangeCommandDto TimeRange { get; set; } = default!;     
 
     public List<StaffMemberCommandDto> Staff { get; set; } = new();
     public List<GroupCommandDto> Groups { get; set; } = new();

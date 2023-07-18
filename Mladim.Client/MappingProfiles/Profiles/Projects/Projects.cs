@@ -14,14 +14,14 @@ public class Projects : Profile
     {
         CreateMap<ProjectVM, UpdateProjectCommandDto>()
             .ForMember(dest => dest.Staff, m => m.MapFrom(src => src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true))
-                .Concat(src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true))).ToList()))
-                .ForMember(dest => dest.DateTimeRange, m => m.MapFrom(src => DateTimeRangeCommandDto.Create(src.DateRange.Start.Value, src.DateRange.End.Value, TimeSpan.Zero, TimeSpan.Zero)));
+                .Concat(src.Administration.Select(s => StaffMemberCommandDto.Create(s.Id, false))).ToList()))
+                .ForMember(dest => dest.TimeRange, m => m.MapFrom(src => DateTimeRangeCommandDto.Create(src.DateRange.Start.Value, src.DateRange.End.Value, TimeSpan.Zero, TimeSpan.Zero)));
 
 
         CreateMap<ProjectVM, AddProjectCommandDto>()
             .ForMember(dest => dest.Staff, m => m.MapFrom(src => src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true))
-                .Concat(src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true))).ToList()))
-                .ForMember(dest => dest.DateTimeRange, m => m.MapFrom(src => DateTimeRangeCommandDto.Create(src.DateRange.Start.Value, src.DateRange.End.Value, TimeSpan.Zero, TimeSpan.Zero)));
+                .Concat(src.Administration.Select(s => StaffMemberCommandDto.Create(s.Id, false))).ToList()))
+                .ForMember(dest => dest.TimeRange, m => m.MapFrom(src => DateTimeRangeCommandDto.Create(src.DateRange.Start.Value, src.DateRange.End.Value, TimeSpan.Zero, TimeSpan.Zero)));
         
 
         CreateMap<ProjectQueryDetailsDto, ProjectVM>()

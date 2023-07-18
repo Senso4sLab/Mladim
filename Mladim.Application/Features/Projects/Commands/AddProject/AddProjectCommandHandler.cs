@@ -25,18 +25,31 @@ public class AddProjectCommandHandler : IRequestHandler<AddProjectCommand, bool>
 
     public async Task<bool> Handle(AddProjectCommand request, CancellationToken cancellationToken)
     {
-        var organization = await this.UnitOfWork.OrganizationRepository
-            .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
+        try
+        {
+            var organization = await this.UnitOfWork.OrganizationRepository
+                .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);         
 
-        ArgumentNullException.ThrowIfNull(organization);
 
-        var project = this.Mapper.Map<Project>(request);
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, project.Groups);
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, project.Partners);       
+            ArgumentNullException.ThrowIfNull(organization);
 
-        organization.Projects.Add(project);     
+            var project = this.Mapper.Map<Project>(request);
+            this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, project.Groups);
+            this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, project.Partners);
 
-        return await this.UnitOfWork.SaveChangesAsync() > 0;
+            organization.Projects.Add(project);
+
+            var result = await this.UnitOfWork.SaveChangesAsync() > 0;
+            return result;
+
+
+        }
+        catch (Exception ex) 
+        {
+            string message = ex.Message;
+            return false;
+        
+        }
 
     }
 }

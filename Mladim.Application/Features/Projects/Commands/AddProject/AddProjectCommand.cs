@@ -13,8 +13,8 @@ namespace Mladim.Application.Features.Projects.Commands.AddProject;
 public class AddProjectCommand : IRequest<bool>
 {
     public int OrganizationId { get; set; }
-    public ProjectAttributesCommandDto Attributes { get; set; } = default!;
-    public DateTimeRangeCommandDto DateTimeRange { get; set; } = default!;
+    public ProjectAttributesCommandDto Attributes { get; set; } = default!;    
+    public DateTimeRangeCommandDto TimeRange { get; set; } = default!;
     public List<StaffMemberCommandDto> Staff { get; set; } = new();
     public List<GroupCommandDto> Groups { get; set; } = new();
     public List<PartnerCommandDto> Partners { get; set; } = new();

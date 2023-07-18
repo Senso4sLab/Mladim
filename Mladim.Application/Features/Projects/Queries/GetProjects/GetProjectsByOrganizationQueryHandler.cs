@@ -27,8 +27,8 @@ public class GetProjectsByOrganizationQueryHandler : IRequestHandler<GetProjects
     public async Task<IEnumerable<ProjectQueryDto>> Handle(GetProjectsByOrganizationQuery request, CancellationToken cancellationToken)
     {
        var projects =  await this.UnitOfWork.ProjectRepository
-            .GetAllAsync(p => p.OrganizationId == request.OrganizationId);
-        
+            .GetAllAsync(p => p.OrganizationId == request.OrganizationId); 
+
         return this.Mapper.Map<IEnumerable<ProjectQueryDto>>(projects);
     }
 }

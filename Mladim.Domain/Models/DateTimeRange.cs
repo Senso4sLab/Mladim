@@ -4,7 +4,7 @@ public class DateTimeRange : IEquatable<DateTimeRange>
 {
     public DateTime StartDate { get; private set; }
     public DateTime EndDate { get; private set; }
-    public TimeSpan? StartTime { get; private set; } = TimeSpan.Zero;
+    public TimeSpan? StartTime { get;  private set; } = TimeSpan.Zero;
     public TimeSpan? EndTime { get; private set; } = TimeSpan.Zero;
 
     private DateTimeRange() { }

@@ -14,7 +14,7 @@ public class ProjectQueryDetailsDto
 {
     public int Id { get; set; }
     public ProjectAttributesQueryDto Attributes { get; set; } = default!;
-    public DateTimeRangeQueryDto DateTimeRange { get; set; } = default!;
+    public DateTimeRangeQueryDto TimeRange { get; set; } = default!;
     public List<StaffMemberQueryDto> Staff { get; set; } = new();
     public List<GroupQueryDto> Groups { get; set; } = new();
     public List<PartnerQueryDto> Partners { get; set; } = new();

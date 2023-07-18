@@ -100,7 +100,7 @@ public partial class UpsertProject
         
             var httpResponse = await this.ProjectService.AddAsync(project, OrganizationId);
 
-            if (httpResponse != null)
+            if (httpResponse)
                 this.PopupService.ShowSnackbarSuccess("Projekt uspešno dodan");
             else
                 this.PopupService.ShowSnackbarError();
