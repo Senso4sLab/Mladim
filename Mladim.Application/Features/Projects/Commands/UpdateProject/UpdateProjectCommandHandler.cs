@@ -24,80 +24,93 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
 
     public async Task<int> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
     {
-        var project = await this.UnitOfWork.ProjectRepository.GetProjectDetailsAsync(request.Id);            
+        try
+        {
+            var project = await this.UnitOfWork.ProjectRepository.GetProjectDetailsAsync(request.Id);
 
-        ArgumentNullException.ThrowIfNull(project);
+            
+            ArgumentNullException.ThrowIfNull(project);
 
-        project = this.Mapper.Map(request, project);
+            //request.Partners.Where(p => project.Partners.Any(pp => pp.Id == p.Id)).ToList()
+            //    .ForEach(p => request.Partners.Remove(p));
+            
+           
+           
+            project = this.Mapper.Map(request, project);
 
-        this.UnitOfWork.ProjectRepository.Update(project);
-      
-        //project.PeriodOfImplementation(request.Start, request.End);
-        //project.SetBaseAttributes(request.Name, request.Description, request.WebpageUrl);
+            //this.UnitOfWork.ProjectRepository.Update(project);
 
-        //// Partners
-        //var otherPartners = request.Partners
-        //    .Select(other => Partner.Create(other.Id))
-        //    .ToList();
+            //project.PeriodOfImplementation(request.Start, request.End);
+            //project.SetBaseAttributes(request.Name, request.Description, request.WebpageUrl);
 
-        //// Add Partners
-        //var partnersToAdd = otherPartners
-        //    .Where(p => !project.Exists(p))            
-        //    .ToList();
-        
-        //this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, partnersToAdd);
-        //project.AddPartners(partnersToAdd);
+            //// Partners
+            //var otherPartners = request.Partners
+            //    .Select(other => Partner.Create(other.Id))
+            //    .ToList();
 
-        //// Remove Partners
-        //var removePartners = project.Partners
-        //    .Where(p => !otherPartners.Any(rp => rp == p))
-        //    .ToList();
+            //// Add Partners
+            //var partnersToAdd = otherPartners
+            //    .Where(p => !project.Exists(p))            
+            //    .ToList();
 
-        //project.RemoveAll(removePartners);
+            //this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, partnersToAdd);
+            //project.AddPartners(partnersToAdd);
 
-        //// Groups
-        //var otherGroups = request.Groups
-        //    .Select(other => ProjectGroup.Create(other.Id))
-        //    .ToList();
+            //// Remove Partners
+            //var removePartners = project.Partners
+            //    .Where(p => !otherPartners.Any(rp => rp == p))
+            //    .ToList();
 
-        //// Add Groups
-        //var groupsToAdd = otherGroups
-        //    .Where(p => !project.Exists(p))            
-        //    .ToList();
+            //project.RemoveAll(removePartners);
 
-        //this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, groupsToAdd);
-        //project.AddGroups(groupsToAdd);
+            //// Groups
+            //var otherGroups = request.Groups
+            //    .Select(other => ProjectGroup.Create(other.Id))
+            //    .ToList();
 
-        //// Remove Groups
-        //var removeGroups = project.Groups
-        //    .Where(g => !otherGroups.Any(rg => rg == g))
-        //    .ToList();
+            //// Add Groups
+            //var groupsToAdd = otherGroups
+            //    .Where(p => !project.Exists(p))            
+            //    .ToList();
 
-        //project.RemoveAll(removeGroups);
+            //this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, groupsToAdd);
+            //project.AddGroups(groupsToAdd);
 
-        //// StaffRole
-        //var otherStaff = request.Staff
-        //    .Select(other => StaffMemberRole.Create(other.StaffMemberId, other.IsLead))
-        //    .ToList();        
+            //// Remove Groups
+            //var removeGroups = project.Groups
+            //    .Where(g => !otherGroups.Any(rg => rg == g))
+            //    .ToList();
 
-        ////Remove Staff
-        //var removeStaff =  project.Staff
-        //    .Where(smp => !otherStaff.Any(o => o.StaffMember == smp.StaffMember))
-        //    .ToList();
+            //project.RemoveAll(removeGroups);
 
-        //this.UnitOfWork.ConfigEntityState(EntityState.Deleted, removeStaff);
-        //project.RemoveAll(removeStaff);
+            //// StaffRole
+            //var otherStaff = request.Staff
+            //    .Select(other => StaffMemberRole.Create(other.StaffMemberId, other.IsLead))
+            //    .ToList();        
 
-        //// Modify StaffMemberProjects              
-        //otherStaff.ForEach(project.SetStaffMemberRole); 
-       
-        //// Add StaffMemberProjects
-        //var addStaffMembers = otherStaff            
-        //   .Where(sm => !project.Exists(sm.StaffMember))
-        //   .ToList();        
+            ////Remove Staff
+            //var removeStaff =  project.Staff
+            //    .Where(smp => !otherStaff.Any(o => o.StaffMember == smp.StaffMember))
+            //    .ToList();
 
-        //project.AddStaff(addStaffMembers);    
+            //this.UnitOfWork.ConfigEntityState(EntityState.Deleted, removeStaff);
+            //project.RemoveAll(removeStaff);
 
-        return await this.UnitOfWork.SaveChangesAsync();       
+            //// Modify StaffMemberProjects              
+            //otherStaff.ForEach(project.SetStaffMemberRole); 
+
+            //// Add StaffMemberProjects
+            //var addStaffMembers = otherStaff            
+            //   .Where(sm => !project.Exists(sm.StaffMember))
+            //   .ToList();        
+
+            //project.AddStaff(addStaffMembers);    
+
+            return await this.UnitOfWork.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            return 0;
+        }
     }
 }

@@ -19,7 +19,7 @@ public class PartnerProfile : Profile
         CreateMap<AddPartnerCommand, Partner>();
         CreateMap<UpdatePartnerCommand, Partner>();
 
-       
+       CreateMap<Partner, Partner>();   
 
         CreateMap<PartnerCommandDto, Partner>();      
 

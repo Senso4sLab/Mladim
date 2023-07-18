@@ -25,7 +25,9 @@ public class OtherProfile : Profile
         CreateMap<SocialMediaUrls, SocialMediaUrlsQueryDto>();
 
         CreateMap<DateTimeRangeCommandDto, DateTimeRange>();
-        CreateMap<DateTimeRange, DateTimeRangeQueryDto>();
+
+        CreateMap<DateTimeRangeQueryDto, DateTimeRange>()
+            .ReverseMap();
 
         CreateMap<ProjectAttributesCommandDto, ProjectAttibutes>();
         CreateMap<ProjectAttibutes, ProjectAttributesQueryDto>();

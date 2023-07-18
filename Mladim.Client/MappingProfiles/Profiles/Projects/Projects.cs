@@ -5,6 +5,7 @@ using Mladim.Client.ViewModels.Project;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Dtos.Attributes;
 using Mladim.Domain.Dtos.DateTimeRange;
+using MudBlazor;
 
 namespace Mladim.Client.MappingProfiles.Profiles.Projects;
 
@@ -26,7 +27,9 @@ public class Projects : Profile
 
         CreateMap<ProjectQueryDetailsDto, ProjectVM>()
             .ForMember(dest => dest.Staff, m => m.MapFrom(src => src.Staff.Where(s => s.IsLead).ToList()))
-            .ForMember(dest => dest.Administration, m => m.MapFrom(src => src.Staff.Where(s => !s.IsLead).ToList()));
+            .ForMember(dest => dest.Administration, m => m.MapFrom(src => src.Staff.Where(s => !s.IsLead).ToList()))
+            .ForMember(dest => dest.DateRange, m => m.MapFrom(src => new DateRange(src.TimeRange.StartDate, src.TimeRange.EndDate)));
+
 
         CreateMap<ProjectQueryDto, ProjectVM>();
 

@@ -39,7 +39,7 @@ public class ProjectRepository : GenericRepository<Project>,  IProjectRepository
             .Include(p => p.Partners)
             .Include(p => p.Groups);
 
-        return tracking ? await projectDbSet.AsTracking().FirstOrDefaultAsync(p => p.Id == projectId)
+        return tracking ? await projectDbSet.FirstOrDefaultAsync(p => p.Id == projectId)
             : await projectDbSet.AsNoTracking().FirstOrDefaultAsync(p => p.Id == projectId);        
     }    
 }

@@ -15,7 +15,7 @@ public class UpdateProjectCommand : IRequest<int>
 {
     public int Id { get; set; }
     public ProjectAttributesCommandDto Attributes { get; set; } = default!;
-    public DateTimeRangeQueryDto DateTimeRange { get; set; } = default!;
+    public DateTimeRangeQueryDto TimeRange { get; set; } = default!;
     public List<StaffMemberCommandDto> Staff { get; set; } = new();
     public List<GroupCommandDto> Groups { get; set; } = new();
     public List<PartnerCommandDto> Partners { get; set; } = new();  

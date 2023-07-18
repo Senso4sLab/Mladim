@@ -46,7 +46,6 @@ public class ProjectService : IProjectService
         command.OrganizationId = organizationId;
 
         var projectDto = await this.HttpClient.PostAsync<AddProjectCommandDto, bool>(MladimApiUrls.ProjectCommand, command);
-
         return projectDto; 
     }
 

@@ -16,9 +16,10 @@ public class ProjectsProfile : Profile
     public ProjectsProfile()
     {
         CreateMap<AddProjectCommand, Project>();
-          
+
 
         CreateMap<UpdateProjectCommand, Project>();
+           
 
         CreateMap<Project, ProjectQueryDto>();
         CreateMap<Project, ProjectQueryDetailsDto>();
