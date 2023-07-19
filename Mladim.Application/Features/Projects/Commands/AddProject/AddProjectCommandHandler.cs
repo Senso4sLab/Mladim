@@ -31,8 +31,8 @@ public class AddProjectCommandHandler : IRequestHandler<AddProjectCommand, bool>
         ArgumentNullException.ThrowIfNull(organization);
 
         var project = this.Mapper.Map<Project>(request);
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, project.Groups);
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, project.Partners);
+        this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, project.Groups);
+        this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, project.Partners);
 
         organization.Projects.Add(project);
 

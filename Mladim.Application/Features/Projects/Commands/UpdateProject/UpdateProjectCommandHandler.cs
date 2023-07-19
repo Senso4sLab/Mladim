@@ -26,31 +26,43 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
     {
         try
         {
-            var project = await this.UnitOfWork.ProjectRepository.GetProjectDetailsAsync(request.Id);
+            var projectDb = await this.UnitOfWork.ProjectRepository
+                .GetProjectDetailsAsync(request.Id);
+
+            this.UnitOfWork.ConfigEntitiesState(EntityState.Detached, projectDb.Partners);
+            this.UnitOfWork.ConfigEntitiesState(EntityState.Detached, projectDb.Groups);
+
+
+
+            ArgumentNullException.ThrowIfNull(projectDb);
+           
+            var uProjectDb = this.Mapper.Map(request, projectDb);
+
+
+
+            //foreach (var p in projectDb.Partners)
+            //{
+            //    if (projectDb.Partners.Any(s => s.Equals(p)))
+            //    {
+            //        uProjectDb.Partners.Remove(p);
+            //    }
+            //}   //this.UnitOfWork.ProjectRepository.Update(uProjectDb);
+
+            this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, uProjectDb.Partners);
+            this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, uProjectDb.Groups);
+
+            //foreach (var smp in uProjectDb.Staff)
+            //{
+            //    if (projectDb.Staff.Any(s => s.Equals(smp)))
+            //        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, smp);
+            //}
 
             
-            ArgumentNullException.ThrowIfNull(project);
 
-            //request.Partners.Where(p => project.Partners.Any(pp => pp.Id == p.Id)).ToList()
-            //    .ForEach(p => request.Partners.Remove(p));
-            
-           
-           
-            project = this.Mapper.Map(request, project);
 
-            //this.UnitOfWork.ProjectRepository.Update(project);
-
-            //project.PeriodOfImplementation(request.Start, request.End);
-            //project.SetBaseAttributes(request.Name, request.Description, request.WebpageUrl);
-
-            //// Partners
-            //var otherPartners = request.Partners
-            //    .Select(other => Partner.Create(other.Id))
-            //    .ToList();
-
-            //// Add Partners
+            // Add Partners
             //var partnersToAdd = otherPartners
-            //    .Where(p => !project.Exists(p))            
+            //    .Where(p => !project.Exists(p))
             //    .ToList();
 
             //this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, partnersToAdd);

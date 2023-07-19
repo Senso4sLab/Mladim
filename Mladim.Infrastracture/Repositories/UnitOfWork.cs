@@ -54,10 +54,15 @@ public class UnitOfWork : IUnitOfWork
     public async Task<int> SaveChangesAsync() =>
         await this.Context.SaveChangesAsync();   
 
-    public void ConfigEntityState<T>(EntityState state, IEnumerable<T> entities) where T : class
+    public void ConfigEntitiesState<T>(EntityState state, IEnumerable<T> entities) where T : class
     {
         foreach (var entity in entities)
             this.Context.Entry(entity).State = state;        
+    }
+
+    public void ConfigEntityState<T>(EntityState state, T entity) where T : class
+    {       
+        this.Context.Entry(entity).State = state;
     }
 
     public void Dispose() =>    

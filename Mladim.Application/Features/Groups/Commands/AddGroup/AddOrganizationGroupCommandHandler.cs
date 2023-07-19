@@ -31,7 +31,7 @@ public class AddOrganizationGroupCommandHandler : IRequestHandler<AddOrganizatio
 
         var group = Group.Create(request.GroupType, request.Name, request.Description, request.Members, request.OrganizationId);        
 
-        this.UnitOfWork.ConfigEntityState(EntityState.Unchanged, group.Members);
+        this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, group.Members);
         
         await this.UnitOfWork.GroupRepository.AddAsync(group);       
 

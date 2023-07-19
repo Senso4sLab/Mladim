@@ -17,10 +17,10 @@ public class BaseEntity<TId> : IEquatable<BaseEntity<TId>>
     public TId Id { get; set; }    
 
     public override bool Equals(object? obj) =>
-        obj is BaseEntity<TId> entity && entity.Id.Equals(Id);
+        obj is BaseEntity<TId> entity && this.Equals(entity);
 
     public bool Equals(BaseEntity<TId>? other) =>
-        Equals((object?)Equals(other));    
+       other != null && this.Id.Equals(other.Id);    
 
     public static bool operator == (BaseEntity<TId> left, BaseEntity<TId> right) =>
        Equals(left, right);
