@@ -48,6 +48,7 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
             //    }
             //}   //this.UnitOfWork.ProjectRepository.Update(uProjectDb);
 
+
             this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, uProjectDb.Partners);
             this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, uProjectDb.Groups);
 
