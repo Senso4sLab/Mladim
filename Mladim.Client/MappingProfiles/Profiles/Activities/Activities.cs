@@ -17,24 +17,25 @@ public class Activities : Profile
     public Activities()
     {
         CreateMap<ActivityVM, UpdateActivityCommandDto>()
-             .ForMember(dest => dest.DateTimeRange, m => m.MapFrom(src => DateTimeRangeCommandDto.Create(src.DateRange.Start.Value, src.DateRange.End.Value, src.StartTime, src.EndTime)))
-             .ForMember(dest => dest.Staff, m => m.MapFrom(src => src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true)).Concat(src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true))).ToList()));
+             .ForMember(dest => dest.TimeRange, m => m.MapFrom(src => DateTimeRangeCommandDto.Create(src.DateRange.Start.Value, src.DateRange.End.Value, src.StartTime, src.EndTime)))
+             .ForMember(dest => dest.Staff, m => m.MapFrom(src => src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true)).Concat(src.Administration.Select(s => StaffMemberCommandDto.Create(s.Id, false))).ToList()));
 
         CreateMap<ActivityVM, AddActivityCommandDto>()
-            .ForMember(dest => dest.DateTimeRange, m => m.MapFrom(src => DateTimeRangeCommandDto.Create(src.DateRange.Start.Value, src.DateRange.End.Value, src.StartTime, src.EndTime)))
-            .ForMember(dest => dest.Staff, m => m.MapFrom(src => src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true)).Concat(src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true))).ToList()));
+            .ForMember(dest => dest.TimeRange, m => m.MapFrom(src => DateTimeRangeCommandDto.Create(src.DateRange.Start.Value, src.DateRange.End.Value, src.StartTime, src.EndTime)))
+            .ForMember(dest => dest.Staff, m => m.MapFrom(src => src.Staff.Select(s => StaffMemberCommandDto.Create(s.Id, true)).Concat(src.Administration.Select(s => StaffMemberCommandDto.Create(s.Id, false))).ToList()));
 
+        
         CreateMap<ActivityQueryDetailsDto, ActivityVM>()
-            .ForMember(dest => dest.DateRange, m => m.MapFrom(src => new DateRange(src.DateTimeRange.StartDate, src.DateTimeRange.EndDate)))
-            .ForMember(dest => dest.StartTime, m => m.MapFrom(src => src.DateTimeRange.StartTime))
-            .ForMember(dest => dest.EndTime, m => m.MapFrom(src => src.DateTimeRange.EndTime))
+            .ForMember(dest => dest.DateRange, m => m.MapFrom(src => new DateRange(src.TimeRange.StartDate, src.TimeRange.EndDate)))
+            .ForMember(dest => dest.StartTime, m => m.MapFrom(src => src.TimeRange.StartTime))
+            .ForMember(dest => dest.EndTime, m => m.MapFrom(src => src.TimeRange.EndTime))
             .ForMember(dest => dest.Staff, m => m.MapFrom(src => src.Staff.Where(s => s.IsLead).ToList()))
             .ForMember(dest => dest.Administration, m => m.MapFrom(src => src.Staff.Where(s => !s.IsLead).ToList()));
 
         CreateMap<ActivityQueryDto, ActivityVM>()
-            .ForMember(dest => dest.DateRange, m => m.MapFrom(src => new DateRange(src.DateTimeRange.StartDate, src.DateTimeRange.EndDate)))
-            .ForMember(dest => dest.StartTime, m => m.MapFrom(src => src.DateTimeRange.StartTime))
-            .ForMember(dest => dest.EndTime, m => m.MapFrom(src => src.DateTimeRange.EndTime));
+            .ForMember(dest => dest.DateRange, m => m.MapFrom(src => new DateRange(src.TimeRange.StartDate, src.TimeRange.EndDate)))
+            .ForMember(dest => dest.StartTime, m => m.MapFrom(src => src.TimeRange.StartTime))
+            .ForMember(dest => dest.EndTime, m => m.MapFrom(src => src.TimeRange.EndTime));
 
         CreateMap<ActivityWithProjectNameQueryDto, ActivityWithProjectNameVM>();
              
@@ -46,3 +47,4 @@ public class Activities : Profile
              .ForMember(dto => dto.ActivityTypes, dt => dt.MapFrom(field => field.ActivityTypes.ToEnums()));
     }
 }
+

@@ -20,5 +20,5 @@ public class ActivityVM
     public IEnumerable<NamedEntityVM> Groups { get; set; } = new List<NamedEntityVM>();
     public IEnumerable<NamedEntityVM> Partners { get; set; } = new List<NamedEntityVM>();
     public IEnumerable<NamedEntityVM> Participants { get; set; } = new List<NamedEntityVM>();
-    public IEnumerable<AnonymousParticipantsVM> AnonymousParticipants { get; set; } = new List<AnonymousParticipantsVM>();
+    public IEnumerable<AnonymousParticipantsVM> AnonymousParticipantActivities { get; set; } = new List<AnonymousParticipantsVM>();
 }

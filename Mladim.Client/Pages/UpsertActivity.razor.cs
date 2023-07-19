@@ -66,17 +66,17 @@ public partial class UpsertActivity
 
     
     private TextEditor? textEditor;
-    private bool UpdateState => ActivityId != null;
-
+    private bool UpdateState =>
+        ActivityId != null;
     private int TotalAnonymousParticipants =>
-        AnonymousParticipants?.Sum(ap => ap.Number) ?? 0;   
-    
-    private DefaultOrganization defaultOrg;
+        activity.AnonymousParticipantActivities?.Sum(ap => ap.Number) ?? 0;
 
-    private IEnumerable<NamedEntityVM> staff = new List<NamedEntityVM>();
+    private DefaultOrganization defaultOrg = default!;
+
+    private List<NamedEntityVM> staff = new List<NamedEntityVM>();
     private List<NamedEntityVM> partners = new List<NamedEntityVM>();
     private List<NamedEntityVM> participants = new List<NamedEntityVM>();
-    private List<AnonymousParticipantsVM> AnonymousParticipants = null;
+   
 
 
     protected async override Task OnInitializedAsync()
@@ -94,41 +94,17 @@ public partial class UpsertActivity
 
     protected async override Task OnParametersSetAsync()
     {
-        if (UpdateState)
-        {
+        if (UpdateState)        
             activity = await ActivityService.GetByActivityIdAsync(ActivityId.Value);
-        }
-
-        AnonymousParticipants ??= GetAnnonymousParticipants().ToList();       
+               
     }
 
-    public IEnumerable<AnonymousParticipantsVM> GetAnnonymousParticipants()
-    {
-        foreach (var ageGroup in Enum.GetValues<AgeGroups>())
-        {
-            foreach (var gender in Enum.GetValues<Gender>())
-            {               
-                var apgroup = new AnonymousParticipantsVM
-                {
-                    AgeGroup = ageGroup,
-                    Gender = gender,
-                    Number = 0,
-                };
-
-                var existedGroup = activity?.AnonymousParticipants.FirstOrDefault(apg => apg.Equals(apgroup));
-                apgroup.Number = existedGroup != null ? existedGroup.Number : 0;
-                yield return apgroup;
-            }
-        }
-    }
+   
 
     public async Task SaveActivityAsync()
     {
         await textEditor!.LoadHtmlText();
-
-        activity.AnonymousParticipants = AnonymousParticipants;
-     
-
+        
         if (UpdateState)
         {           
             var httpResponse = await ActivityService.UpdateAsync(activity);
@@ -142,7 +118,7 @@ public partial class UpsertActivity
         {
             var httpResponse = await ActivityService.AddAsync(activity, ProjectId!.Value);
 
-            if (httpResponse != null)
+            if (httpResponse)
                 this.PopupService.ShowSnackbarSuccess("Aktivnost uspešno dodana");
             else
                 this.PopupService.ShowSnackbarError();
@@ -202,9 +178,14 @@ public partial class UpsertActivity
 
     public async Task AddAnonymousParticipantAsync()
     {
-        var resultGroups = await this.PopupService.ShowAnonymousParticipantGroupsDialog("Dodajanje udeležencev po starostnih skupinah in spolu", AnonymousParticipants);
-        AnonymousParticipants = resultGroups.ToList();
-        this.StateHasChanged();
+        var resultGroups = await this.PopupService
+            .ShowAnonymousParticipantGroupsDialog("Dodajanje udeležencev po starostnih skupinah in spolu", activity.AnonymousParticipantActivities);
+        
+        if(resultGroups.Any())
+        {
+            this.activity.AnonymousParticipantActivities = resultGroups.ToList();
+            this.StateHasChanged();
+        }       
     }
 
 }

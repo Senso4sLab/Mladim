@@ -1,8 +1,10 @@
 ﻿using Mladim.Client.Components.Dialogs;
 using Mladim.Client.ViewModels;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
 using MudBlazor;
+using System.Diagnostics;
 
 namespace Mladim.Client.Services.PopupService
 {
@@ -90,16 +92,41 @@ namespace Mladim.Client.Services.PopupService
             return !result.Canceled;
         }
 
-        public async Task<IEnumerable<AnonymousParticipantsVM>> ShowAnonymousParticipantGroupsDialog(string title, IEnumerable<AnonymousParticipantsVM> anonymousParticipants)
+        public async Task<IEnumerable<AnonymousParticipantsVM>> ShowAnonymousParticipantGroupsDialog(string title, IEnumerable<AnonymousParticipantsVM> participantInActivity)
         {
             var parameters = new DialogParameters();
-            parameters.Add("AnonymousParticipantGroups", anonymousParticipants);
+
+
+            parameters.Add("AnonymousParticipants", AnnonymousParticipantsByGroupAndGender(participantInActivity).ToList());
 
             var dialog = await DialogService.ShowAsync<UpsertAnonymousParticipants>(title, parameters, DialogOptions);
 
             var result = await dialog.Result;
 
-            return result.Canceled ? null : result.Data as IEnumerable<AnonymousParticipantsVM>;
+            return result.Canceled ? Enumerable.Empty<AnonymousParticipantsVM>() : result.Data as IEnumerable<AnonymousParticipantsVM>;
         }
+
+        public IEnumerable<AnonymousParticipantsVM> AnnonymousParticipantsByGroupAndGender(IEnumerable<AnonymousParticipantsVM> participantInActivity)
+        {
+            foreach (var ageGroup in Enum.GetValues<AgeGroups>())
+            {
+                foreach (var gender in Enum.GetValues<Gender>())
+                {
+                    var apgroup = new AnonymousParticipantsVM
+                    {
+                        AgeGroup = ageGroup,
+                        Gender = gender,
+                        Number = 0,
+                    };
+
+                    var existedGroup = participantInActivity.FirstOrDefault(apg => apg.Equals(apgroup));
+                    apgroup.Number = existedGroup != null ? existedGroup.Number : 0;
+                    yield return apgroup;
+                }
+            }
+        }
+
+
+
     }
 }

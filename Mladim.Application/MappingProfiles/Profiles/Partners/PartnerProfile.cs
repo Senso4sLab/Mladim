@@ -26,21 +26,9 @@ public class PartnerProfile : Profile
 
         //CreateMap<PartnerCommandDto, NamedEntity>();
         //CreateMap<PartnerCommandDto, Partner>();
-        //CreateMap<PartnerCommandDto, BaseEntity<int>>();
+        //CreateMap<PartnerCommandDto, BaseEntity<int>>();      
 
-
-        
-
-
-
-
-
-       
-
-      
-
-        CreateMap<Partner, PartnerQueryDetailsDto>();
-           
+        CreateMap<Partner, PartnerQueryDetailsDto>();           
 
         CreateMap<Partner, PartnerQueryDto>();
     }

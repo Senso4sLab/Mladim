@@ -23,11 +23,20 @@ public class GetActivityQueryHandler : IRequestHandler<GetActivityQuery, Activit
 
     public async Task<ActivityQueryDetailsDto> Handle(GetActivityQuery request, CancellationToken cancellationToken)
     {
-        var activity = await this.UnitOfWork.ActivityRepository
-            .GetActivityDetailsAsync(request.ActivityId);            
+        try
+        {
+            var activity = await this.UnitOfWork.ActivityRepository
+                .GetActivityDetailsAsync(request.ActivityId);
 
-        ArgumentNullException.ThrowIfNull(activity);       
+            ArgumentNullException.ThrowIfNull(activity);
 
-        return this.Mapper.Map<ActivityQueryDetailsDto>(activity);
+           
+            return this.Mapper.Map<ActivityQueryDetailsDto>(activity);
+        }
+        catch(Exception ex) 
+        {
+
+            return null;
+        }
     }
 }

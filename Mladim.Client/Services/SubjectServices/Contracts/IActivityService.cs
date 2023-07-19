@@ -4,7 +4,7 @@ namespace Mladim.Client.Services.SubjectServices.Contracts;
 
 public interface IActivityService
 {
-    Task<ActivityVM?> AddAsync(ActivityVM activity, int projectId);
+    Task<bool> AddAsync(ActivityVM activity, int projectId);
     Task<IEnumerable<ActivityVM>> GetByProjectIdAsync(int projectId);
     Task<ActivityVM?> GetByActivityIdAsync(int activityId);
     Task<bool> RemoveAsync(int activityId);

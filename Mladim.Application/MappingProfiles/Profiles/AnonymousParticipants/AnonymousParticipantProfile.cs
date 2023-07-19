@@ -15,9 +15,9 @@ public class AnonymousParticipantProfile : Profile
 	public AnonymousParticipantProfile()
 	{
         CreateMap<AnonymousParticipantGroup, AnonymousParticipantQueryDto>()
-            .ForMember(dest => dest.Number, m => m.MapFrom(src => src.Number))
-            .ForAllMembers(dest => dest.MapFrom(src => src.AnonymousParticipant));
-    
+             .ForMember(dest => dest.Number, m => m.MapFrom(src => src.Number))
+             .ForMember(dest => dest.AgeGroup, m => m.MapFrom(src => src.AnonymousParticipant.AgeGroup))
+             .ForMember(dest => dest.Gender, m => m.MapFrom(src => src.AnonymousParticipant.Gender));
 
         CreateMap<AnonymousParticipantCommandDto, AnonymousParticipant>();
 
@@ -25,7 +25,7 @@ public class AnonymousParticipantProfile : Profile
             .ForMember(dest => dest.Number, m => m.MapFrom(src => src.Number))
             .ForMember(dest => dest.AnonymousParticipant, m => m.MapFrom(src => src));
 
-
+        
         CreateMap<AddAnonymousParticipantCommand, AnonymousParticipant>();        
         CreateMap<AddAnonymousParticipantCommand, AnonymousParticipantGroup>()
             .ForMember(dest => dest.Number, m => m.MapFrom(src => src.Number))

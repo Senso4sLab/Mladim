@@ -25,22 +25,29 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, boo
 
     public async Task<bool> Handle(AddActivityCommand request, CancellationToken cancellationToken)
     {
-        var project = await this.UnitOfWork.ProjectRepository
-            .FirstOrDefaultAsync(p => p.Id == request.ProjectId);
+        try
+        {
 
-        ArgumentNullException.ThrowIfNull(project);
+            var project = await this.UnitOfWork.ProjectRepository
+                .FirstOrDefaultAsync(p => p.Id == request.ProjectId);
 
-        var activity = this.Mapper.Map<Activity>(request);
-       
-        this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, activity.Partners);      
-        this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, activity.Groups);       
-        this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, activity.Participants);
-        
-        //var anonymousParticipantGroup = request.AnonymousParticipantActivities
-        //    .Select(a => AnonymousParticipantGroup.Create(a.Number, a.Gender, a.AgeGroup)).ToList();
-                   
-        project.Activities.Add(activity);
+            ArgumentNullException.ThrowIfNull(project);
 
-        return await this.UnitOfWork.SaveChangesAsync() > 0;
+            var activity = this.Mapper.Map<Activity>(request);
+
+            this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, activity.Partners);
+            this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, activity.Groups);
+            this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, activity.Participants);
+                     
+
+            project.Activities.Add(activity);
+
+
+            return await this.UnitOfWork.SaveChangesAsync() > 0;
+        }
+        catch (Exception ex) 
+        {
+            return false;
+        }
     }
 }

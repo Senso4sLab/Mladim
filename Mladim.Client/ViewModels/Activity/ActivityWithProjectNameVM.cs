@@ -9,5 +9,5 @@ public class ActivityWithProjectNameVM
     public int Id { get; set; }
     public string ProjectName { get; set; } = string.Empty;
     public ActivityAttributesVM Attributes { get; set; } = default!;
-    public DateTimeRangeVM DateTimeRange { get; set; } = default!;
+    public DateTimeRangeVM TimeRange { get; set; } = default!;
 }

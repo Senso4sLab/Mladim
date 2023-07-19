@@ -11,7 +11,7 @@ public class AnonymousParticipantGroup
     {
         
     }
-    public AnonymousParticipantGroup(int number, AnonymousParticipant anonymousParticipant) =>
+    private AnonymousParticipantGroup(int number, AnonymousParticipant anonymousParticipant) =>
         (Number, AnonymousParticipant) = (number, anonymousParticipant); 
     public override bool Equals(object? obj) =>
         obj is AnonymousParticipantGroup anonymousParticipantGroup ?

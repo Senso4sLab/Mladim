@@ -38,8 +38,8 @@
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set; }
 
-    [Parameter]
-    public List<AnonymousParticipantsVM> AnonymousParticipantGroups { get; set; }
+    [Parameter]                          
+    public List<AnonymousParticipantsVM> AnonymousParticipants { get; set; }
 
 
     private List<AnonymousParticipantTableElements> Elements { get; set; }
@@ -60,7 +60,7 @@
 
     protected override void OnParametersSet()
     {
-        this.Elements = GetTableElements(AnonymousParticipantGroups);
+        this.Elements = GetTableElements(AnonymousParticipants);
     }
 
     private IEnumerable<AnonymousParticipantsVM> GetParticipantFromTable() =>
@@ -75,7 +75,7 @@
                         Gender.Female => g.Sum(x => x.Female),
                         Gender.Other => g.Sum(x => x.Other),
                     }                   
-                }))
+                })).Where(ap => ap.Number > 0)
             .ToList();
 
 
@@ -84,6 +84,6 @@
     
 
     void Cancel() =>    
-        MudDialog.Close(DialogResult.Ok(AnonymousParticipantGroups));
+        MudDialog.Close(DialogResult.Ok(AnonymousParticipants));
     
 }

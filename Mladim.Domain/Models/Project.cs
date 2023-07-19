@@ -27,4 +27,11 @@ public class Project : BaseEntity<int>
     public int OrganizationId { get; set; }
     public Organization Organization { get; set; } = default!;
 
+
+    public bool ExistPartner(int id) => 
+        this.Partners.Any(p => p.Id == id);
+
+    public bool ExistGroup(int id) =>
+       this.Groups.Any(p => p.Id == id);
+
 }

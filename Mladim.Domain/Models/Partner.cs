@@ -1,13 +1,8 @@
 ﻿
-
 namespace Mladim.Domain.Models;
 
-
-
-
 public class Partner : NamedEntity
-{
- 
+{ 
     public string? Email { get; set; }
     public string? Description { get; set; }
     public string? WebpageUrl { get; set; }

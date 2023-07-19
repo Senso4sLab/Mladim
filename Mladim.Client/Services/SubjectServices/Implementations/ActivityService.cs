@@ -26,21 +26,19 @@ public class ActivityService : IActivityService
         this.MladimApiUrls = MladimApiUrls.Value;
     }
 
-    public async Task<ActivityVM?> AddAsync(ActivityVM activity, int projectId)
+    public async Task<bool> AddAsync(ActivityVM activity, int projectId)
     {
         var command = this.Mapper.Map<AddActivityCommandDto>(activity);
         command.ProjectId = projectId;
 
-        var activityDto = await this.HttpClient
-            .PostAsync<AddActivityCommandDto, ActivityQueryDto>(MladimApiUrls.ActivityCommand, command);
-
-        return activityDto != null ? this.Mapper.Map<ActivityVM>(activityDto) : null;
+        return await this.HttpClient
+            .PostAsync<AddActivityCommandDto, bool>(MladimApiUrls.ActivityCommand, command);       
     }
 
     public async Task<ActivityVM?> GetByActivityIdAsync(int activityId)
     {
         string url = string.Format(MladimApiUrls.GetActivityById, activityId);
-        var activity = await HttpClient.GetAsync<ActivityQueryDto>(url);
+        var activity = await HttpClient.GetAsync<ActivityQueryDetailsDto>(url);
         return this.Mapper.Map<ActivityVM>(activity);
     }
 

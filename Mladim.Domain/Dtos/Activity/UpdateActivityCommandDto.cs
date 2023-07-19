@@ -13,7 +13,7 @@ public class UpdateActivityCommandDto
 {
     public int Id { get; set; }
     public ActivityAttributesCommandDto Attributes { get; set; } = default!;
-    public DateTimeRangeCommandDto DateTimeRange { get; set; } = default!;
+    public DateTimeRangeCommandDto TimeRange { get; set; } = default!;
    
     public List<PartnerCommandDto> Partners { get; set; } = new();
     public List<GroupCommandDto> Groups { get; set; } = new();

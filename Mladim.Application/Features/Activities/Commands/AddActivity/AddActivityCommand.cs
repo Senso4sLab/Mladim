@@ -16,7 +16,7 @@ public class AddActivityCommand : IRequest<bool>
 {
     public int ProjectId { get; set; }
     public ActivityAttributesCommandDto Attributes { get; set; } = default!;
-    public DateTimeRangeCommandDto DateTimeRange { get; set; } = default!;
+    public DateTimeRangeCommandDto TimeRange { get; set; } = default!;
     public List<PartnerCommandDto> Partners { get; set; } = new();
     public List<StaffMemberCommandDto> Staff { get; set; } = new();
     public List<ParticipantCommandDto> Participants { get; set; } = new();

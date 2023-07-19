@@ -18,8 +18,10 @@ public class ProjectsProfile : Profile
         CreateMap<AddProjectCommand, Project>();
 
 
-        CreateMap<UpdateProjectCommand, Project>();
-           
+        CreateMap<UpdateProjectCommand, Project>()
+            .ForMember(dest => dest.Partners, m => m.Ignore())
+            .ForMember(dest => dest.Groups, m => m.Ignore());
+
 
         CreateMap<Project, ProjectQueryDto>();
         CreateMap<Project, ProjectQueryDetailsDto>();
