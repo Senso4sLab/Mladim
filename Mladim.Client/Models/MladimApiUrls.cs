@@ -22,6 +22,9 @@ public class MladimApiUrls
     public string ActivityCommand { get; set; } = string.Empty;
 
 
+    public string GroupCommand { get; set; } = string.Empty;
+    public string GetGroupById { get; set; } = string.Empty;
+    public string GetGroupsByOrganizationId { get; set; } = string.Empty; 
 
 
     public string GetStafMembersByOrganizationId { get; set; } = string.Empty;

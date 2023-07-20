@@ -1,0 +1,29 @@
+﻿
+
+<MudStack Class="py-10" Spacing="4">
+    <MudStack Row="true" Justify="Justify.SpaceBetween">
+        <MudText Typo="Typo.h5">Izberi skupine</MudText>
+        <MudSwitch T=bool Checked="IsStaffGroup" CheckedChanged="@GroupSwitchChangedAsync" Color="Color.Primary">@(IsStaffGroup ? "Uporabnikov" :"Udeležencev")</MudSwitch>
+    </MudStack>
+    <MudStack Row="true" Justify="Justify.SpaceBetween">
+        <MudButton OnClick="OnCreateGroupAsync" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Ustvari skupino</MudButton>
+            <MudSwitch T=bool Checked="ShowActiveGroups" CheckedChanged="@ShowActiveGroupChangedAsync" Color="Color.Primary">@(ShowActiveGroups ? "Aktivne" : "Neaktivne")</MudSwitch>
+    </MudStack>
+        <MudDataGrid Items="Groups" ReadOnly="false" EditMode="DataGridEditMode.Form"
+                     Bordered="true" Dense="true" EditTrigger="DataGridEditTrigger.Manual">
+        <Columns>
+           <PropertyColumn Property="x => x.FullName" Title="Ime" />
+           <PropertyColumn Property="x => x.Description" Title="Opis" />               
+           <TemplateColumn CellClass="d-flex justify-end">
+               <CellTemplate>
+                   <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" @onclick="@(() => UpdateGroupAsync(context.Item))" />
+               </CellTemplate>
+           </TemplateColumn>
+        </Columns>
+        <PagerContent>
+            <MudDataGridPager T="GroupVM" RowsPerPageString="Št. vrstic na stran" />
+        </PagerContent>
+    </MudDataGrid>
+ </MudStack>
+
+

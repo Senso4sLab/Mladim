@@ -56,7 +56,8 @@ builder.Services.AddScoped<IPopupService, PopupService>();
     builder.Services.AddScoped<IStaffMemberService, StaffMemberService>();
     builder.Services.AddScoped<IParticipantService, ParticipantService>();
     builder.Services.AddScoped<IPartnerService, PartnerService>();
-    builder.Services.AddScoped<IAccountService, AccountService>();  
+    builder.Services.AddScoped<IAccountService, AccountService>();
+    builder.Services.AddScoped<IGroupService, GroupService>();
 }
 {
     builder.Services.Configure<MladimApiUrls>(builder.Configuration.GetSection("MladimApiUrls"));

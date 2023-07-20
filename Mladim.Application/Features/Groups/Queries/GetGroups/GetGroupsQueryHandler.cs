@@ -16,16 +16,25 @@ public class GetGroupsQueryHandler : IRequestHandler<GetGroupsQuery, IEnumerable
    
     public async Task<IEnumerable<GroupQueryDto>> Handle(GetGroupsQuery request, CancellationToken cancellationToken)
     {
-        var groups = await this.UnitOfWork.GroupRepository.GetAllAsync(g => g.IsActive == request.IsActive && g.OrganizationId == request.OrganizationId);      
+        var groups = await this.UnitOfWork.GroupRepository.GetAllAsync(g => g.GetType() == GroupType(request.GroupType) && g.IsActive == request.IsActive && g.OrganizationId == request.OrganizationId);      
 
         return groups.Select(CreateGroupQueryDto).ToList() ?? Enumerable.Empty<GroupQueryDto>();    
     }
 
+    private Type GroupType(GroupType gt) => gt switch
+        {
+            Domain.Enums.GroupType.Project => typeof(ProjectGroup),
+            Domain.Enums.GroupType.Activity => typeof(ActivityGroup),
+            _ => throw new NotImplementedException(),
+        };
+    
+
+
     private GroupQueryDto CreateGroupQueryDto(Group group) =>
         group switch
         {
-            ProjectGroup => GroupQueryDto.Create(group.Id, group.FullName, GroupType.Project),
-            ActivityGroup => GroupQueryDto.Create(group.Id, group.FullName, GroupType.Project),
+            ProjectGroup => GroupQueryDto.Create(group.Id, group.FullName, group.Description, Domain.Enums.GroupType.Project),
+            ActivityGroup => GroupQueryDto.Create(group.Id, group.FullName, group.Description, Domain.Enums.GroupType.Project),
             _ => throw new NotImplementedException()
         };   
 }
