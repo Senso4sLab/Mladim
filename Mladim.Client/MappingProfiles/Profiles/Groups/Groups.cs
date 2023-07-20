@@ -11,11 +11,12 @@ public class Groups : Profile
     {
         CreateMap<NamedEntityVM, GroupCommandDto>(); // TODO groupType??
 
-        CreateMap<GroupDetailsQueryDto, GroupVM>(); // TODO groupType??
-        
+        CreateMap<GroupDetailsQueryDto, GroupVM>(); // TODO groupType??        
 
         CreateMap<GroupQueryDto, GroupVM>();
-        CreateMap<GroupVM, AddGroupCommandDto>();
-        CreateMap<GroupVM, UpdateGroupCommandDto>();
+        CreateMap<GroupVM, AddGroupCommandDto>()
+            .ForMember(dest => dest.Members, m => m.MapFrom(src => src.Members.Select(mem => mem.Id)));
+        CreateMap<GroupVM, UpdateGroupCommandDto>()
+            .ForMember(dest => dest.Members, m => m.MapFrom(src => src.Members.Select(mem => mem.Id)));
     }
 }

@@ -14,7 +14,7 @@ public class UpdateGroupCommand : IRequest<int>
     public string FullName { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public List<int> Members { get; set; } = new();
-    public int OrganizationId { get; set; }
+    //public int OrganizationId { get; set; }
     public bool IsActive { get; set; } = true;
     
 }

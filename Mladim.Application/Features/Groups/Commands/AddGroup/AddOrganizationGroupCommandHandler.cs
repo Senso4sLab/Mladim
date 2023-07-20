@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Mladim.Application.Contracts.Persistence;
+using Mladim.Domain.Dtos;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
 using System;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Groups.Commands.AddGroup;
 
-public class AddOrganizationGroupCommandHandler : IRequestHandler<AddOrganizationGroupCommand, bool>
+public class AddOrganizationGroupCommandHandler : IRequestHandler<AddGroupCommand, GroupQueryDto>
 {
     public IMapper Mapper { get; }
 
@@ -23,19 +24,21 @@ public class AddOrganizationGroupCommandHandler : IRequestHandler<AddOrganizatio
         this.Mapper = mapper;
         this.UnitOfWork = unitOfWork;        
     }
-    public async Task<bool> Handle(AddOrganizationGroupCommand request, CancellationToken cancellationToken)
+    public async Task<GroupQueryDto> Handle(AddGroupCommand request, CancellationToken cancellationToken)
     {
         var organization = await this.UnitOfWork.OrganizationRepository.FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
 
         ArgumentNullException.ThrowIfNull(organization);
 
-        var group = Group.Create(request.GroupType, request.Name, request.Description, request.Members, request.OrganizationId);        
+        var group = Group.Create(request.GroupType, request.FullName, request.Description, request.Members, request.OrganizationId);        
 
         this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, group.Members);
         
-        await this.UnitOfWork.GroupRepository.AddAsync(group);       
+        group = await this.UnitOfWork.GroupRepository.AddAsync(group);
 
-        return await this.UnitOfWork.SaveChangesAsync() > 0;
+        await this.UnitOfWork.SaveChangesAsync();      
+
+        return this.Mapper.Map<GroupQueryDto>(group);
     }
 
   

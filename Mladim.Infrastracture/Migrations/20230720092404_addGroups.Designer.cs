@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mladim.Infrastracture.Persistance;
 
@@ -11,9 +12,11 @@ using Mladim.Infrastracture.Persistance;
 namespace Mladim.Infrastracture.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230720092404_addGroups")]
+    partial class addGroups
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,21 +83,6 @@ namespace Mladim.Infrastracture.Migrations
                     b.HasIndex("OrganizationsId");
 
                     b.ToTable("AppUserOrganization");
-                });
-
-            modelBuilder.Entity("GroupMember", b =>
-                {
-                    b.Property<int>("GroupsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MembersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GroupsId", "MembersId");
-
-                    b.HasIndex("MembersId");
-
-                    b.ToTable("GroupMember");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -399,6 +387,9 @@ namespace Mladim.Infrastracture.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -414,6 +405,8 @@ namespace Mladim.Infrastracture.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
 
                     b.ToTable("Member");
 
@@ -661,21 +654,6 @@ namespace Mladim.Infrastracture.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GroupMember", b =>
-                {
-                    b.HasOne("Mladim.Domain.Models.Group", null)
-                        .WithMany()
-                        .HasForeignKey("GroupsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mladim.Domain.Models.Member", null)
-                        .WithMany()
-                        .HasForeignKey("MembersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -840,6 +818,13 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.Navigation("TimeRange")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Mladim.Domain.Models.Member", b =>
+                {
+                    b.HasOne("Mladim.Domain.Models.Group", null)
+                        .WithMany("Members")
+                        .HasForeignKey("GroupId");
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.Organization", b =>
@@ -1070,6 +1055,11 @@ namespace Mladim.Infrastracture.Migrations
             modelBuilder.Entity("Mladim.Domain.Models.Activity", b =>
                 {
                     b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("Mladim.Domain.Models.Group", b =>
+                {
+                    b.Navigation("Members");
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.Organization", b =>

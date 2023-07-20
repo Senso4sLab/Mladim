@@ -25,7 +25,7 @@ public class GroupService : IGroupService
 
     public async Task<GroupVM?> GetByGroupIdAsync(int groupId)
     {
-        string url = string.Format(MladimApiUrls.GetActivityById, groupId);
+        string url = string.Format(MladimApiUrls.GetGroupById, groupId);
         var group = await HttpClient.GetAsync<GroupDetailsQueryDto>(url);
         return this.Mapper.Map<GroupVM>(group);
     }
@@ -37,10 +37,11 @@ public class GroupService : IGroupService
         return this.Mapper.Map<IEnumerable<GroupVM>>(groupDto);
     }
 
-    public async Task<GroupVM?> AddAsync(int organizationId, GroupVM group)
+    public async Task<GroupVM?> AddAsync(int organizationId, GroupVM group, GroupType groupType)
     {
         var command = this.Mapper.Map<AddGroupCommandDto>(group);
         command.OrganizationId = organizationId;
+        command.GroupType = groupType;
 
         var groupDto = await this.HttpClient
             .PostAsync<AddGroupCommandDto, GroupQueryDto>(MladimApiUrls.GroupCommand, command);

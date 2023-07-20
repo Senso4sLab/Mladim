@@ -26,13 +26,15 @@ public class GroupProfile : Profile
             .ForAllMembers(dest => dest.MapFrom(src => Group.Create(GroupType.Activity, src.Id)));
       
         CreateMap<ProjectGroup, GroupQueryDto>();
-        CreateMap<ActivityGroup, GroupQueryDto>();        
-        
+        CreateMap<ActivityGroup, GroupQueryDto>();
+
         CreateMap<UpdateGroupCommand, ProjectGroup>()
-            .ForMember(dest => dest.Members, m => m.MapFrom(src => Member.Create(MemberType.StaffMember, src.Id)));
+            .ForMember(dest => dest.Members, m => m.Ignore());
+            //.ForMember(dest => dest.Members, m => m.MapFrom(src => Member.Create(MemberType.StaffMember, src.Id)));
 
         CreateMap<UpdateGroupCommand, ActivityGroup>()
-            .ForMember(dest => dest.Members, m => m.MapFrom(src => Member.Create(MemberType.Participant, src.Id)));
+              .ForMember(dest => dest.Members, m => m.Ignore());
+        //.ForMember(dest => dest.Members, m => m.MapFrom(src => Member.Create(MemberType.Participant, src.Id)));
 
 
         //CreateMap<UpdateGroupCommand, ProjectGroup>(); ProjectGroup.Create()

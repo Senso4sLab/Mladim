@@ -66,6 +66,23 @@ namespace Mladim.Client.Services.PopupService
             return !result.Canceled;
         }
 
+        public async Task<bool> ShowGroupDialog(string title, GroupVM group, GroupType groupType, int organizationId)
+        {
+            var parameters = new DialogParameters();
+
+            parameters.Add("Group", group);
+            parameters.Add("GroupType", groupType);
+            parameters.Add("OrganizationId", organizationId);
+            
+
+            var dialog = await DialogService.ShowAsync<UpsertGroup>(title, parameters, DialogOptions);
+
+            var result = await dialog.Result;
+
+            return !result.Canceled;
+        }
+
+
         public async Task<bool> ShowParticipantDialog(string title, ParticipantVM participant)
         {
             var parameters = new DialogParameters();

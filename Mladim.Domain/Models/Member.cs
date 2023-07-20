@@ -16,8 +16,9 @@ public class Member : NamedEntity
     public bool IsActive { get; set; } = true;
     public int OrganizationId { get; set; }
     public override string FullName => $"{this.Name} {this.Surname}";
+    public List<Group> Groups { get; set; } = new();
     protected Member() { }
-    protected Member(int id) => this.Id = id;
+    public Member(int id) => this.Id = id;
     public static Member Create(MemberType memberType, int id) =>
       memberType switch
       {

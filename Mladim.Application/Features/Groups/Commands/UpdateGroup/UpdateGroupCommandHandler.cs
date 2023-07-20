@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
@@ -27,12 +28,16 @@ public class UpdateGroupCommandHandler : IRequestHandler<UpdateGroupCommand, int
 
         ArgumentNullException.ThrowIfNull(oldGroup);
 
-       //var newGroup = GetGroupFromUpdateCommand(request, oldGroup);
-
         oldGroup = this.Mapper.Map(request, oldGroup);
 
-        this.UnitOfWork.GroupRepository.Update(oldGroup);
+        var rMembers =  request.Members.Select(id => new Member(id)).ToList();
 
+        oldGroup.Members.RemoveAll(m => !rMembers.Any(rm => rm.Equals(m)));
+
+        var addMembers = rMembers.Where(rm => !oldGroup.Members.Any(m => m.Equals(rm))).ToList();
+        this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, addMembers);
+        oldGroup.Members.AddRange(addMembers);
+        
         return await this.UnitOfWork.SaveChangesAsync();
     }
 

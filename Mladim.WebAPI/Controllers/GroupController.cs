@@ -28,7 +28,7 @@ public class GroupController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<bool>> AddAsync(AddOrganizationGroupCommand request)
+    public async Task<ActionResult<GroupQueryDto?>> AddAsync(AddGroupCommand request)
     {
         var response = await this.Mediator.Send(request);
         return Ok(response);

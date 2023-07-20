@@ -1,5 +1,6 @@
 ﻿using Mladim.Client.ViewModels;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Enums;
 
 namespace Mladim.Client.Services.PopupService;
 
@@ -17,4 +18,5 @@ public interface IPopupService
     Task<bool> ShowParticipantDialog(string title, ParticipantVM partner);
     Task<bool> ShowPartnerDialog(string title, PartnerVM partner);
     Task<IEnumerable<AnonymousParticipantsVM>> ShowAnonymousParticipantGroupsDialog(string title, IEnumerable<AnonymousParticipantsVM> anonymousParticipantGroups);
+    Task<bool> ShowGroupDialog(string title, GroupVM group, GroupType groupType, int organizationId);
 }

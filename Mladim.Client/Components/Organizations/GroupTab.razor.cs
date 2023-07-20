@@ -26,6 +26,7 @@ using MudBlazor;
 using Mladim.Client.Services.PopupService;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Domain.Enums;
+using Mladim.Client.MappingProfiles.Profiles.Participants;
 
 namespace Mladim.Client.Components.Organizations;
 
@@ -49,32 +50,64 @@ public partial class GroupTab
     private GroupType GroupType => 
         IsStaffGroup ? GroupType.Project : GroupType.Activity;
 
-    //protected async override Task OnParametersSetAsync() =>    
-    //    this.Groups = new(await this.GroupService.
-    //        GetByOrganizationIdAsync(this.Organization.Id, this.GroupType, ShowActiveGroups));
-                
+    protected async override Task OnParametersSetAsync() =>
+        this.Groups = new(await this.GroupService.
+            GetByOrganizationIdAsync(this.Organization.Id, this.GroupType, ShowActiveGroups));
 
-    private void GroupSwitchChangedAsync(bool isStaffGroup)
-    {
-        this.StateHasChanged();
+
+    private async Task GroupSwitchChangedAsync(bool isStaffGroup)
+    {       
         this.IsStaffGroup = isStaffGroup;
+        await OnParametersSetAsync();
     }
 
-    private void ShowActiveGroupChangedAsync(bool activeGroups)
-    {
-        this.StateHasChanged();
+    private async Task ShowActiveGroupChangedAsync(bool activeGroups)
+    {      
         this.ShowActiveGroups = activeGroups;
+        await OnParametersSetAsync();
     }
 
 
     public async Task OnCreateGroupAsync()
     {
+        var group = new GroupVM();
 
+        var groupResponse = await this.PopupService.ShowGroupDialog("Nova skupina", group, GroupType, Organization.Id);
+
+        if (!groupResponse)
+            return;
+
+        group = await this.GroupService.AddAsync(this.Organization.Id, group, GroupType);
+
+        if (group != null)
+        {
+            Groups.Add(group);
+            this.PopupService.ShowSnackbarSuccess("Skupina uspešno dodana");
+        }
+        else
+            this.PopupService.ShowSnackbarError();
     }
 
     public async Task UpdateGroupAsync(GroupVM group)
-    {
+    {      
+        var detailsGroup = await this.GroupService.GetByGroupIdAsync(group.Id);
 
+        ArgumentNullException.ThrowIfNull(detailsGroup);       
+
+        var groupResponse = await this.PopupService.ShowGroupDialog("Uredi skupino", detailsGroup, GroupType, Organization.Id);
+
+        if (!groupResponse)
+            return;
+
+        var response = await this.GroupService.UpdateAsync(detailsGroup);
+
+        if (response)
+        {
+            this.PopupService.ShowSnackbarSuccess("Podatki uspešno posodobljeni");
+            await OnParametersSetAsync();
+        }
+        else
+            this.PopupService.ShowSnackbarError();
     }
 
 

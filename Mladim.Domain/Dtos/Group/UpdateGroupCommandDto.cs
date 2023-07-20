@@ -10,6 +10,6 @@ public class UpdateGroupCommandDto
     public string FullName { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public bool IsActive { get; set; } = true;
-    public GroupType GroupType { get; set; }
-    public List<NamedEntityDto> Members { get; set; } = new();
+    //public GroupType GroupType { get; set; }
+    public List<int> Members { get; set; } = new();
 }

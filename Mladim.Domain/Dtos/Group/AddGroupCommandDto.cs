@@ -15,6 +15,6 @@ public class AddGroupCommandDto
     public string Description { get; set; } = string.Empty;
     public bool IsActive { get; set; } = true;
     public GroupType GroupType { get; set; }
-    public List<NamedEntityDto> Members { get; set; } = new();
+    public List<int> Members { get; set; } = new();
     public int OrganizationId { get; set; }
 }

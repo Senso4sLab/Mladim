@@ -12,6 +12,6 @@ public class GroupVM
     public string FullName { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public bool IsActive { get; set; } = true;    
-    public GroupType GroupType { get; set; }
-    public List<NamedEntityVM> Members { get; set; } = new();
+    //public GroupType GroupType { get; set; }
+    public IEnumerable<NamedEntityVM> Members { get; set; } = new List<NamedEntityVM>();
 }
