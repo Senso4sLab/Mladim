@@ -2,8 +2,8 @@
 
 <MudStack Class="py-10" Spacing="4">
     <MudStack Row="true" Justify="Justify.SpaceBetween">
-        <MudText Typo="Typo.h5">Izberi skupine</MudText>
-        <MudSwitch T=bool Checked="IsStaffGroup" CheckedChanged="@GroupSwitchChangedAsync" Color="Color.Primary">@(IsStaffGroup ? "Uporabnikov" :"Udeležencev")</MudSwitch>
+        <MudText Typo="Typo.h5">Izberi skupino</MudText>
+        <MudSwitch T=bool Checked="IsStaffGroup" CheckedChanged="@GroupSwitchChangedAsync" Color="Color.Primary">@(IsStaffGroup ? "Uporabniki" :"Udeleženci")</MudSwitch>
     </MudStack>
     <MudStack Row="true" Justify="Justify.SpaceBetween">
         <MudButton OnClick="OnCreateGroupAsync" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Ustvari skupino</MudButton>

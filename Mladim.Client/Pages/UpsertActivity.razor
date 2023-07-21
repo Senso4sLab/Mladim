@@ -16,7 +16,7 @@
 
      <MudTextField @bind-Value="activity.Attributes.Name" Variant="Variant.Outlined" Label="Ime aktivnosti">@activity.Attributes.Name</MudTextField>
      <MudDateRangePicker Variant="Variant.Outlined" Label="Trajanje aktivnosti" @bind-DateRange="activity.DateRange" />
-     @if (activity.DateRange.End?.Day == activity.DateRange.Start?.Day)
+     @if (activity.DateRange.End?.Day == activity.DateRange.Start?.Day && activity.DateRange != default)
     {
         <MudGrid>
             <MudItem xs="6">
@@ -49,6 +49,13 @@
         }
     </MudSelect>
 
+    <MudSelect T="NamedEntityVM" ToStringFunc="@((group)=> group.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Groups" Variant="Variant.Outlined" Label="Skupine udeležencev" AnchorOrigin="Origin.BottomCenter">
+        @foreach (var participantGroup in participantGroups)
+        {
+            <MudSelectItem Value="participantGroup">@participantGroup.FullName</MudSelectItem>
+        }
+    </MudSelect>
+
     <MudStack Row Spacing="5" AlignItems="AlignItems.Center">
          <MudSelect T="NamedEntityVM" ToStringFunc="@((partner)=> partner.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Partners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter">
              @foreach (var partner in partners)
@@ -68,7 +75,10 @@
         </MudSelect>
         <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddParticipantAsync" />
     </MudStack>
-    
+
+   
+
+
 
     <MudStack Row Spacing="5" AlignItems="AlignItems.Baseline" Justify="Justify.SpaceBetween">
         <MudText Typo="Typo.body1" Align="Align.Center">Drugi udeleženci (starostna skupina in spol) - skupaj: @TotalAnonymousParticipants.</MudText>

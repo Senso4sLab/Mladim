@@ -19,11 +19,11 @@ public class GroupProfile : Profile
 
         CreateMap<Group, GroupDetailsQueryDto>();
 
-        CreateMap<GroupCommandDto, ProjectGroup>()
-            .ForAllMembers(dest => dest.MapFrom(src => Group.Create(GroupType.Project, src.Id)));
+        CreateMap<GroupCommandDto, ProjectGroup>();
+        //.ForAllMembers(dest => dest.MapFrom(src => Group.Create(GroupType.Project, src.Id)));
 
-        CreateMap<GroupCommandDto, ActivityGroup>()
-            .ForAllMembers(dest => dest.MapFrom(src => Group.Create(GroupType.Activity, src.Id)));
+        CreateMap<GroupCommandDto, ActivityGroup>();
+            //.ForAllMembers(dest => dest.MapFrom(src => Group.Create(GroupType.Activity, src.Id)));
       
         CreateMap<ProjectGroup, GroupQueryDto>();
         CreateMap<ActivityGroup, GroupQueryDto>();

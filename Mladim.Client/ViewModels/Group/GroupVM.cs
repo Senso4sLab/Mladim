@@ -6,10 +6,8 @@ namespace Mladim.Client.ViewModels;
 
 
 
-public class GroupVM 
-{
-    public int Id { get; set; }    
-    public string FullName { get; set; } = string.Empty;
+public class GroupVM :NamedEntityVM
+{   
     public string Description { get; set; } = string.Empty;
     public bool IsActive { get; set; } = true;    
     //public GroupType GroupType { get; set; }

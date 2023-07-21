@@ -48,6 +48,9 @@ public partial class UpsertActivity
     public IPartnerService PartnerService { get; set; }
 
     [Inject]
+    public IGroupService GroupService { get; set; }
+
+    [Inject]
     protected NavigationManager Navigation { get; set; }
 
     [Inject]
@@ -76,6 +79,7 @@ public partial class UpsertActivity
     private List<NamedEntityVM> staff = new List<NamedEntityVM>();
     private List<NamedEntityVM> partners = new List<NamedEntityVM>();
     private List<NamedEntityVM> participants = new List<NamedEntityVM>();
+    private List<NamedEntityVM> participantGroups = new List<NamedEntityVM>();
    
 
 
@@ -89,6 +93,7 @@ public partial class UpsertActivity
         staff = new List<NamedEntityVM>(await StaffMemberService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
         partners = new List<NamedEntityVM>(await PartnerService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
         participants = new List<NamedEntityVM>(await ParticipantService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
+        participantGroups = new List<NamedEntityVM>(await GroupService.GetByOrganizationIdAsync(defaultOrg.Id, GroupType.Activity, true));
     }
 
 
