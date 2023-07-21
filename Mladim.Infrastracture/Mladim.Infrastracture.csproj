@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mladim.Application\Mladim.Application.csproj" />
+    <ProjectReference Include="..\Mladim.Client\Mladim.Client.csproj" />
     <ProjectReference Include="..\Mladim.Domain\Mladim.Domain.csproj" />
   </ItemGroup>
 

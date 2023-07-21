@@ -42,10 +42,9 @@ public partial class Projects
 
     public void AddNewProjectAsync()
     {
-        this.Navigation.NavigateTo($"/organization/{defaultOrg.Id}/project");
-    }
-
-    public void UpdateProjectAsync(ProjectVM project)
+        this.Navigation.NavigateTo($"/organization/{defaultOrg!.Id}/project");
+    }    
+    public void ShowProjectAsync(ProjectVM project)
     {
         this.Navigation.NavigateTo($"/organization/{defaultOrg!.Id}/project/{project.Id}");
     }

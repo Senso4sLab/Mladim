@@ -1,34 +1,37 @@
-﻿@page "/organization/{OrganizationId:int}/project"
+﻿@page "/organization/{OrganizationId:int}/project/"
 @page "/organization/{OrganizationId:int}/project/{projectId:int}"
 @attribute [Authorize]
 
 
 <MudStack Class="pt-5 pb-8" Spacing="4">
     <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-        <MudText Typo="Typo.h5">Vnesi podatke o projektu</MudText>
+        <MudText Typo="Typo.h5">@(editable ? "Vnesi podatke o projektu" : "Podatki o projektu")</MudText>
 
-        <MudStack Row="true" Spacing ="2" Justify="Justify.FlexEnd">
-            <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Save" OnClick="SaveProjectAsync" />
+        <MudStack Row="true" Spacing ="2" Justify="Justify.FlexEnd">           
+                <MudToggleIconButton Toggled="@editable" ToggledChanged="OnProjectEditableChanged"
+                                 Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" Title="Edit"
+                                 ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary" ToggledTitle="Save" />
+            
             <MudFab Color="Color.Secondary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Cancel" OnClick="CancelProjectAsync" />
         </MudStack>
 
     </MudStack>
 
-    <MudTextField @bind-Value="project.Attributes.Name" Variant="Variant.Outlined" Label="Ime projekta">@project.Attributes.Name</MudTextField>
-    <MudDateRangePicker Variant="Variant.Outlined" Label="Trajanje projekta" @bind-DateRange="project.DateRange"/>
+    <MudTextField ReadOnly ="!editable" @bind-Value="project.Attributes.Name" Variant="Variant.Outlined" Label="Ime projekta">@project.Attributes.Name</MudTextField>
+    <MudDateRangePicker ReadOnly ="!editable"  Variant="Variant.Outlined" Label="Trajanje projekta" @bind-DateRange="project.DateRange"/>
 
 
-    <TextEditor @ref="textEditor"  @bind-Text="@project.Attributes.Description" />
+    <TextEditor ReadOnly="!editable" @ref="textEditor" @bind-Text="@project.Attributes.Description" />
     <MudTextField  @bind-Value="project.Attributes.WebpageUrl" Label="Spletna stran" Variant="Variant.Outlined"></MudTextField>
 
-    <MudSelect T="NamedEntityVM" MultiSelection="true" ToStringFunc="@((staff)=> staff.FullName)"  @bind-SelectedValues="project.Staff" Variant="Variant.Outlined" Label="Vodje projekta" AnchorOrigin="Origin.BottomCenter">
+        <MudSelect ReadOnly="!editable" T="NamedEntityVM" MultiSelection="true" ToStringFunc="@((staff)=> staff.FullName)" @bind-SelectedValues="project.Staff" Variant="Variant.Outlined" Label="Vodje projekta" AnchorOrigin="Origin.BottomCenter">
          @foreach (var staffMember in Staff)
         {
             <MudSelectItem Value="staffMember">@staffMember.FullName</MudSelectItem>
         }
     </MudSelect>
 
-    <MudSelect MultiSelection="true" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" @bind-SelectedValues="project.Administration" Variant="Variant.Outlined" Label="Administrativno-tehnično osebje" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect ReadOnly="!editable" MultiSelection="true" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" @bind-SelectedValues="project.Administration" Variant="Variant.Outlined" Label="Administrativno-tehnično osebje" AnchorOrigin="Origin.BottomCenter">
         @foreach (var staffMember in Staff)
         {
             <MudSelectItem Value="staffMember">@staffMember.FullName</MudSelectItem>
@@ -37,14 +40,44 @@
 
 
     <MudStack Row Spacing="5" AlignItems="AlignItems.Center">
-        <MudSelect MultiSelection="true" T="NamedEntityVM" ToStringFunc="@((partner)=> partner.FullName)" @bind-SelectedValues="project.Partners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter">
+        <MudSelect ReadOnly="!editable"  MultiSelection="true" T="NamedEntityVM" ToStringFunc="@((partner)=> partner.FullName)" @bind-SelectedValues="project.Partners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter">
             @foreach (var partner in Partners)
             {
                     <MudSelectItem Value="partner">@partner.FullName</MudSelectItem>
             }
         </MudSelect>
-        <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddPartnerAsync" />
+        <MudFab Disabled ="!editable"  Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddPartnerAsync" />
     </MudStack>
+
+
+    <MudFileUpload Disabled="!editable" T="IReadOnlyList<IBrowserFile>" Multiple MaximumFileCount=5 FilesChanged="UploadFilesToProject">
+        <ButtonTemplate>
+            <MudButton HtmlTag="label"
+                       Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.CloudUpload"
+                       for="@context">
+                Upload Files
+            </MudButton>
+        </ButtonTemplate>
+    </MudFileUpload>
+
+    @if (AttachedFiles != null)
+    {       
+        <MudList Clickable="true">
+            @foreach (var file in AttachedFiles)
+            {
+                <MudListItem Icon="@Icons.Material.Filled.AttachFile" @key="@file" OnClick="() =>SelectedFileAsync(file)" >
+                    @file.Name
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteAttachedFileAsync(file)" aria-label="delete"/>
+                </MudListItem>
+            }
+        </MudList>
+    }
+
+
+
+
 
 
 </MudStack>

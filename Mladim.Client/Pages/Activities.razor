@@ -27,7 +27,7 @@
             <PropertyColumn Property="x => x.ProjectName" Title="Ime projekta" />
             <TemplateColumn CellClass="d-flex justify-end">
                 <CellTemplate>
-                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" @onclick="@(() => UpdateActivityAsync(context.Item))"></MudIconButton>
+                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.MoreHoriz" @onclick="@(() => ShowActivityAsync(context.Item))"></MudIconButton>
                     <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" @onclick="@(() => DeleteActivityAsync(context.Item))"></MudIconButton>
                 </CellTemplate>
             </TemplateColumn>

@@ -3,6 +3,7 @@ using Mladim.Client.Components;
 using Mladim.Client.ViewModels;
 using Mladim.Client.Services.PopupService;
 using Mladim.Client.Services.SubjectServices.Contracts;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace Mladim.Client.Pages;
 
@@ -27,27 +28,42 @@ public partial class UpsertProject
     [Parameter]
     public int OrganizationId { get; set; }
 
+    
+
     [Parameter]
     public int? ProjectId { get; set; }
     
 
     private IEnumerable<NamedEntityVM> Staff = new List<NamedEntityVM>();    
     private List<NamedEntityVM> Partners = new List<NamedEntityVM>();
-
-
+     
+    public bool editable = false;
     private TextEditor? textEditor;  
     private ProjectVM project = new ProjectVM();
-
+    IList<IBrowserFile> AttachedFiles = new List<IBrowserFile>();
     private bool UpdateState => ProjectId != null;
+
+
+
     protected async override Task OnParametersSetAsync()
     {
         this.Staff = new List<NamedEntityVM>(await StaffMembersByOrganizationIdAsync());
         this.Partners = new List<NamedEntityVM>(await PartnersByOrganizationIdAsync());
-        
-        if (UpdateState)        
-           await this.FetchingMembersForProjectUpdate();      
 
+        if (UpdateState)
+            await this.FetchingMembersForProjectUpdate();
+        else
+            editable = true;
     }
+
+
+    public async Task OnProjectEditableChanged(bool toggled)
+    {
+        editable = toggled;              
+        if(!toggled)        
+            await SaveProjectAsync();        
+    }
+    
 
     private Task<IEnumerable<NamedEntityVM>> StaffMembersByOrganizationIdAsync() =>
         this.StaffService.GetBaseByOrganizationIdAsync(OrganizationId, true);
@@ -63,13 +79,6 @@ public partial class UpsertProject
 
         if (projectResponse != null)
             project = projectResponse;
-
-
-        //LeadStaffMembers = project.LeadStaff.ToList(); 
-        //Administrators   = project.Administrators.ToList();
-       // projectDurationRange = new DateRange(project.Start, project.Start);
-        //selectedPartners = this.partners.Where(p => project.Partners.Any(pa => pa.Id == p.Id)).ToList();
-
     }
 
   
@@ -77,15 +86,7 @@ public partial class UpsertProject
     public async Task SaveProjectAsync()
     {
         await textEditor!.LoadHtmlText();
-
-        //project.Start = projectDurationRange.Start!.Value;
-        //project.End = projectDurationRange.End!.Value;         
-        //project.Partners = Partners.ToList();        
-        //project.Staff = LeadStaffMembers.Select(sm => new StaffMemberProjectVM { IsLead = true, StaffMemberId = sm.MemberId.Value }).ToList();
-        //project.Staff.AddRange(Administrators.Select(sm => new StaffMemberProjectVM { StaffMemberId = sm.MemberId.Value }).ToList());
-
-       
-        
+                
         if (UpdateState)
         {
             var httpResponse = await this.ProjectService.UpdateAsync(project);
@@ -132,7 +133,34 @@ public partial class UpsertProject
         }
         else
             this.PopupService.ShowSnackbarError();
-    }   
+    }
+
+
+    private void UploadFilesToProject(IEnumerable<IBrowserFile> files)
+    {
+        files.ToList().ForEach(file => this.AttachedFiles.Add(file));  
+      
+    }
+
+    private Task DeleteAttachedFileAsync(IBrowserFile file)
+    {
+
+        this.AttachedFiles.Remove(file);
+
+        return Task.CompletedTask;
+    }
+
+
+    private Task SelectedFileAsync(IBrowserFile file)
+    {
+        return Task.CompletedTask;
+    }
+
+
+
+    
+
+
 }
 
 

@@ -24,6 +24,10 @@
     <ProjectReference Include="..\Mladim.Infrastracture\Mladim.Infrastracture.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
   
 
 </Project>

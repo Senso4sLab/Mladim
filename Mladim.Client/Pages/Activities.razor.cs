@@ -66,7 +66,7 @@ public partial class Activities
         return activityProjects.ToList();
     }
 
-    public void UpdateActivityAsync(ActivityWithProjectNameVM activity)
+    public void ShowActivityAsync(ActivityWithProjectNameVM activity)
     {
         this.Navigation.NavigateTo($"/activity/{activity.Id}");
     }

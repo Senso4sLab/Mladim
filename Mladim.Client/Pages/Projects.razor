@@ -15,13 +15,13 @@
 
         @foreach (var project in projects)
         {
-            <MudCard Outlined="true" @onclick="(()=> UpdateProjectAsync(project))">
+            <MudCard Outlined="true" @onclick="(()=> ShowProjectAsync(project))">
                 <MudCardHeader>
                     <CardHeaderContent>
                         <MudText Typo="Typo.h4">@project.Attributes.Name</MudText>
                     </CardHeaderContent>
                     <CardHeaderActions>
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Default" @onclick="@(()=> UpdateProjectAsync(project))" />
+                        <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Color="Color.Default" @onclick="@(()=> ShowProjectAsync(project))" />
                         <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Default" @onclick="@(()=> DeleteProjectAsync(project))" />
                     </CardHeaderActions>
                 </MudCardHeader>

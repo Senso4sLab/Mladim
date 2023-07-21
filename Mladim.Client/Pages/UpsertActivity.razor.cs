@@ -65,8 +65,6 @@ public partial class UpsertActivity
     
 
     private ActivityVM activity = new ActivityVM(); 
-
-
     
     private TextEditor? textEditor;
     private bool UpdateState =>
@@ -80,8 +78,8 @@ public partial class UpsertActivity
     private List<NamedEntityVM> partners = new List<NamedEntityVM>();
     private List<NamedEntityVM> participants = new List<NamedEntityVM>();
     private List<NamedEntityVM> participantGroups = new List<NamedEntityVM>();
-   
 
+    public bool editable = false;
 
     protected async override Task OnInitializedAsync()
     {
@@ -99,12 +97,21 @@ public partial class UpsertActivity
 
     protected async override Task OnParametersSetAsync()
     {
-        if (UpdateState)        
+        if (UpdateState)
             activity = await ActivityService.GetByActivityIdAsync(ActivityId.Value);
+        else
+            editable = true;
                
     }
 
-   
+    public async Task OnActivityEditableChanged(bool toggled)
+    {
+        editable = toggled;
+        if (!toggled)
+            await SaveActivityAsync();
+    }
+
+
 
     public async Task SaveActivityAsync()
     {

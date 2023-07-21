@@ -10,10 +10,12 @@ using Microsoft.IdentityModel.Tokens;
 using Mladim.Application.Contracts.Identity;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Application.Models;
+using Mladim.Client.Services.StorageService;
 using Mladim.Domain.IdentityModels;
 using Mladim.Infrastracture.Identity;
 using Mladim.Infrastracture.Persistance;
 using Mladim.Infrastracture.Repositories;
+using Mladim.Infrastracture.StorageService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +44,10 @@ public static class DependencyInjection
         collection.AddScoped<IUnitOfWork, UnitOfWork>();
         collection.AddTransient<IAuthService, AuthService>();
         collection.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+
+        collection.AddScoped<IFileStorageService, InAppStorageService>();
+        collection.AddHttpContextAccessor();
+
 
         collection.AddAuthentication(options =>
         {

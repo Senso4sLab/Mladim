@@ -5,84 +5,81 @@
 
 <MudStack Class="pt-5 pb-8" Spacing="4">
     <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-         <MudText Typo="Typo.h5">Podatki o aktivnosti</MudText>
+        <MudText Typo="Typo.h5">@(editable ? "Vnesi podatke o aktivnosti" : "Podatki o aktivnosti")</MudText>
 
          <MudStack Row="true" Spacing="2" Justify="Justify.FlexEnd">
-             <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Save" OnClick="SaveActivityAsync" />
+            <MudToggleIconButton Toggled="@editable" ToggledChanged="OnActivityEditableChanged"
+                                 Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" Title="Edit"
+                                 ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary" ToggledTitle="Save" />
              <MudFab Color="Color.Secondary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Cancel" OnClick="CancelProjectAsync" />
          </MudStack>
-
      </MudStack>
 
-     <MudTextField @bind-Value="activity.Attributes.Name" Variant="Variant.Outlined" Label="Ime aktivnosti">@activity.Attributes.Name</MudTextField>
-     <MudDateRangePicker Variant="Variant.Outlined" Label="Trajanje aktivnosti" @bind-DateRange="activity.DateRange" />
+     <MudTextField ReadOnly="!editable" @bind-Value="activity.Attributes.Name" Variant="Variant.Outlined" Label="Ime aktivnosti">@activity.Attributes.Name</MudTextField>
+     <MudDateRangePicker ReadOnly="!editable" Variant="Variant.Outlined" Label="Trajanje aktivnosti" @bind-DateRange="activity.DateRange" />
      @if (activity.DateRange.End?.Day == activity.DateRange.Start?.Day && activity.DateRange != default)
     {
         <MudGrid>
             <MudItem xs="6">
                 <MudText Typo="Typo.h6">Začetek aktivnosti</MudText>
-                <MudTimePicker @bind-Time="activity.StartTime" PickerVariant="PickerVariant.Dialog" Label="24 urni prikaz" TimeEditMode="TimeEditMode.OnlyHours" />
+                <MudTimePicker ReadOnly="!editable" @bind-Time="activity.StartTime" PickerVariant="PickerVariant.Dialog" Label="24 urni prikaz" TimeEditMode="TimeEditMode.OnlyHours" />
             </MudItem>
             <MudItem xs="6">
                 <MudText Typo="Typo.h6">Konec aktivnosti</MudText>
-                <MudTimePicker @bind-Time="activity.EndTime" PickerVariant="PickerVariant.Dialog" Label="24 urni prikaz" TimeEditMode="TimeEditMode.OnlyHours" />
+                <MudTimePicker ReadOnly="!editable" @bind-Time="activity.EndTime" PickerVariant="PickerVariant.Dialog" Label="24 urni prikaz" TimeEditMode="TimeEditMode.OnlyHours" />
             </MudItem>
         </MudGrid>     
         
     }
 
-     <TextEditor @ref="textEditor" @bind-Text="@activity.Attributes.Description" />
+    <TextEditor ReadOnly="!editable" @ref="textEditor" @bind-Text="@activity.Attributes.Description" />
 
-     <MultiSelect TItem="ActivityTypes" @bind-EnumValues="activity.Attributes.ActivityTypes" Label="Tip aktivnosti" />
+    <MultiSelect ReadOnly="!editable" TItem="ActivityTypes" @bind-EnumValues="activity.Attributes.ActivityTypes" Label="Tip aktivnosti" />
 
-    <MudSelect T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Staff" Variant="Variant.Outlined" Label="Vodje aktivnosti" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Staff" Variant="Variant.Outlined" Label="Vodje aktivnosti" AnchorOrigin="Origin.BottomCenter">
          @foreach (var staffMember in staff)
         {
             <MudSelectItem Value="staffMember">@staffMember.FullName</MudSelectItem>
         }
     </MudSelect>
 
-    <MudSelect T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Administration" Variant="Variant.Outlined" Label="Drugi sodelujoči" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Administration" Variant="Variant.Outlined" Label="Drugi sodelujoči" AnchorOrigin="Origin.BottomCenter">
         @foreach (var staffMember in staff)
         {
             <MudSelectItem Value="staffMember">@staffMember.FullName</MudSelectItem>
         }
     </MudSelect>
 
-    <MudSelect T="NamedEntityVM" ToStringFunc="@((group)=> group.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Groups" Variant="Variant.Outlined" Label="Skupine udeležencev" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((group)=> group.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Groups" Variant="Variant.Outlined" Label="Skupine udeležencev" AnchorOrigin="Origin.BottomCenter">
         @foreach (var participantGroup in participantGroups)
         {
             <MudSelectItem Value="participantGroup">@participantGroup.FullName</MudSelectItem>
         }
     </MudSelect>
 
-    <MudStack Row Spacing="5" AlignItems="AlignItems.Center">
-         <MudSelect T="NamedEntityVM" ToStringFunc="@((partner)=> partner.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Partners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter">
+    <MudStack  Row Spacing="5" AlignItems="AlignItems.Center">
+        <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((partner)=> partner.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Partners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter">
              @foreach (var partner in partners)
             {
                 <MudSelectItem Value="partner">@partner.FullName</MudSelectItem>
             }
         </MudSelect>
-        <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddPartnerAsync" />
+        <MudFab Disabled ="!editable" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddPartnerAsync" />
     </MudStack>
 
     <MudStack Row Spacing="5" AlignItems="AlignItems.Center">
-        <MudSelect T="NamedEntityVM" ToStringFunc="@((participant)=> participant.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Participants" Variant="Variant.Outlined" Label="Udeleženci" AnchorOrigin="Origin.BottomCenter">
+        <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((participant)=> participant.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Participants" Variant="Variant.Outlined" Label="Udeleženci" AnchorOrigin="Origin.BottomCenter">
              @foreach (var participant in participants)
             {
                 <MudSelectItem Value="participant">@participant.FullName</MudSelectItem>
             }
         </MudSelect>
-        <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddParticipantAsync" />
+        <MudFab Disabled="!editable" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddParticipantAsync" />
     </MudStack>
-
-   
-
-
 
     <MudStack Row Spacing="5" AlignItems="AlignItems.Baseline" Justify="Justify.SpaceBetween">
         <MudText Typo="Typo.body1" Align="Align.Center">Drugi udeleženci (starostna skupina in spol) - skupaj: @TotalAnonymousParticipants.</MudText>
-        <MudFab Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddAnonymousParticipantAsync" />         
+        <MudFab Disabled ="!editable" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddAnonymousParticipantAsync" />         
     </MudStack>   
 
  </MudStack>
