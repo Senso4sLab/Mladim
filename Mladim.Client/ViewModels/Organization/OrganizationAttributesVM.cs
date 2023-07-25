@@ -12,6 +12,7 @@ public class OrganizationAttributesVM
     public string? WebpageUrl { get;  set; }
     public string? VatNumber { get;  set; }
     public string? RegistrationNumber { get;  set; }
+    public string? LogoUrl { get; set; }
     public IEnumerable<AgeGroups> AgeGroups { get; set; } = new List<AgeGroups>();
     public IEnumerable<YouthSectors> YouthSectors { get; set; } = new List<YouthSectors>();
     public IEnumerable<OrganizationTypes> Types { get; set; } = new List<OrganizationTypes>();

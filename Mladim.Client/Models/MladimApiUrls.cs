@@ -42,4 +42,10 @@ public class MladimApiUrls
     public string Login { get; set; } = string.Empty;
     public string AccountCommand { get; set; } = string.Empty;
     public string GetAccountById { get; set; } = string.Empty;
+
+
+    public string GetFileByProjectId { get; set; } = string.Empty;
+    public string GetFileByActivityId { get; set; } = string.Empty;
+
+    public string AddOrganizationProfileImage { get; set; } = string.Empty;
 }

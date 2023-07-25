@@ -1,4 +1,5 @@
-﻿using Mladim.Domain.Dtos.Attributes;
+﻿using Mladim.Domain.Dtos.AttachedFile;
+using Mladim.Domain.Dtos.Attributes;
 using Mladim.Domain.Dtos.DateTimeRange;
 
 namespace Mladim.Domain.Dtos;
@@ -13,5 +14,6 @@ public class ActivityQueryDetailsDto
     public List<ParticipantQueryDto> Participants { get; set; } = new();
     public List<StaffMemberQueryDto> Staff { get; set; } = new();
     public List<AnonymousParticipantQueryDto> AnonymousParticipantActivities { get; set; } = new();
+    public List<AttachedFileQueryDto> Files { get; set; } = new();
 
 }

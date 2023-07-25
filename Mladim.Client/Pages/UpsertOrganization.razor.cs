@@ -62,7 +62,7 @@ public partial class UpsertOrganization
 
     private async Task UpsertOrganizationAsync()
     {
-        await orgDetailsTab!.LoadHtmlFromTextEditor();
+        //await orgDetailsTab!.LoadHtmlFromTextEditor();
 
         if (UpdateState)
             await UpdateOrganizationAsync();

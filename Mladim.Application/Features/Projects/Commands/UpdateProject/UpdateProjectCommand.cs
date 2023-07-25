@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.AttachedFile;
 using Mladim.Domain.Dtos.Attributes;
 using Mladim.Domain.Dtos.DateTimeRange;
 using Mladim.Domain.Models;
@@ -18,5 +19,6 @@ public class UpdateProjectCommand : IRequest<int>
     public DateTimeRangeQueryDto TimeRange { get; set; } = default!;
     public List<StaffMemberCommandDto> Staff { get; set; } = new();
     public List<GroupCommandDto> Groups { get; set; } = new();
-    public List<PartnerCommandDto> Partners { get; set; } = new();  
+    public List<PartnerCommandDto> Partners { get; set; } = new();     
+    public List<AttachedFileCommandDto> Files { get;set; } = new();
 }

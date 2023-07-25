@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Mladim.Application.Contracts.File;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
@@ -16,12 +17,10 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, boo
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
-   
-    public AddActivityCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-    {
-        UnitOfWork = unitOfWork;
-        Mapper = mapper;
-    }   
+
+    public IFileApiService FileApiService { get; set; }
+    public AddActivityCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFileApiService apiService) =>
+        (UnitOfWork, Mapper, FileApiService) = (unitOfWork, mapper, apiService);
 
     public async Task<bool> Handle(AddActivityCommand request, CancellationToken cancellationToken)
     {
@@ -38,7 +37,13 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, boo
             this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, activity.Partners);
             this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, activity.Groups);
             this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, activity.Participants);
-                     
+
+            // uploaded files
+            foreach (var file in request.Files)
+            {
+                string trustedFileName = await FileApiService.AddFileAsync(file.Data.ToArray(), "Activities", file.FileName);
+                activity.Files.Add(AttachedFile.Create(file.FileName, trustedFileName, file.ContentType, "Activities"));
+            }
 
             project.Activities.Add(activity);
 

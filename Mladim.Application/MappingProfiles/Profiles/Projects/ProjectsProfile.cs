@@ -15,12 +15,15 @@ public class ProjectsProfile : Profile
 {
     public ProjectsProfile()
     {
-        CreateMap<AddProjectCommand, Project>();
+        CreateMap<AddProjectCommand, Project>()
+            .ForMember(dest => dest.Files, m => m.Ignore());
 
 
         CreateMap<UpdateProjectCommand, Project>()
             .ForMember(dest => dest.Partners, m => m.Ignore())
-            .ForMember(dest => dest.Groups, m => m.Ignore());
+            .ForMember(dest => dest.Groups, m => m.Ignore())
+            .ForMember(dest => dest.Files, m => m.Ignore());
+
 
 
         CreateMap<Project, ProjectQueryDto>();

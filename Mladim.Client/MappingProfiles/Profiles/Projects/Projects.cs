@@ -34,6 +34,8 @@ public class Projects : Profile
         CreateMap<ProjectQueryDto, ProjectVM>();
 
 
+
+
         CreateMap<ProjectAttributesVM, ProjectAttributesCommandDto>();
 
         CreateMap<ProjectAttributesQueryDto, ProjectAttributesVM>();

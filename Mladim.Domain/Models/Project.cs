@@ -18,20 +18,20 @@ public class Project : BaseEntity<int>
     public List<StaffMemberProject> Staff { get; set; } = new();
     public List<ProjectGroup> Groups { get; set; } = new();
     public List<Partner> Partners { get; set; } = new();
+    public List<AttachedFile> Files { get; set; } = new();
 
     private Project() { }
    
     public void Add(ProjectGroup group) =>
-        this.Groups.Add(group);    
+        this.Groups.Add(group);
+
 
     public int OrganizationId { get; set; }
     public Organization Organization { get; set; } = default!;
 
+   
 
-    public bool ExistPartner(int id) => 
-        this.Partners.Any(p => p.Id == id);
+   
 
-    public bool ExistGroup(int id) =>
-       this.Groups.Any(p => p.Id == id);
 
 }

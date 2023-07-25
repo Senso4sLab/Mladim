@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Mladim.Application.Contracts.File;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
@@ -16,13 +17,12 @@ public class UpdateActivityCommandHandler : IRequestHandler<UpdateActivityComman
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
-    
-    public UpdateActivityCommandHandler(IUnitOfWork unitOfWork, IMapper mapper)
-    {
-        Mapper = mapper;
-        UnitOfWork = unitOfWork;
-    }       
+    public IFileApiService FileApiService { get; }
 
+    public UpdateActivityCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFileApiService apiService) =>
+       (UnitOfWork, Mapper, FileApiService) = (unitOfWork, mapper, apiService);
+
+   
     public async Task<int> Handle(UpdateActivityCommand request, CancellationToken cancellationToken)
     {   
         var activity = await this.UnitOfWork.ActivityRepository
@@ -57,6 +57,19 @@ public class UpdateActivityCommandHandler : IRequestHandler<UpdateActivityComman
         activity.Participants.AddRange(addParticipants);
 
         activity.AnonymousParticipantGroups = new(this.Mapper.Map<IEnumerable<AnonymousParticipantGroup>>(request.AnonymousParticipantActivities));
+
+        // Files 
+        activity.Files.Where(f => !request.Files.Any(rf => rf.FileName == f.FileName)).ToList().ForEach(f =>
+        {
+            FileApiService.DeleteFile(f.StoredFileName, f.FolderName);
+            activity.Files.Remove(f);
+        });
+
+        request.Files.Where(rf => !activity.Files.Any(f => f.FileName == rf.FileName)).ToList().ForEach(async f =>
+        {
+            string trustedFileName = await FileApiService.AddFileAsync(f.Data.ToArray(), "Activities", f.FileName);
+            activity.Files.Add(AttachedFile.Create(f.FileName, trustedFileName, f.ContentType, "Activities"));
+        });
 
         return await this.UnitOfWork.SaveChangesAsync();
     }

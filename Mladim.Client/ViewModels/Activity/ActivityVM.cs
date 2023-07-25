@@ -1,4 +1,5 @@
 ﻿using Mladim.Client.ViewModels.Activity;
+using Mladim.Client.ViewModels.AttachedFile;
 using Mladim.Client.ViewModels.Project;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Enums;
@@ -21,4 +22,5 @@ public class ActivityVM
     public IEnumerable<NamedEntityVM> Partners { get; set; } = new List<NamedEntityVM>();
     public IEnumerable<NamedEntityVM> Participants { get; set; } = new List<NamedEntityVM>();
     public IEnumerable<AnonymousParticipantsVM> AnonymousParticipantActivities { get; set; } = new List<AnonymousParticipantsVM>();
+    public List<AttachedFileVM> Files { get; set; } = new List<AttachedFileVM>();
 }

@@ -44,13 +44,15 @@
     [Parameter]
     public EventCallback<string> TextChanged { get; set; }
 
+   
     [Parameter]
-    public bool ReadOnly { get; set; }
+    public bool ReadOnly{ get; set; }
+
 
     [Parameter]
     public string Placeholder { get; set; }
 
-    public BlazoredTextEditor? QuillHtml { get; set; } = new BlazoredTextEditor();
+    public BlazoredTextEditor? QuillHtml { get; set; }
 
     private string lastText;
 

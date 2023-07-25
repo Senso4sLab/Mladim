@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.AttachedFile;
 using Mladim.Domain.Dtos.Attributes;
 using Mladim.Domain.Dtos.DateTimeRange;
 using System;
@@ -18,6 +20,7 @@ public class AddProjectCommand : IRequest<bool>
     public List<StaffMemberCommandDto> Staff { get; set; } = new();
     public List<GroupCommandDto> Groups { get; set; } = new();
     public List<PartnerCommandDto> Partners { get; set; } = new();
+    public List<AttachedFileCommandDto> Files { get; set; } = new();
 }
 
 

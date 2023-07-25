@@ -8,6 +8,5 @@ public class OrganizationVM
 {
     public int Id { get; set; }
     public SocialMediaUrlsVM SocialMediaUrls { get; set; } = new SocialMediaUrlsVM();
-    public OrganizationAttributesVM Attributes { get; set; } = new OrganizationAttributesVM();   
-
+    public OrganizationAttributesVM Attributes { get; set; } = new OrganizationAttributesVM();
 }

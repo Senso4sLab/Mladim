@@ -23,18 +23,48 @@ using Mladim.Client.Layouts;
 using Blazored.TextEditor;
 using MudBlazor;
 using Mladim.Domain.Dtos;
+using Mladim.Client.Services.FileService;
+using System.Runtime.CompilerServices;
 
 namespace Mladim.Client.Components.Organizations;
 
 public partial class OrganizationDetailsTab
 {
     [Parameter]
-    public OrganizationVM Organization { get; set; }
+    public OrganizationVM Organization { get; set; } = default!;
+
+
+    [Inject]
+
+    IFileService FileService { get; set; } = default!;
 
     [Parameter]
     public bool ReadOnly { get; set; }
 
-    public TextEditor? textEditor;
-    public async Task LoadHtmlFromTextEditor() =>
-        await textEditor!.LoadHtmlText();
+    //public TextEditor? textEditor;
+    //public async Task LoadHtmlFromTextEditor() =>
+    //    await textEditor!.LoadHtmlText();
+
+
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
+
+    private async Task UploadFiles(InputFileChangeEventArgs e)
+    {     
+        var resizedImage = await e.File.RequestImageFileAsync(e.File.ContentType, 200, 200);
+       
+        var buffer = new byte[resizedImage.Size];
+        await resizedImage.OpenReadStream().ReadAsync(buffer);
+
+        string fileName = Path.GetFileName(resizedImage.Name);
+
+        var profileUrl =  await this.FileService.AddOrganizationProfileImageAsync(this.Organization.Id, buffer.ToList(), fileName);
+
+        this.Organization.Attributes.LogoUrl = profileUrl;
+
+        this.StateHasChanged();
+    }
+
 }

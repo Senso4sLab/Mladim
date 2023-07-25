@@ -4,6 +4,11 @@ using Mladim.Client.ViewModels;
 using Mladim.Client.Services.PopupService;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Microsoft.AspNetCore.Components.Forms;
+using System.Net.Http.Json;
+using Mladim.Client.ViewModels.AttachedFile;
+using Microsoft.JSInterop;
+using System.IO;
+using Mladim.Client.Services.FileService;
 
 namespace Mladim.Client.Pages;
 
@@ -24,11 +29,14 @@ public partial class UpsertProject
     [Inject]
     public IPopupService PopupService { get; set; }
 
+    [Inject]
+    public IFileService FileService { get; set; } = default!;
+
+    [Inject]
+    public IJSRuntime JS { get; set; } = default!;
 
     [Parameter]
-    public int OrganizationId { get; set; }
-
-    
+    public int OrganizationId { get; set; }    
 
     [Parameter]
     public int? ProjectId { get; set; }
@@ -40,12 +48,14 @@ public partial class UpsertProject
     public bool editable = false;
     private TextEditor? textEditor;  
     private ProjectVM project = new ProjectVM();
-    IList<IBrowserFile> AttachedFiles = new List<IBrowserFile>();
     private bool UpdateState => ProjectId != null;
 
+    
+    private long maxFileSize = 1024 * 1024 * 3;
+    private int maxAllowedFiles = 5;
 
 
-    protected async override Task OnParametersSetAsync()
+    protected async override Task OnInitializedAsync()
     {
         this.Staff = new List<NamedEntityVM>(await StaffMembersByOrganizationIdAsync());
         this.Partners = new List<NamedEntityVM>(await PartnersByOrganizationIdAsync());
@@ -56,9 +66,9 @@ public partial class UpsertProject
             editable = true;
     }
 
-
     public async Task OnProjectEditableChanged(bool toggled)
     {
+        
         editable = toggled;              
         if(!toggled)        
             await SaveProjectAsync();        
@@ -136,24 +146,47 @@ public partial class UpsertProject
     }
 
 
-    private void UploadFilesToProject(IEnumerable<IBrowserFile> files)
-    {
-        files.ToList().ForEach(file => this.AttachedFiles.Add(file));  
-      
+    private async void UploadFilesToProject(IEnumerable<IBrowserFile> files)
+    {    
+
+        foreach(var file in files)
+        {
+            if(file.Size > maxFileSize)
+            {
+                this.PopupService.ShowSnackbarError("Velikost dokumenta je omejena na 3MB");
+                continue;
+            }
+
+            string fileName = Path.GetFileName(file.Name);
+
+            var buffer = new byte[file.Size];
+            await file.OpenReadStream().ReadAsync(buffer);           
+
+            project.Files.Add(AttachedFileVM.Create(fileName, buffer.ToList(), file.ContentType));           
+        }
+
+        this.StateHasChanged();        
     }
 
-    private Task DeleteAttachedFileAsync(IBrowserFile file)
+    private void DeleteAttachedFileAsync(AttachedFileVM file)
     {
-
-        this.AttachedFiles.Remove(file);
-
-        return Task.CompletedTask;
+        project.Files.Remove(file);
+        this.StateHasChanged();      
     }
 
 
-    private Task SelectedFileAsync(IBrowserFile file)
-    {
-        return Task.CompletedTask;
+    private async Task SelectedFileAsync(AttachedFileVM file)
+    {      
+        var fileStream = await this.FileService.GetFileStreamByProjectIdAsync(file.FileName, ProjectId!.Value);
+
+        if (fileStream != null)
+        {
+            using var streamRef = new DotNetStreamReference(stream: fileStream);
+            await JS.InvokeVoidAsync("downloadFileFromStream", file.FileName, streamRef);
+        }
+        else        
+            this.PopupService.ShowSnackbarError();       
+        
     }
 
 

@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
-using Mladim.Application.Contracts.Identity;
+
 using Mladim.Domain.Models;
 
-namespace Mladim.Application.Validators;
+namespace Mladim.Client.Validators;
 
 public class LoginUserValidator : AbstractValidator<LoginUser>
 {    

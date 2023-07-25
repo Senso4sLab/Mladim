@@ -80,7 +80,33 @@
     <MudStack Row Spacing="5" AlignItems="AlignItems.Baseline" Justify="Justify.SpaceBetween">
         <MudText Typo="Typo.body1" Align="Align.Center">Drugi udeleženci (starostna skupina in spol) - skupaj: @TotalAnonymousParticipants.</MudText>
         <MudFab Disabled ="!editable" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add" OnClick="AddAnonymousParticipantAsync" />         
-    </MudStack>   
+    </MudStack>
+
+     <MudFileUpload Disabled="!editable" T="IReadOnlyList<IBrowserFile>" Multiple MaximumFileCount=5 FilesChanged="UploadFilesToProject">
+         <ButtonTemplate>
+             <MudButton HtmlTag="label"
+                        Variant="Variant.Filled"
+                        Color="Color.Primary"
+                        StartIcon="@Icons.Material.Filled.CloudUpload"
+                        for="@context">
+                Naloži datoteke
+             </MudButton>
+         </ButtonTemplate>
+     </MudFileUpload>
+    
+
+    @if (activity.Files.Count > 0)
+    {
+        <MudList Clickable="true">
+            @foreach (var file in activity.Files)
+            {
+                <MudListItem Icon="@Icons.Material.Filled.AttachFile" @key="@file" OnClick="() =>SelectedFileAsync(file)">
+                    @file.FileName
+                    <MudIconButton Disabled="!editable" Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteAttachedFileAsync(file)" aria-label="delete" />
+                </MudListItem>
+            }
+        </MudList>
+    }
 
  </MudStack>
 

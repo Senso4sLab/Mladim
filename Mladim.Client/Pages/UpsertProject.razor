@@ -8,7 +8,7 @@
         <MudText Typo="Typo.h5">@(editable ? "Vnesi podatke o projektu" : "Podatki o projektu")</MudText>
 
         <MudStack Row="true" Spacing ="2" Justify="Justify.FlexEnd">           
-                <MudToggleIconButton Toggled="@editable" ToggledChanged="OnProjectEditableChanged"
+                <MudToggleIconButton  Toggled="@editable" ToggledChanged="OnProjectEditableChanged" Size="Size.Small"
                                  Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" Title="Edit"
                                  ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary" ToggledTitle="Save" />
             
@@ -57,19 +57,19 @@
                        Color="Color.Primary"
                        StartIcon="@Icons.Material.Filled.CloudUpload"
                        for="@context">
-                Upload Files
+                Naloži datoteke
             </MudButton>
         </ButtonTemplate>
     </MudFileUpload>
 
-    @if (AttachedFiles != null)
+    @if (project.Files.Count > 0)
     {       
         <MudList Clickable="true">
-            @foreach (var file in AttachedFiles)
+            @foreach (var file in project.Files)
             {
-                <MudListItem Icon="@Icons.Material.Filled.AttachFile" @key="@file" OnClick="() =>SelectedFileAsync(file)" >
-                    @file.Name
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteAttachedFileAsync(file)" aria-label="delete"/>
+                <MudListItem  Icon="@Icons.Material.Filled.AttachFile" @key="@file" OnClick="() =>SelectedFileAsync(file)" >
+                    @file.FileName
+                    <MudIconButton Disabled="!editable" Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteAttachedFileAsync(file)" aria-label="delete" />
                 </MudListItem>
             }
         </MudList>

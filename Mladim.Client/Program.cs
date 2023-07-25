@@ -2,8 +2,8 @@ using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Mladim.Application.Contracts.Persistence;
+
+
 using Mladim.Client;
 using Mladim.Client.Services.Authentication;
 using Mladim.Client.Services.HttpService.Generic;
@@ -15,6 +15,7 @@ using MudBlazor.Services;
 using System.Reflection;
 using Mladim.Client.Models;
 using Mladim.Client.Services.AccountService;
+using Mladim.Client.Services.FileService;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -58,6 +59,7 @@ builder.Services.AddScoped<IPopupService, PopupService>();
     builder.Services.AddScoped<IPartnerService, PartnerService>();
     builder.Services.AddScoped<IAccountService, AccountService>();
     builder.Services.AddScoped<IGroupService, GroupService>();
+    builder.Services.AddScoped<IFileService, FileService>();
 }
 {
     builder.Services.Configure<MladimApiUrls>(builder.Configuration.GetSection("MladimApiUrls"));

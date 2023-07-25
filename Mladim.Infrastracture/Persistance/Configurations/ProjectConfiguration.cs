@@ -15,9 +15,8 @@ public class ProjectConfiguration : IEntityTypeConfiguration<Project>
     public void Configure(EntityTypeBuilder<Project> builder)
     {
         builder.OwnsOne(project => project.TimeRange);
-        builder.OwnsOne(project => project.Attributes); 
-
-
+        builder.OwnsOne(project => project.Attributes);
+        builder.OwnsMany(project => project.Files);
 
     }
 }

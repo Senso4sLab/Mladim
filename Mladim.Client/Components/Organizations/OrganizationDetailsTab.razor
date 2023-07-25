@@ -6,6 +6,18 @@
     <MudExpansionPanels>
         <MudExpansionPanel Text="Osnovni podatki">
               <MudStack Spacing="2">
+                <MudFileUpload T="IBrowserFile" OnFilesChanged="UploadFiles" Hidden="false" InputClass="absolute mud-width-full mud-height-full overflow-hidden z-20" InputStyle="opacity:0">
+                    <ButtonTemplate>
+                        @if (@Organization.Attributes.LogoUrl != null)
+                        {
+                            <MudImage Src="@Organization.Attributes.LogoUrl" Alt="Logo" Elevation="25" Class="rounded-lg" Height="200" />
+                        }
+                        else
+                        {
+                            <MudPaper Height="200px" Outlined="true" />                          
+                        }                         
+                    </ButtonTemplate>
+                </MudFileUpload>               
                 <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.Address" Label="Naslov" Variant="Variant.Outlined"></MudTextField>
                 <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.PhoneNumber" Label="Telefon" Variant="Variant.Outlined"></MudTextField>
                 <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.Email" Label="Email" Variant="Variant.Outlined"></MudTextField>
@@ -13,10 +25,10 @@
                 <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.VatNumber" Label="Davčna številka" Variant="Variant.Outlined"></MudTextField>
                 <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.WebpageUrl" Label="Spletna stran" Variant="Variant.Outlined"></MudTextField>
             </MudStack>
-        </MudExpansionPanel>
-        
+        </MudExpansionPanel>       
+
         <MudExpansionPanel Text="Opis">
-            <TextEditor @ref="textEditor" ReadOnly="@ReadOnly" @bind-Text="@Organization.Attributes.Description" />
+            <Editor Disable="ReadOnly" Value="@Organization.Attributes.Description" ValueChanged="@((str) => Organization.Attributes.Description = str)" ApiKey="u4db7t6xs7ux3sts5hpfcbyvqljogwgn9acaxkobct55yoxs" />
         </MudExpansionPanel>
         
         <MudExpansionPanel Text="Profili na družbenih omrežjih">
@@ -38,4 +50,6 @@
             </MudStack>
         </MudExpansionPanel>
     </MudExpansionPanels>
+   
+    
  </MudStack>

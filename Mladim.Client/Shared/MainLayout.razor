@@ -1,27 +1,31 @@
-﻿@inherits LayoutComponentBase
+﻿@using MudBlazor.Utilities;
+@inherits LayoutComponentBase
 
-<MudThemeProvider/>
+<MudThemeProvider Theme="MyCustomTheme" />
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
 
 <MudLayout>           
         <MudAppBar Elevation="1">
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+            <MudText Typo="Typo.h6">Mladim</MudText>
             <MudSpacer/>
             <UserLoginSettings/>
         </MudAppBar>
-        <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
-            <MudDrawerHeader>
-                <MudText Typo="Typo.h5" Class="mt-2">Mladim</MudText>
-            </MudDrawerHeader>
-            <NavMenu/>
-        </MudDrawer>        
-            <MudMainContent>
-                <MudContainer>
-                    @Body
-                </MudContainer>             
-            </MudMainContent>      
+
+    <MudDrawer ClipMode="DrawerClipMode.Docked"  @bind-Open="@_drawerOpen"  Elevation="2" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
+        <MudNavMenu>
+            <MudNavLink Class="pt-2" Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Description">Organizacija</MudNavLink>
+            <MudNavLink Class="pt-2" Href="/projects" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ImportContacts">Projekti</MudNavLink>
+            <MudNavLink Class="pt-2" Href="/activities" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Event">Aktivnosti</MudNavLink>
+        </MudNavMenu>       
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer>
+            @Body
+        </MudContainer>             
+    </MudMainContent>     
+       
 </MudLayout>
   
 
@@ -29,10 +33,19 @@
 
 @code 
 {
-    bool _drawerOpen = true;  
+    bool _drawerOpen = false;
 
-    // [Inject]
-    //public IAppState AppState{ get; set; }
+    MudTheme MyCustomTheme = new MudTheme()
+        {
+            Palette = new PaletteLight()
+            {
+                Primary = new MudColor("#4da456"),//Colors.  Colors.Blue.Default,
+                Secondary = Colors.Green.Accent4,
+                AppbarBackground = new MudColor("#4da456"),
+                
+            },                  
+        };
+   
 
     void DrawerToggle()
     {

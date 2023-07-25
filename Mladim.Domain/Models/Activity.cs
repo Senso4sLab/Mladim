@@ -20,6 +20,8 @@ public class Activity : BaseEntity<int>
     public List<Partner> Partners { get; set; } = new();
     public List<Participant> Participants { get; set; } = new();
     public List<ActivityGroup> Groups { get; set; } = new();
+    public List<AttachedFile> Files { get; set; } = new();
+
     public void Add(ActivityGroup group) =>
        this.Groups.Add(group);
 

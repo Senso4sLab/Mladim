@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Mladim.Application.Features.Accounts.Queries.GetAppUser;
+
 using Mladim.Client.Extensions;
 using Mladim.Client.ViewModels;
 

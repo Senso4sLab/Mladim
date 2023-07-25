@@ -24,6 +24,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     public DbSet<ProjectGroup> ProjectGroups { get; set; }
     public DbSet<ActivityGroup> ActivityGroups { get; set; }
     public DbSet<Group> Groups { get; set; }  
+    public DbSet<AttachedFile> Files { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

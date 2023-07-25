@@ -735,6 +735,41 @@ namespace Mladim.Infrastracture.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsMany("Mladim.Domain.Models.AttachedFile", "Files", b1 =>
+                        {
+                            b1.Property<int>("ActivityId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<string>("ContentType")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("FileName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("FolderName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("StoredFileName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ActivityId", "Id");
+
+                            b1.ToTable("Activities_Files");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ActivityId");
+                        });
+
                     b.OwnsOne("Mladim.Domain.Models.DateTimeRange", "TimeRange", b1 =>
                         {
                             b1.Property<int>("ActivityId")
@@ -836,6 +871,8 @@ namespace Mladim.Infrastracture.Migrations
                     b.Navigation("Attributes")
                         .IsRequired();
 
+                    b.Navigation("Files");
+
                     b.Navigation("Project");
 
                     b.Navigation("TimeRange")
@@ -864,6 +901,9 @@ namespace Mladim.Infrastracture.Migrations
 
                             b1.Property<int>("Fields")
                                 .HasColumnType("int");
+
+                            b1.Property<string>("LogoUrl")
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Name")
                                 .IsRequired()
@@ -941,6 +981,41 @@ namespace Mladim.Infrastracture.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsMany("Mladim.Domain.Models.AttachedFile", "Files", b1 =>
+                        {
+                            b1.Property<int>("ProjectId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<string>("ContentType")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("FileName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("FolderName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("StoredFileName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ProjectId", "Id");
+
+                            b1.ToTable("Projects_Files");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProjectId");
+                        });
+
                     b.OwnsOne("Mladim.Domain.Models.DateTimeRange", "TimeRange", b1 =>
                         {
                             b1.Property<int>("ProjectId")
@@ -992,6 +1067,8 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.Navigation("Attributes")
                         .IsRequired();
+
+                    b.Navigation("Files");
 
                     b.Navigation("Organization");
 

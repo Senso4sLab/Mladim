@@ -25,7 +25,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\Files\Images\OrganizationProfiles\" />
+    <Folder Include="wwwroot\Files\Images\UserProfiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Files\Activities\f5ucqnx4.lc3..png" />
+    <None Include="wwwroot\Files\Projects\4fbimamt.5ot..png" />
+    <None Include="wwwroot\Files\Projects\l5wp3yrp.jrh..png" />
+    <None Include="wwwroot\Files\Projects\zrbpk0w1.fux..png" />
   </ItemGroup>
 
   

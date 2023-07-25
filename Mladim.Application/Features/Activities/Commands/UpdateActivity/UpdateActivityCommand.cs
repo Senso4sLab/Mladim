@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.AttachedFile;
 using Mladim.Domain.Dtos.Attributes;
 using Mladim.Domain.Dtos.DateTimeRange;
 using Mladim.Domain.Enums;
@@ -22,5 +23,6 @@ public class UpdateActivityCommand : IRequest<int>
     public List<ParticipantCommandDto> Participants { get; set; } = new();    
     public List<AnonymousParticipantCommandDto> AnonymousParticipantActivities { get; set; } = new();
     public List<GroupCommandDto> Groups { get; set; } = new();
+    public List<AttachedFileCommandDto> Files { get; set; } = new();
 
 }

@@ -29,6 +29,8 @@ using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.Models;
 using Mladim.Client.Services.SubjectServices.Implementations;
 using Mladim.Domain.Models;
+using Mladim.Client.Services.FileService;
+using Mladim.Client.ViewModels.AttachedFile;
 
 namespace Mladim.Client.Pages;
 
@@ -56,6 +58,12 @@ public partial class UpsertActivity
     [Inject]
     public IPopupService PopupService { get; set; }
 
+    [Inject]
+    public IFileService FileService { get; set; } = default!;
+
+    [Inject]
+    public IJSRuntime JS { get; set; } = default!;
+
     [Parameter]
     public int? ActivityId { get; set; }
 
@@ -81,6 +89,9 @@ public partial class UpsertActivity
 
     public bool editable = false;
 
+    private long maxFileSize = 1024 * 1024 * 3;
+    private int maxAllowedFiles = 5;
+
     protected async override Task OnInitializedAsync()
     {
         defaultOrg = await this.OrganizationService.DefaultOrganizationAsync();
@@ -92,17 +103,15 @@ public partial class UpsertActivity
         partners = new List<NamedEntityVM>(await PartnerService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
         participants = new List<NamedEntityVM>(await ParticipantService.GetBaseByOrganizationIdAsync(defaultOrg.Id, true));
         participantGroups = new List<NamedEntityVM>(await GroupService.GetByOrganizationIdAsync(defaultOrg.Id, GroupType.Activity, true));
-    }
 
-
-    protected async override Task OnParametersSetAsync()
-    {
         if (UpdateState)
             activity = await ActivityService.GetByActivityIdAsync(ActivityId.Value);
         else
             editable = true;
-               
     }
+
+
+   
 
     public async Task OnActivityEditableChanged(bool toggled)
     {
@@ -198,6 +207,49 @@ public partial class UpsertActivity
             this.activity.AnonymousParticipantActivities = resultGroups.ToList();
             this.StateHasChanged();
         }       
+    }
+
+
+    private async void UploadFilesToProject(IEnumerable<IBrowserFile> files)
+    {
+        foreach (var file in files)
+        {
+            if (file.Size > maxFileSize)
+            {
+                this.PopupService.ShowSnackbarError("Velikost dokumenta je omejena na 3MB");
+                continue;
+            }
+
+            string fileName = Path.GetFileName(file.Name);
+
+            var buffer = new byte[file.Size];
+            await file.OpenReadStream().ReadAsync(buffer);
+
+            activity.Files.Add(AttachedFileVM.Create(fileName, buffer.ToList(), file.ContentType));
+        }
+
+        this.StateHasChanged();
+    }
+
+    private void DeleteAttachedFileAsync(AttachedFileVM file)
+    {
+        activity.Files.Remove(file);
+        this.StateHasChanged();
+    }
+
+
+    private async Task SelectedFileAsync(AttachedFileVM file)
+    {
+        var fileStream = await this.FileService.GetFileStreamByActivityIdAsync(file.FileName, ActivityId!.Value);
+
+        if (fileStream != null)
+        {
+            using var streamRef = new DotNetStreamReference(stream: fileStream);
+            await JS.InvokeVoidAsync("downloadFileFromStream", file.FileName, streamRef);
+        }
+        else
+            this.PopupService.ShowSnackbarError();
+
     }
 
 }

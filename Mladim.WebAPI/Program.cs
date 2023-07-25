@@ -1,6 +1,8 @@
 using Microsoft.OpenApi.Models;
 using Mladim.Application;
+using Mladim.Application.Contracts.File;
 using Mladim.Infrastracture;
+using Mladim.WebAPI.Services;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,8 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 
+
+builder.Services.AddScoped<IFileApiService, FileApiSerive>();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
