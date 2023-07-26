@@ -13,11 +13,11 @@
             <UserLoginSettings/>
         </MudAppBar>
 
-    <MudDrawer ClipMode="DrawerClipMode.Docked"  @bind-Open="@_drawerOpen"  Elevation="2" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
-        <MudNavMenu>
-            <MudNavLink Class="pt-2" Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Description">Organizacija</MudNavLink>
-            <MudNavLink Class="pt-2" Href="/projects" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ImportContacts">Projekti</MudNavLink>
-            <MudNavLink Class="pt-2" Href="/activities" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Event">Aktivnosti</MudNavLink>
+    <MudDrawer  ClipMode="DrawerClipMode.Docked"  @bind-Open="@_drawerOpen"  Elevation="2" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
+        <MudNavMenu Color="Color.Primary" Rounded=true Margin="Margin.Normal">
+            <MudNavLink  Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Description">Organizacija</MudNavLink>
+            <MudNavLink  Href="/projects" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ImportContacts">Projekti</MudNavLink>
+            <MudNavLink  Href="/activities" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Event">Aktivnosti</MudNavLink>
         </MudNavMenu>       
     </MudDrawer>
     <MudMainContent>
