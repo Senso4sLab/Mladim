@@ -31,6 +31,9 @@ public class AuthService : IAuthService
 
         bool passwordCorrect = await this.UserManager.CheckPasswordAsync(user, loginUser.Password);           
 
+        
+
+
         if (!await this.UserManager.CheckPasswordAsync(user, loginUser.Password))
             return new Result<AuthResponse>("Vnešeni podatki so napačni");
 

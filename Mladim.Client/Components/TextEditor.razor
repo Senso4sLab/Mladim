@@ -1,7 +1,9 @@
 ﻿
 <div>
     <div style="height:150px; width:100%; display:inline-block">
-        <BlazoredTextEditor ReadOnly="@ReadOnly" @ref="@QuillHtml" Placeholder="@Placeholder">
+        <BlazoredTextEditor 
+            @ref="@richEditor"         
+            Placeholder="@Placeholder">
             <ToolbarContent>
                 <select class="ql-header">
                     <option selected=""></option>
@@ -39,43 +41,13 @@
 @code
 {
     [Parameter]
-    public string Text { get; set; }
+    public string Placeholder { get; set; } = default!;
 
-    [Parameter]
-    public EventCallback<string> TextChanged { get; set; }
+    public BlazoredTextEditor? richEditor { get; set; } = default!;
 
-   
-    [Parameter]
-    public bool ReadOnly{ get; set; }
-
-
-    [Parameter]
-    public string Placeholder { get; set; }
-
-    public BlazoredTextEditor? QuillHtml { get; set; }
-
-    private string lastText;
-
-    private Task showHtmlTextTask;
-
-    protected async override Task OnAfterRenderAsync(bool firstRender)
+    public async Task EnableEditor(bool enable)
     {
-        if (showHtmlTextTask?.IsCompleted == false)
-            return;
-
-        if (this.lastText != this.Text)
-        {
-            showHtmlTextTask = ShowHtmlText();
-            this.lastText = this.Text;
-            await showHtmlTextTask;
-        }
-    }
-
-
-
-    public async Task ShowHtmlText()
-    {
-        if (string.IsNullOrWhiteSpace(Text))
+        if (richEditor == null)
             return;
 
         bool loading = true;
@@ -84,19 +56,45 @@
         {
             try
             {
-                await this.QuillHtml?.LoadHTMLContent(Text);
+                await this.richEditor!.EnableEditor(enable);
                 loading = false;
             }
-            catch (Exception ex)
+            catch
+            {
+                await Task.Delay(10);
+                loading = true;
+            }
+        }      
+    }
+
+    public async Task SetHTMLTextAsync(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text) || this.richEditor == null)
+            return;
+
+        bool loading = true;
+
+        while (loading)
+        {
+            try
+            {
+                await this.richEditor!.LoadHTMLContent(text);
+                loading = false;
+            }
+            catch
             {
                 await Task.Delay(10);
                 loading = true;
             }
         }
     }
-    public async Task LoadHtmlText()
+
+    public async Task<string> GetHTMLTextAsync()
     {
-        var quillHtml = await this.QuillHtml!.GetHTML();
-        await TextChanged.InvokeAsync(quillHtml == "<p><br></p>" ? string.Empty : quillHtml);
+        if (richEditor == null)
+            return string.Empty;
+
+        var quillHtml = await this.richEditor!.GetHTML();
+        return quillHtml == "<p><br></p>" ? string.Empty : quillHtml;
     }
 }

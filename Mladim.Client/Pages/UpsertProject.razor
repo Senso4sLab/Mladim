@@ -21,7 +21,7 @@
     <MudDateRangePicker ReadOnly ="!editable"  Variant="Variant.Outlined" Label="Trajanje projekta" @bind-DateRange="project.DateRange"/>
 
 
-    <TextEditor ReadOnly="!editable" @ref="textEditor" @bind-Text="@project.Attributes.Description" />
+    <TextEditor ReadOnly="!editable" @ref="textEditor" Placeholder="Nekaj o projektu"/>
     <MudTextField  @bind-Value="project.Attributes.WebpageUrl" Label="Spletna stran" Variant="Variant.Outlined"></MudTextField>
 
         <MudSelect ReadOnly="!editable" T="NamedEntityVM" MultiSelection="true" ToStringFunc="@((staff)=> staff.FullName)" @bind-SelectedValues="project.Staff" Variant="Variant.Outlined" Label="Vodje projekta" AnchorOrigin="Origin.BottomCenter">

@@ -51,7 +51,7 @@ public partial class UpsertOrganization
 
     private OrganizationVM? organization = new OrganizationVM();
 
-    private OrganizationDetailsTab? orgDetailsTab;
+    private OrganizationTab? orgDetailsTab = default!;
 
     protected async override Task OnInitializedAsync()
     {       
@@ -62,7 +62,7 @@ public partial class UpsertOrganization
 
     private async Task UpsertOrganizationAsync()
     {
-        //await orgDetailsTab!.LoadHtmlFromTextEditor();
+        this.organization!.Attributes.Description = await orgDetailsTab!.textEditor!.GetHTMLTextAsync();
 
         if (UpdateState)
             await UpdateOrganizationAsync();

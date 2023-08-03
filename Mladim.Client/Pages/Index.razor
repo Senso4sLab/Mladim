@@ -26,13 +26,18 @@
     {
         <MudIconButton Color="Color.Primary" Size="Size.Medium" Variant="Variant.Outlined"  Icon="@Icons.Material.Filled.Add" OnClick="AddOrganizationAsync" />
     }
+
+   
+
+  
 </MudStack>
+
 
 @if (selectedOrganization != null)
 {
     <MudTabs  Class="py-3" Elevation="4" Color="@Color.Primary">
         <MudTabPanel Text="Info">        
-          <OrganizationDetailsTab Organization="selectedOrganization" ReadOnly = "true"/>
+          <OrganizationTab Organization="selectedOrganization" ReadOnly = "true"/>
         </MudTabPanel>
         <MudTabPanel Text="Uporabniki">
             <StaffMemberTab Organization="selectedOrganization" />

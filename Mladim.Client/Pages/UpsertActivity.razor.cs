@@ -124,7 +124,7 @@ public partial class UpsertActivity
 
     public async Task SaveActivityAsync()
     {
-        await textEditor!.LoadHtmlText();
+        await textEditor!.GetHTMLTextAsync();
         
         if (UpdateState)
         {           

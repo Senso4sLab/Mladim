@@ -95,7 +95,7 @@ public partial class UpsertProject
 
     public async Task SaveProjectAsync()
     {
-        await textEditor!.LoadHtmlText();
+        await textEditor!.GetHTMLTextAsync();
                 
         if (UpdateState)
         {

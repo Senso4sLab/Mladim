@@ -2,7 +2,6 @@
 @using Mladim.Client.ViewModels;
 
 <MudStack Spacing="4" Class="py-10"> 
-
     <MudExpansionPanels>
         <MudExpansionPanel Text="Osnovni podatki">
               <MudStack Spacing="2">
@@ -28,7 +27,7 @@
         </MudExpansionPanel>       
 
         <MudExpansionPanel Text="Opis">
-            <Editor Disable="ReadOnly" Value="@Organization.Attributes.Description" ValueChanged="@((str) => Organization.Attributes.Description = str)" ApiKey="u4db7t6xs7ux3sts5hpfcbyvqljogwgn9acaxkobct55yoxs" />
+            <TextEditor  @ref ="@textEditor" Placeholder="Nekaj o organizaciji" />
         </MudExpansionPanel>
         
         <MudExpansionPanel Text="Profili na družbenih omrežjih">

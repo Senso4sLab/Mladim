@@ -25,46 +25,69 @@ using MudBlazor;
 using Mladim.Domain.Dtos;
 using Mladim.Client.Services.FileService;
 using System.Runtime.CompilerServices;
+using System.Data;
+using Mladim.Domain.Models;
+using Mladim.Client.Services.PopupService;
+using Mladim.Client.Services.SubjectServices.Contracts;
 
 namespace Mladim.Client.Components.Organizations;
 
-public partial class OrganizationDetailsTab
+public partial class OrganizationTab
 {
     [Parameter]
     public OrganizationVM Organization { get; set; } = default!;
 
+    [Parameter]
+    public bool ReadOnly { get; set; } = true;
+
+    public TextEditor? textEditor = default!;    
 
     [Inject]
-
     IFileService FileService { get; set; } = default!;
 
-    [Parameter]
-    public bool ReadOnly { get; set; }
+    [Inject]
+    public IPopupService PopupService { get; set; } = default!;
 
-    //public TextEditor? textEditor;
-    //public async Task LoadHtmlFromTextEditor() =>
-    //    await textEditor!.LoadHtmlText();
+    [Inject]
+    public IOrganizationService OrganizationService { get; set; } = default!;    
 
-
-    protected override Task OnInitializedAsync()
+    protected async override Task OnAfterRenderAsync(bool firstRender)
     {
-        return base.OnInitializedAsync();
+        if (firstRender)
+        {
+            await this.textEditor!.SetHTMLTextAsync(this.Organization.Attributes.Description);
+            await this.textEditor!.EnableEditor(!ReadOnly);
+        }
+    }
+
+
+    private async Task UpdateOrganizationAsync()
+    {
+        this.Organization.Attributes.Description = await textEditor!.GetHTMLTextAsync();
+
+        var response = await this.OrganizationService.UpdateAsync(Organization!);
+
+        if (response)
+            this.PopupService.ShowSnackbarSuccess("Organizacija uspešno posodobljena");
+        else
+            this.PopupService.ShowSnackbarError("Prišlo je do napake, poskusite ponovno");
     }
 
     private async Task UploadFiles(InputFileChangeEventArgs e)
-    {     
+    {
         var resizedImage = await e.File.RequestImageFileAsync(e.File.ContentType, 200, 200);
-       
+
         var buffer = new byte[resizedImage.Size];
         await resizedImage.OpenReadStream().ReadAsync(buffer);
 
         string fileName = Path.GetFileName(resizedImage.Name);
 
-        var profileUrl =  await this.FileService.AddOrganizationProfileImageAsync(this.Organization.Id, buffer.ToList(), fileName);
+        var profileUrl = await this.FileService.AddOrganizationProfileImageAsync(this.Organization.Id, buffer.ToList(), fileName);
 
         this.Organization.Attributes.LogoUrl = profileUrl;
 
         this.StateHasChanged();
     }
+
 
 }

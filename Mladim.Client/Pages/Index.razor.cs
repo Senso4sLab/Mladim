@@ -26,6 +26,7 @@ public partial class Index
     private List<OrganizationVM> organizations = new List<OrganizationVM>();
 
     private OrganizationVM? selectedOrganization = default!;
+   
 
     protected async override Task OnInitializedAsync()
     {
