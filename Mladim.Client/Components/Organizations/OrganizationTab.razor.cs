@@ -38,7 +38,7 @@ public partial class OrganizationTab
     public OrganizationVM Organization { get; set; } = default!;
 
     [Parameter]
-    public bool ReadOnly { get; set; } = true;
+    public bool ReadOnly { get; set; }
 
     public TextEditor? textEditor = default!;    
 
@@ -49,15 +49,15 @@ public partial class OrganizationTab
     public IPopupService PopupService { get; set; } = default!;
 
     [Inject]
-    public IOrganizationService OrganizationService { get; set; } = default!;    
+    public IOrganizationService OrganizationService { get; set; } = default!;
 
+
+   
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
-        {
-            await this.textEditor!.SetHTMLTextAsync(this.Organization.Attributes.Description);
-            await this.textEditor!.EnableEditor(!ReadOnly);
-        }
+        await this.textEditor!.SetHTMLTextAsync(this.Organization.Attributes.Description);
+        await this.textEditor!.EnableEditor(!ReadOnly);
+           
     }
 
 

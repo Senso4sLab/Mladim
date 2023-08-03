@@ -14,6 +14,6 @@
 @if (organization != null)
 {
     <MudTextField @bind-Value="@organization.Attributes.Name" Label="Ime organizacije" Variant="Variant.Outlined" Margin="Margin.Dense"/>
-    <OrganizationTab @ref="orgDetailsTab" Organization="organization" />
+    <OrganizationTab @ref="orgDetailsTab" Organization="organization" ReadOnly="false" />
 }
 
