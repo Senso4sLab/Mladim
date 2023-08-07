@@ -13,7 +13,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-
+builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<IFileApiService, FileApiSerive>();
 builder.Services.AddApplicationServices(builder.Configuration);
@@ -54,7 +54,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
+app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
 

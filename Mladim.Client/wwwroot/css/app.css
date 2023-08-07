@@ -30,6 +30,12 @@ a, .btn-link {
     outline: 1px solid #26b050;
 }
 
+
+.navlink-hover .mud-nav-link:hover {
+    color: black;
+}
+
+
 .invalid {
     outline: 1px solid red;
 }

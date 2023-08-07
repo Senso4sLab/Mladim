@@ -5,6 +5,7 @@ using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.Services.PopupService;
 using Mladim.Client.Models;
 using Mladim.Client.ViewModels.Organization;
+using Mladim.Client.Components.Organizations;
 
 namespace Mladim.Client.Pages;
 
@@ -25,8 +26,7 @@ public partial class Index
 
     private List<OrganizationVM> organizations = new List<OrganizationVM>();
 
-    private OrganizationVM? selectedOrganization = default!;
-   
+    private OrganizationVM? selectedOrganization = default!;    
 
     protected async override Task OnInitializedAsync()
     {
@@ -39,6 +39,18 @@ public partial class Index
         if(selectedOrganization != null)
             await this.OrganizationService.SetDefaultOrganizationAsync(DefaultOrganization.Create(selectedOrganization));
     }
+
+
+    //protected async override Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    if (selectedOrganization != null)
+    //    {            
+    //        await organizationTab.SetHTMLTextAsync(selectedOrganization.Attributes.Description);
+    //        await organizationTab.EnableEditor();
+    //    }
+    //}
+
+
 
     private OrganizationVM? FindSelectedOrganization(DefaultOrganization? lastSelectedOrg) =>    
         lastSelectedOrg != null ? organizations.FirstOrDefault(o => o.Id == lastSelectedOrg.Id) ?? organizations.FirstOrDefault()

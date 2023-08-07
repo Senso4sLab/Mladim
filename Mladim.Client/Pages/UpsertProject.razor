@@ -18,10 +18,12 @@
     </MudStack>
 
     <MudTextField ReadOnly ="!editable" @bind-Value="project.Attributes.Name" Variant="Variant.Outlined" Label="Ime projekta">@project.Attributes.Name</MudTextField>
-    <MudDateRangePicker ReadOnly ="!editable"  Variant="Variant.Outlined" Label="Trajanje projekta" @bind-DateRange="project.DateRange"/>
+    <MudDateRangePicker ReadOnly ="!editable"  Variant="Variant.Outlined" Label="Trajanje projekta" @bind-DateRange="project.DateRange"/>       
 
+    <div>
+        <SfRichTextEditor Readonly="!editable" @bind-Value="@project.Attributes.Description" Placeholder="Nekaj o projektu" />
+    </div>
 
-    <TextEditor ReadOnly="!editable" @ref="textEditor" Placeholder="Nekaj o projektu"/>
     <MudTextField  @bind-Value="project.Attributes.WebpageUrl" Label="Spletna stran" Variant="Variant.Outlined"></MudTextField>
 
         <MudSelect ReadOnly="!editable" T="NamedEntityVM" MultiSelection="true" ToStringFunc="@((staff)=> staff.FullName)" @bind-SelectedValues="project.Staff" Variant="Variant.Outlined" Label="Vodje projekta" AnchorOrigin="Origin.BottomCenter">

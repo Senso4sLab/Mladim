@@ -2,30 +2,41 @@
 @inherits LayoutComponentBase
 
 <MudThemeProvider Theme="MyCustomTheme" />
-<MudDialogProvider/>
-<MudSnackbarProvider/>
+<MudDialogProvider />
+<MudSnackbarProvider />
 
 
-<MudLayout>           
-        <MudAppBar Elevation="1">
-            <MudText Typo="Typo.h6">Mladim</MudText>
-            <MudSpacer/>
-            <UserLoginSettings/>
-        </MudAppBar>
+<MudLayout>
+    <MudAppBar Elevation="0">      
+        <MudSpacer />
+        <UserLoginSettings />
+    </MudAppBar>
 
-    <MudDrawer  ClipMode="DrawerClipMode.Docked"  @bind-Open="@_drawerOpen"  Elevation="2" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
-        <MudNavMenu Color="Color.Primary" Rounded=true Margin="Margin.Normal">
-            <MudNavLink  Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Description">Organizacija</MudNavLink>
-            <MudNavLink  Href="/projects" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ImportContacts">Projekti</MudNavLink>
-            <MudNavLink  Href="/activities" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Event">Aktivnosti</MudNavLink>
-        </MudNavMenu>       
+
+
+    <MudDrawer @bind-Open="@_drawerOpen" Elevation="0" DisableOverlay=true Variant="DrawerVariant.Mini" OpenMiniOnHover=true MiniWidth="65px">
+        <div class="bg-white rounded-tr-xl" style="height:100%; overflow:hidden">          
+            @if (_drawerOpen)
+            {
+                <MudDrawerHeader Class="mt-5">
+                    <MudText Typo="Typo.h6">Mladim</MudText>
+                </MudDrawerHeader>
+            }
+
+            <MudNavMenu Color="Color.Primary" Rounded=true Margin="Margin.Normal" Class="pa-2">
+                <MudNavLink Class="navlink-hover" Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Description">Organizacija</MudNavLink>
+                <MudNavLink Class="navlink-hover" Href="/projects" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ImportContacts">Projekti</MudNavLink>
+                <MudNavLink Class="navlink-hover" Href="/activities" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Event">Aktivnosti</MudNavLink>
+            </MudNavMenu>         
+        </div>
     </MudDrawer>
+
     <MudMainContent>
         <MudContainer>
             @Body
-        </MudContainer>             
-    </MudMainContent>     
-       
+        </MudContainer>
+    </MudMainContent>
+
 </MudLayout>
   
 
@@ -42,6 +53,10 @@
                 Primary = new MudColor("#4da456"),//Colors.  Colors.Blue.Default,
                 Secondary = Colors.Green.Accent4,
                 AppbarBackground = new MudColor("#4da456"),
+                DrawerBackground = new MudColor("#4da456"),
+                DrawerText = new MudColor("#000000"),
+                
+                
                 
             },                  
         };

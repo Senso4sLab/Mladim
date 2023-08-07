@@ -1,45 +1,89 @@
 ﻿@using Mladim.Domain.Enums
 @using Mladim.Client.ViewModels;
 
-<MudStack Spacing="4" Class="py-10"> 
-    <MudExpansionPanels>
-        <MudExpansionPanel Text="Osnovni podatki">
-              <MudStack Spacing="2">
-                <MudFileUpload T="IBrowserFile" OnFilesChanged="UploadFiles" Hidden="false" InputClass="absolute mud-width-full mud-height-full overflow-hidden z-20" InputStyle="opacity:0">
-                    <ButtonTemplate>
-                        @if (@Organization.Attributes.LogoUrl != null)
-                        {
-                            <MudImage Src="@Organization.Attributes.LogoUrl" Alt="Logo" Elevation="25" Class="rounded-lg" Height="200" />
-                        }
-                        else
-                        {
-                            <MudPaper Height="200px" Outlined="true" />                          
-                        }                         
-                    </ButtonTemplate>
-                </MudFileUpload>               
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.Address" Label="Naslov" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.PhoneNumber" Label="Telefon" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.Email" Label="Email" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.RegistrationNumber" Label="Matična številka" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.VatNumber" Label="Davčna številka" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.WebpageUrl" Label="Spletna stran" Variant="Variant.Outlined"></MudTextField>
-            </MudStack>
+<MudStack Spacing="4" Class="py-10">   
+
+    <MudExpansionPanels Elevation="1">
+        <MudExpansionPanel Style="font-weight:bold;" Text="Osnovni podatki" Class="my-2" >
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.body2">Logo organizacije</MudText>
+                    <div style="height:200px; ">
+                        <MudImage Src="@Organization.Attributes.LogoUrl" Alt="@Organization.Attributes.LogoUrl" Elevation="0" Class="rounded-lg d-inline" Height="200" />
+                        <MudFileUpload Disabled=@ReadOnly style="translate:-20px 150px;" Class="d-inline-block" T="IBrowserFile" FilesChanged="UploadFiles">
+                            <ButtonTemplate>
+                                <MudFab  HtmlTag="label"
+                                        Size="Size.Small"
+                                        Color="Color.Primary"
+                                        Icon="@Icons.Material.Filled.Edit"
+                                        for="@context" />
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </div>                   
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudText Typo="Typo.body2">Logo za vstopno stran</MudText>
+                    <div style="height:200px; ">
+                        <MudImage Src="@Organization.Attributes.LogoUrl" Alt="@Organization.Attributes.LogoUrl" Elevation="0" Class="rounded-lg d-inline" Height="200" />
+                        <MudFileUpload Disabled=@ReadOnly style="translate:-20px 150px  " Class="d-inline-block" T="IBrowserFile" FilesChanged="UploadFiles">
+                            <ButtonTemplate>
+                                <MudFab HtmlTag="label"
+                                        Size="Size.Small"
+                                        Color="Color.Primary"
+                                        Icon="@Icons.Material.Filled.Edit"
+                                        for="@context" />
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </div>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.Address" Label="Naslov" Variant="Variant.Outlined"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.PhoneNumber" Label="Telefon" Variant="Variant.Outlined"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.Email" Label="Email" Variant="Variant.Outlined"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.RegistrationNumber" Label="Matična številka" Variant="Variant.Outlined"></MudTextField>
+                </MudItem>
+
+                 <MudItem xs="12" sm="6">
+                    <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.VatNumber" Label="Davčna številka" Variant="Variant.Outlined"></MudTextField>
+                </MudItem>
+
+                <MudItem xs="12" sm="6">
+                    <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.Attributes.WebpageUrl" Label="Spletna stran" Variant="Variant.Outlined"></MudTextField>
+                </MudItem>
+             
+
+            </MudGrid>           
         </MudExpansionPanel>       
 
-        <MudExpansionPanel Text="Opis">
-            <TextEditor  @ref ="@textEditor" Placeholder="Nekaj o organizaciji" />
+        <MudExpansionPanel Style="font-weight:bold;" Text="Opis" Class="my-2">
+            <SfRichTextEditor Readonly ="ReadOnly" @bind-Value="@Organization.Attributes.Description" Placeholder="Nekaj o organizaciji"/>                 
         </MudExpansionPanel>
         
-        <MudExpansionPanel Text="Profili na družbenih omrežjih">
-            <MudStack Spacing="2">
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.SocialMediaUrls.Twiter" Label="Twitter" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.SocialMediaUrls.Facebook" Label="Facebook" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.SocialMediaUrls.Instagram" Label="Instagram" Variant="Variant.Outlined"></MudTextField>
-                <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.SocialMediaUrls.TikTok" Label="TikTok" Variant="Variant.Outlined"></MudTextField>
-            </MudStack>
+        <MudExpansionPanel Style="font-weight:bold;" Text="Profili na družbenih omrežjih" Class="my-2">
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.SocialMediaUrls.Twiter" Label="Twitter" Variant="Variant.Outlined"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.SocialMediaUrls.Facebook" Label="Facebook" Variant="Variant.Outlined"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.SocialMediaUrls.Instagram" Label="Instagram" Variant="Variant.Outlined"></MudTextField>
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField ReadOnly="@ReadOnly" @bind-Value="Organization.SocialMediaUrls.TikTok" Label="TikTok" Variant="Variant.Outlined"></MudTextField>
+                </MudItem>
+            </MudGrid>          
         </MudExpansionPanel>
-        <MudExpansionPanel Text="Splošno o organizaciji">
-             <MudStack Spacing="2">
+
+        <MudExpansionPanel Style="font-weight:bold;" Text="Splošno o organizaciji" Class="my-2">
+             <MudStack Spacing="4">
                 <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationTypes" @bind-EnumValues="Organization.Attributes.Types" Label="Vrsta organizacije" />
                 <MultiSelect ReadOnly="@ReadOnly" TItem="OrganizationFields" @bind-EnumValues="Organization.Attributes.Fields" Label="Področje delovanja" />
                 <MultiSelect ReadOnly="@ReadOnly" TItem="AgeGroups" @bind-EnumValues="Organization.Attributes.AgeGroups" Label="Starostne skupine" />

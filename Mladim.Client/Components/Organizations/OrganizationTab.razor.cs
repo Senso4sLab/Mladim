@@ -40,42 +40,36 @@ public partial class OrganizationTab
     [Parameter]
     public bool ReadOnly { get; set; }
 
-    public TextEditor? textEditor = default!;    
+    
 
-    [Inject]
+     [Inject]
     IFileService FileService { get; set; } = default!;
-
-    [Inject]
-    public IPopupService PopupService { get; set; } = default!;
-
-    [Inject]
-    public IOrganizationService OrganizationService { get; set; } = default!;
-
-
    
-    protected async override Task OnAfterRenderAsync(bool firstRender)
+    //public async Task EnableEditor()
+    //{
+    //    if (this.textEditor != null)
+    //        await this.textEditor!.EnableEditor(!this.ReadOnly);
+    //}
+
+    //public async Task SetHTMLTextAsync(string text)
+    //{
+    //    if (this.textEditor != null)
+    //        await this.textEditor!.SetHTMLTextAsync(text);       
+    //}
+
+    //public async Task<string> GetHTMLTextAsync()
+    //{
+    //    if (this.textEditor == null)
+    //        return string.Empty;
+
+    //    return await this.textEditor!.GetHTMLTextAsync();
+    //}
+
+    
+
+    private async Task UploadFiles(IBrowserFile e)
     {
-        await this.textEditor!.SetHTMLTextAsync(this.Organization.Attributes.Description);
-        await this.textEditor!.EnableEditor(!ReadOnly);
-           
-    }
-
-
-    private async Task UpdateOrganizationAsync()
-    {
-        this.Organization.Attributes.Description = await textEditor!.GetHTMLTextAsync();
-
-        var response = await this.OrganizationService.UpdateAsync(Organization!);
-
-        if (response)
-            this.PopupService.ShowSnackbarSuccess("Organizacija uspešno posodobljena");
-        else
-            this.PopupService.ShowSnackbarError("Prišlo je do napake, poskusite ponovno");
-    }
-
-    private async Task UploadFiles(InputFileChangeEventArgs e)
-    {
-        var resizedImage = await e.File.RequestImageFileAsync(e.File.ContentType, 200, 200);
+        var resizedImage = await e.RequestImageFileAsync(e.ContentType, 200, 200);
 
         var buffer = new byte[resizedImage.Size];
         await resizedImage.OpenReadStream().ReadAsync(buffer);

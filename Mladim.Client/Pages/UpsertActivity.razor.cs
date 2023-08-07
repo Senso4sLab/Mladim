@@ -74,7 +74,7 @@ public partial class UpsertActivity
 
     private ActivityVM activity = new ActivityVM(); 
     
-    private TextEditor? textEditor;
+   
     private bool UpdateState =>
         ActivityId != null;
     private int TotalAnonymousParticipants =>
@@ -124,7 +124,7 @@ public partial class UpsertActivity
 
     public async Task SaveActivityAsync()
     {
-        await textEditor!.GetHTMLTextAsync();
+        //await textEditor!.GetHTMLTextAsync();
         
         if (UpdateState)
         {           

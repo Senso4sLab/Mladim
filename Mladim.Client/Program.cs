@@ -16,6 +16,7 @@ using System.Reflection;
 using Mladim.Client.Models;
 using Mladim.Client.Services.AccountService;
 using Mladim.Client.Services.FileService;
+using Syncfusion.Blazor;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -42,7 +43,7 @@ builder.Services.AddHttpClient("MladimHttpClient", client =>
 
 builder.Services.AddScoped(sp => sp.GetService<IHttpClientFactory>()!.CreateClient("MladimHttpClient"));
 
-
+builder.Services.AddSyncfusionBlazor();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());    
 builder.Services.AddTransient<HttpAuthorizationHandler>();
 builder.Services.AddAuthorizationCore();
@@ -65,5 +66,11 @@ builder.Services.AddScoped<IPopupService, PopupService>();
     builder.Services.Configure<MladimApiUrls>(builder.Configuration.GetSection("MladimApiUrls"));
     builder.Services.Configure<StorageKeys>(builder.Configuration.GetSection("StorageKeys"));
 }
-   
+
+
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MjYyNTA2MUAzMjMyMmUzMDJlMzBUR2hXd25DT1U1N1lkM0xpMEozSS9Ta2N6d0YrRUJYbHpvR0JPKysyUnJnPQ==");
+
+
+
 await builder.Build().RunAsync();
+

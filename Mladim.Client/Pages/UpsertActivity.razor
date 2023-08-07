@@ -31,8 +31,9 @@
         </MudGrid>     
         
     }
-
-    <TextEditor ReadOnly="!editable" @ref="textEditor" @bind-Text="@activity.Attributes.Description" />
+    <div>
+        <SfRichTextEditor Readonly="!editable" @bind-Value="@activity.Attributes.Description" Placeholder="Nekaj o aktivnosti" />
+    </div>
 
     <MultiSelect ReadOnly="!editable" TItem="ActivityTypes" @bind-EnumValues="activity.Attributes.ActivityTypes" Label="Tip aktivnosti" />
 

@@ -46,7 +46,7 @@ public partial class UpsertProject
     private List<NamedEntityVM> Partners = new List<NamedEntityVM>();
      
     public bool editable = false;
-    private TextEditor? textEditor;  
+   
     private ProjectVM project = new ProjectVM();
     private bool UpdateState => ProjectId != null;
 
@@ -95,7 +95,7 @@ public partial class UpsertProject
 
     public async Task SaveProjectAsync()
     {
-        await textEditor!.GetHTMLTextAsync();
+        //await textEditor!.GetHTMLTextAsync();
                 
         if (UpdateState)
         {

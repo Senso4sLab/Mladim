@@ -23,8 +23,8 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
     <PackageReference Include="MudBlazor" Version="6.2.5" />
+    <PackageReference Include="Syncfusion.Blazor" Version="22.2.7" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.1" />
-    <PackageReference Include="TinyMCE.Blazor" Version="1.0.4" />
   </ItemGroup>
 
   <ItemGroup>   

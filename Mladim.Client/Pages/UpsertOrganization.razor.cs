@@ -64,8 +64,6 @@ public partial class UpsertOrganization
 
     private async Task UpsertOrganizationAsync()
     {
-        this.organization!.Attributes.Description = await orgDetailsTab!.textEditor!.GetHTMLTextAsync();
-
         if (UpdateState)
             await UpdateOrganizationAsync();
         else
