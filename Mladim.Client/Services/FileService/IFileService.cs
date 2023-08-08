@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Mladim.Client.Models;
 using Mladim.Client.Services.HttpService.Generic;
+using Mladim.Client.ViewModels.Organization;
 using Mladim.Domain.Dtos.Organization;
 
 namespace Mladim.Client.Services.FileService;
@@ -10,8 +11,7 @@ public interface IFileService
 {
     Task<Stream?> GetFileStreamByProjectIdAsync(string fileName, int projectId);
     Task<Stream?> GetFileStreamByActivityIdAsync(string fileName, int activityId);
-
-    Task<string?> AddOrganizationProfileImageAsync(int organizationId, List<byte> data, string fileName);
+    Task<string?> AddOrganizationImageAsync(int organizationId, List<byte> data, string fileName, OrganizationImageType type);
 }
 
 
@@ -41,12 +41,19 @@ public class FileService : IFileService
         return await this.HttpClient.GetAsync<Stream>(url);
     }
 
-    public async Task<string?> AddOrganizationProfileImageAsync(int organizationId, List<byte> data, string fileName)
+    public async Task<string?> AddOrganizationImageAsync(int organizationId, List<byte> data, string fileName, OrganizationImageType type)
     {
-        var url = this.MladimApiUrls.AddOrganizationProfileImage;
-        var urlProfile = await this.HttpClient.PostAsync<AddOrganizationProfileImageDto>(url, AddOrganizationProfileImageDto.Create(organizationId,data,fileName));
+        var organizationUrl = OrganizationImageUrl(type);
+        var urlProfile = await this.HttpClient.PostAsync<AddOrganizationProfileImageDto>(organizationUrl, AddOrganizationProfileImageDto.Create(organizationId,data,fileName));
         return urlProfile;
     }
+
+    private string OrganizationImageUrl(OrganizationImageType type) => type switch
+    {
+        OrganizationImageType.Banner => this.MladimApiUrls.AddOrganizationBannerImage,
+        OrganizationImageType.Profile => this.MladimApiUrls.AddOrganizationProfileImage,
+        _ => throw new NotImplementedException(),
+    };
 }
 
 

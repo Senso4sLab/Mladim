@@ -5,6 +5,12 @@
 
 
 <MudDialog Style="min-width:400px;">
+    <TitleContent>
+       <MudStack Row Justify="Justify.SpaceBetween">
+           <MudText Typo="Typo.h6">@(staffMember.Id == 0 ? "Nov uporabnik" : "Uredi uporabnika")</MudText>
+           <MudSwitch @bind-Checked="staffMember.IsActive" Color="Color.Primary">@(staffMember.IsActive ? "Aktiven" : "Neaktiven")</MudSwitch>
+       </MudStack>
+    </TitleContent>
     <DialogContent>
         <MudForm @ref="@staffMemberForm" Model="@staffMember" Validation="@(staffMemberValidator.ValidateValue)" OnValidSubmit="OnValidSubmit">
             <MudStack Spacing="4">
@@ -19,14 +25,13 @@
                 </MudSelect>
 
                 <MudNumericField @bind-Value="staffMember.YearOfBirth" For="@(() => staffMember.YearOfBirth)" Label="Leto rojstva" Variant="Variant.Outlined" Min="@(DateTime.Now.Year - 100)" Max="@DateTime.Now.Year"/>
-                <MudTextField @bind-Value="staffMember.Email" For="@(() => staffMember.Email)" Variant="Variant.Outlined" Label="Email" />
-                <MudSwitch @bind-Checked="staffMember.IsActive" Color="Color.Primary">@(staffMember.IsActive ? "Aktiven" : "Neaktiven")</MudSwitch>
+                <MudTextField @bind-Value="staffMember.Email" For="@(() => staffMember.Email)" Variant="Variant.Outlined" Label="Email" />                
             </MudStack>
         </MudForm>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">Prekliči</MudButton>
-        <MudButton OnClick="OnValidSubmitAsync" Color="Color.Primary">@(staffMember.Id == 0 ? "Dodaj" : "Spremeni")</MudButton>
+        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="Cancel">Prekliči</MudButton>
+        <MudButton Variant="Variant.Filled" OnClick="OnValidSubmitAsync" Color="Color.Primary">@(staffMember.Id == 0 ? "Dodaj" : "Spremeni")</MudButton>
     </DialogActions>
 </MudDialog>
 

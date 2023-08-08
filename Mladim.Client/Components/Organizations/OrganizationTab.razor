@@ -9,8 +9,8 @@
                 <MudItem xs="12" sm="6">
                     <MudText Typo="Typo.body2">Logo organizacije</MudText>
                     <div style="height:200px; ">
-                        <MudImage Src="@Organization.Attributes.LogoUrl" Alt="@Organization.Attributes.LogoUrl" Elevation="0" Class="rounded-lg d-inline" Height="200" />
-                        <MudFileUpload Disabled=@ReadOnly style="translate:-20px 150px;" Class="d-inline-block" T="IBrowserFile" FilesChanged="UploadFiles">
+                        <MudImage Src="@(Organization.Attributes.BannerUrl ?? "Files\\Images\\OrganizationProfiles\\lm4cdbbh.so4..png")" Alt="logo" Elevation="0" Class="rounded-lg d-inline" Height="200" />
+                        <MudFileUpload Disabled=@ReadOnly style="translate:-20px 150px;" Class="d-inline-block" T="IBrowserFile" FilesChanged="UploadProfileImage">
                             <ButtonTemplate>
                                 <MudFab  HtmlTag="label"
                                         Size="Size.Small"
@@ -23,9 +23,11 @@
                 </MudItem>
                 <MudItem xs="12" sm="6">
                     <MudText Typo="Typo.body2">Logo za vstopno stran</MudText>
-                    <div style="height:200px; ">
-                        <MudImage Src="@Organization.Attributes.LogoUrl" Alt="@Organization.Attributes.LogoUrl" Elevation="0" Class="rounded-lg d-inline" Height="200" />
-                        <MudFileUpload Disabled=@ReadOnly style="translate:-20px 150px  " Class="d-inline-block" T="IBrowserFile" FilesChanged="UploadFiles">
+                    <div>
+                        
+                        <MudImage Src="@(Organization.Attributes.BannerUrl ?? "Files\\Images\\OrganizationProfiles\\lm4cdbbh.so4..png")" Alt="banner" Elevation="0" Class="rounded-lg d-inline" Height="200" />
+                        
+                        <MudFileUpload Disabled=@ReadOnly style="translate:-20px 150px;" Class="d-inline-block" T="IBrowserFile" FilesChanged="UploadBannerImage">
                             <ButtonTemplate>
                                 <MudFab HtmlTag="label"
                                         Size="Size.Small"

@@ -29,6 +29,7 @@ using System.Data;
 using Mladim.Domain.Models;
 using Mladim.Client.Services.PopupService;
 using Mladim.Client.Services.SubjectServices.Contracts;
+using Mladim.Client.ViewModels.Organization;
 
 namespace Mladim.Client.Components.Organizations;
 
@@ -38,36 +39,37 @@ public partial class OrganizationTab
     public OrganizationVM Organization { get; set; } = default!;
 
     [Parameter]
-    public bool ReadOnly { get; set; }
-
-    
+    public bool ReadOnly { get; set; }    
 
      [Inject]
     IFileService FileService { get; set; } = default!;
-   
-    //public async Task EnableEditor()
-    //{
-    //    if (this.textEditor != null)
-    //        await this.textEditor!.EnableEditor(!this.ReadOnly);
-    //}
 
-    //public async Task SetHTMLTextAsync(string text)
-    //{
-    //    if (this.textEditor != null)
-    //        await this.textEditor!.SetHTMLTextAsync(text);       
-    //}
 
-    //public async Task<string> GetHTMLTextAsync()
-    //{
-    //    if (this.textEditor == null)
-    //        return string.Empty;
+    private async Task UploadBannerImage(IBrowserFile e)
+    {
+        var image = await GenerateByteImageAsync(e);
 
-    //    return await this.textEditor!.GetHTMLTextAsync();
-    //}
+        var url = await this.FileService.AddOrganizationImageAsync(this.Organization.Id, image.data, image.name, OrganizationImageType.Banner);
+
+        this.Organization.Attributes.BannerUrl = url;
+
+        this.StateHasChanged();
+    }
+
+    private async Task UploadProfileImage(IBrowserFile e)
+    {
+        var image = await GenerateByteImageAsync(e);
+
+        var url = await this.FileService.AddOrganizationImageAsync(this.Organization.Id, image.data, image.name, OrganizationImageType.Profile);
+
+        this.Organization.Attributes.LogoUrl = url;
+
+        this.StateHasChanged();
+    }
 
     
 
-    private async Task UploadFiles(IBrowserFile e)
+    private async Task<(string name, List<byte> data)> GenerateByteImageAsync(IBrowserFile e)
     {
         var resizedImage = await e.RequestImageFileAsync(e.ContentType, 200, 200);
 
@@ -76,12 +78,10 @@ public partial class OrganizationTab
 
         string fileName = Path.GetFileName(resizedImage.Name);
 
-        var profileUrl = await this.FileService.AddOrganizationProfileImageAsync(this.Organization.Id, buffer.ToList(), fileName);
-
-        this.Organization.Attributes.LogoUrl = profileUrl;
-
-        this.StateHasChanged();
+        return (fileName, buffer.ToList());
     }
+
+   
 
 
 }

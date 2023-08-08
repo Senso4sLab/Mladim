@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Files.Commands.AddOrganizationProfileImage;
 
-public class AddOrganizationProfileImageCommandHandler : IRequestHandler<AddOrganizationProfileImageCommand, string>
+public class AddOrganizationProfileImageCommandHandler : IRequestHandler<AddOrganizationImageProfileCommand, string>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -19,7 +19,7 @@ public class AddOrganizationProfileImageCommandHandler : IRequestHandler<AddOrga
     public AddOrganizationProfileImageCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFileApiService apiService) =>
         (UnitOfWork, Mapper, FileApiService) = (unitOfWork, mapper, apiService);
   
-    public async Task<string> Handle(AddOrganizationProfileImageCommand request, CancellationToken cancellationToken)
+    public async Task<string> Handle(AddOrganizationImageProfileCommand request, CancellationToken cancellationToken)
     {
         var organization = await this.UnitOfWork.OrganizationRepository.FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
         ArgumentNullException.ThrowIfNull(organization);

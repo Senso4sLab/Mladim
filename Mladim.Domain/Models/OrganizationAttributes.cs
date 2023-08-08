@@ -11,6 +11,7 @@ public class OrganizationAttributes : BaseAttibutes
     public string? VatNumber { get; private set; }
     public string? RegistrationNumber { get; private set; }
     public string? LogoUrl { get; set; }
+    public string? BannerUrl { get; set; }
     public AgeGroups AgeGroups { get; private set; }
     public YouthSectors YouthSectors { get; private set; }
     public OrganizationTypes Types { get; private set; }

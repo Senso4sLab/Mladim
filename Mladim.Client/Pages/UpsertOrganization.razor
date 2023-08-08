@@ -8,12 +8,12 @@
      <MudText Typo="Typo.h5">Podatki o organizaciji</MudText>
      <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
          <MudIconButton Icon="@Icons.Material.Filled.Save" OnClick="UpsertOrganizationAsync" />
-         <MudIconButton Icon="@Icons.Material.Filled.Cancel" OnClick="GoBack" />
+         <MudIconButton Icon="@Icons.Material.Filled.Cancel" OnClick="GoBack" Color="Color.Secondary" />
      </MudButtonGroup>
  </MudStack>
 @if (organization != null)
 {
-    <MudTextField @bind-Value="@organization.Attributes.Name" Label="Ime organizacije" Variant="Variant.Outlined" Margin="Margin.Dense"/>
+    <MudTextField @bind-Value="@organization.Attributes.Name" Label="Ime organizacije" Variant="Variant.Outlined" Margin="Margin.Normal"/>
     <OrganizationTab @ref="orgDetailsTab" Organization="organization" ReadOnly="false" />
 }
 

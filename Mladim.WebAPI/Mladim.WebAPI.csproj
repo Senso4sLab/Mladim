@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\Files\Images\OrganizationBanners\" />
     <Folder Include="wwwroot\Files\Images\OrganizationProfiles\" />
     <Folder Include="wwwroot\Files\Images\UserProfiles\" />
   </ItemGroup>

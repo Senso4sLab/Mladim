@@ -48,4 +48,5 @@ public class MladimApiUrls
     public string GetFileByActivityId { get; set; } = string.Empty;
 
     public string AddOrganizationProfileImage { get; set; } = string.Empty;
+    public string AddOrganizationBannerImage { get; set; } = string.Empty;
 }

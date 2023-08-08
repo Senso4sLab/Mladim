@@ -24,8 +24,8 @@
             </MudForm>
         </DialogContent>
         <DialogActions>
-            <MudButton OnClick="Cancel">Prekliči</MudButton>
-            <MudButton OnClick="OnValidSubmitAsync" Color="Color.Primary">@(participant.Id == 0 ? "Dodaj" : "Spremeni")</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="Cancel">Prekliči</MudButton>
+            <MudButton Variant="Variant.Filled" OnClick="OnValidSubmitAsync" Color="Color.Primary">@(participant.Id == 0 ? "Dodaj" : "Spremeni")</MudButton>
         </DialogActions>    
 </MudDialog>
 

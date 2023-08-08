@@ -5,6 +5,7 @@ using Mladim.Application.Features.Activities.Commands.AddActivity;
 using Mladim.Application.Features.Activities.Commands.RemoveActivity;
 using Mladim.Application.Features.Activities.Commands.UpdateActivity;
 using Mladim.Application.Features.Activities.Queries.GetActivity;
+using Mladim.Application.Features.Files.Commands.AddOrganizationBannerImage;
 using Mladim.Application.Features.Files.Commands.AddOrganizationProfileImage;
 using Mladim.Application.Features.Files.Queries;
 using Mladim.Domain.Dtos;
@@ -34,11 +35,19 @@ namespace Mladim.WebAPI.Controllers
         }
 
         [HttpPost("organizationProfile")]
-        public async Task<ActionResult<string>> UploadOrganizationProfile(AddOrganizationProfileImageCommand profile)
+        public async Task<ActionResult<string>> UploadOrganizationProfile(AddOrganizationImageProfileCommand profile)
         {
             var profileUrl = await this.Mediator.Send(profile);
 
             return Ok(profileUrl);         
+        }
+
+        [HttpPost("organizationBanner")]
+        public async Task<ActionResult<string>> UploadOrganizationBanner(AddOrganizationImageBannerCommand banner)
+        {
+            var url = await this.Mediator.Send(banner);
+
+            return Ok(url);
         }
 
     }

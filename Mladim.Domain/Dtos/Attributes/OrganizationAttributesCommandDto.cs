@@ -18,6 +18,7 @@ public class OrganizationAttributesCommandDto
     public string? VatNumber { get; set; }
     public string? RegistrationNumber { get; set; }
     public string? LogoUrl { get; set; }
+    public string? BannerUrl { get; set; }
     public AgeGroups AgeGroups { get; set; }
     public YouthSectors YouthSectors { get; set; }
     public OrganizationTypes Types { get; set; }
