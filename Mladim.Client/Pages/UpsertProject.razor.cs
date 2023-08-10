@@ -9,6 +9,7 @@ using Mladim.Client.ViewModels.AttachedFile;
 using Microsoft.JSInterop;
 using System.IO;
 using Mladim.Client.Services.FileService;
+using Mladim.Client.MappingProfiles.Profiles.Projects;
 
 namespace Mladim.Client.Pages;
 
@@ -94,9 +95,7 @@ public partial class UpsertProject
   
 
     public async Task SaveProjectAsync()
-    {
-        //await textEditor!.GetHTMLTextAsync();
-                
+    {                
         if (UpdateState)
         {
             var httpResponse = await this.ProjectService.UpdateAsync(project);
@@ -116,6 +115,23 @@ public partial class UpsertProject
             else
                 this.PopupService.ShowSnackbarError();
         }
+
+        Navigation.NavigateTo("/projects");
+    }
+
+    public async Task DeleteProjectAsync(ProjectVM project)
+    {
+        var dialogResponse = await this.PopupService.ShowSimpleTextDialogAsync("Odstranitev projekta", "Ali želite odstraniti projekt?");
+
+        if (!dialogResponse)
+            return;
+
+        if (await this.ProjectService.RemoveAsync(project.Id))
+        {          
+            this.PopupService.ShowSnackbarSuccess("Projekt je bil uspešno odstranjen");
+        }
+        else
+            this.PopupService.ShowSnackbarError();
 
         Navigation.NavigateTo("/projects");
     }

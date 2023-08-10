@@ -31,6 +31,7 @@ using Mladim.Client.Services.SubjectServices.Implementations;
 using Mladim.Domain.Models;
 using Mladim.Client.Services.FileService;
 using Mladim.Client.ViewModels.AttachedFile;
+using Mladim.Client.MappingProfiles.Profiles.Activities;
 
 namespace Mladim.Client.Pages;
 
@@ -123,9 +124,7 @@ public partial class UpsertActivity
 
 
     public async Task SaveActivityAsync()
-    {
-        //await textEditor!.GetHTMLTextAsync();
-        
+    {        
         if (UpdateState)
         {           
             var httpResponse = await ActivityService.UpdateAsync(activity);
@@ -144,6 +143,26 @@ public partial class UpsertActivity
             else
                 this.PopupService.ShowSnackbarError();
         }
+
+        Navigation.NavigateTo("/activities");
+    }
+
+    public async Task DeleteActivityAsync()
+    { 
+        var dialogResponse = await this.PopupService.ShowSimpleTextDialogAsync("Odstranjevanje aktivnosti", "Ali želite odstraniti aktivnost?");
+
+        if (!dialogResponse)
+            return;
+
+        var htmlResponse = await this.ActivityService.RemoveAsync(ActivityId.Value);
+
+        if (htmlResponse)
+        {
+           
+            this.PopupService.ShowSnackbarSuccess("Aktivnost je bila uspešno odstranjena");
+        }
+        else
+            this.PopupService.ShowSnackbarError();
 
         Navigation.NavigateTo("/activities");
     }

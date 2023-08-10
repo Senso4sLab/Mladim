@@ -4,6 +4,12 @@
 
 
 <MudDialog Style="min-width:400px;">
+    <TitleContent>
+        <MudStack Row Justify="Justify.SpaceBetween">
+             <MudText Typo="Typo.h6">@(participant.Id == 0 ? "Nov udeleženec" : "Uredi udeleženca")</MudText>
+             <MudSwitch @bind-Checked="participant.IsActive" Color="Color.Primary">@(participant.IsActive ? "Aktiven" : "Neaktiven")</MudSwitch>
+        </MudStack>
+    </TitleContent>
     <DialogContent>
         <MudForm @ref="@participantForm" Model="@participant" Validation="@(participantValidator.ValidateValue)" OnValidSubmit="OnValidSubmit">
             <MudStack Spacing="4">

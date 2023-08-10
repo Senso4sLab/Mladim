@@ -6,12 +6,28 @@
 
 <PageTitle>Aktivnosti</PageTitle>
 
+<MudTextField Value="@defaultOrg?.Name" Label="Izbrana organizacija" Variant="Variant.Outlined" ReadOnly="true"></MudTextField>
 
-<MudStack Class="py-5" Spacing="5">
-    <MudTextField Value="@defaultOrg?.Name" Label="Izbrana organizacija" Variant="Variant.Outlined" ReadOnly="true" Margin="Margin.Dense"></MudTextField>
+<MudStack Row  Justify="Justify.SpaceBetween">  
     <MudText Typo="Typo.h5">Seznam aktivnosti</MudText>
+    <MudButton Color ="Color.Primary" >Dodaj Aktivnost</MudButton>
+</MudStack>
 
-    <MudDataGrid Items="activities" Filterable="true" QuickFilter="@_quickFilter" FilterMode="DataGridFilterMode.ColumnFilterRow" FilterCaseSensitivity="DataGridFilterCaseSensitivity.Default">
+ @if (activities.Count > 0)
+{
+    @* <SfGantt DataSource="@TaskCollection">
+        <GanttTaskFields Id="TaskId" Name="TaskName" StartDate="StartDate" EndDate="EndDate"></GanttTaskFields>
+
+    </SfGantt> *@
+
+    <SfGantt  DataSource="@TaskCollection" Height="450px" Width="700px">
+        <GanttTaskFields Id="TaskId" Notes="Samo" M Name="TaskName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId">
+        </GanttTaskFields>
+    </SfGantt>
+}
+
+
+    @* <MudDataGrid Items="activities" Filterable="true" QuickFilter="@_quickFilter" FilterMode="DataGridFilterMode.ColumnFilterRow" FilterCaseSensitivity="DataGridFilterCaseSensitivity.Default">
         <ToolBarContent>
             <MudText Typo="Typo.h6">Ime projekta</MudText>
             <MudSpacer />
@@ -27,16 +43,15 @@
             <PropertyColumn Property="x => x.ProjectName" Title="Ime projekta" />
             <TemplateColumn CellClass="d-flex justify-end">
                 <CellTemplate>
-                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.MoreHoriz" @onclick="@(() => ShowActivityAsync(context.Item))"></MudIconButton>
-                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" @onclick="@(() => DeleteActivityAsync(context.Item))"></MudIconButton>
+                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.MoreHoriz" @onclick="@(() => ShowActivityAsync(context.Item))"></MudIconButton>                  
                 </CellTemplate>
             </TemplateColumn>
         </Columns>
         <PagerContent>
             <MudDataGridPager T="ActivityWithProjectNameVM" />
         </PagerContent>
-    </MudDataGrid>
-</MudStack>
+    </MudDataGrid> *@
+
 
 
 

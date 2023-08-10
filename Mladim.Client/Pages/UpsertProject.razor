@@ -8,9 +8,14 @@
         <MudText Typo="Typo.h5">@(editable ? "Vnesi podatke o projektu" : "Podatki o projektu")</MudText>
 
         <MudStack Row="true" Spacing ="2" Justify="Justify.FlexEnd">           
-                <MudToggleIconButton  Toggled="@editable" ToggledChanged="OnProjectEditableChanged" Size="Size.Small"
+                <MudToggleIconButton Toggled="@editable" ToggledChanged="OnProjectEditableChanged" Size="Size.Small"
                                  Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" Title="Edit"
                                  ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary" ToggledTitle="Save" />
+            @if(!editable)
+            {
+                <MudFab Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error" @onclick="@(()=> DeleteProjectAsync(project))" />
+            }
+            
             
             <MudFab Color="Color.Secondary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Cancel" OnClick="CancelProjectAsync" />
         </MudStack>
@@ -65,16 +70,33 @@
     </MudFileUpload>
 
     @if (project.Files.Count > 0)
-    {       
+    {
+
+        <MudPaper Class="d-flex align-content-start flex-wrap flex-grow-1 gap-4" Elevation="0">
+            @foreach (var file in project.Files)
+            {
+                <MudPaper Class="pa-4 cursor-pointer" Elevation="3" @onclick="()=>SelectedFileAsync(file)">
+                    <MudStack Row Spacing="2" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                         <MudText Typo="Typo.body2">@file.FileName</MudText>
+                         <MudIconButton Color=Color.Error Disabled="!editable" Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteAttachedFileAsync(file)" aria-label="delete" />
+                     </MudStack>
+                 </MudPaper>
+            }
+        </MudPaper>
+
+
+@* 
         <MudList Clickable="true">
             @foreach (var file in project.Files)
             {
+             
+
                 <MudListItem  Icon="@Icons.Material.Filled.AttachFile" @key="@file" OnClick="() =>SelectedFileAsync(file)" >
                     @file.FileName
                     <MudIconButton Disabled="!editable" Icon="@Icons.Material.Filled.Delete" OnClick="() => DeleteAttachedFileAsync(file)" aria-label="delete" />
                 </MudListItem>
             }
-        </MudList>
+        </MudList> *@
     }
 
 

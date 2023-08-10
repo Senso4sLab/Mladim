@@ -49,21 +49,7 @@ public partial class Projects
         this.Navigation.NavigateTo($"/organization/{defaultOrg!.Id}/project/{project.Id}");
     }
 
-    public async Task DeleteProjectAsync(ProjectVM project)
-    {
-        var dialogResponse = await this.PopupService.ShowSimpleTextDialogAsync("Odstranitev projekta", "Ali želite odstraniti projekt?");
-
-        if (!dialogResponse)
-            return;          
-
-        if (await this.ProjectService.RemoveAsync(project.Id))
-        {
-            projects.Remove(project);
-            this.PopupService.ShowSnackbarSuccess("Projekt je bil uspešno odstranjen");
-        }
-        else
-            this.PopupService.ShowSnackbarError();
-    }
+    
 
 
     public void AddActivityAsync(ProjectVM project)
