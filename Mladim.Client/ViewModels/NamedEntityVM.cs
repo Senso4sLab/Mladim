@@ -15,5 +15,13 @@ public class NamedEntityVM : IEquatable<NamedEntityVM>
 
     public override int GetHashCode() =>
         HashCode.Combine(Id);
-    
+
+
+    public static NamedEntityVM Create(int id, string name) =>
+        new NamedEntityVM
+        {
+            Id = id,
+            FullName = name
+        };
+
 }

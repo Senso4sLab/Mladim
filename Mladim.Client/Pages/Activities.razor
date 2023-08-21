@@ -1,56 +1,80 @@
 ﻿@page "/activities"
-@page "/activities/{projectName}"
+@page "/activities/{projectId:int}"
+@using Mladim.Client.ViewModels.Activity;
 
 
 @attribute [Authorize]
 
 <PageTitle>Aktivnosti</PageTitle>
 
-<MudTextField Value="@defaultOrg?.Name" Label="Izbrana organizacija" Variant="Variant.Outlined" ReadOnly="true"></MudTextField>
-
-<MudStack Row  Justify="Justify.SpaceBetween">  
+ <MudStack Class="py-5" Spacing="3">
+    <MudTextField Value="@defaultOrg?.Name" Label="Izbrana organizacija" Variant="Variant.Outlined" ReadOnly="true"></MudTextField>
     <MudText Typo="Typo.h5">Seznam aktivnosti</MudText>
-    <MudButton Color ="Color.Primary" >Dodaj Aktivnost</MudButton>
+ 
+
+    @if (activities.Count > 0)
+    {
+         <MudPaper Class="pa-3" >
+            <MudGrid Spacing="2">
+                <MudItem sm="6" xl="3" xs="12">
+                    <MudDateRangePicker Label="Obdobje" DateRange="dateRange" DateRangeChanged="OnDateRangeChanged" Variant=Variant.Outlined Clearable />
+                 </MudItem>
+                 <MudItem sm="6" xl="3" xs="12">
+                     <MudSelect T="NamedEntityVM" SelectedValues="selectedProjects" SelectedValuesChanged="OnProjectNameChanged" Label="Izberi projekt" Variant="Variant.Outlined" Clearable>
+                        @foreach(var project in projects)
+                        {
+                            <MudSelectItem T="NamedEntityVM" Value="@project">@project.FullName</MudSelectItem>
+                        }
+                    </MudSelect>
+                 </MudItem>
+                 <MudItem sm="6" xl="3" xs="12">
+                     <MudSelect T="NamedEntityVM" SelectedValuesChanged="OnProjectLeaderChanged" Label="Izberi vodjo projekta" Variant="Variant.Outlined" Clearable>
+                     @foreach (var projectLead in projectLeads)
+                        {
+                            <MudSelectItem T="NamedEntityVM" Value="@projectLead">@projectLead.FullName</MudSelectItem>
+                        }
+                     </MudSelect>
+                 </MudItem>
+                 <MudItem sm="6" xl="3" xs="12">
+                     <MudSelect T="NamedEntityVM" SelectedValuesChanged="OnActivityLeaderChanged" Label="Izberi vodnjo aktivnosti" Variant="Variant.Outlined" Clearable>
+                     @foreach (var activityLead in activityLeads)
+                        {
+                            <MudSelectItem T="NamedEntityVM" Value="@activityLead">@activityLead.FullName</MudSelectItem>
+                        }
+                     </MudSelect>
+                 </MudItem>
+             </MudGrid>
+
+
+            @if (filteredActivities.Count > 0)
+            { 
+                <SfGantt class="pt-5" DataSource="@filteredActivities" RowHeight="40" TaskbarHeight="30">
+                    <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId"/>
+
+                    <GanttColumns>
+                        <GanttColumn Field="Id" HeaderText="Št."></GanttColumn>
+                        <GanttColumn Field="ActivityName" HeaderText="Ime aktivnosti"></GanttColumn>
+                        <GanttColumn Field="ProjectName" HeaderText="Ime projekta"></GanttColumn>
+                        <GanttColumn Field="StartDate" HeaderText="Začetek" ></GanttColumn>
+                        <GanttColumn Field="EndDate" HeaderText="Konec"></GanttColumn>
+                    </GanttColumns>
+
+                    <GanttTemplates TValue="ActivityForGantt">
+                        <TaskbarTemplate>
+                            <div class="e-gantt-parent-taskbar" style="background-color:#4da456; height:30px; border: 4px solid #4da456; border-radius:8px;"/>               
+                        </TaskbarTemplate>
+                    </GanttTemplates>
+                    <GanttEvents TValue="ActivityForGantt" RowSelected="SelectedActivity"></GanttEvents>    
+                </SfGantt>            
+            }
+        </MudPaper>
+    }
+
+
 </MudStack>
 
- @if (activities.Count > 0)
-{
-    @* <SfGantt DataSource="@TaskCollection">
-        <GanttTaskFields Id="TaskId" Name="TaskName" StartDate="StartDate" EndDate="EndDate"></GanttTaskFields>
 
-    </SfGantt> *@
-
-    <SfGantt  DataSource="@TaskCollection" Height="450px" Width="700px">
-        <GanttTaskFields Id="TaskId" Notes="Samo" M Name="TaskName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId">
-        </GanttTaskFields>
-    </SfGantt>
-}
-
-
-    @* <MudDataGrid Items="activities" Filterable="true" QuickFilter="@_quickFilter" FilterMode="DataGridFilterMode.ColumnFilterRow" FilterCaseSensitivity="DataGridFilterCaseSensitivity.Default">
-        <ToolBarContent>
-            <MudText Typo="Typo.h6">Ime projekta</MudText>
-            <MudSpacer />
-            <MudTextField @bind-Value="ProjectName" Placeholder="Search" Adornment="Adornment.Start" Immediate="true"
-                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
-        </ToolBarContent>
-
-
-        <Columns>
-            <PropertyColumn Property="x => x.Attributes.Name" Title="Ime aktivnosti" Filterable="false" />
-            <PropertyColumn Property="x => x.TimeRange.StartDate" Format="dd/MM/yyyy" Title="Pričetek" />
-            <PropertyColumn Property="x => x.TimeRange.EndDate" Format="dd/MM/yyyy" Title="Konec" />
-            <PropertyColumn Property="x => x.ProjectName" Title="Ime projekta" />
-            <TemplateColumn CellClass="d-flex justify-end">
-                <CellTemplate>
-                    <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.MoreHoriz" @onclick="@(() => ShowActivityAsync(context.Item))"></MudIconButton>                  
-                </CellTemplate>
-            </TemplateColumn>
-        </Columns>
-        <PagerContent>
-            <MudDataGridPager T="ActivityWithProjectNameVM" />
-        </PagerContent>
-    </MudDataGrid> *@
+   
 
 
 

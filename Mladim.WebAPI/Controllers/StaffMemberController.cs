@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
 using Mladim.Application.Features.Members.StaffMembers.Commands.UpdateStaffMember;
+using Mladim.Application.Features.Members.StaffMembers.Queries.GetLeadStaffMembers;
 using Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMember;
 using Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMembers;
 using Mladim.Domain.Dtos;
@@ -49,6 +50,13 @@ public class StaffMemberController : ControllerBase
     public async Task<ActionResult<StaffMemberDetailsQueryDto?>> GetAsync(int memId)
     {
         var response = await this.Mediator.Send(new GetStaffMemberQuery { Id = memId });
+        return Ok(response);
+    }
+
+    [HttpGet("{organizationId}/lead")]
+    public async Task<ActionResult<IEnumerable<StaffMemberLeadQueryDto>>> GetLeadAsync(int organizationId)
+    {
+        var response = await this.Mediator.Send(new GetLeadStaffMembersQuery { OrganizationId = organizationId });
         return Ok(response);
     }
 }

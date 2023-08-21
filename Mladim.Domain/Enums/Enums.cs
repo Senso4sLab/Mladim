@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -116,44 +117,64 @@ public enum OrganizationFields
 public enum ActivityTypes
 {
     [Display(Name = "Tabor")]
+    [Description("Skupina mladih več dni biva skupaj na istem mestu, vključuje več drugih aktivnosti.")]
     Tabor = 1,
     [Display(Name = "Delavnica")]
+    [Description("1 - 4 ure, skupina udeležencev, ki se sreča v živo.Učni učinki.Krepi veščine, stališča, medosebne odnose...")]
     Delavnica = 2,
     [Display(Name = "Zaporedna (kontinuirana srečanja skupine)")]
+    [Description("Kontinuirano srečevanje skupine skozi daljši čas. Primeri: srečanja mladinske skupine, animatorjev, skavtov/tabornikov, mladinski študijski krožek, karierni ali zaposlitveni klub.")]
     Srecanje = 4,
     [Display(Name = "Posvet")]
+    [Description("Dogodek na določeno temo, lahko, večdnevni, ponavadi odprte narave in z udeleženci, ki se ne srečujejo kontinuirano. Primeri poimenovanja: konferenca, posvet, okrogla miza...")]
     Posvet = 8,
     [Display(Name = "Kampanja")]
+    [Description("Serija aktivnosti, katerih cilj je spreminjanje vedenj in/ali stališč pri ciljni skupini (primeri ciljnih skupin: odločevalci, mladi, občinska uprava, učenci določene šole, člani mladinskih organizacij...)")]
     Kampanija = 16,
     [Display(Name = "Ulično delo")]
+    [Description("Kontinuirano druženje z mladimi na ulici, občasno organiziranje aktivnosti, spremljanje mladih.")]
     Ulicno = 32,
     [Display(Name = "(Mednarodna) mladinska izmenjava")]
+    [Description("Nadgradnja tabora. Dodatne dimenzije zahtevnosti: ne le skupina mladih, ki jo poznam, ampak tudi drugi.")]
     Izmenjava = 64,
     [Display(Name = "Mladinsko informiranje")]
+    [Description("Izvajanje aktivnosti informiranja za tiste, ki pridejo ter delno tudi aktivno iskanje in naslavljanje drugih ciljnih skupin.")]
     Informiranje = 128,
     [Display(Name = "Usposabljanje")]
+    [Description("Dogodek s ciljem načrtne krepitve kompetenc mladih ali mladinskih voditeljev/delavcev za njihovo aktivno participacijo. Pomembna je dolgotrajnost procesa, kontinuiteta.")]
     Usposabljanje = 256,
     [Display(Name = "Vodenje organizacije")]
+    [Description("Vodenje lokalne enote ali organizacije / prevzem polne odgovornosti za delo v smeri razvoja enote ali organizacije (odgovornost na področju kadrov, financ, programa...")]
     Vodenje = 512,
     [Display(Name = "Mladinski kulturni ali športni dogodek")]
+    [Description("Izvedba enkratnega dogodka ali daljšega kulturnega dogajanja, v katerega so v večinskem delu aktivno vključeni mladi (lahko v različnih vlogah).")]
     Sport = 1024,
     [Display(Name = "Večdnevni mladinski kulturni ali športni dogodek")]
+    [Description("Npr. festival, turnir...")]
     VecdnevniDogodek = 2048,
     [Display(Name = "Mentorstvo/tutorstvo/svetovanje")]
+    [Description("Delo s posameznikom ali s skupino skozi daljše časovno obdobje z elementi podpore pri doseganju nekega cilja (npr. izvedba mladinske pobude, vodenje dogodka, iskanje zaposlitve...) Primeri: mentor, tutor, coach, svetovalec, karierni svetovalec, mentor na področju glasbe, filma...")]
     Svetovanje = 4096,
     [Display(Name = "Mladinska pobuda")]
+    [Description("Inovativen in kompleksen projekt, pri katerem so osrednji akterji mladi in je osredotočen na spremembo v družbi, ki ima učinke, širše kot zgolj na sodelujoče.")]
     Pobuda = 8192,
     [Display(Name = "Izlet")]
+    [Description("Vsaj poldnevna načrtovana (ciljno usmerjena) aktivnost ki vključuje spremembo kraja. V naravo, v gore, na prireditev, v drugo mesto, študijski obisk...")]
     Izlet = 16384,
     [Display(Name = "Animacija skupine")]
+    [Description("Aktivnost (vsaj 2 uri), katere namen je spoznavanje, prebijanje ledu, socialno vključevanje, povezovanje skupine...")]
     Animacija = 32768,
     [Display(Name = "Organiziranje prostovoljnega dela")]
+    [Description("Organiziranje dlje časa trajajočega sodelovanja prostovoljcev in drugih deležnikov (ponavadi ne z mladinskega sektorja) s ciljem delati v dobro tretjih oseb.")]
     Prostovoljstvo = 65536,
     [Display(Name = "Zagovorništvo")]
+    [Description("Kompleksnejši proces (koordinacija več aktivnosti, npr: kampanja, shod, peticija, posvetovanje, javna razprava...)")]
     Zagovorništvo = 131072,
     [Display(Name = "Dolgotrajsno partnersko sodelovanje")]
+    [Description("Kot predstavnik organizacije trajno gojenje odnosov s partnersko organizacijo iz a) drugega sektorja ali b) drugega okolja, npr. druge države.")]
     Partnerstvo = 262144,
     [Display(Name = "Digitalno mladisnko delo")]
+    [Description("Digitalno mladinsko delo pomeni proaktivno uporabo ali naslavljanje digitalnih medijev in tehnologij v mladinskem delu. Digitalno mladinsko delo ni metoda mladinskega dela, vendar je lahko vključeno v katerokoli okolje mladinskega dela (odprto mladinsko delo, mladinsko informiranje in svetovanje, mladinski klubi...).")]
     Digitalno = 524288,
 };
 
@@ -205,3 +226,12 @@ public enum GroupType
     Project = 1,
     Activity = 2,
 };
+
+
+public enum ApplicationClaim
+{
+    Worker = 0,
+    Manager = 1,
+    Admin = 2,    
+}
+

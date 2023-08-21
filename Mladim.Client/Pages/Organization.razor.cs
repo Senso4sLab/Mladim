@@ -9,58 +9,52 @@ using Mladim.Client.Components.Organizations;
 
 namespace Mladim.Client.Pages;
 
-public partial class Index
+public partial class Organization
 {
 
     [Inject]
-    protected NavigationManager Navigation { get; set; }
+    protected NavigationManager Navigation { get; set; } = default!;
 
     [Inject]
-    protected IOrganizationService OrganizationService { get; set; }
+    protected IOrganizationService OrganizationService { get; set; } = default!;
 
     [Inject]
-    protected IAuthService AuthService { get; set; }
+    protected IAuthService AuthService { get; set; } = default!;
 
     [Inject]
-    protected IPopupService PopupService { get; set; }
+    protected IPopupService PopupService { get; set; } = default!;
 
     private List<OrganizationVM> organizations = new List<OrganizationVM>();
 
-    private OrganizationVM? selectedOrganization = default!;    
+    [CascadingParameter]
+    public OrganizationVM? SelectedOrganization { get; set; }
+
+    [CascadingParameter]
+    public EventCallback<int> OnSelectedOrganizationChanged { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
-        await LoadOrganizationsByUserIdAsync();       
+        await LoadOrganizationsByUserIdAsync();
 
-        var lastSelectedOrg = await OrganizationService.DefaultOrganizationAsync();
+        //var lastSelectedOrg = await OrganizationService.DefaultOrganizationAsync();
 
-        selectedOrganization = FindSelectedOrganization(lastSelectedOrg);  
+        //if (SelectedOrganization == null && organizations.)
+        //    OrganizationValueChanged()
 
-        if(selectedOrganization != null)
-            await this.OrganizationService.SetDefaultOrganizationAsync(DefaultOrganization.Create(selectedOrganization));
+        //if(selectedOrganization != null)
+        //    await this.OrganizationService.SetDefaultOrganizationAsync(DefaultOrganization.Create(selectedOrganization));
     }
 
+    
 
-    //protected async override Task OnAfterRenderAsync(bool firstRender)
-    //{
-    //    if (selectedOrganization != null)
-    //    {            
-    //        await organizationTab.SetHTMLTextAsync(selectedOrganization.Attributes.Description);
-    //        await organizationTab.EnableEditor();
-    //    }
-    //}
-
-
-
-    private OrganizationVM? FindSelectedOrganization(DefaultOrganization? lastSelectedOrg) =>    
-        lastSelectedOrg != null ? organizations.FirstOrDefault(o => o.Id == lastSelectedOrg.Id) ?? organizations.FirstOrDefault()
-            : organizations?.FirstOrDefault();    
+    //private OrganizationVM? FindSelectedOrganization(DefaultOrganization? lastSelectedOrg) =>    
+    //    lastSelectedOrg != null ? organizations.FirstOrDefault(o => o.Id == lastSelectedOrg.Id) ?? organizations.FirstOrDefault()
+    //        : organizations?.FirstOrDefault();    
 
 
     private async Task OrganizationValueChanged(OrganizationVM organization)
     {
-       selectedOrganization = organization;
-       await this.OrganizationService.SetDefaultOrganizationAsync(DefaultOrganization.Create(selectedOrganization));    
+        await OnSelectedOrganizationChanged.InvokeAsync(organization.Id);       
     }
 
     private async Task LoadOrganizationsByUserIdAsync()
@@ -98,12 +92,9 @@ public partial class Index
         {
             this.PopupService.ShowSnackbarSuccess("Organizacija je uspešno odstranjena");
             organizations.Remove(organization);
-            selectedOrganization = null;           
+            await OnSelectedOrganizationChanged.InvokeAsync(0);
         }
         else
             this.PopupService.ShowSnackbarError();
     }
-
-
-
 }

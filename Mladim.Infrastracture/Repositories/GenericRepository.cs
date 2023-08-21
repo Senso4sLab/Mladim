@@ -36,6 +36,9 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate) =>
         await DbSet.AnyAsync(predicate);
 
+    public async Task<int> CountAsync(Expression<Func<T, bool>> predicate) =>
+       await DbSet.CountAsync(predicate);
+
     public virtual async Task<T?> FindAsync(object id) =>
        await DbSet.FindAsync(id);
 

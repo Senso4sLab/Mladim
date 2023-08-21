@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/organization"
 @using Mladim.Client.Components.Organizations.MemberTabs
 @attribute [Authorize]
 <PageTitle>Organizacija</PageTitle>
@@ -6,7 +6,7 @@
 
 
 <MudStack Class="py-3" Row = "true" AlignItems="AlignItems.Center" Spacing="4">
-    <MudSelect Value="selectedOrganization" ValueChanged="OrganizationValueChanged" ToStringFunc="@(org => org.Attributes.Name)" T="OrganizationVM" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" AdornmentColor="Color.Primary" AdornmentIcon="@Icons.Material.Filled.ArrowDropDown">
+    <MudSelect Value="SelectedOrganization" ValueChanged="OrganizationValueChanged" ToStringFunc="@(org => org.Attributes.Name)" T="OrganizationVM" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" AdornmentColor="Color.Primary" AdornmentIcon="@Icons.Material.Filled.ArrowDropDown">
         @foreach (var organization in organizations)
         {
             <MudSelectItem T="OrganizationVM" Value=@organization>              
@@ -14,12 +14,12 @@
             </MudSelectItem>
         }
     </MudSelect>
-    @if (selectedOrganization != null)
+    @if (SelectedOrganization != null)
     {
         <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-            <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="@(org => EditOrganizationAsync(selectedOrganization))"></MudIconButton>
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="@(org => EditOrganizationAsync(SelectedOrganization))"></MudIconButton>
             <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddOrganizationAsync" />
-            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(org => RemoveOrganizationAsync(selectedOrganization))"></MudIconButton>
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(org => RemoveOrganizationAsync(SelectedOrganization))"></MudIconButton>
         </MudButtonGroup>
     }
     else
@@ -29,23 +29,23 @@
 </MudStack>
 
 
-@if (selectedOrganization != null)
+@if (SelectedOrganization != null)
 {
     <MudTabs  Class="py-3" Elevation="0" >
-        <MudTabPanel Text="Info">        
-          <OrganizationTab Organization="selectedOrganization" ReadOnly = "true"/>
+        <MudTabPanel Text="Info">
+            <OrganizationTab Organization="SelectedOrganization" ReadOnly="true" />
         </MudTabPanel>
         <MudTabPanel Text="Uporabniki">
-            <StaffMemberTab Organization="selectedOrganization" />
+            <StaffMemberTab Organization="SelectedOrganization" />
         </MudTabPanel>       
         <MudTabPanel Text="Partnerji">
-            <PartnerTab Organization="selectedOrganization"></PartnerTab>
+            <PartnerTab Organization="SelectedOrganization"></PartnerTab>
         </MudTabPanel>
         <MudTabPanel Text="Udeleženci">
-            <ParticipantTab Organization="selectedOrganization"></ParticipantTab>
+            <ParticipantTab Organization="SelectedOrganization"></ParticipantTab>
         </MudTabPanel>
         <MudTabPanel Text="Skupine">
-            <GroupTab Organization="selectedOrganization"></GroupTab>
+            <GroupTab Organization="SelectedOrganization"></GroupTab>
         </MudTabPanel>
     </MudTabs>
 }

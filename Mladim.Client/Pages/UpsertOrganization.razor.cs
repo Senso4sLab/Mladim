@@ -49,18 +49,23 @@ public partial class UpsertOrganization
 
     private bool UpdateState => OrgId != null;
 
-    private OrganizationVM? organization = new OrganizationVM();
+    private OrganizationVM? Organization;
 
     private OrganizationTab? orgDetailsTab = default!;
 
-    protected async override Task OnInitializedAsync()
+
+    [CascadingParameter]
+    public EventCallback<int> OnSelectedOrganizationChanged { get; set; }
+
+    [CascadingParameter]
+    public OrganizationVM? SelectedOrganization { get; set; }
+
+    protected override void OnInitialized()
     {
-        if (this.UpdateState && OrgId != null)        
-            organization = await this.OrganizationService.GetByIdAsync(OrgId.Value);      
-
-    }
-
-   
+        //if (this.UpdateState && OrgId != null)        
+        //    Organization = await this.OrganizationService.GetByIdAsync(OrgId.Value);      
+        this.Organization = this.UpdateState ? this.SelectedOrganization : new OrganizationVM();
+    }   
 
     private async Task UpsertOrganizationAsync()
     {
@@ -74,21 +79,24 @@ public partial class UpsertOrganization
 
     private async Task UpdateOrganizationAsync()
     {
-        var response = await this.OrganizationService.UpdateAsync(organization!);
+        var response = await this.OrganizationService.UpdateAsync(Organization!);
 
         if (response)
+        {
+            await OnSelectedOrganizationChanged.InvokeAsync(this.Organization!.Id);
             this.PopupService.ShowSnackbarSuccess("Organizacija uspešno posodobljena");
+        }
         else
             this.PopupService.ShowSnackbarError("Prišlo je do napake, poskusite ponovno");
     }
 
     private async Task AddOrganizationAsync()
     {
-        var orgResponse= await this.OrganizationService.AddAsync(organization!, UserId!);        
+        var orgResponse= await this.OrganizationService.AddAsync(Organization!, UserId!);        
 
         if (orgResponse != null)
-        {
-            await this.OrganizationService.SetDefaultOrganizationAsync(DefaultOrganization.Create(orgResponse));
+        {            
+            await OnSelectedOrganizationChanged.InvokeAsync(orgResponse.Id);
             this.PopupService.ShowSnackbarSuccess("Organizacija uspešno dodana");
         }
         else

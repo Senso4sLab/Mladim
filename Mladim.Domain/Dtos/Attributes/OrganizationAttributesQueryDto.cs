@@ -16,6 +16,7 @@ public class OrganizationAttributesQueryDto
     public string? Email { get; set; }
     public string? WebpageUrl { get; set; }
     public string? VatNumber { get; set; }
+    public DateTime CreatedStamp { get; set; }
     public string? RegistrationNumber { get; set; }
     public string? LogoUrl { get; set; }
     public AgeGroups AgeGroups { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mladim.Domain.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,4 +16,13 @@ public class NamedEntityDto
 {
     public int Id { get; set; }
     public string FullName { get; set; } = string.Empty;
+
+
+    public static NamedEntityDto Create(int id, string fullName) =>
+        new NamedEntityDto
+        {
+            Id = id,
+            FullName = fullName
+        };
+
 }

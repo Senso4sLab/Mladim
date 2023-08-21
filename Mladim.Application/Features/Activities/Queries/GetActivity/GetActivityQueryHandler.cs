@@ -23,8 +23,7 @@ public class GetActivityQueryHandler : IRequestHandler<GetActivityQuery, Activit
 
     public async Task<ActivityQueryDetailsDto> Handle(GetActivityQuery request, CancellationToken cancellationToken)
     {
-        try
-        {
+       
             var activity = await this.UnitOfWork.ActivityRepository
                 .GetActivityDetailsAsync(request.ActivityId);
 
@@ -32,11 +31,6 @@ public class GetActivityQueryHandler : IRequestHandler<GetActivityQuery, Activit
 
            
             return this.Mapper.Map<ActivityQueryDetailsDto>(activity);
-        }
-        catch(Exception ex) 
-        {
-
-            return null;
-        }
+       
     }
 }

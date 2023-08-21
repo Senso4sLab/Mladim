@@ -5,6 +5,7 @@ using Mladim.Client.ViewModels.Project;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Dtos.Attributes;
 using Mladim.Domain.Dtos.DateTimeRange;
+using Mladim.Domain.Dtos.Project;
 using MudBlazor;
 
 namespace Mladim.Client.MappingProfiles.Profiles.Projects;
@@ -34,7 +35,7 @@ public class Projects : Profile
         CreateMap<ProjectQueryDto, ProjectVM>();
 
 
-
+        CreateMap<ProjectStatisticsQueryDto, ProjectStatisticsVM>();
 
         CreateMap<ProjectAttributesVM, ProjectAttributesCommandDto>();
 

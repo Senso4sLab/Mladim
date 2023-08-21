@@ -1,4 +1,8 @@
-﻿@using MudBlazor.Utilities;
+﻿@using Mladim.Client.Models;
+@using Mladim.Client.Services.SubjectServices.Contracts;
+@using MudBlazor.Utilities;
+@using Mladim.Domain.Models;
+
 @inherits LayoutComponentBase
 
 <MudThemeProvider Theme="MyCustomTheme" />
@@ -24,7 +28,8 @@
             }
 
             <MudNavMenu Color="Color.Primary" Rounded=true Margin="Margin.Normal" Class="pa-2">
-                <MudNavLink Class="navlink-hover" Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Description">Organizacija</MudNavLink>
+                <MudNavLink Class="navlink-hover" Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">Poročila</MudNavLink>
+                <MudNavLink Class="navlink-hover" Href="/organization" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Description">Organizacija</MudNavLink>
                 <MudNavLink Class="navlink-hover" Href="/projects" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ImportContacts">Projekti</MudNavLink>
                 <MudNavLink Class="navlink-hover" Href="/activities" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Event">Aktivnosti</MudNavLink>
             </MudNavMenu>         
@@ -33,7 +38,11 @@
 
     <MudMainContent>
         <MudContainer>
-            @Body
+            <CascadingValue Value="@OnSelectedOrganizationChanged">          
+                <CascadingValue Value="@SelectedOrganization">
+                      @Body
+                </CascadingValue>
+            </CascadingValue>
         </MudContainer>
     </MudMainContent>
 
@@ -46,6 +55,14 @@
 {
     bool _drawerOpen = false;
 
+    OrganizationVM? SelectedOrganization { get; set; } = null;
+
+    EventCallback<int> OnSelectedOrganizationChanged => EventCallback.Factory.Create<int>(this, GetSelectedOrganizationAsync);
+
+    [Inject]
+    protected IOrganizationService OrganizationService { get; set; } = default!;
+
+
     MudTheme MyCustomTheme = new MudTheme()
         {
             Palette = new PaletteLight()
@@ -54,13 +71,10 @@
                 Secondary = new MudColor("#394241"),
                 AppbarBackground = new MudColor("#4da456"),
                 DrawerBackground = new MudColor("#4da456"),
-                DrawerText = new MudColor("#000000"),
-                
-                
-                
+                DrawerText = new MudColor("#000000"),                
             },                  
         };
-   
+
 
     void DrawerToggle()
     {
@@ -68,9 +82,24 @@
     }
 
 
-    protected override Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
-        return base.OnInitializedAsync();
+        var defaultOrganization = await OrganizationService.DefaultOrganizationAsync();
+
+        if (defaultOrganization != null)
+            await GetSelectedOrganizationAsync(defaultOrganization.Id);        
+    }
+
+    private async Task GetSelectedOrganizationAsync(int organizationId)
+    {
+        var selectedOrganization = organizationId > 0 ? await this.OrganizationService.GetByIdAsync(organizationId) : null;
+        if(selectedOrganization != null)
+        {
+            this.SelectedOrganization = selectedOrganization;
+            await this.OrganizationService.SetDefaultOrganizationAsync(DefaultOrganization.Create(selectedOrganization));           
+        }
+        else
+            this.SelectedOrganization = null;
     }
 }
 

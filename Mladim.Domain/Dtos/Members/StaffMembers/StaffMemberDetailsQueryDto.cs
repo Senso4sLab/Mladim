@@ -22,5 +22,6 @@ public class StaffMemberDetailsQueryDto : NamedEntityDto
     public int OrganizationId { get; set; }    
     public int? YearOfBirth { get; set; }
     public string Email { get; set; } = string.Empty;   
-    public bool IsRegistered { get; set; }   
+    public bool IsRegistered { get; set; }
+    public ApplicationClaim Claim { get; set; } = ApplicationClaim.Worker;
 }

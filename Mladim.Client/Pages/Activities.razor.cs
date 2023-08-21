@@ -1,39 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using System.Net.Http;
-using System.Net.Http.Json;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.Web.Virtualization;
-using Microsoft.AspNetCore.Components.WebAssembly.Http;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.JSInterop;
-using Mladim.Client;
-using Mladim.Client.Shared;
-using Mladim.Client.Services.Authentication;
-using Mladim.Client.Components;
 using Mladim.Client.ViewModels;
-using Mladim.Client.Layouts;
-using Mladim.Client.Extensions;
-using Mladim.Client.Components.Organizations;
-using Blazored.TextEditor;
 using MudBlazor;
 using Mladim.Client.Services.PopupService;
 using Mladim.Client.Services.SubjectServices.Contracts;
-using Mladim.Domain.Models;
 using Mladim.Client.Models;
+using Mladim.Client.ViewModels.Members.StaffMembers;
+using Syncfusion.Blazor.Grids;
+using Mladim.Client.ViewModels.Activity;
 
 namespace Mladim.Client.Pages;
 
 public partial class Activities
 {
     [Inject]
-    public IActivityService ActivityService { get; set; }
+    public IActivityService ActivityService { get; set; } 
+
+    [Inject]
+    public IStaffMemberService StaffMemberService { get; set; }
 
     [Inject]
     public IOrganizationService OrganizationService { get; set; }
@@ -42,76 +25,141 @@ public partial class Activities
     protected NavigationManager Navigation { get; set; }
 
     [Inject]
-    public IPopupService PopupService { get; set; }
-
-    
+    public IPopupService PopupService { get; set; }    
 
     [Parameter]
-    public string? ProjectName { get; set; }
-                 
-    private List<ActivityWithProjectNameVM> activities { get; set; } = new List<ActivityWithProjectNameVM>();
+    public int? ProjectId { get; set; }
 
-    private DefaultOrganization defaultOrg;
+    private List<ActivityForGantt> activities = new List<ActivityForGantt>();
 
-    private List<TaskData> TaskCollection { get; set; }
+    private List<ActivityForGantt> filteredActivities { get; set; } = new List<ActivityForGantt>();
+    private IEnumerable<StaffMemberLeadVM> leadStaff { get; set; } = new List<StaffMemberLeadVM>();
+
+    private DefaultOrganization? defaultOrg;   
+
+    private DateRange dateRange = new DateRange();
+
+    private List<NamedEntityVM> projects = new List<NamedEntityVM>();
+    private List<NamedEntityVM> selectedProjects = new List<NamedEntityVM>();
+
+
+
+    private List<NamedEntityVM> projectLeads = new List<NamedEntityVM>();
+    private NamedEntityVM? projectLead;
+
+
+    private List<NamedEntityVM> activityLeads = new List<NamedEntityVM>();
+    private NamedEntityVM? activityLead;
+
     protected async override Task OnInitializedAsync()
     {
         defaultOrg = await this.OrganizationService.DefaultOrganizationAsync();
 
         if (defaultOrg != null)
-           activities = await GetActivities(defaultOrg);
-
-
-
-        this.TaskCollection = GetTaskCollection();
+        {
+            await GetActivitiesAsync(defaultOrg);
+            await GetLeadStaffAsync(defaultOrg);
+            FindSelectedProject();
+            await ApplyActivitiesFilterAsync();
+        }        
     }
 
-    private async Task<List<ActivityWithProjectNameVM>> GetActivities(DefaultOrganization defaultOrg)
+
+   
+
+    private void FindSelectedProject()
+    {
+        if (this.ProjectId is int id && this.projects.FirstOrDefault(p => p.Id == id) is NamedEntityVM project)
+            this.selectedProjects.Add(project);
+        else
+            this.ProjectId = null;
+    }
+        
+    
+
+
+
+    private Task ApplyActivitiesFilterAsync() =>
+        Task.Run(() =>
+        {
+            IEnumerable<ActivityForGantt> gattActivities = activities;
+
+            if (ProjectId is int projectId)
+                gattActivities = gattActivities.Where(a => a.ProjectId == projectId);
+
+            if (dateRange.Start is DateTime start && dateRange.End is DateTime end)
+                gattActivities = gattActivities.Where(a => a.StartDate >= start && a.EndDate <= end);
+
+            if (projectLead is NamedEntityVM pl && this.leadStaff.FirstOrDefault(lsm => lsm.Id == pl.Id) is StaffMemberLeadVM psml)
+                gattActivities = gattActivities.Where(a => psml.ProjectIds.Any(id => id == a.ProjectId));
+
+            if (activityLead is NamedEntityVM al && this.leadStaff.FirstOrDefault(lsm => lsm.Id == al.Id) is StaffMemberLeadVM asml)
+                gattActivities = gattActivities.Where(a => asml.ActivityIds.Any(id => id == a.ActivityId));
+
+            filteredActivities = gattActivities.ToList();
+        });
+    
+
+
+    
+
+    private async Task GetActivitiesAsync(DefaultOrganization defaultOrg)
     {        
         var activityProjects = await this.ActivityService.GetByOrganizationIdAsync(defaultOrg.Id);
-        return activityProjects.ToList();
+        
+        projects = activityProjects.Select(a => a.Project).Distinct()
+            .ToList();
+
+        activities = activityProjects.Select((a, i) => ActivityForGantt.Create(i + 1, a.Id, a.Attributes.Name, a.Project, a.TimeRange))
+            .ToList();      
     }
 
-    public void ShowActivityAsync(ActivityWithProjectNameVM activity)
+    private async Task GetLeadStaffAsync(DefaultOrganization defaultOrg)
     {
-        this.Navigation.NavigateTo($"/activity/{activity.Id}");
+        leadStaff = await this.StaffMemberService.GetLeadStaffMembersAsync(defaultOrg.Id);
+
+        projectLeads = leadStaff.Where(sml => sml.ProjectIds.Any())
+            .Select(sml => NamedEntityVM.Create(sml.Id, sml.FullName))
+            .ToList();
+
+        activityLeads = leadStaff.Where(sml => sml.ActivityIds.Any())
+          .Select(sml => NamedEntityVM.Create(sml.Id, sml.FullName))
+          .ToList();       
     }
 
-    public static List<TaskData> GetTaskCollection()
+
+    public void SelectedActivity(RowSelectEventArgs<ActivityForGantt> args) =>    
+        this.Navigation.NavigateTo($"/activity/{args.Data.Id}");
+      
+
+    private async Task OnDateRangeChanged(DateRange dateRange)
     {
-        List<TaskData> Tasks = new List<TaskData>() {
-            new TaskData() { TaskId = 1, TaskName = "Project initiation", StartDate = new DateTime(2022, 04, 05), EndDate = new DateTime(2022, 04, 21), },
-            new TaskData() { TaskId = 2, TaskName = "Identify Site location", StartDate = new DateTime(2022, 04, 05), Duration = "4", Progress = 50, ParentId = 1 },
-            new TaskData() { TaskId = 3, TaskName = "Perform soil test", StartDate = new DateTime(2022, 04, 05), Duration = "4", Progress = 50, ParentId = 1 }
-        };
-        return Tasks;
+        this.dateRange = dateRange;
+        await ApplyActivitiesFilterAsync();        
     }
 
-
-
-
-    private Func<ActivityWithProjectNameVM, bool> _quickFilter => x =>
+    private async Task OnProjectNameChanged(IEnumerable <NamedEntityVM> project)
     {
-        if (string.IsNullOrWhiteSpace(ProjectName))
-            return true;
+        this.ProjectId = project.FirstOrDefault()?.Id;
+        selectedProjects = project.ToList();
+        await ApplyActivitiesFilterAsync();      
+    }
 
-        if (x.ProjectName.Contains(ProjectName, StringComparison.OrdinalIgnoreCase))
-            return true;
+    private async Task OnProjectLeaderChanged(IEnumerable<NamedEntityVM> projectLeads)
+    {
+        projectLead = projectLeads.FirstOrDefault();
+        await ApplyActivitiesFilterAsync();        
+    }
 
-        return false;
-    };
+    private async Task OnActivityLeaderChanged(IEnumerable<NamedEntityVM> activityLeads)
+    {
+        activityLead = activityLeads.FirstOrDefault();
+        await ApplyActivitiesFilterAsync();       
+    }
 
 
 }
 
 
-public class TaskData
-{
-    public int TaskId { get; set; }
-    public string TaskName { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
-    public string Duration { get; set; }
-    public int Progress { get; set; }
-    public int? ParentId { get; set; }
-}
+
+

@@ -25,7 +25,8 @@
                 </MudSelect>
 
                 <MudNumericField @bind-Value="staffMember.YearOfBirth" For="@(() => staffMember.YearOfBirth)" Label="Leto rojstva" Variant="Variant.Outlined" Min="@(DateTime.Now.Year - 100)" Max="@DateTime.Now.Year"/>
-                <MudTextField @bind-Value="staffMember.Email" For="@(() => staffMember.Email)" Variant="Variant.Outlined" Label="Email" />                
+                <MudTextField @bind-Value="staffMember.Email" For="@(() => staffMember.Email)" Variant="Variant.Outlined" Label="Email" />
+                <MudSwitch @bind-Checked="staffMember.Claim" Color="Color.Primary" >@($"Vloga uporabnika v organizaciji: {GetRoleName(staffMember.Claim)}")</MudSwitch>
             </MudStack>
         </MudForm>
     </DialogContent>
@@ -37,7 +38,7 @@
 
 
 @code
-{
+    {
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set;}
 
@@ -46,7 +47,7 @@
 
     private MudForm? staffMemberForm;
     private StaffMemberValidator staffMemberValidator = new StaffMemberValidator();
-       
+
 
     private async Task OnValidSubmitAsync()
     {
@@ -55,6 +56,14 @@
         if (staffMemberForm.IsValid)
             MudDialog.Close(DialogResult.Ok(staffMember));       
     }
+
+
+    private string GetRoleName(ApplicationClaim role) => role switch
+    {
+        ApplicationClaim.Worker => "Delavec",
+        ApplicationClaim.Manager => "Menedžer",
+        _ => string.Empty,
+    };
 
 
     void Cancel() =>

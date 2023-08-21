@@ -1,6 +1,8 @@
-﻿namespace Mladim.Domain.Dtos;
+﻿using Mladim.Domain.Dtos.Members;
+
+namespace Mladim.Domain.Dtos;
 
 public class ActivityWithProjectNameQueryDto : ActivityQueryDto
 {
-    public string ProjectName { get; set; } = string.Empty;
+    public NamedEntityDto Project { get; set; } = default!;
 }

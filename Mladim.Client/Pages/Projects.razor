@@ -6,9 +6,9 @@
 @if (defaultOrg != null)
 {
     <MudStack Class="py-5" Spacing="5">
-        <MudStack Row Justify="Justify.SpaceBetween">
+        <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
             <MudTextField Value="@defaultOrg.Name"  Label="Izbrana organizacija" Variant="Variant.Outlined" ReadOnly="true"></MudTextField>
-            <MudButton OnClick="AddNewProjectAsync" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Dodaj projekt</MudButton>
+            <MudButton OnClick="AddNewProjectAsync" Style="height:40px;"  Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Dodaj projekt</MudButton>
         </MudStack>
 
         <MudText Typo="Typo.h5">Seznam projektov</MudText>

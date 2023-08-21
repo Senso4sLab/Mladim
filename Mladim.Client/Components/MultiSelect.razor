@@ -5,21 +5,44 @@
 @typeparam TItem where TItem : struct, Enum
 
 
-<MudSelect MultiSelection="true" T="TItem" SelectedValues="EnumValues" SelectedValuesChanged="EnumValuesChanged" ToStringFunc="@(item => item.GetDisplayAttributeString())" Label="@Label" ReadOnly="@ReadOnly" AdornmentColor="Color.Primary" Variant="Variant.Outlined">
+<MudSelect MultiSelection="true" Lines=@Lines T="TItem" SelectedValues="EnumValues" SelectedValuesChanged="EnumValuesChanged" ToStringFunc="@(item => item.GetDisplayAttributeString())" Label="@Label" ReadOnly="@ReadOnly" AdornmentColor="Color.Primary" Variant="Variant.Outlined">
     @foreach (var item in Enum.GetValues<TItem>())
     {
-        <MudSelectItem Value="@item">@item.GetDisplayAttributeString()</MudSelectItem>
+        <MudSelectItem  Value="@item">
+
+            <MudStack Row Spacing="2" AlignItems="AlignItems.Center">
+           
+                @item.GetDisplayAttributeString()
+
+                @if (ToolTip)
+                {
+                    <MudTooltip Text="@(item.GetDescriptionAttributeString())">
+                        <MudIconButton Size=Size.Small Icon="@Icons.Material.Filled.QuestionMark" />
+                    </MudTooltip>
+                }
+
+              </MudStack>
+               
+        
+        </MudSelectItem>
     }
 </MudSelect>
 
 
 @code {
 
+
+    [Parameter]
+    public bool ToolTip { get; set; } = false;
+
     [Parameter]
     public string Label { get; set; }
 
     [Parameter]
     public bool ReadOnly { get; set; }
+
+    [Parameter]
+    public int Lines { get; set; } = 1;
 
     [Parameter]
     public IEnumerable<TItem> EnumValues { get; set; }

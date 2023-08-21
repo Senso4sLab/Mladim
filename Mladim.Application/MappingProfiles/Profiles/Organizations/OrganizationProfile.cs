@@ -2,6 +2,7 @@
 using Mladim.Application.Features.Organizations.Commands.AddOrganization;
 using Mladim.Application.Features.Organizations.Commands.UpdateOrganization;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.Organization;
 using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -18,5 +19,8 @@ public class OrganizationProfile : Profile
         CreateMap<AddOrganizationCommand, Organization>();             
         CreateMap<UpdateOrganizationCommand, Organization>();
         CreateMap<Organization, OrganizationQueryDto>();
+
+
+        
     }
 }

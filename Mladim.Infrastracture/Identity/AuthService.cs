@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Mladim.Application.Contracts.Identity;
 using Mladim.Application.Models;
+using Mladim.Domain.Enums;
 using Mladim.Domain.IdentityModels;
 using Mladim.Domain.Models;
-using Mladim.Domain.Roles;
+
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -27,15 +29,12 @@ public class AuthService : IAuthService
         var user = await this.UserManager.FindByEmailAsync(loginUser.Email);
 
         if (user == null)
-            return new Result<AuthResponse>("Vnešeni podatki so napačni");       
+            return Result<AuthResponse>.Error("Vnešeni podatki so napačni");            
 
-        bool passwordCorrect = await this.UserManager.CheckPasswordAsync(user, loginUser.Password);           
-
-        
-
+        bool passwordCorrect = await this.UserManager.CheckPasswordAsync(user, loginUser.Password);
 
         if (!await this.UserManager.CheckPasswordAsync(user, loginUser.Password))
-            return new Result<AuthResponse>("Vnešeni podatki so napačni");
+            return Result<AuthResponse>.Error("Vnešeni podatki so napačni");
 
         var authResponse =  new AuthResponse
         {
@@ -43,9 +42,9 @@ public class AuthService : IAuthService
             Name   = user.Name,
             Email  = user.Email!,
             Token  = await CreateTokenAsync(user),
-        };        
+        };
 
-        return new Result<AuthResponse>(authResponse,true);          
+        return Result<AuthResponse>.Success(authResponse);         
     }
 
 
@@ -58,8 +57,13 @@ public class AuthService : IAuthService
             new Claim(ClaimTypes.NameIdentifier, user.Id),
         };
 
-        foreach (var role in await UserManager.GetRolesAsync(user))
-            tokenClaims.Add(new Claim(ClaimTypes.Role, role));
+        //foreach (var role in await UserManager.GetRolesAsync(user))
+        //    tokenClaims.Add(new Claim(ClaimTypes.Role, role));
+
+       
+        tokenClaims.AddRange(await this.UserManager.GetClaimsAsync(user));
+
+
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSettings.Key));
 
@@ -67,44 +71,125 @@ public class AuthService : IAuthService
 
         var token = new JwtSecurityToken(
                 claims: tokenClaims,
-                signingCredentials: credential
-                );
+                signingCredentials: credential);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
 
-    public async Task<Result<RegistrationResponse>> RegisterAsync(RegistrationUser request)
+    public async Task<AppUser?>ExistAppUserAsync(string email)
+    {         
+        return await this.UserManager.FindByEmailAsync(email);          
+    }
+    
+    public async Task<bool> IsAdminAsync(AppUser user, int organizationId)
+    {
+        var claims = await this.UserManager.GetClaimsAsync(user);
+        return claims.Any(claim => claim.Type == nameof(ApplicationClaim.Admin) && claim.Value == organizationId.ToString());
+    }
+
+    public async Task<bool> IsEmailConfirmedAsync(AppUser user)
+    {
+       return await this.UserManager.IsEmailConfirmedAsync(user);
+    }
+
+
+    public string GenerateAppUserPassword()
+    {
+        var options = this.UserManager.Options.Password;
+
+        int length = options.RequiredLength;
+
+        bool nonAlphanumeric = options.RequireNonAlphanumeric;
+        bool digit = options.RequireDigit;
+        bool lowercase = options.RequireLowercase;
+        bool uppercase = options.RequireUppercase;
+
+        StringBuilder password = new StringBuilder();
+        Random random = new Random();
+
+        while (password.Length < length)
+        {
+            char c = (char)random.Next(32, 126);
+
+            password.Append(c);
+
+            if (char.IsDigit(c))
+                digit = false;
+            else if (char.IsLower(c))
+                lowercase = false;
+            else if (char.IsUpper(c))
+                uppercase = false;
+            else if (!char.IsLetterOrDigit(c))
+                nonAlphanumeric = false;
+        }
+
+        if (nonAlphanumeric)
+            password.Append((char)random.Next(33, 48));
+        if (digit)
+            password.Append((char)random.Next(48, 58));
+        if (lowercase)
+            password.Append((char)random.Next(97, 123));
+        if (uppercase)
+            password.Append((char)random.Next(65, 91));
+
+        return password.ToString();
+    }
+
+
+    public async Task<bool> ExistClaimAsync(AppUser user, string claimValue)
+    {
+        var claims = await this.UserManager.GetClaimsAsync(user);
+
+        return claims.Any(c => c.Value == claimValue);
+    }
+
+
+
+    private async Task<AppUser?> CreateAppUserAsync(string name, string surname, string email)
+    {
+        var registerUser = RegistrationUser.Create(name, surname, name, email, GenerateAppUserPassword());
+        var response = await RegisterAsync(registerUser);
+        return response.Value;
+    }
+
+
+
+
+
+    public async Task<IdentityResult> UpsertClaimAsync(AppUser? user, Claim newClaim)
+    {
+
+
+
+
+
+        var claims = await this.UserManager.GetClaimsAsync(user);
+        
+        var foundClaim = claims.FirstOrDefault(c => c.Value == newClaim.Value);
+
+        return foundClaim == null ? await this.UserManager.AddClaimAsync(user, newClaim) :
+            await this.UserManager.ReplaceClaimAsync(user, foundClaim, newClaim);         
+    }   
+
+
+    public async Task<Result<AppUser>> RegisterAsync(RegistrationUser request)
     {
         var user = await this.UserManager.FindByEmailAsync(request.Email);
 
         if (user != null)
-            return new Result<RegistrationResponse>("Uporabnik že obstaja");       
+            return Result<AppUser>.Error("Uporabnik že obstaja");
 
-        var appUser = new AppUser
-        {   
-            Name = request.Name,
-            Surname = request.Surname,
-            Nickname = request.Nickname,
-            UserName = request.Email,
-            Email = request.Email,
-        };
+        var appUser = AppUser.Create(request.Name, request.Surname, request.Nickname, request.Email, request.Email);       
 
         var result = await this.UserManager.CreateAsync(appUser, request.Password);
+        
 
         if (!result.Succeeded)
-            return new Result<RegistrationResponse>(string.Join(",", result.Errors.Select(e => e.Description)));      
+            return Result<AppUser>.Error(string.Join(",", result.Errors.Select(e => e.Description)));
+        
+        var registrationResponse = new RegistrationResponse { UserId = appUser.Id,};       
 
-        result = await this.UserManager.AddToRoleAsync(appUser, ApplicationRoles.Worker);
-
-        if (!result.Succeeded)
-            return new Result<RegistrationResponse>(string.Join(",", result.Errors.Select(e => e.Description)));
-
-        var registrationResponse = new RegistrationResponse
-        {
-            UserId = appUser.Id,
-        };
-
-        return new Result<RegistrationResponse>(registrationResponse, true);      
-    }
+        return Result<AppUser>.Success(appUser);       
+    } 
 }

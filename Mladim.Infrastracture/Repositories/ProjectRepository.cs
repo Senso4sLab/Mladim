@@ -21,15 +21,15 @@ public class ProjectRepository : GenericRepository<Project>,  IProjectRepository
        
     }
 
-    public async Task<Project?> FirstOrDefaultWithoutIncludeAsync(Expression<Func<Project, bool>> predicate, bool tracking = true)
-    {
-        var dbSetQ = this.DbSet.AsQueryable();
+    //public async Task<Project?> FirstOrDefaultWithoutIncludeAsync(Expression<Func<Project, bool>> predicate, bool tracking = true)
+    //{
+    //    var dbSetQ = this.DbSet.AsQueryable();
 
-        if (!tracking)
-            dbSetQ = dbSetQ.AsNoTracking();
+    //    if (!tracking)
+    //        dbSetQ = dbSetQ.AsNoTracking();
 
-        return await dbSetQ.FirstOrDefaultAsync(predicate);
-    }
+    //    return await dbSetQ.FirstOrDefaultAsync(predicate);
+    //}
 
 
     public async Task<Project?> GetProjectDetailsAsync(int projectId, bool tracking = true)

@@ -59,7 +59,7 @@ public partial class Projects
 
     public void GetAllActivitiesAsync(ProjectVM project)
     {
-        this.Navigation.NavigateTo($"/activities/{project.Attributes.Name}");
+        this.Navigation.NavigateTo($"/activities/{project.Id}");
     }
 
 

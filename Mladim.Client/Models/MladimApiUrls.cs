@@ -28,7 +28,7 @@ public class MladimApiUrls
 
 
     public string GetStafMembersByOrganizationId { get; set; } = string.Empty;
-
+    public string GetLeadStaffMembers { get; set; } = string.Empty;
 
     public string StaffMemberCommand { get; set; } = string.Empty;
 

@@ -10,7 +10,9 @@ using Mladim.Application.Features.Organizations.Commands.UpdateOrganization;
 using Mladim.Application.Features.Organizations.Commands.UserGetOrganization;
 using Mladim.Application.Features.Organizations.Queries.GetOrganization;
 using Mladim.Application.Features.Organizations.Queries.GetOrganizations;
+using Mladim.Application.Features.Organizations.Queries.GetOrganizationStatistics;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.Organization;
 
 namespace Mladim.WebAPI.Controllers;
 
@@ -69,4 +71,18 @@ public class OrganizationController : ControllerBase
        
         return Ok(response);
     }
+
+    [HttpGet("{orgId}/statistics/{year}")]
+    public async Task<ActionResult<OrganizationStatisticQueryDto>> GetStatistics(int orgId, int year)
+    {
+        var query = new GetOrganizationStatisticQuery { OrganizationId = orgId, Year = year };
+        
+        var response = await this.Mediator.Send(query);
+
+        return Ok(response);
+    }
+
+
+
+    
 }

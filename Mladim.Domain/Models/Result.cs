@@ -6,38 +6,36 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Models;
 
-public class Result
+
+
+public class Result<T>
 {
-    public string Message { get; set; }
+    public T? Value { get; set; } = default!;
+
+    public string Message { get; set; } = string.Empty;
     public bool IsSucceed { get; set; }
 
-    public Result()
-    {
-
-    }
-    public Result(bool isSucceed, string message = "Uspešno izvedeno")
-    {
-        Message = message;
-        IsSucceed = isSucceed;
-    }
-}
-
-public class Result<T> : Result
-{
-    public T? Value { get; set; }
-
-    public Result()
+    public Result() 
     {
 
     }
 
-    public Result(T? value, bool isSucceed, string message = "Uspešno izvedeno") : base(isSucceed, message)
+    private Result(string message, bool isSucceed) 
     {
-        Value = value;
+        this.Message = message;
+        this.IsSucceed = isSucceed;       
     }
-    public Result(string errorMessage) : base(false, errorMessage)
-    {
 
-    }
+    private Result(T? value, string message) 
+    {
+        this.Value = value;
+        this.IsSucceed = true;  
+    }  
+
+    public static Result<T> Error(string message) =>
+        new Result<T>(message, false);
+
+    public static Result<T> Success(T value, string message = "Uspešno izvedeno") =>
+        new Result<T>(value, message);
 
 }

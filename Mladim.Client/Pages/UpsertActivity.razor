@@ -41,7 +41,7 @@
         <SfRichTextEditor Readonly="!editable" @bind-Value="@activity.Attributes.Description" Placeholder="Nekaj o aktivnosti" />
     </div>
 
-    <MultiSelect ReadOnly="!editable" TItem="ActivityTypes" @bind-EnumValues="activity.Attributes.ActivityTypes" Label="Tip aktivnosti" />
+    <MultiSelect ReadOnly="!editable" ToolTip= "editable" TItem="ActivityTypes" @bind-EnumValues="activity.Attributes.ActivityTypes" Label="Tip aktivnosti" />
 
     <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Staff" Variant="Variant.Outlined" Label="Vodje aktivnosti" AnchorOrigin="Origin.BottomCenter">
          @foreach (var staffMember in staff)

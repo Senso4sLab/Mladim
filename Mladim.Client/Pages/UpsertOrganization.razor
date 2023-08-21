@@ -11,9 +11,9 @@
          <MudIconButton Icon="@Icons.Material.Filled.Cancel" OnClick="GoBack" Color="Color.Secondary" />
      </MudButtonGroup>
  </MudStack>
-@if (organization != null)
+@if (Organization != null)
 {
-    <MudTextField @bind-Value="@organization.Attributes.Name" Label="Ime organizacije" Variant="Variant.Outlined" Margin="Margin.Normal"/>
-    <OrganizationTab @ref="orgDetailsTab" Organization="organization" ReadOnly="false" />
+    <MudTextField @bind-Value="@Organization.Attributes.Name" Label="Ime organizacije" Variant="Variant.Outlined" Margin="Margin.Normal"/>
+    <OrganizationTab @ref="orgDetailsTab" Organization="Organization" ReadOnly="false" />
 }
 

@@ -23,4 +23,16 @@ public class StaffMemberRepository : GenericRepository<StaffMember>, IStaffMembe
         memberAbbreviated ? await DbSet.Where(predicate).Select(p => p as NamedEntity).AsNoTracking().ToListAsync() :
             await DbSet.Where(predicate).AsNoTracking().ToListAsync();
 
+
+    public async Task<IEnumerable<StaffMemberLeadQuery>> GetLeadStaffMembersAsync(int organizationId)
+    {
+        var leadStaff = await DbSet.Where(sm => sm.OrganizationId == organizationId && (sm.StaffProjects.Any(sp => sp.IsLead) 
+            || sm.StaffActivities.Any(sp => sp.IsLead)))
+            .Select(sm => StaffMemberLeadQuery.Create(sm.Id,$"{sm.Name} {sm.Surname}",  sm.StaffProjects.Where(sp => sp.IsLead).Select(sp => sp.ProjectId), sm.StaffActivities.Where(sp => sp.IsLead).Select(sa => sa.ActivityId)))
+            .ToListAsync();
+
+        return leadStaff;
+    }
+      
+
 }

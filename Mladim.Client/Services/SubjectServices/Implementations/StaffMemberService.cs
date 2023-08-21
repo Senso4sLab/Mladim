@@ -9,6 +9,7 @@ using Mladim.Domain.Dtos;
 using Mladim.Client.Models;
 using Mladim.Domain.Models;
 using Mladim.Domain.Dtos.Members;
+using Mladim.Client.ViewModels.Members.StaffMembers;
 
 namespace Mladim.Client.Services.SubjectServices.Implementations;
 
@@ -37,6 +38,13 @@ public class StaffMemberService : IStaffMemberService
         string url = string.Format(this.ApiUrls.GetStafMembersByOrganizationId, organizationId, true, isActive);
         var baseDto = await this.HttpService.GetAllAsync<NamedEntityDto>(url);
         return this.Mapper.Map<IEnumerable<NamedEntityVM>>(baseDto);
+    }
+
+    public async Task<IEnumerable<StaffMemberLeadVM>> GetLeadStaffMembersAsync(int organizationId)
+    {
+        string url = string.Format(this.ApiUrls.GetLeadStaffMembers, organizationId);
+        var baseDto = await this.HttpService.GetAllAsync<StaffMemberLeadQueryDto>(url);
+        return this.Mapper.Map<IEnumerable<StaffMemberLeadVM>>(baseDto);
     }
 
 

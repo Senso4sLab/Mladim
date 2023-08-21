@@ -4,6 +4,7 @@ using Mladim.Client.ViewModels;
 using Mladim.Client.ViewModels.Organization;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Dtos.Attributes;
+using Mladim.Domain.Dtos.Organization;
 using Mladim.Domain.Enums;
 
 namespace Mladim.Client.MappingProfiles.Profiles.Organizations;
@@ -25,6 +26,8 @@ public class Organizations : Profile
            .ForMember(db => db.Regions, dto => dto.MapFrom(field => (OrganizationRegions)(field.Regions.Sum(x => (int)x))));      
            
         CreateMap<OrganizationQueryDto, OrganizationVM>();
+        CreateMap<OrganizationStatisticQueryDto, OrganizationStatisticVM>();
+       
 
         CreateMap<OrganizationAttributesQueryDto, OrganizationAttributesVM>()
              .ForMember(dto => dto.AgeGroups, dt => dt.MapFrom(field => field.AgeGroups.ToEnums()))

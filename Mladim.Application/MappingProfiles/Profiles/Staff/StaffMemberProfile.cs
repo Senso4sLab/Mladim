@@ -22,6 +22,10 @@ public class StaffMemberProfile : Profile
         CreateMap<AddStaffMemberCommand, StaffMember>();
         CreateMap<UpdateStaffMemberCommand, StaffMember>();     
 
+
+    
+        CreateMap<StaffMemberLeadQuery, StaffMemberLeadQueryDto>();
+
         CreateMap<StaffMemberCommandDto, StaffMemberProject>()
             .ForMember(dest => dest.StaffMemberId, m => m.MapFrom(src => src.Id));
 

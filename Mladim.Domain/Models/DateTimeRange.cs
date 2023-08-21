@@ -13,7 +13,17 @@ public class DateTimeRange : IEquatable<DateTimeRange>
 
     public static DateTimeRange Create(DateTime start, DateTime end, int startHour = 0, int endHour = 0) => 
         new DateTimeRange(start, end, TimeSpan.FromHours(startHour), TimeSpan.FromHours(endHour));
-    
+
+
+    public bool IsDateTimeInRange(DateTime dateTime) => 
+        StartDate < dateTime && EndDate > dateTime;
+
+    public bool IsSameYearAs(int year) =>
+        StartDate.Year == EndDate.Year && StartDate.Year == year;
+
+   
+
+
     public override bool Equals(object? obj) =>
         obj is DateTimeRange && Equals((DateTimeRange)obj);
     public bool Equals(DateTimeRange? other) =>

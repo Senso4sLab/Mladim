@@ -38,5 +38,15 @@ public class GroupRepository : GenericRepository<Group> , IGroupRepository
         return await DbSet.OfType<TResult>().Where(predicate).AsNoTracking().ToListAsync();
     }
 
-    
+    public async Task<int> NumberOfMemberInGroupAsync<TResult>(Expression<Func<TResult, bool>> predicate) where TResult : Group
+    {
+        return await DbSet.OfType<TResult>().Where(predicate)
+            .Include(o => o.Members)
+            .SumAsync(o => o.Members.Count);
+    }
+
+
+
+
+
 }

@@ -1,18 +1,23 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Azure.Communication.Email;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 
 
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Mladim.Application.Contracts.EmailService;
 using Mladim.Application.Contracts.Identity;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Application.Models;
 using Mladim.Client.Services.StorageService;
 using Mladim.Domain.IdentityModels;
+
 using Mladim.Infrastracture.Identity;
+using Mladim.Infrastracture.MailService;
 using Mladim.Infrastracture.Persistance;
 using Mladim.Infrastracture.Repositories;
 using Mladim.Infrastracture.StorageService;
@@ -43,7 +48,16 @@ public static class DependencyInjection
 
         collection.AddScoped<IUnitOfWork, UnitOfWork>();
         collection.AddTransient<IAuthService, AuthService>();
-        collection.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+        collection.Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
+        collection.Configure<EmailSettings>(configuration.GetSection(nameof(EmailSettings)));
+
+        collection.AddAzureClients(builder =>
+        {
+            var connectionString = configuration.GetValue<EmailSettings>(nameof(EmailSettings))!.ConnectionString;
+            builder.AddEmailClient(connectionString);
+        });
+
+        collection.AddTransient<IEmailService, EmailService>();       
 
         collection.AddScoped<IFileStorageService, InAppStorageService>();
         collection.AddHttpContextAccessor();

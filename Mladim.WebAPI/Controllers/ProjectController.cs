@@ -6,12 +6,16 @@ using Mladim.Application.Features.Organizations.Commands.AddOrganization;
 using Mladim.Application.Features.Organizations.Commands.DeleteOrganization;
 using Mladim.Application.Features.Organizations.Queries.GetOrganization;
 using Mladim.Application.Features.Organizations.Queries.GetOrganizations;
+using Mladim.Application.Features.Organizations.Queries.GetOrganizationStatistics;
 using Mladim.Application.Features.Projects.Commands.AddProject;
 using Mladim.Application.Features.Projects.Commands.RemoveProject;
 using Mladim.Application.Features.Projects.Commands.UpdateProject;
 using Mladim.Application.Features.Projects.Queries.GetProjectDetails;
 using Mladim.Application.Features.Projects.Queries.GetProjects;
+using Mladim.Application.Features.Projects.Queries.GetProjectStatistics;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.Organization;
+using Mladim.Domain.Dtos.Project;
 using Mladim.Domain.Models;
 
 namespace Mladim.WebAPI.Controllers;
@@ -60,6 +64,17 @@ public class ProjectController : ControllerBase
     public async Task<ActionResult<IEnumerable<ProjectQueryDto>>> GetAllByOrganizationAsync([FromQuery] int organizationId)
     {
         var response = await this.Mediator.Send(new GetProjectsByOrganizationQuery { OrganizationId = organizationId });
+        return Ok(response);
+    }
+
+
+    [HttpGet("{projectId}/statistics")]
+    public async Task<ActionResult<ProjectStatisticsQueryDto?>> GetStatistics(int projectId)
+    {
+        var query = new GetProjectStatisticQuery { ProjectId = projectId };
+
+        var response = await this.Mediator.Send(query);
+
         return Ok(response);
     }
 }

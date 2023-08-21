@@ -895,6 +895,9 @@ namespace Mladim.Infrastracture.Migrations
                             b1.Property<string>("BannerUrl")
                                 .HasColumnType("nvarchar(max)");
 
+                            b1.Property<DateTime>("CreatedStamp")
+                                .HasColumnType("datetime2");
+
                             b1.Property<string>("Description")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
