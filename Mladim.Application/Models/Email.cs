@@ -8,3 +8,4 @@ namespace Mladim.Application.Models;
 
 public record Email(string Subject, string HtmlContent, string Receipent, string Sender);
 
+

@@ -10,4 +10,5 @@ namespace Mladim.Application.Contracts.EmailService;
 public interface IEmailService
 {
     Task<bool> SendEmailAsync(Email email);
+    Task<bool> SendPredefinedEmailAsync(string content, string receipent);
 }
