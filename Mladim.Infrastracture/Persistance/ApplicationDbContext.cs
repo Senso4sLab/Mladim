@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using Mladim.Domain.IdentityModels;
 using Mladim.Domain.Models;
 using System.Reflection;

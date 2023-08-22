@@ -13,7 +13,7 @@ public class Result<T>
     public T? Value { get; set; } = default!;
 
     public string Message { get; set; } = string.Empty;
-    public bool IsSucceed { get; set; }
+    public bool Succeeded { get; set; }
 
     public Result() 
     {
@@ -23,13 +23,13 @@ public class Result<T>
     private Result(string message, bool isSucceed) 
     {
         this.Message = message;
-        this.IsSucceed = isSucceed;       
+        this.Succeeded = isSucceed;       
     }
 
     private Result(T? value, string message) 
     {
         this.Value = value;
-        this.IsSucceed = true;  
+        this.Succeeded = true;  
     }  
 
     public static Result<T> Error(string message) =>

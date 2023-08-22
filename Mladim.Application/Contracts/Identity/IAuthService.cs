@@ -20,6 +20,7 @@ public interface IAuthService
     Task<Result<AppUser>> RegisterAsync(RegistrationUser request);
     Task<AppUser?> ExistAppUserAsync(string email);
     string GenerateAppUserPassword();
-    Task<IdentityResult> UpsertClaimAsync(AppUser? user, Claim newClaim);
+    Task UpsertClaimAsync(AppUser user, Claim newClaim);
     Task<bool> ExistClaimAsync(AppUser user, string claimValue);
+    Task CreateUserWithClaimAsync(string name, string surname, string email, Claim claim);
 }

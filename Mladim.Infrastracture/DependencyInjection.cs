@@ -1,4 +1,4 @@
-﻿using Azure.Communication.Email;
+﻿
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 
@@ -52,12 +52,11 @@ public static class DependencyInjection
         collection.Configure<EmailSettings>(configuration.GetSection(nameof(EmailSettings)));
 
         collection.AddAzureClients(builder =>
-        {
-            var connectionString = configuration.GetValue<EmailSettings>(nameof(EmailSettings))!.ConnectionString;
-            builder.AddEmailClient(connectionString);
+        {          
+            builder.AddEmailClient(configuration.GetSection(nameof(EmailSettings)));
         });
 
-        collection.AddTransient<IEmailService, EmailService>();       
+        collection.AddTransient<IEmailService, EmailService>();
 
         collection.AddScoped<IFileStorageService, InAppStorageService>();
         collection.AddHttpContextAccessor();

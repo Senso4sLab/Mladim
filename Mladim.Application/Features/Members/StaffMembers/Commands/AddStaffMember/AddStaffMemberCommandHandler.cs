@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using AutoMapper.Execution;
 using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Mladim.Application.Contracts.EmailService;
@@ -22,15 +24,17 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
     public IAuthService AuthService { get; }
-    public IEmailService EmailService { get; }
-    public EmailContents EmailContents { get; }
+    public IEmailService EmailService { get; } 
+    public PredefinedEmailContent EmailContent { get; }
+    public IWebHostEnvironment WebHostEnvironment { get; }
 
-    public AddStaffMemberCommandHandler(IUnitOfWork unitOfWork, IAuthService authService, IEmailService emailService, IOptions<EmailContents> emailContents, IMapper mapper)
+    public AddStaffMemberCommandHandler(IWebHostEnvironment webHostEnvironment, IUnitOfWork unitOfWork, IAuthService authService, IEmailService emailService, IOptions<PredefinedEmailContent> emailContent, IMapper mapper)
     {
-        UnitOfWork  = unitOfWork;
+        WebHostEnvironment = webHostEnvironment;
+        UnitOfWork = unitOfWork;
         AuthService = authService;
         EmailService = emailService;
-        EmailContents = emailContents.Value;
+        EmailContent = emailContent.Value;
         Mapper = mapper;
     }
    
@@ -42,65 +46,49 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
         ArgumentNullException.ThrowIfNull(organization);
 
         var staffMember = this.Mapper.Map<StaffMember>(request);
-        
-        staffMember = await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);
-
-        await this.UnitOfWork.SaveChangesAsync();
-
-        var appUser = await this.AuthService.ExistAppUserAsync(request.Email);
-
-        string emailContent = string.Empty;
-      
-
-        if (appUser == null)
-        {
-            appUser = await CreateAppUserAsync(request.Name, request.Surname, request.Email);
-            
-            emailContent = string.Format(this.EmailContents.ContentAddedNewUser, organization.Attributes.Name, "url");
-
-            await EmailService.SendPredefinedEmailAsync(emailContent, request.Email);
-
-
-        }       
-        else
-            emailContent = string.Format(this.EmailContents.ContentUserAddedNewOrganization, organization.Attributes.Name, nameof(request.Claim));
-        
 
         var claim = new Claim(nameof(request.Claim), request.OrganizationId.ToString());
 
-        var identityResult = await this.AuthService.UpsertClaimAsync(appUser, claim);
+        var appUser = await this.AuthService.ExistAppUserAsync(request.Email);
 
-        if (!identityResult.Succeeded)
-            throw new Exception("Claim is not added");
+        if (appUser == null)
+        {
+            // nov app user
+            await this.AuthService.CreateUserWithClaimAsync(request.Name, request.Surname, request.Email, claim);
 
-        var response =  await SendEmailAsync(emailContent, request.Email);
+            var emailContent = string.Format(this.EmailContent.ContentAddedNewUser, organization.Attributes.Name, $"{WebHostEnvironment.WebRootPath}"); //{WebHostEnvironment.WebRootPath}
 
-        if (!response)
-            throw new Exception("Email was not send successfuly");
+            await SendEmailAsync(emailContent, request.Email);
+        }
+        else
+        {
+            // app user dodat v novo organizacijo
+
+            staffMember.IsRegistered = await this.AuthService.IsEmailConfirmedAsync(appUser);
+
+            await this.AuthService.UpsertClaimAsync(appUser, claim);
+
+            var emailContent = string.Format(this.EmailContent.ContentUserAddedNewOrganization, organization.Attributes.Name, nameof(request.Claim));
+          
+            await SendEmailAsync(emailContent, request.Email);
+        }
+
+        await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);
+        await this.UnitOfWork.SaveChangesAsync();
 
         return this.Mapper.Map<StaffMemberDetailsQueryDto>(staffMember);
 
     }
 
 
-    private async Task<bool> SendEmailAsync(string content, string receipent)
+    private async Task SendEmailAsync(string content, string receipent)
     {
-        var email = new Email(EmailContents.Subject, content, receipent, EmailContents.Sender);
+        var email = new Email(EmailContent.Subject, content, receipent, EmailContent.Sender);
 
-        return await this.EmailService.SendEmailAsync(email);
+        var response = await this.EmailService.SendEmailAsync(email);
+
+        if (!response)
+            throw new Exception("Email was not send");
     }
-
-
-    private async Task<AppUser?> CreateAppUserAsync(string name, string surname, string email)
-    {
-        var registerUser = RegistrationUser.Create(name, surname, name, email, this.AuthService.GenerateAppUserPassword());
-        var response = await this.AuthService.RegisterAsync(registerUser);
-        return response.Value;
-    }
-
-
-   
-
-
 
 }

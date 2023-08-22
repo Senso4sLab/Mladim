@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Mladim.Application.Contracts;
+using Mladim.Application.Models;
 using Mladim.Domain.IdentityModels;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ public static  class DependencyInjection
         collection.AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));  
         collection.AddAutoMapper(Assembly.GetExecutingAssembly());
         collection.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        collection.Configure<PredefinedEmailContent>(configuration.GetSection(nameof(PredefinedEmailContent)));
         return collection;
     }
 }

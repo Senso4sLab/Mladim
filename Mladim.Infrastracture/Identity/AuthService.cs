@@ -146,30 +146,31 @@ public class AuthService : IAuthService
 
 
 
-    private async Task<AppUser?> CreateAppUserAsync(string name, string surname, string email)
+    public async Task CreateUserWithClaimAsync(string name, string surname, string email, Claim claim)
     {
-        var registerUser = RegistrationUser.Create(name, surname, name, email, GenerateAppUserPassword());
-        var response = await RegisterAsync(registerUser);
-        return response.Value;
+        var user = RegistrationUser.Create(name, surname, name, email, GenerateAppUserPassword());
+        var registrationResponse = await RegisterAsync(user);
+
+        if(!registrationResponse.Succeeded)
+            throw new Exception(registrationResponse.Message);
+
+        await UpsertClaimAsync(registrationResponse.Value!, claim);        
     }
 
+    
 
-
-
-
-    public async Task<IdentityResult> UpsertClaimAsync(AppUser? user, Claim newClaim)
+    public async Task UpsertClaimAsync(AppUser user, Claim newClaim)
     {
-
-
-
-
-
         var claims = await this.UserManager.GetClaimsAsync(user);
         
         var foundClaim = claims.FirstOrDefault(c => c.Value == newClaim.Value);
 
-        return foundClaim == null ? await this.UserManager.AddClaimAsync(user, newClaim) :
-            await this.UserManager.ReplaceClaimAsync(user, foundClaim, newClaim);         
+        var identityResult =  foundClaim == null ? await this.UserManager.AddClaimAsync(user, newClaim) :
+            await this.UserManager.ReplaceClaimAsync(user, foundClaim, newClaim);
+
+        if (!identityResult.Succeeded)
+            throw new Exception(string.Join(", ", identityResult.Errors.Select(e => e.Description)));       
+       
     }   
 
 
@@ -186,7 +187,7 @@ public class AuthService : IAuthService
         
 
         if (!result.Succeeded)
-            return Result<AppUser>.Error(string.Join(",", result.Errors.Select(e => e.Description)));
+            return Result<AppUser>.Error(string.Join(", ", result.Errors.Select(e => e.Description)));
         
         var registrationResponse = new RegistrationResponse { UserId = appUser.Id,};       
 

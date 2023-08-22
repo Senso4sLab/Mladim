@@ -43,7 +43,7 @@ public partial class Login
             var response = await this.AuthService.LoginAsync(loginUser);
             _isBusy = false;
 
-            if(response.IsSucceed)
+            if(response.Succeeded)
                 this.Navigation.NavigateTo("/");
             else
                 this._errorMessage = response.Message;           

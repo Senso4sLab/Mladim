@@ -2,6 +2,6 @@
 
 public record EmailSettings(string ConnectionString);
 
-public record EmailContents(string Sender, string Subject, string ContentAddedNewUser, string ContentUserAddedNewOrganization, string ContentUserAddedNewClaim);
+public record PredefinedEmailContent(string Sender, string Subject, string ContentAddedNewUser, string ContentUserAddedNewOrganization, string ContentUserAddedNewClaim);
 
 

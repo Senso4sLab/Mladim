@@ -38,7 +38,7 @@ public class AuthService : IAuthService
     {   
         var response = await this.HttpClient.PostAsync<LoginUser,Result<AuthResponse>>(this.MladimApiUrls.Login, loginUser);   
         
-        if (!response.IsSucceed)
+        if (!response.Succeeded)
             return response;
 
         await this.Storage.SetItemAsStringAsync(this.StorageKeys.AccessToken, response.Value!.Token);
