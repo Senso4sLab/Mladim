@@ -6,6 +6,7 @@ namespace Mladim.Client.Services.Authentication;
 
 public interface IAuthService
 {
+    Task<Result<AuthResponse>> ChangePasswordAsync(UserPassword userPassword);
     Task<string?> GetUserIdentityAsync();
     Task<Result<AuthResponse>> LoginAsync(LoginUser loginUser);
     Task LogoutAsync();

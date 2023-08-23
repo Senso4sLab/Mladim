@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Mladim.Application.Contracts.Identity;
 using Mladim.Application.Features.Accounts.Commands.UpdateAppUser;
@@ -39,6 +37,22 @@ public class AccountController : ControllerBase
         var response = await this.AuthService.LoginAsync(userDto);
         return Ok(response);
     }
+
+
+    [HttpGet("password")]
+    public async Task<ActionResult<Result<AuthResponse>>> ChangePasswordAsync([FromQuery] UserPassword userPassword )
+    {
+        var response = await this.AuthService.ChangePasswordAsync(userPassword);
+        return Ok(response);
+    }
+
+
+
+    
+
+
+
+
 
     [Authorize]
     [HttpPut("profile")]

@@ -26,8 +26,18 @@ public class StaffMemberController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<StaffMemberDetailsQueryDto?>> AddAsync(AddStaffMemberCommand request)
     {
-        var response = await this.Mediator.Send(request);
-        return Ok(response);
+
+        try
+        {
+
+
+            var response = await this.Mediator.Send(request);
+            return Ok(response);
+        }
+        catch(Exception ex)
+        {
+            return null;
+        }
     }
 
 

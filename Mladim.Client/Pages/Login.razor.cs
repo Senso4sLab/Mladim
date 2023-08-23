@@ -5,6 +5,7 @@ using MudBlazor;
 
 using Mladim.Domain.Models;
 using Mladim.Client.Validators;
+using Mladim.Client.Services.AccountService;
 
 namespace Mladim.Client.Pages;
 
@@ -18,9 +19,17 @@ public partial class Login
     public NavigationManager Navigation { get; set; }
 
 
+    [Inject]
+    public IAccountService AccountService { get; set; }
+
+    [Parameter]
+    public string? UserId { get; set; }
+
+
     private bool _isBusy = false;
     private string _errorMessage = string.Empty;
     private LoginUser loginUser = new LoginUser();
+    private UserPassword userPassword = new UserPassword();
 
     bool isShow;
     private InputType PasswordInput = InputType.Password;
@@ -28,8 +37,10 @@ public partial class Login
 
     private MudForm? loginForm;
 
-    LoginUserValidator loginUserValidator = new LoginUserValidator(); 
+    LoginUserValidator loginUserValidator = new LoginUserValidator();
 
+
+    private bool IsPasswordChanged => !string.IsNullOrEmpty(UserId);
     public async Task OnValidSubmit()
     {
         try
@@ -40,20 +51,45 @@ public partial class Login
                 return;
 
             _isBusy = true;
-            var response = await this.AuthService.LoginAsync(loginUser);
-            _isBusy = false;
-
-            if(response.Succeeded)
-                this.Navigation.NavigateTo("/");
-            else
-                this._errorMessage = response.Message;           
+            await LoginAsync();          
+            this.Navigation.NavigateTo("/");                
         }       
         catch (Exception ex)
         {
             _isBusy = false;
             this._errorMessage = ex.Message;
         }
+        finally
+        { 
+            _isBusy = true; 
+        }
     }
+
+
+
+    private async Task LoginAsync()
+    {
+
+        var response = IsPasswordChanged ? await this.AuthService.ChangePasswordAsync(userPassword) :
+            await this.AuthService.LoginAsync(loginUser);
+
+        if(!response.Succeeded)
+            throw new Exception(response.Message);  
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        if (IsPasswordChanged)
+        {
+            var appUser = await AccountService.GetAccountByIdAsync(UserId);
+
+            loginUser = new LoginUser { Email = appUser.Email, Password = string.Empty };
+        }
+    }
+
+
+
+   
 
     public void ButtonPasswordClick()
     {

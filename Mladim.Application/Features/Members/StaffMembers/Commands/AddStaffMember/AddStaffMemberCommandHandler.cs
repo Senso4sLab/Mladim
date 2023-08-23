@@ -2,13 +2,16 @@
 using AutoMapper.Execution;
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Mladim.Application.Contracts.EmailService;
 using Mladim.Application.Contracts.Identity;
 using Mladim.Application.Contracts.Persistence;
+using Mladim.Application.Extensions;
 using Mladim.Application.Models;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Enums;
 using Mladim.Domain.IdentityModels;
 using Mladim.Domain.Models;
 using System;
@@ -26,16 +29,24 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
     public IAuthService AuthService { get; }
     public IEmailService EmailService { get; } 
     public PredefinedEmailContent EmailContent { get; }
-    public IWebHostEnvironment WebHostEnvironment { get; }
+    public IHttpContextAccessor HttpContextAccessor { get; }  
 
-    public AddStaffMemberCommandHandler(IWebHostEnvironment webHostEnvironment, IUnitOfWork unitOfWork, IAuthService authService, IEmailService emailService, IOptions<PredefinedEmailContent> emailContent, IMapper mapper)
+
+    public AddStaffMemberCommandHandler(IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork, IAuthService authService, IEmailService emailService, IOptions<PredefinedEmailContent> emailContent, IMapper mapper)
     {
-        WebHostEnvironment = webHostEnvironment;
-        UnitOfWork = unitOfWork;
-        AuthService = authService;
-        EmailService = emailService;
-        EmailContent = emailContent.Value;
-        Mapper = mapper;
+        try
+        {
+            HttpContextAccessor = httpContextAccessor;
+            UnitOfWork = unitOfWork;
+            AuthService = authService;
+            EmailService = emailService;
+            EmailContent = emailContent.Value;
+            Mapper = mapper;
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
    
     public async Task<StaffMemberDetailsQueryDto> Handle(AddStaffMemberCommand request, CancellationToken cancellationToken)
@@ -47,16 +58,19 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
 
         var staffMember = this.Mapper.Map<StaffMember>(request);
 
-        var claim = new Claim(nameof(request.Claim), request.OrganizationId.ToString());
+       
+        var claim = new Claim(Enum.GetName(request.Claim)!, request.OrganizationId.ToString());
 
         var appUser = await this.AuthService.ExistAppUserAsync(request.Email);
 
         if (appUser == null)
         {
             // nov app user
-            await this.AuthService.CreateUserWithClaimAsync(request.Name, request.Surname, request.Email, claim);
+            var userId = await this.AuthService.CreateUserWithClaimAsync(request.Name, request.Surname, request.Email, claim);
 
-            var emailContent = string.Format(this.EmailContent.ContentAddedNewUser, organization.Attributes.Name, $"{WebHostEnvironment.WebRootPath}"); //{WebHostEnvironment.WebRootPath}
+            var registrationUrl = $"{HttpContextAccessor?.HttpContext?.AppBaseUrl()}/login/{userId}";
+
+            var emailContent = string.Format(this.EmailContent.ContentAddedNewUser, organization.Attributes.Name, registrationUrl); 
 
             await SendEmailAsync(emailContent, request.Email);
         }
@@ -66,11 +80,13 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
 
             staffMember.IsRegistered = await this.AuthService.IsEmailConfirmedAsync(appUser);
 
-            await this.AuthService.UpsertClaimAsync(appUser, claim);
-
-            var emailContent = string.Format(this.EmailContent.ContentUserAddedNewOrganization, organization.Attributes.Name, nameof(request.Claim));
-          
-            await SendEmailAsync(emailContent, request.Email);
+            var isClamChanged =  await this.AuthService.UpsertClaimAsync(appUser, claim);
+            
+            if (isClamChanged)
+            {
+                var emailContent = string.Format(this.EmailContent.ContentUserAddedNewOrganization, organization.Attributes.Name, Enum.GetName(request.Claim));
+                await SendEmailAsync(emailContent, request.Email);
+            }           
         }
 
         await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);

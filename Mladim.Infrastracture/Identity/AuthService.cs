@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -26,12 +27,10 @@ public class AuthService : IAuthService
    
     public async Task<Result<AuthResponse>> LoginAsync(LoginUser loginUser)
     {
-        var user = await this.UserManager.FindByEmailAsync(loginUser.Email);
+        var user = await this.UserManager.FindByEmailAsync(loginUser.Email);        
 
         if (user == null)
-            return Result<AuthResponse>.Error("Vnešeni podatki so napačni");            
-
-        bool passwordCorrect = await this.UserManager.CheckPasswordAsync(user, loginUser.Password);
+            return Result<AuthResponse>.Error("Vnešeni podatki so napačni");      
 
         if (!await this.UserManager.CheckPasswordAsync(user, loginUser.Password))
             return Result<AuthResponse>.Error("Vnešeni podatki so napačni");
@@ -46,6 +45,33 @@ public class AuthService : IAuthService
 
         return Result<AuthResponse>.Success(authResponse);         
     }
+
+    public async Task<Result<AuthResponse>> ChangePasswordAsync(UserPassword up)
+    {
+        var user = await this.UserManager.FindByIdAsync(up.UserId);
+
+        if (user == null)
+            return Result<AuthResponse>.Error("Vnešeni podatki so napačni");
+
+        var token = await UserManager.GeneratePasswordResetTokenAsync(user);
+
+        var result = await UserManager.ResetPasswordAsync(user, token, up.Password);
+
+        if (!result.Succeeded)
+            return Result<AuthResponse>.Error(string.Join(", ",result.Errors.Select(e => e.Description)));
+
+        var authResponse = new AuthResponse
+        {
+            Id = user.Id,
+            Name = user.Name,
+            Email = user.Email!,
+            Token = await CreateTokenAsync(user),
+        };
+
+        return Result<AuthResponse>.Success(authResponse);
+    }
+
+
 
 
     private async Task<string> CreateTokenAsync(AppUser user)
@@ -146,51 +172,65 @@ public class AuthService : IAuthService
 
 
 
-    public async Task CreateUserWithClaimAsync(string name, string surname, string email, Claim claim)
+    public async Task<string> CreateUserWithClaimAsync(string name, string surname, string email, Claim claim)
     {
         var user = RegistrationUser.Create(name, surname, name, email, GenerateAppUserPassword());
-        var registrationResponse = await RegisterAsync(user);
+        var registrationResponse = await UserRegistrationAsync(user);
 
         if(!registrationResponse.Succeeded)
             throw new Exception(registrationResponse.Message);
 
-        await UpsertClaimAsync(registrationResponse.Value!, claim);        
+        await UpsertClaimAsync(registrationResponse.Value!, claim);
+
+        return registrationResponse.Value!.Id;
     }
 
     
 
-    public async Task UpsertClaimAsync(AppUser user, Claim newClaim)
+    public async Task<bool> UpsertClaimAsync(AppUser user, Claim newClaim)
     {
         var claims = await this.UserManager.GetClaimsAsync(user);
         
         var foundClaim = claims.FirstOrDefault(c => c.Value == newClaim.Value);
 
+        if (foundClaim?.ToString() == newClaim.ToString())
+            return false;
+
         var identityResult =  foundClaim == null ? await this.UserManager.AddClaimAsync(user, newClaim) :
             await this.UserManager.ReplaceClaimAsync(user, foundClaim, newClaim);
 
         if (!identityResult.Succeeded)
-            throw new Exception(string.Join(", ", identityResult.Errors.Select(e => e.Description)));       
-       
+            throw new Exception(string.Join(", ", identityResult.Errors.Select(e => e.Description)));
+
+        return true;       
     }   
 
 
-    public async Task<Result<AppUser>> RegisterAsync(RegistrationUser request)
+
+    private async Task<Result<AppUser>> UserRegistrationAsync(RegistrationUser request)
+    { 
+        var appUser = AppUser.Create(request.Name, request.Surname, request.Nickname, request.Email, request.Email);
+        var result = await this.UserManager.CreateAsync(appUser, request.Password);
+        
+        if (!result.Succeeded)
+            return Result<AppUser>.Error(string.Join(", ", result.Errors.Select(e => e.Description)));
+
+        return Result<AppUser>.Success(appUser);
+    }
+    public async Task<Result<RegistrationResponse>> RegisterAsync(RegistrationUser request)
     {
         var user = await this.UserManager.FindByEmailAsync(request.Email);
 
         if (user != null)
-            return Result<AppUser>.Error("Uporabnik že obstaja");
+            return Result<RegistrationResponse>.Error("Uporabnik že obstaja");
 
-        var appUser = AppUser.Create(request.Name, request.Surname, request.Nickname, request.Email, request.Email);       
+        var appUser = await UserRegistrationAsync(request);
 
-        var result = await this.UserManager.CreateAsync(appUser, request.Password);
-        
+        if (appUser.Succeeded)
+            return Result<RegistrationResponse>.Success(new RegistrationResponse { UserId = appUser.Value!.Id });
+        else
+            return Result<RegistrationResponse>.Error(appUser.Message);            
+    }
 
-        if (!result.Succeeded)
-            return Result<AppUser>.Error(string.Join(", ", result.Errors.Select(e => e.Description)));
-        
-        var registrationResponse = new RegistrationResponse { UserId = appUser.Id,};       
-
-        return Result<AppUser>.Success(appUser);       
-    } 
+  
 }

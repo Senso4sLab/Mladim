@@ -40,6 +40,9 @@ public class MladimApiUrls
 
 
     public string Login { get; set; } = string.Empty;
+
+    public string Password { get; set; } = string.Empty;
+
     public string AccountCommand { get; set; } = string.Empty;
     public string GetAccountById { get; set; } = string.Empty;
 

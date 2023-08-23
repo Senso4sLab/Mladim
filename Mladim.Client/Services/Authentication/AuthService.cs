@@ -46,6 +46,20 @@ public class AuthService : IAuthService
         return response;        
     }
 
+    public async Task<Result<AuthResponse>> ChangePasswordAsync(UserPassword up)
+    {
+        string url = string.Format(this.MladimApiUrls.Password, up.UserId, up.Password);
+        var response =  await this.HttpClient.GetAsync<Result<AuthResponse>>(url);
+
+        if (!response.Succeeded)
+            return response;
+
+        await this.Storage.SetItemAsStringAsync(this.StorageKeys.AccessToken, response.Value!.Token);
+        await this.AuthStateProvider.GetAuthenticationStateAsync();
+        return response;
+    }
+
+
     public async Task<string?> GetUserIdentityAsync()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();

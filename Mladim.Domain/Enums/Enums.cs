@@ -230,8 +230,11 @@ public enum GroupType
 
 public enum ApplicationClaim
 {
+    [Display(Name = "Delavec")]
     Worker = 0,
+    [Display(Name = "Menedžer")]
     Manager = 1,
+    [Display(Name = "Administrator")]
     Admin = 2,    
 }
 
