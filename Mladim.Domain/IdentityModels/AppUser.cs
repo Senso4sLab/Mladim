@@ -11,8 +11,6 @@ public class AppUser : IdentityUser
     public string Nickname { get; set; } = string.Empty;
     public List<Organization> Organizations { get; set; } = new();
 
-
-
     private AppUser()
     {
         

@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Components\Activity\**" />
+    <Compile Remove="Components\Project\**" />
+    <Content Remove="Components\Activity\**" />
+    <Content Remove="Components\Project\**" />
+    <EmbeddedResource Remove="Components\Activity\**" />
+    <EmbeddedResource Remove="Components\Project\**" />
+    <None Remove="Components\Activity\**" />
+    <None Remove="Components\Project\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.3.0" />
@@ -33,16 +44,6 @@
 
   <ItemGroup>
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
-  </ItemGroup>
-
-
-	
-	
-	
-
-  <ItemGroup>
-    <Folder Include="Components\Activity\" />
-    <Folder Include="Components\Project\" />
   </ItemGroup>
 
 	

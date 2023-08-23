@@ -51,7 +51,7 @@ public class AuthService : IAuthService
         var user = await this.UserManager.FindByIdAsync(up.UserId);
 
         if (user == null)
-            return Result<AuthResponse>.Error("Vnešeni podatki so napačni");
+            return Result<AuthResponse>.Error("Uporabnik ne obstaja");
 
         var token = await UserManager.GeneratePasswordResetTokenAsync(user);
 
@@ -166,7 +166,6 @@ public class AuthService : IAuthService
     public async Task<bool> ExistClaimAsync(AppUser user, string claimValue)
     {
         var claims = await this.UserManager.GetClaimsAsync(user);
-
         return claims.Any(c => c.Value == claimValue);
     }
 
@@ -175,7 +174,7 @@ public class AuthService : IAuthService
     public async Task<string> CreateUserWithClaimAsync(string name, string surname, string email, Claim claim)
     {
         var user = RegistrationUser.Create(name, surname, name, email, GenerateAppUserPassword());
-        var registrationResponse = await UserRegistrationAsync(user);
+        var registrationResponse = await CreateUserAsync(user);
 
         if(!registrationResponse.Succeeded)
             throw new Exception(registrationResponse.Message);
@@ -207,7 +206,7 @@ public class AuthService : IAuthService
 
 
 
-    private async Task<Result<AppUser>> UserRegistrationAsync(RegistrationUser request)
+    private async Task<Result<AppUser>> CreateUserAsync(RegistrationUser request)
     { 
         var appUser = AppUser.Create(request.Name, request.Surname, request.Nickname, request.Email, request.Email);
         var result = await this.UserManager.CreateAsync(appUser, request.Password);
@@ -224,7 +223,7 @@ public class AuthService : IAuthService
         if (user != null)
             return Result<RegistrationResponse>.Error("Uporabnik že obstaja");
 
-        var appUser = await UserRegistrationAsync(request);
+        var appUser = await CreateUserAsync(request);
 
         if (appUser.Succeeded)
             return Result<RegistrationResponse>.Success(new RegistrationResponse { UserId = appUser.Value!.Id });

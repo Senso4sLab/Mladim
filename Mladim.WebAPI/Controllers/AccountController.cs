@@ -48,12 +48,6 @@ public class AccountController : ControllerBase
 
 
 
-    
-
-
-
-
-
     [Authorize]
     [HttpPut("profile")]
     public async Task<ActionResult<int>> UserProfileAsync(UpdateAppUserCommand appUserCommand)

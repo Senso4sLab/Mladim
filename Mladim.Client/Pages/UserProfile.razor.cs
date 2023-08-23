@@ -56,6 +56,26 @@ public partial class UserProfile
     private MudForm appUserForm;
 
     private AppUserValidator appUserValidator = new AppUserValidator();
+
+
+    
+
+
+    bool isShow;
+    private InputType PasswordInput = InputType.Password;
+    private string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+
+    private InputType NewPasswordInput = InputType.Password;
+    private string NewPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+
+
+    private InputType ConfirmedPasswordInput = InputType.Password;
+    private string ConfirmedPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+
+
     protected override async Task OnInitializedAsync()
     {
         if (authenticationState is null)
@@ -92,6 +112,59 @@ public partial class UserProfile
         {
             this.PopupService.ShowSnackbarError();
             await OnInitializedAsync();
+        }
+    }
+
+
+
+
+
+    public void ButtonPasswordClick()
+    {
+        if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+    public void ButtonNewPasswordClick()
+    {
+        if (isShow)
+        {
+            isShow = false;
+            NewPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            NewPasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            NewPasswordInputIcon = Icons.Material.Filled.Visibility;
+            NewPasswordInput = InputType.Text;
+        }
+    }
+
+
+    public void ButtonConfirmedPasswordClick()
+    {
+        if (isShow)
+        {
+            isShow = false;
+            ConfirmedPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            ConfirmedPasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            ConfirmedPasswordInputIcon = Icons.Material.Filled.Visibility;
+            ConfirmedPasswordInput = InputType.Text;
         }
     }
 

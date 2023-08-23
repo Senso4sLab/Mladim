@@ -17,5 +17,6 @@ public class UpdateStaffMemberCommand : IRequest<int>
     public int? YearOfBirth { get; set; }
     public bool IsActive { get; set; } = true;
     public bool IsRegistered { get; set; }
-    public string Email { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;  
+    public ApplicationClaim Claim { get; set; } 
 }

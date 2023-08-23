@@ -30,3 +30,4 @@ public class LoginUserValidator : AbstractValidator<LoginUser>
         return result.Errors.Select(e => e.ErrorMessage);
     };
 }
+

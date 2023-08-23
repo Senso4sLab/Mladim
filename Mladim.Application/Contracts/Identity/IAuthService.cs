@@ -14,8 +14,7 @@ namespace Mladim.Application.Contracts.Identity;
 
 public interface IAuthService
 {
-    Task<bool> IsAdminAsync(AppUser user, int organizationId);
-    Task<bool> IsEmailConfirmedAsync(AppUser user);
+    Task<bool> IsAdminAsync(AppUser user, int organizationId);   
     Task<Result<AuthResponse>> LoginAsync(LoginUser request);
     Task<Result<AuthResponse>> ChangePasswordAsync(UserPassword request);
     Task<Result<RegistrationResponse>> RegisterAsync(RegistrationUser request);
