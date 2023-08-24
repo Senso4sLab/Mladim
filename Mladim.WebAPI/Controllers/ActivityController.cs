@@ -51,7 +51,7 @@ public class ActivityController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ActivityQueryDto>>> GetAllByQueryAsync([FromQuery] GetActivitiesByQuery query)
+    public async Task<ActionResult<IEnumerable<ActivityQueryDto>>> GetAllByQueryAsync([FromQuery] GetActivitiesQuery query)
     {
         var response = await this.Mediator.Send(query);
         return Ok(response);

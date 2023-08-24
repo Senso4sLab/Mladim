@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Validators;
 
-public class GetActivitiesByProjectQueryValidator : AbstractValidator<GetActivitiesByQuery>
+public class GetActivitiesByProjectQueryValidator : AbstractValidator<GetActivitiesQuery>
 {
     private IUnitOfWork UnitOfWork { get; }
     public GetActivitiesByProjectQueryValidator(IUnitOfWork unitOfWork)

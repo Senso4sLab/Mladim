@@ -33,8 +33,7 @@ using Syncfusion.Blazor.Schedule.Internal;
 namespace Mladim.Client.Pages;
 
 public partial class Dashboard
-{
-   
+{   
 
     [Inject]
     public IOrganizationService OrganizationService { get; set; } = default!;

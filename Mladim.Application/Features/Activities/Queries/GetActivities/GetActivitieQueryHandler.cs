@@ -12,18 +12,18 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Activities.Queries.GetActivities;
 
-public class GetActivitiesByProjectQueryHandler : IRequestHandler<GetActivitiesByQuery, IEnumerable<ActivityQueryDto>>
+public class GetActivitieQueryHandler : IRequestHandler<GetActivitiesQuery, IEnumerable<ActivityQueryDto>>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
    
-    public GetActivitiesByProjectQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+    public GetActivitieQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {
         UnitOfWork = unitOfWork;
         Mapper = mapper;
     } 
 
-    public async Task<IEnumerable<ActivityQueryDto>> Handle(GetActivitiesByQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ActivityQueryDto>> Handle(GetActivitiesQuery request, CancellationToken cancellationToken)
     {
         if (request.ProjectId is int projectId)
         {
