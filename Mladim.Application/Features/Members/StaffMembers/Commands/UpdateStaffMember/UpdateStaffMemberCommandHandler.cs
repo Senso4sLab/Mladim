@@ -35,26 +35,37 @@ public class UpdateStaffMemberCommandHandler : IRequestHandler<UpdateStaffMember
 
     public async Task<int> Handle(UpdateStaffMemberCommand request, CancellationToken cancellationToken)
     {
-       var staffMember = await this.UnitOfWork.StaffMemberRepository
-            .FirstOrDefaultAsync(sm => sm.Id == request.Id); 
+        var staffMember = await this.UnitOfWork.StaffMemberRepository
+            .FirstOrDefaultAsync(sm => sm.Id == request.Id);                    
 
-       ArgumentNullException.ThrowIfNull(staffMember);
-       
-       staffMember = this.Mapper.Map(request, staffMember);
-       this.UnitOfWork.StaffMemberRepository.Update(staffMember);
+        ArgumentNullException.ThrowIfNull(staffMember);
 
-       var claim = new Claim(Enum.GetName(request.Claim)!, staffMember.OrganizationId.ToString());
+        if (request.Email != staffMember.Email)
+            throw new ArgumentException("Mail uporabnika se ne ujema");
 
-       // var appUser = this.AuthService.ExistAppUserAsync
+        var appUser = await this.AuthService.ExistAppUserAsync(request.Email);
+        
+        if(appUser == null)
+            throw new ArgumentException("Uporabnik z vnešenim email naslovom ne obstaja");
 
-       //if (await this.AuthService.UpsertClaimAsync(appUser, claim))
-       //{
-       //     var emailContent = string.Format(this.EmailContent.ContentUserAddedNewClaim, organization.Attributes.Name, Enum.GetName(request.Claim));
-       //     await SendEmailAsync(emailContent, request.Email);
-       // }
-     
-       
-       return await this.UnitOfWork.SaveChangesAsync();
+        if (!await this.UnitOfWork.AppUserRepository.IsUserInOrganizationAsync(appUser.Id,staffMember.OrganizationId))
+            throw new ArgumentException("Uporabnik nima dodeljene zahtevane organizacije");
+
+
+        staffMember = this.Mapper.Map(request, staffMember);
+        this.UnitOfWork.StaffMemberRepository.Update(staffMember);
+
+        var claimName = Enum.GetName(request.Claim)!;
+        var claim = new Claim(claimName, staffMember.OrganizationId.ToString());
+
+        if (await this.AuthService.UpsertClaimAsync(appUser, claim))
+        {
+            var organization = await this.UnitOfWork.OrganizationRepository.FirstOrDefaultAsync(o => o.Id == staffMember.OrganizationId, false);
+            var emailContent = string.Format(this.EmailContent.ContentUserAddedNewClaim, organization!.Attributes.Name, claimName);
+            await SendEmailAsync(emailContent, request.Email);
+        }
+
+        return await this.UnitOfWork.SaveChangesAsync();
     }
 
     private async Task SendEmailAsync(string content, string receipent)

@@ -16,11 +16,11 @@ public interface IAuthService
 {
     Task<bool> IsAdminAsync(AppUser user, int organizationId);   
     Task<Result<AuthResponse>> LoginAsync(LoginUser request);
-    Task<Result<AuthResponse>> ChangePasswordAsync(UserPassword request);
-    Task<Result<RegistrationResponse>> RegisterAsync(RegistrationUser request);
+    Task<Result<AuthResponse>> ChangePasswordAsync(string userId, string password);
+    Task<Result<RegistrationResponse>> RegisterAsync(UserRegistration request);
     Task<AppUser?> ExistAppUserAsync(string email);
     string GenerateAppUserPassword();
     Task<bool> UpsertClaimAsync(AppUser user, Claim newClaim);
     Task<bool> ExistClaimAsync(AppUser user, string claimValue);
-    Task<string> CreateUserWithClaimAsync(string name, string surname, string email, Claim claim);
+    Task<AppUser> CreateUserWithClaimAsync(string name, string surname, string email, Claim claim);
 }

@@ -29,6 +29,9 @@ using Syncfusion.Blazor.Gantt;
 using Mladim.Client.Models;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Syncfusion.Blazor.Schedule.Internal;
+using Mladim.Client.ViewModels.Organization;
+using Mladim.Client.ViewModels.Activity;
+using Syncfusion.Blazor.Grids;
 
 namespace Mladim.Client.Pages;
 
@@ -36,42 +39,72 @@ public partial class Dashboard
 {   
 
     [Inject]
-    public IOrganizationService OrganizationService { get; set; } = default!;
+    public IProjectService ProjectService { get; set; } = default!;
+
+    //[Inject]
+    //public IActivityService ActivityService { get; set; } = default!;
+
+    //[Inject]
+    //public NavigationManager Navigation { get; set; } = default!;
 
     [CascadingParameter]
     public OrganizationVM? SelectedOrganization { get; set; }
 
-    private int selectedYear = DateTime.UtcNow.Year;
-  
-    private IEnumerable<int> availableYears = new List<int>();
+    //private int selectedYear = DateTime.UtcNow.Year;
 
-   
+    //private IEnumerable<int> availableYears = new List<int>();
 
-    protected override void OnParametersSet()
+    //private OrganizationStatisticVM? organizationStatistics;   
+
+    //private List<ActivityForGantt> activities = new List<ActivityForGantt>();
+
+    private IEnumerable<ProjectVM> projects = new List<ProjectVM>();
+
+
+    protected override async Task OnParametersSetAsync()
     {
-       if(SelectedOrganization != null && !availableYears.Any())
-            availableYears = this.AvailableYearsForSelectedOrganization();
+        if (SelectedOrganization is OrganizationVM organization)
+        {
+            projects = await ProjectsByOrganizationAsync(organization.Id);
+        }
+    }
+
+    public async Task<IEnumerable<ProjectVM>> ProjectsByOrganizationAsync(int organizationId)
+    {
+        return await this.ProjectService.GetByOrganizationIdAsync(organizationId);    
     }
 
 
+    //public async Task<OrganizationStatisticVM?> OrganizationStatisticsAsync(int year)
+    //{
+    //    return await this.OrganizationService.GetStatisticsByYearAsync(SelectedOrganization!.Id, year);
+    //}
+
+    //public async Task<List<ActivityForGantt>> UpcommingActivitiesAsync(int numOfUpcommingActivities)
+    //{
+    //   var upcommingActivities = await this.ActivityService.GetByOrganizationIdAsync(SelectedOrganization!.Id, numOfUpcommingActivities);
+
+    //   return upcommingActivities.Select((a, i) => ActivityForGantt.Create(i + 1, a.Id, a.Attributes.Name, a.Project, a.TimeRange))
+    //    .ToList();
+    //}
+
+    //private IEnumerable<int> AvailableYears()
+    //{
+    //    int createdYear = SelectedOrganization!.Attributes.CreatedStamp.Year;
+    //    return Enumerable.Range(createdYear, DateTime.UtcNow.Year - createdYear + 1).ToList();
+    //}
+
+    //public void SelectedActivity(RowSelectEventArgs<ActivityForGantt> args) =>
+    //   this.Navigation.NavigateTo($"/activity/{args.Data.Id}");
 
 
-    
+    //private async Task OnYearChangedAsync(int selectedYear)
+    //{
+    //    if(this.selectedYear != selectedYear)
+    //    {
+    //        this.selectedYear = selectedYear;
+    //        this.organizationStatistics = await OrganizationStatisticsAsync(selectedYear);
+    //    }       
 
-    
-
-
-
-    private IEnumerable<int> AvailableYearsForSelectedOrganization()
-    {
-        int createdYear = SelectedOrganization!.Attributes.CreatedStamp.Year;
-        return Enumerable.Range(createdYear, DateTime.UtcNow.Year - createdYear + 1).ToList();
-    }
-
-
-    private Task OnYearChangedAsync(int selectedYear)
-    {
-        this.selectedYear = selectedYear;
-        return Task.CompletedTask;
-    }
+    //}
 }

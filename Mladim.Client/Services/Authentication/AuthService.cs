@@ -46,9 +46,11 @@ public class AuthService : IAuthService
         return response;        
     }
 
-    public async Task<Result<AuthResponse>> ChangePasswordAsync(UserPassword up)
+
+
+    public async Task<Result<AuthResponse>> ChangePasswordAsync(string userId, string password)
     {
-        string url = string.Format(this.MladimApiUrls.Password, up.UserId, up.Password);
+        string url = string.Format(this.MladimApiUrls.Password, userId, password);
         var response =  await this.HttpClient.GetAsync<Result<AuthResponse>>(url);
 
         if (!response.Succeeded)

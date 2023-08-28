@@ -8,14 +8,20 @@ public class UserPasswordValidator : AbstractValidator<UserPassword>
 {
     public UserPasswordValidator()
     {
-        RuleFor(x => x.Password)
+        RuleFor(x => x.OldPassword)
            .NotEmpty()
            .NotNull()
            .WithMessage("Vnosno polje je obvezno");
 
-        RuleFor(x => x.Password)
-            .NotEqual(x => x.ConfirmPassword)
-            .WithMessage("Gesli se ne ujemata");
+        RuleFor(x => x.NewPassword)
+           .NotEmpty()
+           .NotNull()
+           .WithMessage("Vnosno polje je obvezno");
+
+
+        RuleFor(x => x.ConfirmPassword)
+           .Equal(x => x.NewPassword)
+           .WithMessage("Gesli se ne ujemata");
     }
 
 

@@ -1,66 +1,83 @@
 ﻿@page "/userprofile"
 @attribute [Authorize]
 
-<MudStack Spacing="4" Class="py-4">
-    
-    <MudStack Row Justify="Justify.SpaceBetween">
-        <MudText Typo="Typo.h5">Moji podatki</MudText>
+<MudStack Spacing="4" Class="py-4">    
 
-        <MudStack Row>      
-            <MudToggleIconButton ToggledChanged="UpdateAccountIfEditable" Toggled="editableAccount" Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" 
-                ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary" />
-
-            <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="@Color.Secondary" OnClick="CancelButton"/>
-
-         </MudStack>     
-    </MudStack>
    
-     <MudForm Model="appUser" @ref="@appUserForm" Validation="@(appUserValidator.ValidateValue)">
-         <MudGrid Spacing="4">
+        <MudStack Row Justify="Justify.SpaceBetween">
+            <MudText Typo="Typo.h5">Moji podatki</MudText>
+
+            <MudStack Row>      
+                <MudToggleIconButton ToggledChanged="UpdateAccountAsync" Toggled="editableAccount" Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" 
+                    ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary" />
+
+                @if(editableAccount)
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="@Color.Secondary" OnClick="CancelButton"/>
+                }
+             </MudStack>     
+        </MudStack>
+   
+        <MudForm Model="appUser" @ref="@appUserForm" Validation="@(appUserValidator.ValidateValue)">
+             <MudGrid Spacing="2">
          
-             <MudItem sm="12" md="6">
-                <MudTextField @bind-Value="appUser.Name" For="@(() => appUser.Name)" ReadOnly="@(!editableAccount)" Label="Ime" Variant="Variant.Outlined"></MudTextField>
-             </MudItem>
-            <MudItem sm="12" md="6">
-                <MudTextField @bind-Value="appUser.Surname" For="@(() => appUser.Surname)" ReadOnly="@(!editableAccount)" Label="Priimek" Variant="Variant.Outlined"></MudTextField>
-            </MudItem>
+                 <MudItem sm="12" md="6">
+                    <MudTextField @bind-Value="appUser.Name" For="@(() => appUser.Name)" ReadOnly="@(!editableAccount)" Label="Ime" Variant="Variant.Outlined"></MudTextField>
+                 </MudItem>
+                <MudItem sm="12" md="6">
+                    <MudTextField @bind-Value="appUser.Surname" For="@(() => appUser.Surname)" ReadOnly="@(!editableAccount)" Label="Priimek" Variant="Variant.Outlined"></MudTextField>
+                </MudItem>
 
-            <MudItem sm="12" md="6">
-                <MudTextField @bind-Value="appUser.Nickname" For="@(() => appUser.Nickname)" ReadOnly="@(!editableAccount)" Label="Vzdevek" Variant="Variant.Outlined"></MudTextField>
-            </MudItem>
+                <MudItem sm="12" md="6">
+                    <MudTextField @bind-Value="appUser.Nickname" For="@(() => appUser.Nickname)" ReadOnly="@(!editableAccount)" Label="Vzdevek" Variant="Variant.Outlined"></MudTextField>
+                </MudItem>
 
-            <MudItem sm="12" md="6">
-                <MudTextField @bind-Value="appUser.Email" For="@(() => appUser.Email)" ReadOnly="@(!editableAccount)" Label="Email" Variant="Variant.Outlined"></MudTextField>
-            </MudItem>    
-         </MudGrid>
+                <MudItem sm="12" md="6">
+                    <MudTextField @bind-Value="appUser.Email" For="@(() => appUser.Email)" ReadOnly="@(!editableAccount)" Label="Email" Variant="Variant.Outlined"></MudTextField>
+                </MudItem>    
+             </MudGrid>
+         </MudForm>
+   
+        <MudStack Row Justify="Justify.SpaceBetween">
+             <MudText Typo="Typo.h5">Spremembna gesla</MudText>
+             <MudStack Row>
+                <MudToggleIconButton ToggledChanged="UpdatePasswordAsync" Toggled="editablePassword" Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary"
+                                     ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary"/>
+                @if (editablePassword)
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="@Color.Secondary" OnClick="CancelButton" />
+                }               
+            </MudStack>
+        </MudStack>
 
-        <MudText>Sprememba gesla</MudText>
+        @if (!editablePassword)
+        {
+            <MudText Typo="Typo.body2">Sprememba gesla je možna preko gumba za urejanje.</MudText>
+        }
+        else
+        {
+            <MudForm Model="userPassword" @ref="@userPasswordForm" Validation="@(userPasswordValidator.ValidateValue)">
+                <MudTextField Label="Trenutno geslo"
+                @bind-Value="userPassword.OldPassword" For="@(() => userPassword.OldPassword)"
+                                InputType="@PasswordInput"
+                          Variant="Variant.Outlined"
+                                Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonPasswordClick" AdornmentAriaLabel="Pokaži geslo" />
 
-         @if (editableAccount)
-         {
-            <MudTextField Label="Trenutno geslo"
-            @bind-Value="appUser.Password" For="@(() => appUser.Password)"
-                          InputType="@PasswordInput"
-                          Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonPasswordClick" AdornmentAriaLabel="Pokaži geslo" />
+                <MudTextField Label="Novo geslo"
+                @bind-Value="userPassword.NewPassword" For="@(() => userPassword.NewPassword)"
+                                InputType="@NewPasswordInput"
+                                Variant="Variant.Outlined"
+                                Adornment="Adornment.End" AdornmentIcon="@NewPasswordInputIcon" OnAdornmentClick="ButtonNewPasswordClick" AdornmentAriaLabel="Pokaži geslo" />
 
-            <MudTextField Label="Novo geslo"
-            @bind-Value="appUser.NewPassword" For="@(() => appUser.NewPassword)"
-                          InputType="@NewPasswordInput"
-                          Adornment="Adornment.End" AdornmentIcon="@NewPasswordInputIcon" OnAdornmentClick="ButtonNewPasswordClick" AdornmentAriaLabel="Pokaži geslo"/>
+                <MudTextField Label="Ponovi geslo"
+                @bind-Value="userPassword.ConfirmPassword" For="@(() => userPassword.ConfirmPassword)"
+                                InputType="@ConfirmedPasswordInput"
+                          Variant="Variant.Outlined"
+                                Adornment="Adornment.End" AdornmentIcon="@ConfirmedPasswordInputIcon" OnAdornmentClick="ButtonConfirmedPasswordClick" AdornmentAriaLabel="Pokaži geslo" />
 
-            <MudTextField Label="Ponovitev novega gesla"
-            @bind-Value="appUser.ConfirmedPassword" For="@(() => appUser.ConfirmedPassword)"
-                          InputType="@ConfirmedPasswordInput"
-                          Adornment="Adornment.End" AdornmentIcon="@ConfirmedPasswordInputIcon" OnAdornmentClick="ButtonConfirmedPasswordClick" AdornmentAriaLabel="Pokaži geslo"/>
-          
-         }
-         else
-         {
-            <MudText>Za spremembe gesla klikni na ikono za urejenaje profila </MudText>
-         }
-
-     </MudForm>
-
+            </MudForm>
+        }       
+  
 </MudStack>
 
 

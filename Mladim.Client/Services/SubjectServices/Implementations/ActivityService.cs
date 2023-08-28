@@ -42,16 +42,16 @@ public class ActivityService : IActivityService
         return this.Mapper.Map<ActivityVM>(activity);
     }
 
-    public async Task<IEnumerable<ActivityVM>> GetByProjectIdAsync(int projectId)
+    public async Task<IEnumerable<ActivityWithProjectNameVM>> GetByProjectIdAsync(int projectId, int? upcommingActivities = null)
     {
-        string url = string.Format(MladimApiUrls.GetActivitiesByProjectId, projectId);
-        var activities = await HttpClient.GetAllAsync<ActivityQueryDto>(url);
-        return this.Mapper.Map<IEnumerable<ActivityVM>>(activities);
+        string url = string.Format(MladimApiUrls.GetActivitiesByProjectId, projectId, upcommingActivities);
+        var activities = await HttpClient.GetAllAsync<ActivityWithProjectNameQueryDto>(url);
+        return this.Mapper.Map<IEnumerable<ActivityWithProjectNameVM>>(activities);
     }
 
-    public async Task<IEnumerable<ActivityWithProjectNameVM>> GetByOrganizationIdAsync(int organizationId)
+    public async Task<IEnumerable<ActivityWithProjectNameVM>> GetByOrganizationIdAsync(int organizationId, int? upcommingActivities = null)
     {
-        string url = string.Format(MladimApiUrls.GetActivitiesByOrganizationId, organizationId);
+        string url = string.Format(MladimApiUrls.GetActivitiesByOrganizationId, organizationId, upcommingActivities);
         var activities = await HttpClient.GetAllAsync<ActivityWithProjectNameQueryDto>(url);
         return this.Mapper.Map<IEnumerable<ActivityWithProjectNameVM>>(activities);
     }

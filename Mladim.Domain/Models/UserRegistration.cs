@@ -9,22 +9,24 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Models;
 
-
-
 public class UserPassword
+{
+    public string UserId { get; set; } = string.Empty;  
+    public string OldPassword { get; set; } = string.Empty;
+    public string NewPassword { get; set; } = string.Empty;
+    public string ConfirmPassword { get; set; } = string.Empty;
+
+}
+
+public class UrlRegistration
 {
     public string UserId { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
     public string ConfirmPassword { get; set; } = string.Empty;
-
-
-   
-
-
 }
 
 
-public class RegistrationUser
+public class UserRegistration
 {
     [Required]
     public string Name { get; set; } = string.Empty;
@@ -39,12 +41,12 @@ public class RegistrationUser
     [Required]
     public string Password { get; set; } = string.Empty;
 
-    public RegistrationUser(string name, string surname, string nickname, string email, string password) =>
+    public UserRegistration(string name, string surname, string nickname, string email, string password) =>
         (this.Name, this.Surname, this.Nickname, this.Email, this.Password) = (name, surname, nickname, email, password);
 
 
-    public static RegistrationUser Create(string name, string surname, string nickname, string email, string password) =>
-        new RegistrationUser(name, surname, nickname, email, password);
+    public static UserRegistration Create(string name, string surname, string nickname, string email, string password) =>
+        new UserRegistration(name, surname, nickname, email, password);
     
 
 

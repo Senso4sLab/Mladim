@@ -46,16 +46,16 @@ public class AuthService : IAuthService
         return Result<AuthResponse>.Success(authResponse);         
     }
 
-    public async Task<Result<AuthResponse>> ChangePasswordAsync(UserPassword up)
+    public async Task<Result<AuthResponse>> ChangePasswordAsync(string userId, string password)
     {
-        var user = await this.UserManager.FindByIdAsync(up.UserId);
+        var user = await this.UserManager.FindByIdAsync(userId);
 
         if (user == null)
             return Result<AuthResponse>.Error("Uporabnik ne obstaja");
 
         var token = await UserManager.GeneratePasswordResetTokenAsync(user);
 
-        var result = await UserManager.ResetPasswordAsync(user, token, up.Password);
+        var result = await UserManager.ResetPasswordAsync(user, token, password);
 
         if (!result.Succeeded)
             return Result<AuthResponse>.Error(string.Join(", ",result.Errors.Select(e => e.Description)));
@@ -171,9 +171,9 @@ public class AuthService : IAuthService
 
 
 
-    public async Task<string> CreateUserWithClaimAsync(string name, string surname, string email, Claim claim)
+    public async Task<AppUser> CreateUserWithClaimAsync(string name, string surname, string email, Claim claim)
     {
-        var user = RegistrationUser.Create(name, surname, name, email, GenerateAppUserPassword());
+        var user = UserRegistration.Create(name, surname, name, email, GenerateAppUserPassword());
         var registrationResponse = await CreateUserAsync(user);
 
         if(!registrationResponse.Succeeded)
@@ -181,7 +181,7 @@ public class AuthService : IAuthService
 
         await UpsertClaimAsync(registrationResponse.Value!, claim);
 
-        return registrationResponse.Value!.Id;
+        return registrationResponse.Value!;
     }
 
     
@@ -206,7 +206,7 @@ public class AuthService : IAuthService
 
 
 
-    private async Task<Result<AppUser>> CreateUserAsync(RegistrationUser request)
+    private async Task<Result<AppUser>> CreateUserAsync(UserRegistration request)
     { 
         var appUser = AppUser.Create(request.Name, request.Surname, request.Nickname, request.Email, request.Email);
         var result = await this.UserManager.CreateAsync(appUser, request.Password);
@@ -216,7 +216,7 @@ public class AuthService : IAuthService
 
         return Result<AppUser>.Success(appUser);
     }
-    public async Task<Result<RegistrationResponse>> RegisterAsync(RegistrationUser request)
+    public async Task<Result<RegistrationResponse>> RegisterAsync(UserRegistration request)
     {
         var user = await this.UserManager.FindByEmailAsync(request.Email);
 

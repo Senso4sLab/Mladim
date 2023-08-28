@@ -10,6 +10,7 @@ using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,40 +35,51 @@ public class GetOrganizationStatisticQueryHandler : IRequestHandler<GetOrganizat
             return OrganizationStatisticQueryDto.Empty;
 
         var currentDate = DateTime.UtcNow;
-        
-        // Projekti
-        var projects = await this.UnitOfWork.ProjectRepository
-            .GetAllAsync(p => p.OrganizationId == request.OrganizationId && p.TimeRange.IsSameYearAs(request.Year));
+        try
+        {
+            // Projekti          
 
-        var activeProjects = projects.Where(p => p.TimeRange.IsDateTimeInRange(currentDate))
-            .Select(p => NamedEntityDto.Create(p.Id, p.Attributes.Name))
-            .ToList();
+            var projects = await this.UnitOfWork.ProjectRepository
+                .GetAllAsync(p => p.OrganizationId == request.OrganizationId);
+               
+            projects = projects.Where(p => p.TimeRange.IsSameYearAs(request.Year)).ToList();    
 
-        var pastProjects = projects.Where(p => !p.TimeRange.IsDateTimeInRange(currentDate))
-            .Select(p => NamedEntityDto.Create(p.Id, p.Attributes.Name))
-            .ToList();
+            var activeProjects = projects.Where(p => p.TimeRange.IsDateTimeInRange(currentDate))
+                .Select(p => NamedEntityDto.Create(p.Id, p.Attributes.Name))
+                .ToList();
 
-        // Aktivnosti
+            var pastProjects = projects.Where(p => !p.TimeRange.IsDateTimeInRange(currentDate))
+                .Select(p => NamedEntityDto.Create(p.Id, p.Attributes.Name))
+                .ToList();
 
-        var activities = await this.UnitOfWork.ActivityRepository
-          .GetActivitiesWithParticipantsAsync(a => a.Project.OrganizationId == request.OrganizationId && a.TimeRange.IsSameYearAs(request.Year));
+            // Aktivnosti
 
-        var activeActivities = activities.Where(a => a.TimeRange.IsDateTimeInRange(currentDate))
-            .Select(a => NamedEntityDto.Create(a.Id, a.Attributes.Name))
-            .ToList();
+            var activities = await this.UnitOfWork.ActivityRepository
+              .GetActivitiesWithParticipantsAsync(a => a.Project.OrganizationId == request.OrganizationId);
 
-        var pastActivites = activities.Where(a => !a.TimeRange.IsDateTimeInRange(currentDate))
-            .Select(a => NamedEntityDto.Create(a.Id, a.Attributes.Name))
-            .ToList();
+            activities = activities.Where(a => a.TimeRange.IsSameYearAs(request.Year)).ToList();
 
-        // št. participantov
-       
-        int anonymousParticipants =  activities.Sum(a => a.AnonymousParticipantGroups.Sum(apg => apg.Number));
-       
-        int individualParticipants = activities.Sum(a => a.Participants.Count);            
+            var activeActivities = activities.Where(a => a.TimeRange.IsDateTimeInRange(currentDate))
+                .Select(a => NamedEntityDto.Create(a.Id, a.Attributes.Name))
+                .ToList();
 
-        individualParticipants += activities.Sum(a => a.Groups.Sum(g => g.Members.Count));
+            var pastActivites = activities.Where(a => !a.TimeRange.IsDateTimeInRange(currentDate))
+                .Select(a => NamedEntityDto.Create(a.Id, a.Attributes.Name))
+                .ToList();
 
-        return OrganizationStatisticQueryDto.Create(activeProjects, pastProjects, activeActivities, pastActivites, individualParticipants, anonymousParticipants);
+            // št. participantov
+
+            int anonymousParticipants = activities.Sum(a => a.AnonymousParticipantGroups.Sum(apg => apg.Number));
+
+            int individualParticipants = activities.Sum(a => a.Participants.Count);
+
+            individualParticipants += activities.Sum(a => a.Groups.Sum(g => g.Members.Count));
+
+            return OrganizationStatisticQueryDto.Create(activeProjects, pastProjects, activeActivities, pastActivites, individualParticipants, anonymousParticipants);
+        }
+        catch(Exception ex)
+        {
+            return null;
+        }
     }
 }

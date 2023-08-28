@@ -52,4 +52,8 @@ public class MladimApiUrls
 
     public string AddOrganizationProfileImage { get; set; } = string.Empty;
     public string AddOrganizationBannerImage { get; set; } = string.Empty;
+
+
+    public string GetOrganizationStatistics { get; set; }  = string.Empty;
+    public string GetProjectStatistics { get; set; } = string.Empty;
 }

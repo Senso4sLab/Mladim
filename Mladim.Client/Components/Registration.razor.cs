@@ -1,32 +1,6 @@
-using global::System;
-using global::System.Collections.Generic;
-using global::System.Linq;
-using global::System.Threading.Tasks;
 using global::Microsoft.AspNetCore.Components;
-using System.Net.Http;
-using System.Net.Http.Json;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.Web.Virtualization;
-using Microsoft.AspNetCore.Components.WebAssembly.Http;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.JSInterop;
-using Mladim.Client;
-using Mladim.Client.Shared;
 using Mladim.Client.Services.Authentication;
-using Mladim.Client.Components;
-using Mladim.Client.ViewModels;
-using Mladim.Client.Layouts;
-using Mladim.Client.Extensions;
-using Mladim.Client.Components.Organizations;
-using Blazored.TextEditor;
 using MudBlazor;
-using Syncfusion.Blazor;
-using Syncfusion.Blazor.RichTextEditor;
-using Syncfusion.Blazor.Gantt;
-using Mladim.Client.Services.AccountService;
 using Mladim.Client.Validators;
 using Mladim.Domain.Models;
 
@@ -47,9 +21,9 @@ public partial class Registration
     private bool _isBusy = false;
     private string _errorMessage = string.Empty;
  
-    private UserPassword userPassword = new UserPassword();
+    private UrlRegistration urlRegistration = new UrlRegistration();
 
-    UserPasswordValidator userPasswordValidator = new UserPasswordValidator();    
+    UrlRegistrationValidator urlRegistrationValidator = new UrlRegistrationValidator();    
 
     
 
@@ -68,13 +42,13 @@ public partial class Registration
         
         _isBusy = true;
 
-        var response = await this.AuthService.ChangePasswordAsync(userPassword);
+        var response = await this.AuthService.ChangePasswordAsync(UserId!, urlRegistration.Password);
         this._errorMessage = response.Message;
         
         _isBusy = false;
-          
-        if(response.Succeeded)
-            this.Navigation.NavigateTo("/");        
+
+        if (response.Succeeded)
+            this.Navigation.NavigateTo("/");
     } 
 
     public void ButtonPasswordClick()

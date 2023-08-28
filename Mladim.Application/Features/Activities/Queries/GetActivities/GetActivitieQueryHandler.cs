@@ -30,7 +30,7 @@ public class GetActivitieQueryHandler : IRequestHandler<GetActivitiesQuery, IEnu
             var activities = await this.UnitOfWork.ActivityRepository
                 .GetActivitiesWithProjectName(a => a.ProjectId ==  projectId, request.UpcomingActivities);
 
-            return this.Mapper.Map<IEnumerable<ActivityQueryDto>>(activities);
+            return this.Mapper.Map<IEnumerable<ActivityWithProjectNameQueryDto>>(activities);
         }
         
         if(request.OrganizationId is int organizationId)

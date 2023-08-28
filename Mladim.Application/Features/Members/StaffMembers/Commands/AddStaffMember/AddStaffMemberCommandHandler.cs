@@ -33,15 +33,13 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
 
 
     public AddStaffMemberCommandHandler(IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork, IAuthService authService, IEmailService emailService, IOptions<PredefinedEmailContent> emailContent, IMapper mapper)
-    {
-       
+    {       
             HttpContextAccessor = httpContextAccessor;
             UnitOfWork = unitOfWork;
             AuthService = authService;
             EmailService = emailService;
             EmailContent = emailContent.Value;
-            Mapper = mapper;
-       
+            Mapper = mapper;       
     }
    
     public async Task<StaffMemberDetailsQueryDto> Handle(AddStaffMemberCommand request, CancellationToken cancellationToken)
@@ -52,17 +50,24 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
         ArgumentNullException.ThrowIfNull(organization);
 
         var staffMember = this.Mapper.Map<StaffMember>(request);
-       
-        var claim = new Claim(Enum.GetName(request.Claim)!, request.OrganizationId.ToString());
+
+        var claimName = Enum.GetName(request.Claim)!;
+
+        var claim = new Claim(claimName, request.OrganizationId.ToString());
 
         var appUser = await this.AuthService.ExistAppUserAsync(request.Email);
 
         if (appUser == null)
         {
             // nov app user
-            var userId = await this.AuthService.CreateUserWithClaimAsync(request.Name, request.Surname, request.Email, claim);
+            appUser = await this.AuthService.CreateUserWithClaimAsync(request.Name, request.Surname, request.Email, claim);
+            appUser.Organizations.Add(organization);
 
-            var registrationUrl = $"{HttpContextAccessor?.HttpContext?.AppBaseUrl()}/registration/{userId}";
+            await this.UnitOfWork.AppUserRepository.AddAsync(appUser);
+            await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);
+            await this.UnitOfWork.SaveChangesAsync();
+
+            var registrationUrl = $"{HttpContextAccessor?.HttpContext?.AppBaseUrl()}/registration/{appUser.Id}";
 
             var emailContent = string.Format(this.EmailContent.ContentAddedNewUser, organization.Attributes.Name, registrationUrl); 
 
@@ -70,16 +75,16 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
         }
         else
         {
-            // app user dodat v novo organizacijo        
+           if (await this.UnitOfWork.AppUserRepository.IsUserInOrganizationAsync(appUser.Id, organization.Id)) 
+                throw new Exception("Uporabnik je že dodan v organizaciji");
+
+            appUser.Organizations.Add(organization);
+            await this.UnitOfWork.SaveChangesAsync();
 
             await this.AuthService.UpsertClaimAsync(appUser, claim);                      
-            var emailContent = string.Format(this.EmailContent.ContentUserAddedNewOrganization, organization.Attributes.Name, Enum.GetName(request.Claim));
-            await SendEmailAsync(emailContent, request.Email);
-                       
-        }
-
-        await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);
-        await this.UnitOfWork.SaveChangesAsync();
+            var emailContent = string.Format(this.EmailContent.ContentUserAddedNewOrganization, organization.Attributes.Name, claimName);
+            await SendEmailAsync(emailContent, request.Email);                       
+        }   
 
         return this.Mapper.Map<StaffMemberDetailsQueryDto>(staffMember);
 

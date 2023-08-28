@@ -9,6 +9,8 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using Mladim.Client.Models;
 using Mladim.Domain.Models;
+using Mladim.Client.ViewModels.Organization;
+using Mladim.Domain.Dtos.Organization;
 
 namespace Mladim.Client.Services.SubjectServices.Implementations;
 
@@ -58,6 +60,15 @@ public class OrganizationService : IOrganizationService
         return this.Mapper.Map<OrganizationVM>(organizations);
     }
 
+    public async Task<OrganizationStatisticVM?> GetStatisticsByYearAsync(int organizationId, int year)
+    {
+        string url = string.Format(MladimApiUrls.GetOrganizationStatistics, organizationId, year);
+        var organizations = await HttpClient.GetAsync<OrganizationStatisticQueryDto>(url);
+        return this.Mapper.Map<OrganizationStatisticVM>(organizations);
+    }
+
+
+
     public async Task<OrganizationVM?> AddAsync(OrganizationVM organization, string userId)
     {
         var command = this.Mapper.Map<AddOrganizationCommandDto>(organization);
@@ -90,4 +101,7 @@ public class OrganizationService : IOrganizationService
         }
         return false;
     }
+
+
+
 }

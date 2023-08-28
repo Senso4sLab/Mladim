@@ -25,7 +25,7 @@ public class AccountController : ControllerBase
 
 
     [HttpPost("register")]
-    public async Task<ActionResult<Result<RegistrationResponse>>> RegisterAsync(RegistrationUser request)
+    public async Task<ActionResult<Result<RegistrationResponse>>> RegisterAsync(UserRegistration request)
     {
         var response = await this.AuthService.RegisterAsync(request);
         return Ok(response);
@@ -40,9 +40,9 @@ public class AccountController : ControllerBase
 
 
     [HttpGet("password")]
-    public async Task<ActionResult<Result<AuthResponse>>> ChangePasswordAsync([FromQuery] UserPassword userPassword )
+    public async Task<ActionResult<Result<AuthResponse>>> ChangePasswordAsync([FromQuery] string UserId, [FromQuery] string Password)
     {
-        var response = await this.AuthService.ChangePasswordAsync(userPassword);
+        var response = await this.AuthService.ChangePasswordAsync(UserId, Password);
         return Ok(response);
     }
 

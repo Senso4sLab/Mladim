@@ -1,7 +1,7 @@
 ﻿
 
 
-<MudForm @ref="@passwordForm" Model="@userPassword" Validation="@(userPasswordValidator.ValidateValue)" OnValidSubmit="OnValidSubmit">
+<MudForm @ref="@passwordForm" Model="@urlRegistration" Validation="@(urlRegistrationValidator.ValidateValue)" OnValidSubmit="OnValidSubmit">
     <MudGrid Justify="Justify.Center">
         <MudItem xs="12" md="6">
             <MudCard Elevation="4" Class="pa-2">
@@ -15,12 +15,12 @@
 
                 <MudCardContent>
                     <MudTextField Label="Vnesi geslo"
-                    @bind-Value="userPassword.Password" For="@(() => userPassword.Password)"
+                    @bind-Value="urlRegistration.Password" For="@(() => urlRegistration.Password)"
                                   InputType="@PasswordInput"
                                   Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonPasswordClick" AdornmentAriaLabel="Pokaži geslo" />
                     
                     <MudTextField Label="Potrdi geslo" Class="mt-3"
-                    @bind-Value="userPassword.ConfirmPassword" For="@(() =>  userPassword.ConfirmPassword)"
+                    @bind-Value="urlRegistration.ConfirmPassword" For="@(() =>  urlRegistration.ConfirmPassword)"
                                   InputType="@PasswordInput"
                                   Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonPasswordClick" AdornmentAriaLabel="Pokaži geslo" />
                 </MudCardContent>

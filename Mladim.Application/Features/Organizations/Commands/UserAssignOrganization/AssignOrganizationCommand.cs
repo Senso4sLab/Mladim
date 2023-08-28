@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Mladim.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,4 +12,5 @@ public class AssignOrganizationCommand : IRequest<bool>
 {
     public string AppUserId { get; set; } = string.Empty;
     public int OrganizationId { get; set; }
+    public ApplicationClaim Claim { get; set;}
 }

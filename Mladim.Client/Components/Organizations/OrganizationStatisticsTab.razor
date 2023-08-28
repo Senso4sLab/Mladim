@@ -1,0 +1,89 @@
+﻿@using Mladim.Client.ViewModels.Activity;
+
+
+<MudStack Spacing="4" Class="py-5">
+    <div style="width:200px;">
+        <MudSelect T="int" Label="Izberi leto" Value=selectedYear ValueChanged="OnYearChangedAsync" OpenIcon="@Icons.Material.Filled.CalendarMonth" Variant=Variant.Outlined AdornmentColor="Color.Primary">
+            @foreach (int year in availableYears)
+            {
+                <MudSelectItem Value="@year">@year</MudSelectItem>
+            }
+        </MudSelect>
+    </div>
+
+    @if (organizationStatistics != null)
+    {
+        <MudGrid>
+            <MudItem sm="4">
+                <MudPaper Outlined="true" Class="pa-4">
+                    <MudStack Row AlignItems="AlignItems.Center">
+                         <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Size="Size.Large">
+                             <MudIcon Style="color:#FFFFFF;" Icon="@Icons.Material.Filled.Person" Size="Size.Large" />
+                         </MudAvatar>
+
+                         <MudStack Spacing="1">
+                             <MudText Typo="Typo.h6">@(organizationStatistics.IndividualParticipants + organizationStatistics.AnonymousParticipants)</MudText>
+                             <MudText Typo="Typo.h6">Udeleženci</MudText>
+                         </MudStack>
+                     </MudStack>
+                 </MudPaper>
+             </MudItem>
+             <MudItem sm="4">
+                 <MudPaper Outlined="true" Class="pa-4">
+                     <MudStack Row
+                               AlignItems="AlignItems.Center">
+                         <MudAvatar Style="background-color:#FCCA46" Variant="Variant.Filled" Size="Size.Large">
+                             <MudIcon Style="color:#FFFFFF;" Icon="@CustomIcons.Activities" Size="Size.Large" />
+                         </MudAvatar>
+                         <MudStack Spacing="1">
+                             <MudText Typo="Typo.h6">@(organizationStatistics.ActiveActivities.Count + organizationStatistics.PastActivities.Count)</MudText>
+                             <MudText Typo="Typo.h6">Aktivnosti</MudText>
+                         </MudStack>
+                     </MudStack>
+                 </MudPaper>
+             </MudItem>
+             <MudItem sm="4">
+                 <MudPaper Outlined="true" Class="pa-4">
+                     <MudStack Row
+                               AlignItems="AlignItems.Center">
+                         <MudAvatar Style="background-color:#8ED974" Variant="Variant.Filled" Size="Size.Large">
+                             <MudIcon Icon="@CustomIcons.Projects" Size="Size.Large" />
+                         </MudAvatar>
+                         <MudStack Spacing="1">
+                             <MudText Typo="Typo.h6">@organizationStatistics.ActiveProjects.Count</MudText>
+                             <MudText Typo="Typo.h6">Aktivni projekti</MudText>
+                         </MudStack>
+                     </MudStack>
+                 </MudPaper>
+             </MudItem>
+         </MudGrid>
+    }
+
+    @if (activities.Any())
+    {
+        <SfGantt class="pt-5" DataSource="@activities" RowHeight="40" TaskbarHeight="30">
+            <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId" />
+
+            <GanttColumns>
+                <GanttColumn Field="Id" HeaderText="Št."></GanttColumn>
+                <GanttColumn Field="ActivityName" HeaderText="Ime aktivnosti"></GanttColumn>
+                <GanttColumn Field="ProjectName" HeaderText="Ime projekta"></GanttColumn>
+                <GanttColumn Field="StartDate" HeaderText="Začetek"></GanttColumn>
+                <GanttColumn Field="EndDate" HeaderText="Konec"></GanttColumn>
+            </GanttColumns>
+
+            <GanttTemplates TValue="ActivityForGantt">
+                <TaskbarTemplate>
+                    <div class="e-gantt-parent-taskbar" style="background-color:#4da456; height:30px; border: 4px solid #4da456; border-radius:8px;" />
+                </TaskbarTemplate>
+            </GanttTemplates>
+            <GanttEvents TValue="ActivityForGantt" RowSelected="SelectedActivity"></GanttEvents>
+        </SfGantt>
+    }
+    else
+    {
+        <MudText Typo="Typo.h6">Organizacija nima nobenih prihajajočih aktivnosti.</MudText>
+    }
+</MudStack>
+
+

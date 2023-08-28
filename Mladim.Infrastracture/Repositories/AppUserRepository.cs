@@ -13,7 +13,11 @@ public class AppUserRepository : GenericRepository<AppUser>, IAppUserRepository
     public AppUserRepository(ApplicationDbContext context) : base(context)
     {
         
-    } 
+    }
 
+    public async Task<bool> IsUserInOrganizationAsync(string userId, int organizationId)
+    {
+        return await this.DbSet.Where(u => u.Id == userId).AnyAsync(u => u.Organizations.Any(o => o.Id == organizationId));
+    }
 }
 
