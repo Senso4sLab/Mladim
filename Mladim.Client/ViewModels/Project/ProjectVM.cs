@@ -8,8 +8,8 @@ namespace Mladim.Client.ViewModels;
 public class ProjectVM
 {
     public int Id { get; set; }
-    public ProjectAttributesVM Attributes { get; private set; } = new ProjectAttributesVM();    
-    public DateRange DateRange { get; set; } = new DateRange();
+    public ProjectAttributesVM Attributes { get; private set; } = default!;
+    public DateTimeRangeVM DateRange { get; set; } = default!;
 
     public IEnumerable<NamedEntityVM> Staff { get; set; } = new List<NamedEntityVM>();
     public IEnumerable<NamedEntityVM> Administration { get; set; } = new List<NamedEntityVM>();

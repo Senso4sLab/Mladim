@@ -1,5 +1,103 @@
-﻿<h3>ProjectStatisticsTab</h3>
+﻿@using Mladim.Client.ViewModels.Activity;
+@using Syncfusion.Blazor.Charts
 
-@code {
 
-}
+<MudStack Spacing="4" Class="py-5">
+    <div style="width:300px;">
+        <MudSelect T="ProjectVM" Label="Izberi želeni projekt" Value=selectedProject ValueChanged="OnProjectChangedAsync" OpenIcon="@CustomIcons.Projects" Variant=Variant.Outlined AdornmentColor="Color.Primary">
+            @foreach (var project in Projects)
+            {
+                <MudSelectItem Value="@project">@project.Attributes.Name</MudSelectItem>
+            }
+        </MudSelect>
+    </div>
+
+    @if (projectStatistics != null)
+    {
+        <MudGrid>
+            <MudItem xl="4" sm="6">
+                <SfAccumulationChart Title="Razporeditev udeležencev po letih" EnableAnimation="true" EnableSmartLabels="true">
+                    <AccumulationChartSeriesCollection>
+                        <AccumulationChartSeries DataSource="@projectStatistics.AgeDoughnut" XName="Name" YName="Value" InnerRadius="80%">
+                        </AccumulationChartSeries>
+                    </AccumulationChartSeriesCollection>
+                    <AccumulationChartLegendSettings Visible="true"></AccumulationChartLegendSettings>
+                </SfAccumulationChart>
+            </MudItem>
+            <MudItem xl ="4" sm="6">
+                <SfAccumulationChart Title="Razporeditev udeležencev po spolu" EnableAnimation="true" EnableSmartLabels="true">
+                    <AccumulationChartSeriesCollection>
+                        <AccumulationChartSeries DataSource="@projectStatistics.GenderDoughnut" XName="Name" YName="Value" InnerRadius="80%">
+                        </AccumulationChartSeries>
+                    </AccumulationChartSeriesCollection>
+                    <AccumulationChartLegendSettings Visible="true"></AccumulationChartLegendSettings>
+                </SfAccumulationChart>
+            </MudItem>
+            <MudItem xl ="4" sm="12">
+                <MudGrid>
+                    <MudItem xl="6" sm="12">
+                        <MudPaper Outlined="true" Class="pa-4">
+                            <MudStack Row AlignItems="AlignItems.Center">
+                                 <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Size="Size.Large">
+                                     <MudIcon Style="color:#FFFFFF;" Icon="@Icons.Material.Filled.Person" Size="Size.Large" />
+                                 </MudAvatar>
+
+                                 <MudStack Spacing="1">
+                                     <MudText Typo="Typo.h6">@projectStatistics.TotalParticipants</MudText>
+                                     <MudText Typo="Typo.h6">Udeleženci</MudText>
+                                 </MudStack>
+                             </MudStack>
+                         </MudPaper>
+                     </MudItem>
+                    <MudItem xl="6" sm="12">
+                         <MudPaper Outlined="true" Class="pa-4">
+                             <MudStack Row
+                                       AlignItems="AlignItems.Center">
+                                 <MudAvatar Style="background-color:#FCCA46" Variant="Variant.Filled" Size="Size.Large">
+                                     <MudIcon Style="color:#FFFFFF;" Icon="@CustomIcons.Activities" Size="Size.Large" />
+                                 </MudAvatar>
+                                 <MudStack Spacing="1">
+                                     <MudText Typo="Typo.h6">@projectStatistics.TotalActivities</MudText>
+                                     <MudText Typo="Typo.h6">Aktivnosti</MudText>
+                                 </MudStack>
+                             </MudStack>
+                         </MudPaper>
+                     </MudItem>
+                 </MudGrid>
+            </MudItem>
+        </MudGrid>       
+    }
+
+    @if (activities.Any())
+    {
+        <SfGantt class="pt-5" DataSource="@activities" RowHeight="40" TaskbarHeight="30">
+            <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId" />
+
+            <GanttColumns>
+                <GanttColumn Field="Id" HeaderText="Št."></GanttColumn>
+                <GanttColumn Field="ActivityName" HeaderText="Ime aktivnosti"></GanttColumn>
+                <GanttColumn Field="ProjectName" HeaderText="Ime projekta"></GanttColumn>
+                <GanttColumn Field="StartDate" HeaderText="Začetek"></GanttColumn>
+                <GanttColumn Field="EndDate" HeaderText="Konec"></GanttColumn>
+            </GanttColumns>
+
+            <GanttTemplates TValue="ActivityForGantt">
+                <TaskbarTemplate>
+                    <div class="e-gantt-parent-taskbar" style="background-color:#4da456; height:30px; border: 4px solid #4da456; border-radius:8px;" />
+                </TaskbarTemplate>
+            </GanttTemplates>
+            <GanttEvents TValue="ActivityForGantt" RowSelected="SelectedActivity"></GanttEvents>
+        </SfGantt>
+    }
+    else
+    {
+        <MudText Typo="Typo.h6">Projekt nima nobenih aktivnosti.</MudText>
+    }
+</MudStack>
+
+
+
+
+
+
+

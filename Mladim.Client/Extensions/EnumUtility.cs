@@ -6,7 +6,7 @@ namespace Mladim.Client.Extensions;
 
 public static class EnumUtility
 {
-    public static string GetDisplayAttributeString(this Enum value) =>
+    public static string GetDisplayAttribute(this Enum value) =>
         TryGetDisplayAttribute(value) is DisplayAttribute displayAttribute ?
             displayAttribute.Name ?? string.Empty : string.Empty;
     private static Attribute? TryGetDisplayAttribute(this Enum value) =>

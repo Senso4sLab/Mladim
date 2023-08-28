@@ -11,4 +11,6 @@ namespace Mladim.Application.Features.Projects.Queries.GetProjects;
 public class GetProjectsByOrganizationQuery : IRequest<IEnumerable<ProjectQueryDto>>
 {
     public int OrganizationId { get; set; }
+
+    
 }

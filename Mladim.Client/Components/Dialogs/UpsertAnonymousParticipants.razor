@@ -7,18 +7,18 @@
         <MudDataGrid T="AnonymousParticipantTableElements" Items="@Elements" ReadOnly=false EditMode="DataGridEditMode.Cell"
                      Bordered="true" Dense="false" EditTrigger="DataGridEditTrigger.Manual">
             <Columns>
-                <PropertyColumn Property="x => x.AgeGroup.GetDisplayAttributeString()" Title="Starostna skupina" IsEditable="false" />
-                <PropertyColumn  Property="x => x.Male" Title="@Gender.Male.GetDisplayAttributeString()">
+                <PropertyColumn Property="x => x.AgeGroup.GetDisplayAttribute()" Title="Starostna skupina" IsEditable="false" />
+                <PropertyColumn  Property="x => x.Male" Title="@Gender.Male.GetDisplayAttribute()">
                     <EditTemplate>
                         <MudNumericField @bind-Value="context.Item.Male" Min="0" />
                     </EditTemplate>              
                 </PropertyColumn>                  
-                <PropertyColumn Property="x => x.Female" Title="@Gender.Female.GetDisplayAttributeString()" >
+                <PropertyColumn Property="x => x.Female" Title="@Gender.Female.GetDisplayAttribute()" >
                     <EditTemplate>
                          <MudNumericField @bind-Value="context.Item.Female" Min="0"/>
                     </EditTemplate>               
                 </PropertyColumn>
-                <PropertyColumn Property="x => x.Other" Title="@Gender.Other.GetDisplayAttributeString()">
+                <PropertyColumn Property="x => x.Other" Title="@Gender.Other.GetDisplayAttribute()">
                     <EditTemplate>
                         <MudNumericField @bind-Value="context.Item.Other" Min="0" />
                     </EditTemplate>

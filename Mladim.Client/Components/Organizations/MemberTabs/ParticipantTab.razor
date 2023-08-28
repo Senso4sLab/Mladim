@@ -9,12 +9,12 @@
                 Bordered="true" Dense="true" EditTrigger="DataGridEditTrigger.Manual">
             <Columns>
                 <PropertyColumn Property="x => x.Name" Title="Ime" />
-                <PropertyColumn Property="x => x.Gender.GetDisplayAttributeString()" Title="Spol">
+                <PropertyColumn Property="x => x.Gender.GetDisplayAttribute()" Title="Spol">
                     <EditTemplate>
                         <MudSelect @bind-Value="context.Item.Gender" Margin="@Margin.Dense">
                             @foreach (var gender in Enum.GetValues<Gender>())
                             {
-                                <MudSelectItem Value="gender">@gender.GetDisplayAttributeString()</MudSelectItem>
+                                <MudSelectItem Value="gender">@gender.GetDisplayAttribute()</MudSelectItem>
                             }
                     </MudSelect>
                 </EditTemplate>

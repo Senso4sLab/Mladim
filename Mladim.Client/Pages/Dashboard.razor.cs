@@ -58,21 +58,30 @@ public partial class Dashboard
 
     //private List<ActivityForGantt> activities = new List<ActivityForGantt>();
 
-    private IEnumerable<ProjectVM> projects = new List<ProjectVM>();
+   
+
+    private IEnumerable<ProjectVM> activeProjects = new List<ProjectVM>();  
+    private IEnumerable<ProjectVM> pastProjects = new List<ProjectVM>();
 
 
     protected override async Task OnParametersSetAsync()
     {
         if (SelectedOrganization is OrganizationVM organization)
         {
-            projects = await ProjectsByOrganizationAsync(organization.Id);
+            var projects = await ProjectsByOrganizationAsync(organization.Id);
+
+            var dateTime = DateTime.UtcNow;
+
+            activeProjects = projects.Where(p => !p.DateRange.IsExpired(dateTime)).ToList();
+            pastProjects = projects.Where(p => p.DateRange.IsExpired(dateTime)).ToList();
         }
     }
 
-    public async Task<IEnumerable<ProjectVM>> ProjectsByOrganizationAsync(int organizationId)
-    {
-        return await this.ProjectService.GetByOrganizationIdAsync(organizationId);    
-    }
+
+
+    public async Task<IEnumerable<ProjectVM>> ProjectsByOrganizationAsync(int organizationId) =>
+        await this.ProjectService.GetByOrganizationIdAsync(organizationId);    
+    
 
 
     //public async Task<OrganizationStatisticVM?> OrganizationStatisticsAsync(int year)

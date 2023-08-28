@@ -5,7 +5,11 @@ using Mladim.Client.Models;
 using Mladim.Client.Services.HttpService.Generic;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.ViewModels;
+using Mladim.Client.ViewModels.Organization;
+using Mladim.Client.ViewModels.Project;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.Organization;
+using Mladim.Domain.Dtos.Project;
 
 namespace Mladim.Client.Services.SubjectServices.Implementations;
 
@@ -67,6 +71,13 @@ public class ProjectService : IProjectService
             return true;
         
         return false;
+    }
+
+    public async Task<ProjectStatisticsVM?> GetStatisticsAsync(int projectId)
+    {
+        string url = string.Format(MladimApiUrls.GetProjectStatistics, projectId);
+        var projects = await HttpClient.GetAsync<ProjectStatisticsQueryDto>(url);
+        return this.Mapper.Map<ProjectStatisticsVM>(projects);
     }
 
 
