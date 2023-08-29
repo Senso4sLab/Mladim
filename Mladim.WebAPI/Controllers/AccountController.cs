@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mladim.Application.Contracts.Identity;
+using Mladim.Application.Features.Accounts.Commands.ChangePassword;
 using Mladim.Application.Features.Accounts.Commands.UpdateAppUser;
 using Mladim.Application.Features.Accounts.Queries.GetAppUser;
 using Mladim.Application.Models;
@@ -27,22 +28,22 @@ public class AccountController : ControllerBase
     [HttpPost("register")]
     public async Task<ActionResult<Result<RegistrationResponse>>> RegisterAsync(UserRegistration request)
     {
-        var response = await this.AuthService.RegisterAsync(request);
+        var response = await this.AuthService.RegisterAsync(request.Name, request.Surname, request.Nickname, request.Email, request.Password);
         return Ok(response);
     }
 
     [HttpPost("login")]
     public async Task<ActionResult<Result<AuthResponse>>> LoginAsync(LoginUser userDto)
     {
-        var response = await this.AuthService.LoginAsync(userDto);
+        var response = await this.AuthService.LoginAsync(userDto.Email, userDto.Password);
         return Ok(response);
     }
 
 
     [HttpGet("password")]
-    public async Task<ActionResult<Result<AuthResponse>>> ChangePasswordAsync([FromQuery] string UserId, [FromQuery] string Password)
+    public async Task<ActionResult<Result<AuthResponse>>> ChangePasswordAsync([FromQuery] ChangePasswordCommand changePasswordCommand)
     {
-        var response = await this.AuthService.ChangePasswordAsync(UserId, Password);
+        var response = await this.Mediater.Send(changePasswordCommand);
         return Ok(response);
     }
 

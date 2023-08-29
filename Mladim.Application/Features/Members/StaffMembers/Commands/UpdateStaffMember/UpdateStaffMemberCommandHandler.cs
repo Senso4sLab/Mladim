@@ -41,9 +41,9 @@ public class UpdateStaffMemberCommandHandler : IRequestHandler<UpdateStaffMember
         ArgumentNullException.ThrowIfNull(staffMember);
 
         if (request.Email != staffMember.Email)
-            throw new ArgumentException("Mail uporabnika se ne ujema");
+            throw new ArgumentException("Vnešeni mail se ne ujema");
 
-        var appUser = await this.AuthService.ExistAppUserAsync(request.Email);
+        var appUser = await this.UnitOfWork.AppUserRepository.FindByEmailAsync(request.Email);
         
         if(appUser == null)
             throw new ArgumentException("Uporabnik z vnešenim email naslovom ne obstaja");
@@ -55,17 +55,18 @@ public class UpdateStaffMemberCommandHandler : IRequestHandler<UpdateStaffMember
         staffMember = this.Mapper.Map(request, staffMember);
         this.UnitOfWork.StaffMemberRepository.Update(staffMember);
 
-        var claimName = Enum.GetName(request.Claim)!;
-        var claim = new Claim(claimName, staffMember.OrganizationId.ToString());
+        var dbResponse = await this.UnitOfWork.SaveChangesAsync();
 
-        if (await this.AuthService.UpsertClaimAsync(appUser, claim))
+        var claim = new Claim(Enum.GetName(request.Claim)!, staffMember.OrganizationId.ToString());
+
+        if (await this.AuthService.ReplaceClaimAsync(appUser, claim))
         {
             var organization = await this.UnitOfWork.OrganizationRepository.FirstOrDefaultAsync(o => o.Id == staffMember.OrganizationId, false);
-            var emailContent = string.Format(this.EmailContent.ContentUserAddedNewClaim, organization!.Attributes.Name, claimName);
+            var emailContent = string.Format(this.EmailContent.ContentUserAddedNewClaim, organization!.Attributes.Name, claim.Type);
             await SendEmailAsync(emailContent, request.Email);
         }
 
-        return await this.UnitOfWork.SaveChangesAsync();
+        return dbResponse;
     }
 
     private async Task SendEmailAsync(string content, string receipent)

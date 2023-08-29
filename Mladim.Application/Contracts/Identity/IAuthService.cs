@@ -14,13 +14,10 @@ namespace Mladim.Application.Contracts.Identity;
 
 public interface IAuthService
 {
-    Task<bool> IsAdminAsync(AppUser user, int organizationId);   
-    Task<Result<AuthResponse>> LoginAsync(LoginUser request);
-    Task<Result<AuthResponse>> ChangePasswordAsync(string userId, string password);
-    Task<Result<RegistrationResponse>> RegisterAsync(UserRegistration request);
-    Task<AppUser?> ExistAppUserAsync(string email);
-    string GenerateAppUserPassword();
-    Task<bool> UpsertClaimAsync(AppUser user, Claim newClaim);
-    Task<bool> ExistClaimAsync(AppUser user, string claimValue);
-    Task<AppUser> CreateUserWithClaimAsync(string name, string surname, string email, Claim claim);
+    Task<bool> AddClaimAsync(AppUser user, Claim newClaim);
+    Task<bool> ExistClaimValueAsync(AppUser user, string claimValue);
+    Task<Result<AuthResponse>> LoginAsync(string email, string password);
+    Task<Result<RegistrationResponse>> RegisterAsync(string name, string surname, string nickname, string email, string? password = null);
+    Task<bool> ReplaceClaimAsync(AppUser user, Claim newClaim);
+    
 }
