@@ -49,10 +49,7 @@ public partial class ProjectStatisticsTab
     public IProjectService ProjectService { get; set; } = default!;
 
     [Inject]
-    public NavigationManager Navigation { get; set; } = default!;
-
-    [CascadingParameter]
-    public OrganizationVM? SelectedOrganization { get; set; }
+    public NavigationManager Navigation { get; set; } = default!;    
 
     [Parameter]
     public IEnumerable<ProjectVM> Projects { get; set; } = new List<ProjectVM>();

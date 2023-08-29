@@ -29,6 +29,9 @@ public class AuthService : IAuthService
     {
         var user = await this.UserManager.FindByEmailAsync(loginUser.Email);        
 
+
+       
+
         if (user == null)
             return Result<AuthResponse>.Error("Vnešeni podatki so napačni");      
 

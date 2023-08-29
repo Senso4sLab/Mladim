@@ -9,10 +9,14 @@ public class DateTimeRangeVM
     public TimeSpan? StartTime { get; set; } = TimeSpan.Zero;
     public TimeSpan? EndTime { get; set; } = TimeSpan.Zero;
 
-    private DateTimeRangeVM() { }
+    public DateTimeRangeVM() { }
 
-    public bool IsExpired(DateTime dateTime) => this.EndDate < dateTime;
-   
-   
+
+    public static DateTimeRangeVM Create(DateTime start, DateTime end,  TimeSpan? startTime, TimeSpan? endTime) =>
+        new DateTimeRangeVM() { StartDate = start, EndDate = end, StartTime = startTime, EndTime = endTime };
+
+
+
+
 }
 

@@ -17,7 +17,7 @@ public class AppUserRepository : GenericRepository<AppUser>, IAppUserRepository
 
     public async Task<bool> IsUserInOrganizationAsync(string userId, int organizationId)
     {
-        return await this.DbSet.Where(u => u.Id == userId).AnyAsync(u => u.Organizations.Any(o => o.Id == organizationId));
+        return await this.DbSet.Where(u => u.Id == userId).Include(u => u.Organizations).AnyAsync(u => u.Organizations.Any(o => o.Id == organizationId));
     }
 }
 

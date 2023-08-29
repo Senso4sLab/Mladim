@@ -63,7 +63,7 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
             appUser = await this.AuthService.CreateUserWithClaimAsync(request.Name, request.Surname, request.Email, claim);
             appUser.Organizations.Add(organization);
 
-            await this.UnitOfWork.AppUserRepository.AddAsync(appUser);
+            //await this.UnitOfWork.AppUserRepository.AddAsync(appUser);
             await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);
             await this.UnitOfWork.SaveChangesAsync();
 
@@ -74,7 +74,8 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
             await SendEmailAsync(emailContent, request.Email);
         }
         else
-        {
+        {       
+
            if (await this.UnitOfWork.AppUserRepository.IsUserInOrganizationAsync(appUser.Id, organization.Id)) 
                 throw new Exception("Uporabnik je že dodan v organizaciji");
 

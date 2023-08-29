@@ -72,8 +72,8 @@ public partial class Dashboard
 
             var dateTime = DateTime.UtcNow;
 
-            activeProjects = projects.Where(p => !p.DateRange.IsExpired(dateTime)).ToList();
-            pastProjects = projects.Where(p => p.DateRange.IsExpired(dateTime)).ToList();
+            activeProjects = projects.Where(p => !p.IsCompleted(dateTime)).ToList();
+            pastProjects = projects.Where(p => p.IsCompleted(dateTime)).ToList();
         }
     }
 

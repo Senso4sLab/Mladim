@@ -15,9 +15,10 @@ public class Other : Profile
         CreateMap<SocialMediaUrlsQueryDto, SocialMediaUrlsVM>();
 
         CreateMap<DateTimeRangeVM, DateTimeRangeCommandDto>();
-        CreateMap<DateTimeRangeQueryDto, DateTimeRangeVM>();
 
-        
+        CreateMap<DateTimeRangeQueryDto, DateTimeRangeVM>();
+         
+
 
         CreateMap<NamedEntityDto, NamedEntityVM>()
             .ReverseMap();
