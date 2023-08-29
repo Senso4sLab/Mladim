@@ -43,8 +43,8 @@ public class AssignOrganizationHandlerCommand : IRequestHandler<AssignOrganizati
 
         var claimName = Enum.GetName(request.Claim)!;
         var claim = new Claim(claimName, request.OrganizationId.ToString());
-
-        await this.AuthService.UpsertClaimAsync(appUser, claim);
+        
+        await this.AuthService.ReplaceClaimAsync(appUser, claim);
 
         return await this.UnitOfWork.SaveChangesAsync() > 0;        
     }
