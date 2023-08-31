@@ -23,9 +23,7 @@ public class UnitOfWork : IUnitOfWork
     public IStaffMemberRepository StaffMemberRepository =>
         memberRepository ??= new StaffMemberRepository(this.Context);
     public IGroupRepository GroupRepository =>
-       groupRepository ??= new GroupRepository(this.Context);
-    public IAppUserRepository AppUserRepository =>
-       appUserRepository ??= new AppUserRepository(this.Context);
+       groupRepository ??= new GroupRepository(this.Context);  
     public IPartnerRepository PartnerRepository => 
         partnerRepository ??= new PartnerRepository(this.Context);
     public IParticipantRepository ParticipantRepository =>
@@ -34,10 +32,11 @@ public class UnitOfWork : IUnitOfWork
     public IAnonymousParticipantRepository AnonymousParticipantRepository =>
         anonymousParticipantRepository ??= new AnonymousParticipantRepository(this.Context);
 
+    public IAppUserRepository AppUserRepository { get; }
+
     private IOrganizationRepository organizationRepository;
     private IActivityRepository activityRepository;
-    private IProjectRepository projectRepository;
-    private IAppUserRepository appUserRepository;
+    private IProjectRepository projectRepository;  
     private IStaffMemberRepository memberRepository;
     private IGroupRepository groupRepository;
     private IParticipantRepository participantRepository;
@@ -45,10 +44,10 @@ public class UnitOfWork : IUnitOfWork
     private IAnonymousParticipantRepository anonymousParticipantRepository;
 
 
-    public UnitOfWork(ApplicationDbContext context)
+    public UnitOfWork(IAppUserRepository appUserRepository, ApplicationDbContext context)
     {
-        this.Context = context; 
-        
+        this.Context = context;
+        this.AppUserRepository = appUserRepository;        
     }    
 
     public async Task<int> SaveChangesAsync() =>

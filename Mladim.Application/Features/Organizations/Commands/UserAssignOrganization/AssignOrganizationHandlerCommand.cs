@@ -1,13 +1,7 @@
 ﻿using MediatR;
 using Mladim.Application.Contracts.Identity;
 using Mladim.Application.Contracts.Persistence;
-using Mladim.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Organizations.Commands.UserGetOrganization;
 
@@ -28,24 +22,22 @@ public class AssignOrganizationHandlerCommand : IRequestHandler<AssignOrganizati
 
         ArgumentNullException.ThrowIfNull(organization);
 
-        var appUser = await this.UnitOfWork.AppUserRepository
-            .FirstOrDefaultAsync(u => u.Id == request.AppUserId);
+        var appUser = await this.UnitOfWork.AppUserRepository.FindByIdAsync(request.AppUserId);           
 
         ArgumentNullException.ThrowIfNull(appUser);
 
-        var existAppUser = await this.UnitOfWork.AppUserRepository
-            .FirstOrDefaultAsync(u => u.Organizations.Any(o => o.Id == request.OrganizationId));
+        var claim = new Claim(Enum.GetName(request.Claim)!, request.OrganizationId.ToString());
 
-        if (existAppUser != null)
-            return false;
+        var userExists = await this.UnitOfWork.OrganizationRepository
+            .IsUserInOrganizationAsync(request.AppUserId, request.OrganizationId);
 
-        appUser.Organizations.Add(organization);
-
-        var claimName = Enum.GetName(request.Claim)!;
-        var claim = new Claim(claimName, request.OrganizationId.ToString());
-        
-        await this.AuthService.ReplaceClaimAsync(appUser, claim);
-
+        if (userExists)        
+            await this.AuthService.ReplaceClaimAsync(appUser, claim);        
+        else
+        {
+            appUser.Organizations.Add(organization);
+            await this.AuthService.AddClaimAsync(appUser, claim);
+        }
         return await this.UnitOfWork.SaveChangesAsync() > 0;        
     }
 }

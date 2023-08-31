@@ -20,6 +20,7 @@ public class UserPassword
 
 public class UrlRegistration
 {
+    public string Email { get; set; } = string.Empty;
     public string UserId { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
     public string ConfirmPassword { get; set; } = string.Empty;
@@ -46,11 +47,24 @@ public class UserRegistration
 
 
     public static UserRegistration Create(string name, string surname, string nickname, string email, string password) =>
-        new UserRegistration(name, surname, nickname, email, password);
-    
-
+        new UserRegistration(name, surname, nickname, email, password);    
 
 }
+
+
+public class UserRegistrationConfirmation
+{   
+    [Required]   
+    public string EmailToken { get; set; } = string.Empty;
+
+    [Required]
+    public string Email { get; set; } = string.Empty;
+
+    [Required]
+    public string Password { get; set; } = string.Empty;
+
+}
+
 
 
 

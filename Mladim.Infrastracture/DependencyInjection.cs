@@ -48,6 +48,7 @@ public static class DependencyInjection
 
         collection.AddScoped<IUnitOfWork, UnitOfWork>();
         collection.AddTransient<IAuthService, AuthService>();
+        collection.AddScoped<IAppUserRepository, AppUserRepository>();
         collection.Configure<JwtSettings>(configuration.GetSection(nameof(JwtSettings)));
         collection.Configure<EmailSettings>(configuration.GetSection(nameof(EmailSettings)));
 

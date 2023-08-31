@@ -41,7 +41,7 @@
         <MudStack Row Justify="Justify.SpaceBetween">
              <MudText Typo="Typo.h5">Spremembna gesla</MudText>
              <MudStack Row>
-                <MudToggleIconButton ToggledChanged="UpdatePasswordAsync" Toggled="editablePassword" Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary"
+                <MudToggleIconButton ToggledChanged="ChangePasswordAsync" Toggled="editablePassword" Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary"
                                      ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary"/>
                 @if (editablePassword)
                 {

@@ -19,12 +19,11 @@ public class AuthService : IAuthService
 
     private IAppUserRepository UserRepository { get; }
     private JwtSettings JwtSettings { get; }
-    public AuthService(UserManager<AppUser> userManager, IAppUserRepository userRepository ,IOptions<JwtSettings> jwtSettings)
+    public AuthService(UserManager<AppUser> userManager, IAppUserRepository userRepository, IOptions<JwtSettings> jwtSettings)
     {
         this.UserManager = userManager;
         this.UserRepository = userRepository;
-        this.JwtSettings = jwtSettings.Value;
-       
+        this.JwtSettings = jwtSettings.Value;       
     }
    
     public async Task<Result<AuthResponse>> LoginAsync(string email, string password)
@@ -48,11 +47,6 @@ public class AuthService : IAuthService
         return Result<AuthResponse>.Success(authResponse);         
     }
 
-   
-
-
-
-
     private async Task<string> CreateTokenAsync(AppUser user)
     {
         List<Claim> tokenClaims = new List<Claim>
@@ -62,10 +56,10 @@ public class AuthService : IAuthService
             new Claim(ClaimTypes.NameIdentifier, user.Id),
         };
 
-        //foreach (var role in await UserManager.GetRolesAsync(user))
-        //    tokenClaims.Add(new Claim(ClaimTypes.Role, role));
+        foreach (var role in await UserManager.GetRolesAsync(user))
+            tokenClaims.Add(new Claim(ClaimTypes.Role, role));
 
-       
+
         tokenClaims.AddRange(await this.UserManager.GetClaimsAsync(user));
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtSettings.Key));
@@ -79,7 +73,7 @@ public class AuthService : IAuthService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }    
     
-    public async Task<bool> IsUserAdminAsync(AppUser user, int organizationId)
+    public async Task<bool> IsUserAdminAsync(AppUser user)
     {
         var roles = await this.UserManager.GetRolesAsync(user);
         return roles.Any(r => r == "Admin");  
@@ -116,7 +110,6 @@ public class AuthService : IAuthService
         return claimResponse.Succeeded;
     }
 
-
     public async Task<bool> ReplaceClaimAsync(AppUser user, Claim newClaim)
     {
         var claims = await this.UserManager.GetClaimsAsync(user);
@@ -132,21 +125,54 @@ public class AuthService : IAuthService
     }
 
 
-
-
-   
-
-
-
-    //private async Task<Result<AppUser>> CreateUserAsync(AppUser user, string password)
-    //{      
-    //    var result = await this.UserManager.CreateAsync(user, password);
+    
+    private async Task<bool> ConfirmEmailAsync(AppUser user, string emailToken)
+    {
+        bool isEmailConfirmed = await this.UserManager.IsEmailConfirmedAsync(user);
         
-    //    if (!result.Succeeded)
-    //        return Result<AppUser>.Error(string.Join(", ", result.Errors.Select(e => e.Description)));
+        if (isEmailConfirmed)
+            return true;
+        
+        var identityResult = await this.UserManager.ConfirmEmailAsync(user, emailToken);
+        return identityResult.Succeeded;
+    }
 
-    //    return Result<AppUser>.Success(user);
-    //} 
+
+    public async Task<string> EmailTokenAsync(AppUser appUser)
+    {
+        return await this.UserManager.GenerateEmailConfirmationTokenAsync(appUser);
+    }
+
+
+    public async Task<Result<AuthResponse>> RegisterConfirmationAsync(string email, string emailToken, string password)
+    {
+
+        var user = await this.UserManager.FindByEmailAsync(email);
+
+        ArgumentNullException.ThrowIfNull(user);
+
+        if(!await ConfirmEmailAsync(user, emailToken))
+            return Result<AuthResponse>.Error("Potrditev registracije ni uspela.");
+
+
+        var token = await UserManager.GeneratePasswordResetTokenAsync(user);
+
+        var result = await UserManager.ResetPasswordAsync(user, token, password);
+
+        if (!result.Succeeded)
+            return Result<AuthResponse>.Error(string.Join(", ", result.Errors.Select(e => e.Description)));
+     
+
+        var authResponse = new AuthResponse
+        {
+            Id = user.Id,
+            Name = user.Name,
+            Email = user.Email!,
+            Token = await CreateTokenAsync(user),
+        };
+
+        return Result<AuthResponse>.Success(authResponse);
+    }
 
 
     public async Task<Result<RegistrationResponse>> RegisterAsync(string name, string surname, string nickname, string email, string? password = null)  
@@ -157,7 +183,7 @@ public class AuthService : IAuthService
             return Result<RegistrationResponse>.Error("Uporabnik že obstaja");
 
         var appUser = AppUser.Create(name, surname, nickname, email, email);
-        var response = await this.UserRepository.AddAsync(appUser, password ?? GenerateUserPassword());     
+        var response = await this.UserRepository.CreateAsync(appUser, password ?? GenerateUserPassword());     
 
         if (response.Succeeded)
             return Result<RegistrationResponse>.Success(new RegistrationResponse { UserId = response.Value!.Id });

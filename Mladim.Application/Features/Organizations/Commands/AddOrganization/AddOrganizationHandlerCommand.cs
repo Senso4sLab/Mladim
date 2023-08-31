@@ -12,6 +12,7 @@ public class AddOrganizationHandlerCommand : IRequestHandler<AddOrganizationComm
     private IMapper Mapper { get; }
     private IUnitOfWork UnitOfWork { get; }
     
+    
     public AddOrganizationHandlerCommand(IUnitOfWork unitOfWork, IMapper mapper)
     {
         Mapper = mapper;
@@ -25,7 +26,7 @@ public class AddOrganizationHandlerCommand : IRequestHandler<AddOrganizationComm
 
         if (request.AppUserId is string appUserId)
         {
-            var appUser = await UnitOfWork.AppUserRepository.FirstOrDefaultAsync(ap => ap.Id == appUserId);             
+            var appUser = await UnitOfWork.AppUserRepository.FindByIdAsync(appUserId);             
 
             ArgumentNullException.ThrowIfNull(appUser);
 

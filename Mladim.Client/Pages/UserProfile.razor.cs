@@ -1,30 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
-using System.Net.Http;
-using System.Net.Http.Json;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.Web.Virtualization;
-using Microsoft.AspNetCore.Components.WebAssembly.Http;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.JSInterop;
-using Mladim.Client;
-using Mladim.Client.Shared;
 using Mladim.Client.Services.Authentication;
-using Mladim.Client.Components;
 using Mladim.Client.ViewModels;
-using Mladim.Client.Layouts;
-using Mladim.Client.Extensions;
-using Mladim.Client.Components.Organizations;
-using Blazored.TextEditor;
 using MudBlazor;
 using System.Security.Claims;
-using Mladim.Domain.IdentityModels;
 using Mladim.Client.Services.AccountService;
 using Mladim.Client.Services.PopupService;
 using Mladim.Domain.Models;
@@ -51,7 +30,6 @@ public partial class UserProfile
     public NavigationManager Navigation { get; set; } = default!;
 
 
-
     private bool editableAccount = false;
     private bool editablePassword = false;
 
@@ -74,7 +52,6 @@ public partial class UserProfile
 
     private InputType ConfirmedPasswordInput = InputType.Password;
     private string ConfirmedPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
-
 
 
     protected override async Task OnInitializedAsync()
@@ -110,16 +87,14 @@ public partial class UserProfile
         if (editState)
             return;
 
-        if (await this.AccountService.UpdateAccountAsync(appUser))
-        {
-            this.PopupService.ShowSnackbarSuccess("Podatki so uspe�no posodobljeni");            
-        }
+        if (await this.AccountService.UpdateAccountAsync(appUser))        
+            this.PopupService.ShowSnackbarSuccess("Podatki so uspešno posodobljeni");        
         else
             this.PopupService.ShowSnackbarError();
     }
 
 
-    private async Task UpdatePasswordAsync(bool editState)
+    private async Task ChangePasswordAsync(bool editState)
     {
         if (editState)
         {
@@ -132,15 +107,15 @@ public partial class UserProfile
         if (!userPasswordForm.IsValid)
             return;
 
-        var response = await this.AuthService.ChangePasswordAsync(appUser.Id, userPassword.NewPassword);
+        var passwordChanged = await this.AuthService.TryChangePasswordAsync(appUser.Id, userPassword.OldPassword, userPassword.NewPassword);
 
-        if (response.Succeeded)
+        if (passwordChanged)
         {
-            this.PopupService.ShowSnackbarSuccess("Podatki so uspe�no posodobljeni");
+            this.PopupService.ShowSnackbarSuccess("Geslo je uspešno spremenjeno");
             this.editablePassword = editState;
         }
         else
-            this.PopupService.ShowSnackbarError(response.Message);
+            this.PopupService.ShowSnackbarError("Gesla ni mogoče spremeniti");
     }
 
 

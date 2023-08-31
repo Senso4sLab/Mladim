@@ -5,9 +5,10 @@
 <PageTitle>Poročila</PageTitle>
 
 <MudStack Class="py-5" Spacing="4">
-   <MudTextField Value="@SelectedOrganization?.Attributes?.Name" Label="Izbrana organizacija" Variant="Variant.Outlined" ReadOnly="true"></MudTextField>
+   <MudTextField Value="@SelectedOrganization?.Attributes?.Name" Label="Izbrana organizacija" Variant="Variant.Outlined" ReadOnly="true"></MudTextField> 
 
-   @if (SelectedOrganization != null)
+
+    @if (SelectedOrganization != null)
     {
         <MudTabs  Class="py-3" Elevation="0" >
             <MudTabPanel Text="Statistika">

@@ -10,10 +10,19 @@ public class UrlRegistrationValidator : AbstractValidator<UrlRegistration>
 {
     public UrlRegistrationValidator()
     {
+        RuleFor(x => x.Email)
+            .EmailAddress()
+            .WithMessage("Neveljavna oblika email naslova");
+
         RuleFor(x => x.Password)
            .NotEmpty()
            .NotNull()
            .WithMessage("Vnosno polje je obvezno");
+
+        RuleFor(x => x.ConfirmPassword)
+         .NotEmpty()
+         .NotNull()
+         .WithMessage("Vnosno polje je obvezno");
 
         RuleFor(x => x.ConfirmPassword)
             .Equal(x => x.Password)

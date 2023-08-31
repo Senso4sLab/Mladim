@@ -24,13 +24,20 @@ public class AccountController : ControllerBase
         AuthService = authService;
     }
 
-
     [HttpPost("register")]
     public async Task<ActionResult<Result<RegistrationResponse>>> RegisterAsync(UserRegistration request)
     {
         var response = await this.AuthService.RegisterAsync(request.Name, request.Surname, request.Nickname, request.Email, request.Password);
         return Ok(response);
     }
+
+    [HttpPost("confirmRegistration")]
+    public async Task<ActionResult<Result<AuthResponse>>> RegisterConfirmationAsync(UserRegistrationConfirmation request)
+    {
+        var response = await this.AuthService.RegisterConfirmationAsync(request.Email,request.EmailToken, request.Password);
+        return Ok(response);
+    }
+
 
     [HttpPost("login")]
     public async Task<ActionResult<Result<AuthResponse>>> LoginAsync(LoginUser userDto)
@@ -39,15 +46,13 @@ public class AccountController : ControllerBase
         return Ok(response);
     }
 
-
-    [HttpGet("password")]
-    public async Task<ActionResult<Result<AuthResponse>>> ChangePasswordAsync([FromQuery] ChangePasswordCommand changePasswordCommand)
+    [Authorize]
+    [HttpPost("password")]
+    public async Task<ActionResult<string>> ChangePasswordAsync(ChangePasswordCommand changePasswordCommand)
     {
         var response = await this.Mediater.Send(changePasswordCommand);
         return Ok(response);
     }
-
-
 
     [Authorize]
     [HttpPut("profile")]

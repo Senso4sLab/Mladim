@@ -1,6 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿@using MudBlazor.Utilities;
+@inherits LayoutComponentBase
 
-<MudThemeProvider />
+<MudThemeProvider Theme="MyCustomTheme"/>
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -12,3 +13,18 @@
         </MudItem>
     </MudGrid>
 </MudContainer>
+
+@code
+{
+    MudTheme MyCustomTheme = new MudTheme()
+        {
+            Palette = new PaletteLight()
+            {
+                Primary = new MudColor("#4da456"),//Colors.  Colors.Blue.Default,
+                Secondary = new MudColor("#394241"),
+                AppbarBackground = new MudColor("#4da456"),
+                DrawerBackground = new MudColor("#4da456"),
+                DrawerText = new MudColor("#000000"),
+            },
+        };
+}

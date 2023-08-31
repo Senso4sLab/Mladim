@@ -16,7 +16,15 @@ public class OrganizationRepository : GenericRepository<Organization>, IOrganiza
     public OrganizationRepository(ApplicationDbContext context) : base(context)
     {        
     }
+
+    public async Task<bool> IsUserInOrganizationAsync(string userId, int organizationId)
+    {
+        return await this.DbSet.Where(o => o.Id == organizationId)
+            .Include(o => o.AppUsers)
+            .AnyAsync(o => o.AppUsers.Any(u => u.Id == userId));
+    }
+
 }
 
-   
+
 

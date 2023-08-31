@@ -48,9 +48,9 @@ public class UpdateStaffMemberCommandHandler : IRequestHandler<UpdateStaffMember
         if(appUser == null)
             throw new ArgumentException("Uporabnik z vnešenim email naslovom ne obstaja");
 
-        if (!await this.UnitOfWork.AppUserRepository.IsUserInOrganizationAsync(appUser.Id,staffMember.OrganizationId))
+        if (!await this.UnitOfWork.OrganizationRepository.IsUserInOrganizationAsync(appUser.Id,staffMember.OrganizationId))
             throw new ArgumentException("Uporabnik nima dodeljene zahtevane organizacije");
-
+        
 
         staffMember = this.Mapper.Map(request, staffMember);
         this.UnitOfWork.StaffMemberRepository.Update(staffMember);
@@ -69,13 +69,10 @@ public class UpdateStaffMemberCommandHandler : IRequestHandler<UpdateStaffMember
         return dbResponse;
     }
 
-    private async Task SendEmailAsync(string content, string receipent)
+    private async Task<bool> SendEmailAsync(string content, string receipent)
     {
         var email = new Email(EmailContent.Subject, content, receipent, EmailContent.Sender);
 
-        var response = await this.EmailService.SendEmailAsync(email);
-
-        if (!response)
-            throw new Exception("Email was not send");
+        return await this.EmailService.SendEmailAsync(email);      
     }
 }

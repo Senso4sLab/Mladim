@@ -26,7 +26,7 @@
     <MudDateRangePicker ReadOnly ="!editable"  Variant="Variant.Outlined" Label="Trajanje projekta" @bind-DateRange="project.DateRange"/>       
 
     <div>
-        <SfRichTextEditor Readonly="!editable" @bind-Value="@project.Attributes.Description" Placeholder="Nekaj o projektu" />
+        <SfRichTextEditor Readonly="!editable" @bind-Value="project.Attributes.Description" Placeholder="Nekaj o projektu" />           
     </div>
 
     <MudTextField  @bind-Value="project.Attributes.WebpageUrl" Label="Spletna stran" Variant="Variant.Outlined"></MudTextField>

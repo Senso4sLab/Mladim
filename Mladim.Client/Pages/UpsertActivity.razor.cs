@@ -1,37 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
-using System.Net.Http;
-using System.Net.Http.Json;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Routing;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.Web.Virtualization;
-using Microsoft.AspNetCore.Components.WebAssembly.Http;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
-using Mladim.Client;
-using Mladim.Client.Shared;
-using Mladim.Client.Services.Authentication;
-using Mladim.Client.Components;
 using Mladim.Client.ViewModels;
-using Mladim.Client.Layouts;
-using Mladim.Client.Extensions;
-using Mladim.Client.Components.Organizations;
-using Blazored.TextEditor;
-using MudBlazor;
 using Mladim.Client.Services.PopupService;
 using Mladim.Domain.Enums;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.Models;
-using Mladim.Client.Services.SubjectServices.Implementations;
-using Mladim.Domain.Models;
 using Mladim.Client.Services.FileService;
 using Mladim.Client.ViewModels.AttachedFile;
-using Mladim.Client.MappingProfiles.Profiles.Activities;
 
 namespace Mladim.Client.Pages;
 
@@ -88,7 +64,7 @@ public partial class UpsertActivity
     private List<NamedEntityVM> participants = new List<NamedEntityVM>();
     private List<NamedEntityVM> participantGroups = new List<NamedEntityVM>();
 
-    public bool editable = false;
+    public bool editable = true;
 
     private long maxFileSize = 1024 * 1024 * 3;
     private int maxAllowedFiles = 5;
@@ -106,7 +82,10 @@ public partial class UpsertActivity
         participantGroups = new List<NamedEntityVM>(await GroupService.GetByOrganizationIdAsync(defaultOrg.Id, GroupType.Activity, true));
 
         if (UpdateState)
+        {
             activity = await ActivityService.GetByActivityIdAsync(ActivityId.Value);
+            editable = false;
+        }
         else
             editable = true;
     }
@@ -116,9 +95,10 @@ public partial class UpsertActivity
 
     public async Task OnActivityEditableChanged(bool toggled)
     {
-        editable = toggled;
-        if (!toggled)
+        if (editable)
             await SaveActivityAsync();
+
+        editable = toggled;
     }
 
 

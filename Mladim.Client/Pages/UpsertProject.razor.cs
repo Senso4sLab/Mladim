@@ -10,6 +10,8 @@ using Microsoft.JSInterop;
 using System.IO;
 using Mladim.Client.Services.FileService;
 using Mladim.Client.MappingProfiles.Profiles.Projects;
+using System.ComponentModel.DataAnnotations;
+using Syncfusion.Blazor.RichTextEditor;
 
 namespace Mladim.Client.Pages;
 
@@ -45,9 +47,9 @@ public partial class UpsertProject
 
     private IEnumerable<NamedEntityVM> Staff = new List<NamedEntityVM>();    
     private List<NamedEntityVM> Partners = new List<NamedEntityVM>();
-     
-    public bool editable = false;
-   
+
+    public bool editable = true;
+
     private ProjectVM project = new ProjectVM();
     private bool UpdateState => ProjectId != null;
 
@@ -62,17 +64,21 @@ public partial class UpsertProject
         this.Partners = new List<NamedEntityVM>(await PartnersByOrganizationIdAsync());
 
         if (UpdateState)
+        {
             await this.FetchingMembersForProjectUpdate();
+            editable = false;
+        }
         else
             editable = true;
     }
 
     public async Task OnProjectEditableChanged(bool toggled)
     {
-        
-        editable = toggled;              
-        if(!toggled)        
-            await SaveProjectAsync();        
+        if (editable)
+            await SaveProjectAsync();
+
+        editable = toggled;
+
     }
     
 

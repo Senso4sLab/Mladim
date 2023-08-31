@@ -56,13 +56,15 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
             await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);
             await this.UnitOfWork.SaveChangesAsync();
 
-            var registrationUrl = $"{HttpContextAccessor?.HttpContext?.AppBaseUrl()}/registration/{user.Id}";
+
+            var emailToken = await this.AuthService.EmailTokenAsync(user);
+            var registrationUrl = $"{HttpContextAccessor?.HttpContext?.AppBaseUrl()}/registration/{emailToken}";
             var emailContent = string.Format(this.EmailContent.ContentAddedNewUser, organization.Attributes.Name, registrationUrl);
             await SendEmailAsync(emailContent, request.Email);
         }
         else
         {
-            if (await this.UnitOfWork.AppUserRepository.IsUserInOrganizationAsync(user.Id, organization.Id))
+            if (await this.UnitOfWork.OrganizationRepository.IsUserInOrganizationAsync(user.Id, organization.Id))
                 throw new Exception("Uporabnik je že dodan v organizacijo");
 
             user.Organizations.Add(organization);
@@ -77,16 +79,15 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
         return this.Mapper.Map<StaffMemberDetailsQueryDto>(staffMember);
     }
 
+
+
    
 
-    private async Task SendEmailAsync(string content, string receipent)
+    private async Task<bool> SendEmailAsync(string content, string receipent)
     {
         var email = new Email(EmailContent.Subject, content, receipent, EmailContent.Sender);
 
-        var response = await this.EmailService.SendEmailAsync(email);
-
-        if (!response)
-            throw new Exception("Email was not send");
+        return await this.EmailService.SendEmailAsync(email);
     }
 
     private async Task<AppUser?> CreateUserAsync(string name, string surname, string email)

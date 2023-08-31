@@ -12,11 +12,10 @@ public partial class Registration
     public IAuthService AuthService { get; set; } = default!;
 
     [Inject]
-    public NavigationManager Navigation { get; set; } = default!;
-      
+    public NavigationManager Navigation { get; set; } = default!;      
 
     [Parameter]
-    public string? UserId { get; set; }
+    public string? Token { get; set; }
 
     private bool _isBusy = false;
     private string _errorMessage = string.Empty;
@@ -25,14 +24,18 @@ public partial class Registration
 
     UrlRegistrationValidator urlRegistrationValidator = new UrlRegistrationValidator();    
 
-    
-
-    bool isShow;
+    bool isShowPasword;
     private InputType PasswordInput = InputType.Password;
     private string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
+    bool isShowConfirmPasword;
+    private InputType ConfirmPasswordInput = InputType.Password;
+    private string ConfirmPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+
     private MudForm? passwordForm;
    
+
     public async Task OnValidSubmit()
     {
         await passwordForm.Validate();
@@ -42,7 +45,8 @@ public partial class Registration
         
         _isBusy = true;
 
-        var response = await this.AuthService.ChangePasswordAsync(UserId!, urlRegistration.Password);
+        var response = await this.AuthService.ConfirmRegistrationAsync(urlRegistration.Email, Token!, urlRegistration.Password);            
+           
         this._errorMessage = response.Message;
         
         _isBusy = false;
@@ -53,17 +57,33 @@ public partial class Registration
 
     public void ButtonPasswordClick()
     {
-        if (isShow)
+        if (isShowPasword)
         {
-            isShow = false;
+            isShowPasword = false;
             PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
             PasswordInput = InputType.Password;
         }
         else
         {
-            isShow = true;
+            isShowPasword = true;
             PasswordInputIcon = Icons.Material.Filled.Visibility;
             PasswordInput = InputType.Text;
+        }
+    }
+
+    public void ButtonConfirmPasswordClick()
+    {
+        if (isShowConfirmPasword)
+        {
+            isShowConfirmPasword = false;
+            ConfirmPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            ConfirmPasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShowConfirmPasword = true;
+            ConfirmPasswordInputIcon = Icons.Material.Filled.Visibility;
+            ConfirmPasswordInput = InputType.Text;
         }
     }
 }

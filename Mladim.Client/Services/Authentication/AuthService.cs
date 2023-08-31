@@ -47,11 +47,11 @@ public class AuthService : IAuthService
     }
 
 
-
-    public async Task<Result<AuthResponse>> ChangePasswordAsync(string userId, string password)
+    public async Task<Result<AuthResponse>> ConfirmRegistrationAsync(string email, string emailToken,  string password)
     {
-        string url = string.Format(this.MladimApiUrls.Password, userId, password);
-        var response =  await this.HttpClient.GetAsync<Result<AuthResponse>>(url);
+        var userConfirmation = new UserRegistrationConfirmation { Email = email, EmailToken = emailToken, Password = password };
+
+        var response = await this.HttpClient.PostAsync<UserRegistrationConfirmation, Result<AuthResponse>>(this.MladimApiUrls.ConfirmRegistration, userConfirmation);
 
         if (!response.Succeeded)
             return response;
@@ -59,6 +59,19 @@ public class AuthService : IAuthService
         await this.Storage.SetItemAsStringAsync(this.StorageKeys.AccessToken, response.Value!.Token);
         await this.AuthStateProvider.GetAuthenticationStateAsync();
         return response;
+    }
+
+   
+
+
+    public async Task<bool> TryChangePasswordAsync(string userId, string oldPassword, string password)
+    {
+        string url = string.Format(this.MladimApiUrls.Password, userId, password);
+
+        var changePassword = new ChangePassword { UserId = userId, OldPassword = oldPassword, Password = password };
+        var response =  await this.HttpClient.PostAsync<ChangePassword, string>(url, changePassword);
+
+        return response == userId;
     }
 
 
