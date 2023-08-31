@@ -14,12 +14,19 @@
             <MudTabPanel Text="Statistika">
                 <OrganizationStatisticsTab></OrganizationStatisticsTab>
             </MudTabPanel>
-            <MudTabPanel Text="Aktivni projekti">
-               
-            </MudTabPanel>       
-            <MudTabPanel Text="Končani projekti">
-             
-            </MudTabPanel>           
+            @if (activeProjects.Any())
+            {
+                <MudTabPanel Text="Aktivni projekti">
+                    <ProjectStatisticsTab PastActivities=false Projects="activeProjects"></ProjectStatisticsTab>
+                </MudTabPanel> 
+            }
+
+            @if (pastProjects.Any())
+            {
+                <MudTabPanel Text="Končani projekti">
+                    <ProjectStatisticsTab PastActivities=true Projects="pastProjects"></ProjectStatisticsTab>
+                </MudTabPanel>
+            }
         </MudTabs>
     }   
 </MudStack>

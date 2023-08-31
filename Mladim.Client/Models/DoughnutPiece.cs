@@ -4,6 +4,7 @@ public class DoughnutPiece
 {
     public string Name { get; set; } = string.Empty;
     public int Value { get; set; }
+    public string Text { get; set; }
 
 
     public DoughnutPiece()
@@ -11,9 +12,9 @@ public class DoughnutPiece
         
     }
 
-    private DoughnutPiece(string name, int value) => 
-        (this.Name, this.Value) = (name, value);   
+    private DoughnutPiece(string name, int value, string text) => 
+        (this.Name, this.Value, this.Text) = (name, value, text);   
 
-    public static DoughnutPiece Create(string name, int value) => 
-        new DoughnutPiece(name, value);
+    public static DoughnutPiece Create(string name, int value, string text) => 
+        new DoughnutPiece(name, value, text);
 }

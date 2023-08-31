@@ -3,14 +3,17 @@
 
 
 <MudStack Spacing="4" Class="py-5">
-    <div style="width:300px;">
-        <MudSelect T="ProjectVM" Label="Izberi želeni projekt" Value=selectedProject ValueChanged="OnProjectChangedAsync" OpenIcon="@CustomIcons.Projects" Variant=Variant.Outlined AdornmentColor="Color.Primary">
-            @foreach (var project in Projects)
-            {
-                <MudSelectItem Value="@project">@project.Attributes.Name</MudSelectItem>
-            }
-        </MudSelect>
-    </div>
+    <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+        <div style="width:400px;">
+            <MudSelect T="ProjectVM" Label="Izberi želeni projekt" Value=selectedProject ValueChanged="OnProjectChangedAsync" OpenIcon="@CustomIcons.Projects" Variant=Variant.Outlined AdornmentColor="Color.Primary">
+                @foreach (var project in Projects)
+                {
+                    <MudSelectItem Value="@project">@project.Attributes.Name</MudSelectItem>
+                }
+            </MudSelect>
+        </div>
+        <MudText Color="Color.Primary">Trajanje projekta: @selectedProject?.DateRange?.Start?.ToString("d MMMM, yyyy") - @selectedProject?.DateRange?.End?.ToString("d MMMM, yyyy")</MudText>
+    </MudStack>
 
     @if (projectStatistics != null)
     {
@@ -19,23 +22,25 @@
                 <SfAccumulationChart Title="Razporeditev udeležencev po letih" EnableAnimation="true" EnableSmartLabels="true">
                     <AccumulationChartSeriesCollection>
                         <AccumulationChartSeries DataSource="@projectStatistics.AgeDoughnut" XName="Name" YName="Value" InnerRadius="80%">
+                            <AccumulationDataLabelSettings Visible="true" Name="Text" Position="AccumulationLabelPosition.Outside"></AccumulationDataLabelSettings>
                         </AccumulationChartSeries>
                     </AccumulationChartSeriesCollection>
-                    <AccumulationChartLegendSettings Visible="true"></AccumulationChartLegendSettings>
+                    <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Far"></AccumulationChartLegendSettings>
                 </SfAccumulationChart>
             </MudItem>
             <MudItem xl ="4" sm="6">
                 <SfAccumulationChart Title="Razporeditev udeležencev po spolu" EnableAnimation="true" EnableSmartLabels="true">
                     <AccumulationChartSeriesCollection>
                         <AccumulationChartSeries DataSource="@projectStatistics.GenderDoughnut" XName="Name" YName="Value" InnerRadius="80%">
+                            <AccumulationDataLabelSettings Visible="true" Name="Text" Position="AccumulationLabelPosition.Outside"></AccumulationDataLabelSettings>
                         </AccumulationChartSeries>
                     </AccumulationChartSeriesCollection>
-                    <AccumulationChartLegendSettings Visible="true"></AccumulationChartLegendSettings>
+                    <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Far"></AccumulationChartLegendSettings>
                 </SfAccumulationChart>
             </MudItem>
             <MudItem xl ="4" sm="12">
                 <MudGrid>
-                    <MudItem xl="6" sm="12">
+                    <MudItem sm="12">
                         <MudPaper Outlined="true" Class="pa-4">
                             <MudStack Row AlignItems="AlignItems.Center">
                                  <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Size="Size.Large">
@@ -49,7 +54,7 @@
                              </MudStack>
                          </MudPaper>
                      </MudItem>
-                    <MudItem xl="6" sm="12">
+                    <MudItem sm="12">
                          <MudPaper Outlined="true" Class="pa-4">
                              <MudStack Row
                                        AlignItems="AlignItems.Center">

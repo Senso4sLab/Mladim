@@ -48,8 +48,6 @@ public partial class Dashboard
         }
     }
 
-
-
     public async Task<IEnumerable<ProjectVM>> ProjectsByOrganizationAsync(int organizationId) =>
         await this.ProjectService.GetByOrganizationIdAsync(organizationId);    
     

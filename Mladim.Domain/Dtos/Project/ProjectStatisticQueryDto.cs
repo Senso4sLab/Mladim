@@ -15,19 +15,22 @@ public class ProjectStatisticsQueryDto
     public int Id { get; set; }
     public string Name { get; set; } = default!;
     public int TotalActivities { get; set; }
-    public DateTimeRangeQueryDto TimeRange { get; private set; } = default!;
+    public DateTimeRangeQueryDto TimeRange { get; set; } = default!;
 
-    public List<ParticipantsGenderDto> ParticipantsByGenders = new List<ParticipantsGenderDto>();
+    public List<ParticipantsGenderDto> ParticipantsByGenders { get; set; } = new List<ParticipantsGenderDto>();
 
-    public List<ParticipantsAgeGroupDto> ParticipantsByAgeGroups = new List<ParticipantsAgeGroupDto>();
-    public int TotalParticipants => 
-        ParticipantsByGenders.Count == ParticipantsByAgeGroups.Count ? ParticipantsByAgeGroups.Count : 0;
+    public List<ParticipantsAgeGroupDto> ParticipantsByAgeGroups { get; set; } = new List<ParticipantsAgeGroupDto>();
     
+    public ProjectStatisticsQueryDto()
+    {
+        
+    }
+
     public void AddRange(IEnumerable<ParticipantsGenderDto> participantGenders)
     {
         foreach (var participantGender in participantGenders)
         {
-            var pg = ParticipantsByGenders.FirstOrDefault(p => p == participantGender);
+            var pg = ParticipantsByGenders.FirstOrDefault(p => p.Equals(participantGender));
 
             if (pg != null)
                 pg.Number += participantGender.Number;
@@ -41,7 +44,7 @@ public class ProjectStatisticsQueryDto
 
         foreach (var participantAgeGroup in participantAgeGroups)
         {
-            var pag = ParticipantsByAgeGroups.FirstOrDefault(p => p == participantAgeGroup);
+            var pag = ParticipantsByAgeGroups.FirstOrDefault(p => p.Equals(participantAgeGroup));
 
             if (pag != null)
                 pag.Number += participantAgeGroup.Number;
@@ -67,6 +70,12 @@ public class ParticipantsGenderDto
     public Gender Gender { get; set; }
     public int Number { get; set; }
 
+
+    public ParticipantsGenderDto()
+    {
+        
+    }
+
     public override bool Equals(object? obj) =>
         obj is ParticipantsGenderDto participantGenderDto && this.Equals(participantGenderDto);  
 
@@ -89,6 +98,11 @@ public class ParticipantsAgeGroupDto
 {
     public AgeGroups AgeGroup { get; set; }
     public int Number { get; set; }
+
+    public ParticipantsAgeGroupDto()
+    {
+        
+    }
 
     public override bool Equals(object? obj) =>
        obj is ParticipantsAgeGroupDto participantsAgeGroup && this.Equals(participantsAgeGroup);
