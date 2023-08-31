@@ -43,7 +43,6 @@ public partial class Activities
     private List<NamedEntityVM> selectedProjects = new List<NamedEntityVM>();
 
 
-
     private List<NamedEntityVM> projectLeads = new List<NamedEntityVM>();
     private NamedEntityVM? projectLead;
 
@@ -73,8 +72,7 @@ public partial class Activities
             this.selectedProjects.Add(project);
         else
             this.ProjectId = null;
-    }
-        
+    }      
     
 
 
@@ -97,11 +95,7 @@ public partial class Activities
                 gattActivities = gattActivities.Where(a => asml.ActivityIds.Any(id => id == a.ActivityId));
 
             filteredActivities = gattActivities.ToList();
-        });
-    
-
-
-    
+        });    
 
     private async Task GetActivitiesAsync(DefaultOrganization defaultOrg)
     {        

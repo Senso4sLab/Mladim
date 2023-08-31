@@ -3,13 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Mladim.Application.Contracts.File;
 using Mladim.Application.Contracts.Persistence;
-using Mladim.Domain.Dtos;
 using Mladim.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Activities.Commands.AddActivity;
 

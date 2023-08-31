@@ -2,7 +2,7 @@
 <MudForm @ref="@loginForm" Model="@loginUser" Validation="@(loginUserValidator.ValidateValue)" OnValidSubmit="OnValidSubmit">
     <MudGrid Justify="Justify.Center">
         <MudItem xs="12" md="6">
-            <MudCard Elevation="4" Class="pa-2">
+            <MudCard Elevation="4" Class="pa-3">
                 @if (!string.IsNullOrWhiteSpace(_errorMessage))
                 {
                     <MudAlert Severity="Severity.Error" Variant="Variant.Filled">@_errorMessage</MudAlert>
@@ -13,9 +13,9 @@
 
                 <MudCardContent>
                     <MudTextField Label="Email"
-                    @bind-Value="loginUser.Email" For="@(() => loginUser.Email)" />
+                    @bind-Value="loginUser.Email" For="@(() => loginUser.Email)" Variant="Variant.Outlined" />
                     <MudTextField Label="Geslo" Class="mt-3"
-                    @bind-Value="loginUser.Password" For="@(() => loginUser.Password)"
+                    @bind-Value="loginUser.Password" For="@(() => loginUser.Password)" Variant="Variant.Outlined"
                                   InputType="@PasswordInput"
                                   Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonPasswordClick" AdornmentAriaLabel="Pokaži geslo" />
                 </MudCardContent>

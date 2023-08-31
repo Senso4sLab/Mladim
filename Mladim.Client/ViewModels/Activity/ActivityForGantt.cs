@@ -9,6 +9,7 @@ public class ActivityForGantt
     public string ProjectName { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
+    public string Duration { get; set; }
     public int? ParentId { get; set; }
 
     public ActivityForGantt()
@@ -16,9 +17,19 @@ public class ActivityForGantt
 
     }
 
-    private ActivityForGantt(int id, int activityId, string activityName, NamedEntityVM project, DateTimeRangeVM dateTimeRange) =>
-        (Id, ActivityId, ActivityName, ProjectId, ProjectName, StartDate, EndDate) =
-            (id, activityId, activityName, project.Id, project.FullName, dateTimeRange.StartDate, dateTimeRange.EndDate);
+    private ActivityForGantt(int id, int activityId, string activityName, NamedEntityVM project, DateTimeRangeVM dateTimeRange)
+    {
+
+        this.Id = id;
+        this.ActivityId = activityId;
+        this.ActivityName = activityName;
+        this.ProjectId = project.Id;
+        this.ProjectName = project.FullName;
+        this.StartDate = dateTimeRange.StartDate;
+          
+        this.EndDate = dateTimeRange.EndDate;
+        this.Duration = (this.EndDate - this.StartDate).Days.ToString();
+    }
 
 
 

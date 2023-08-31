@@ -42,8 +42,6 @@ public class AppUserRepository: IAppUserRepository
     {
         return await this.UserManager.FindByEmailAsync(email);
     }
-   
-
 
     public async Task<string> ChangePasswordAsync(string userId, string oldPassword, string newPassword)
     {
