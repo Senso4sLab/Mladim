@@ -24,7 +24,7 @@ public class MladimApiUrls
 
     public string GroupCommand { get; set; } = string.Empty;
     public string GetGroupById { get; set; } = string.Empty;
-    public string GetGroupsByOrganizationId { get; set; } = string.Empty; 
+    public string GetGroupsByOrganizationId { get; set; } = string.Empty;
 
 
     public string GetStafMembersByOrganizationId { get; set; } = string.Empty;
@@ -53,6 +53,8 @@ public class MladimApiUrls
 
     public string AddOrganizationProfileImage { get; set; } = string.Empty;
     public string AddOrganizationBannerImage { get; set; } = string.Empty;
+
+    public string AddUserProfileImage { get; set; } = string.Empty;
 
 
     public string GetOrganizationStatistics { get; set; }  = string.Empty;

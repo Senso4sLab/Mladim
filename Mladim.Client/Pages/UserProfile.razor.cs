@@ -8,6 +8,9 @@ using Mladim.Client.Services.AccountService;
 using Mladim.Client.Services.PopupService;
 using Mladim.Domain.Models;
 using Mladim.Client.Validators;
+using Mladim.Client.Services.FileService;
+using Mladim.Client.ViewModels.Organization;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace Mladim.Client.Pages;
 
@@ -24,6 +27,9 @@ public partial class UserProfile
 
     [Inject]
     public IPopupService PopupService { get; set; }
+
+    [Inject]
+    IFileService FileService { get; set; } = default!;
 
 
     [Inject]
@@ -74,6 +80,31 @@ public partial class UserProfile
     {
         await OnInitializedAsync();
     }
+
+    public async Task UploadUserImageAsync(IBrowserFile e)
+    {
+        var image = await GenerateByteImageAsync(e);
+
+        var url = await this.FileService.AddUserProfileImageAsync(this.appUser.Id, image.data, image.name);
+
+        this.appUser.ImageUrl = url;      
+
+        this.StateHasChanged();
+    }
+
+    private async Task<(string name, List<byte> data)> GenerateByteImageAsync(IBrowserFile e)
+    {
+        var resizedImage = await e.RequestImageFileAsync(e.ContentType, 200, 200);
+
+        var buffer = new byte[resizedImage.Size];
+        await resizedImage.OpenReadStream().ReadAsync(buffer);
+
+        string fileName = Path.GetFileName(resizedImage.Name);
+
+        return (fileName, buffer.ToList());
+    }
+
+
 
     private async Task UpdateAccountAsync(bool editState)
     {

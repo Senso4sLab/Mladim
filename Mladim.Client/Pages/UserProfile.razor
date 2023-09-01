@@ -20,7 +20,20 @@
    
         <MudForm Model="appUser" @ref="@appUserForm" Validation="@(appUserValidator.ValidateValue)">
              <MudGrid Spacing="2">
-         
+                 <MudItem sm="12">
+                    <div>
+                        <MudImage Src="@(appUser.ImageUrl ?? "Files\\Images\\UserProfiles\\default_user_profile.png")" Alt="user_profile" Elevation="0" Class="rounded-lg d-inline" Height="200"/>
+                    <MudFileUpload Disabled=@(!editableAccount) style="transform: translate(-20px, 150px);" Class="d-inline-block" T="IBrowserFile" FilesChanged="UploadUserImageAsync">
+                            <ButtonTemplate>
+                                <MudFab HtmlTag="label"
+                                        Size="Size.Small"
+                                        Color="Color.Primary"
+                                        Icon="@Icons.Material.Filled.Edit"
+                                        for="@context" />
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </div>
+                 </MudItem>         
                  <MudItem sm="12" md="6">
                     <MudTextField @bind-Value="appUser.Name" For="@(() => appUser.Name)" ReadOnly="@(!editableAccount)" Label="Ime" Variant="Variant.Outlined"></MudTextField>
                  </MudItem>

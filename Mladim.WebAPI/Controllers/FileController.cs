@@ -7,6 +7,7 @@ using Mladim.Application.Features.Activities.Commands.UpdateActivity;
 using Mladim.Application.Features.Activities.Queries.GetActivity;
 using Mladim.Application.Features.Files.Commands.AddOrganizationBannerImage;
 using Mladim.Application.Features.Files.Commands.AddOrganizationProfileImage;
+using Mladim.Application.Features.Files.Commands.AddUserProfileImage;
 using Mladim.Application.Features.Files.Queries;
 using Mladim.Domain.Dtos;
 
@@ -46,6 +47,14 @@ namespace Mladim.WebAPI.Controllers
         public async Task<ActionResult<string>> UploadOrganizationBanner(AddOrganizationImageBannerCommand banner)
         {
             var url = await this.Mediator.Send(banner);
+
+            return Ok(url);
+        }
+
+        [HttpPost("userProfile")]
+        public async Task<ActionResult<string>> UploadUserProfile(AddUserProfileImageCommand userProfile)
+        {
+            var url = await this.Mediator.Send(userProfile);
 
             return Ok(url);
         }

@@ -7,9 +7,9 @@
         <MudExpansionPanel Style="font-weight:bold;" Text="Osnovni podatki" Class="my-2" >
             <MudGrid>
                 <MudItem xs="12" sm="6">
-                    <MudText Typo="Typo.body2">Logo organizacije</MudText>
+                    <MudText Class="py-3" Typo="Typo.body2">Logo organizacije</MudText>
                     <div style="height:200px; ">
-                        <MudImage Src="@(Organization.Attributes.BannerUrl ?? "Files\\Images\\OrganizationProfiles\\lm4cdbbh.so4..png")" Alt="logo" Elevation="0" Class="rounded-lg d-inline" Height="200" />
+                        <MudImage Src="@(Organization.Attributes.LogoUrl ?? "Files\\Images\\OrganizationProfiles\\default_org_logo.png")" Alt="logo" Elevation="0" Class="rounded-lg d-inline" Height="200" />
                         <MudFileUpload Disabled=@ReadOnly style="translate:-20px 150px;" Class="d-inline-block" T="IBrowserFile" FilesChanged="UploadProfileImage">
                             <ButtonTemplate>
                                 <MudFab  HtmlTag="label"
@@ -22,10 +22,10 @@
                     </div>                   
                 </MudItem>
                 <MudItem xs="12" sm="6">
-                    <MudText Typo="Typo.body2">Logo za vstopno stran</MudText>
+                    <MudText Class="py-3" Typo="Typo.body2">Logo za vstopno stran</MudText>
                     <div>
                         
-                        <MudImage Src="@(Organization.Attributes.BannerUrl ?? "Files\\Images\\OrganizationProfiles\\lm4cdbbh.so4..png")" Alt="banner" Elevation="0" Class="rounded-lg d-inline" Height="200" />
+                        <MudImage Src="@(Organization.Attributes.BannerUrl ?? "Files\\Images\\OrganizationBanners\\default_org_banner.png")" Alt="banner" Elevation="0" Class="rounded-lg d-inline" Height="200" />
                         
                         <MudFileUpload Disabled=@ReadOnly style="translate:-20px 150px;" Class="d-inline-block" T="IBrowserFile" FilesChanged="UploadBannerImage">
                             <ButtonTemplate>

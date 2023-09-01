@@ -13,4 +13,5 @@ public class AppUserQueryDto
     public string Surname { get; set; } = string.Empty;
     public string Nickname { get; set; } = string.Empty;
     public string? Email { get; set; }
+    public string? ImageUrl { get; set; }
 }

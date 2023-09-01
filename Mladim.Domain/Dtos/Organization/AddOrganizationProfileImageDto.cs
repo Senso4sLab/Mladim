@@ -18,5 +18,4 @@ public class AddOrganizationProfileImageDto
 
     public static AddOrganizationProfileImageDto Create(int organizationId, List<byte> data, string fileName) =>
         new AddOrganizationProfileImageDto(organizationId, data, fileName);
-
 }

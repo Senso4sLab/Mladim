@@ -16,26 +16,22 @@
         <UserLoginSettings />
     </MudAppBar>
 
-
-
     <MudDrawer @bind-Open="@_drawerOpen" Elevation="0" DisableOverlay=true Variant="DrawerVariant.Mini" OpenMiniOnHover=true MiniWidth="65px">
-        <div class="bg-white rounded-tr-xl" style="height:100%; overflow:hidden">          
-            @if (_drawerOpen)
-            {
-                <MudDrawerHeader Class="mt-5">
-                    <MudText Typo="Typo.h6">Mladim</MudText>
-                </MudDrawerHeader>
-            }
-
+        <div class="bg-white rounded-tr-xl" style="height:100%; overflow:hidden; border-right:1px solid #eeeeee">
+            <div style="padding: 30px 2px;">
+                @if (_drawerOpen)
+                {              
+                    <MudImage Class="px-5" Src="logo.jpg" Alt="Mladim logo"/>
+                }
+            </div>
             <MudNavMenu Color="Color.Primary" Rounded=true Margin="Margin.Normal" Class="pa-2">
-                <MudNavLink Class="navlink-hover" Href="/" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">Poročila</MudNavLink>
+                <MudNavLink Class="navlink-hover" Href="/" Match="NavLinkMatch.All" Icon="@CustomIcons.Dashboard">Poročila</MudNavLink>
                 <MudNavLink Class="navlink-hover" Href="/organization" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Description">Organizacija</MudNavLink>
                 <MudNavLink Class="navlink-hover" Href="/projects" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ImportContacts">Projekti</MudNavLink>
-                <MudNavLink Class="navlink-hover" Href="/activities" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Event">Aktivnosti</MudNavLink>
-            </MudNavMenu>         
+                <MudNavLink Class="navlink-hover" Href="/activities" Match="NavLinkMatch.All" Icon="@CustomIcons.ActivityGrayFilled">Aktivnosti</MudNavLink>
+            </MudNavMenu>           
         </div>
     </MudDrawer>
-
     <MudMainContent>
         <MudContainer>
             <CascadingValue Value="@OnSelectedOrganizationChanged">          

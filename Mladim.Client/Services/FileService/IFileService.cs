@@ -12,6 +12,7 @@ public interface IFileService
     Task<Stream?> GetFileStreamByProjectIdAsync(string fileName, int projectId);
     Task<Stream?> GetFileStreamByActivityIdAsync(string fileName, int activityId);
     Task<string?> AddOrganizationImageAsync(int organizationId, List<byte> data, string fileName, OrganizationImageType type);
+    Task<string?> AddUserProfileImageAsync(string userId, List<byte> data, string fileName);
 }
 
 
@@ -54,6 +55,13 @@ public class FileService : IFileService
         OrganizationImageType.Profile => this.MladimApiUrls.AddOrganizationProfileImage,
         _ => throw new NotImplementedException(),
     };
+
+    public async Task<string?> AddUserProfileImageAsync(string userId, List<byte> data, string fileName)
+    {
+        var userProfileImageUrl = this.MladimApiUrls.AddUserProfileImage;
+        var urlProfile = await this.HttpClient.PostAsync<AddUserProfileImageDto>(userProfileImageUrl, AddUserProfileImageDto.Create(userId, data, fileName));
+        return urlProfile;
+    }
 }
 
 

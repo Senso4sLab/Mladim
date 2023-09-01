@@ -28,7 +28,7 @@ public class ActivityForGantt
         this.StartDate = dateTimeRange.StartDate;
           
         this.EndDate = dateTimeRange.EndDate;
-        this.Duration = (this.EndDate - this.StartDate).Days.ToString();
+        //this.Duration = (this.EndDate - this.StartDate).Days.ToString();
     }
 
 

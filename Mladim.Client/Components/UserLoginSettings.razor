@@ -3,11 +3,16 @@
 
  
 <AuthorizeView>
-    <Authorized>        
-        <MudMenu Class="px-3" Icon="@Icons.Material.Filled.Person" Color="Color.Inherit">
-            <MudMenuItem OnClick="UserSettings">Moji podatki</MudMenuItem>
-            <MudMenuItem OnClick="LogoutAsync">Izpis</MudMenuItem>
-        </MudMenu>
+    <Authorized>  
+        <MudMenu Class="px-3">
+            <ActivatorContent>
+                <MudAvatar style="background-color:#FFFFFF; color:#4da456;">@(context?.User?.Identity?.Name[0])</MudAvatar>
+            </ActivatorContent>
+            <ChildContent>
+               <MudMenuItem OnClick="UserSettings">Moji podatki</MudMenuItem>
+               <MudMenuItem OnClick=" LogoutAsync">Izpis</MudMenuItem>               
+            </ChildContent>
+        </MudMenu>      
     </Authorized>
 </AuthorizeView>
 
