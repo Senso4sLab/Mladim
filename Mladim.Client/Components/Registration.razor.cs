@@ -52,7 +52,7 @@ public partial class Registration
         _isBusy = false;
 
         if (response.Succeeded)
-            this.Navigation.NavigateTo("/");
+            this.Navigation.NavigateTo("/organization");
     } 
 
     public void ButtonPasswordClick()

@@ -59,17 +59,23 @@ public class UpdateActivityCommandHandler : IRequestHandler<UpdateActivityComman
         activity.AnonymousParticipantGroups = new(this.Mapper.Map<IEnumerable<AnonymousParticipantGroup>>(request.AnonymousParticipantActivities));
 
         // Files 
-        activity.Files.Where(f => !request.Files.Any(rf => rf.FileName == f.FileName)).ToList().ForEach(f =>
+        var removeFiles = activity.Files.Where(f => !request.Files.Any(rf => rf.FileName == f.FileName)).ToList();
+        
+        foreach(var file in removeFiles)
         {
-            FileApiService.DeleteFile(f.StoredFileName, f.FolderName);
-            activity.Files.Remove(f);
-        });
+            var fileUrl = Path.Combine("Files", file.FolderName, file.StoredFileName);
+            FileApiService.DeleteFile(fileUrl);
+            activity.Files.Remove(file);
+        }
+       
 
-        request.Files.Where(rf => !activity.Files.Any(f => f.FileName == rf.FileName)).ToList().ForEach(async f =>
+        var addFiles = request.Files.Where(rf => !activity.Files.Any(f => f.FileName == rf.FileName)).ToList();
+            
+        foreach(var file in addFiles)
         {
-            string trustedFileName = await FileApiService.AddFileAsync(f.Data.ToArray(), "Activities", f.FileName);
-            activity.Files.Add(AttachedFile.Create(f.FileName, trustedFileName, f.ContentType, "Activities"));
-        });
+            string trustedFileName = await FileApiService.AddFileAsync(file.Data.ToArray(), "Activities", file.FileName);
+            activity.Files.Add(AttachedFile.Create(file.FileName, trustedFileName, file.ContentType, "Activities"));
+        }     
 
         return await this.UnitOfWork.SaveChangesAsync();
     }

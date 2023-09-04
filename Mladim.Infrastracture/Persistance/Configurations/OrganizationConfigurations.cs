@@ -15,6 +15,6 @@ public class OrganizationConfigurations : IEntityTypeConfiguration<Organization>
     {
         builder.OwnsOne(organization => organization.SocialMediaUrls);
         builder.OwnsOne(organization => organization.Attributes);
-        
+       
     }
 }

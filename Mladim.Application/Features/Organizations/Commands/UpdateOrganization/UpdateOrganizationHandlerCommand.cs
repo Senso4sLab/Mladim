@@ -26,6 +26,8 @@ public class UpdateOrganizationHandlerCommand : IRequestHandler<UpdateOrganizati
 
         this.UnitOfWork.OrganizationRepository.Update(organization);
 
-        return await this.UnitOfWork.SaveChangesAsync();
+        int dbResponse = await this.UnitOfWork.SaveChangesAsync();
+
+        return dbResponse;
     }
 }

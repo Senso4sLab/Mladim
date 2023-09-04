@@ -104,5 +104,5 @@ public partial class UpsertOrganization
     }
 
     private void GoBack() =>
-        this.Navigation.NavigateTo("/");
+        this.Navigation.NavigateTo("/organization");
 }

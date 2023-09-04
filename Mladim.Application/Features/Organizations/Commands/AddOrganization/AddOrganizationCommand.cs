@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Dtos.Attributes;
+
 using Mladim.Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -15,4 +16,6 @@ public class AddOrganizationCommand : IRequest<OrganizationQueryDto>
     public string? AppUserId { get; set; }
     public OrganizationAttributesCommandDto Attributes { get; set; } = default!;   
     public SocialMediaUrlsCommandDto SocialMediaUrls { get; set; } = default!;
+   
+
 }

@@ -25,7 +25,10 @@
                 }
             </div>
             <MudNavMenu Color="Color.Primary" Rounded=true Margin="Margin.Normal" Class="pa-2">
-                <MudNavLink Class="navlink-hover" Href="/" Match="NavLinkMatch.All" Icon="@CustomIcons.Dashboard">Poročila</MudNavLink>
+                @if(SelectedOrganization != null)
+                {
+                     <MudNavLink Class="navlink-hover" Href="/" Match="NavLinkMatch.All" Icon="@CustomIcons.Dashboard">Poročila</MudNavLink>
+                }               
                 <MudNavLink Class="navlink-hover" Href="/organization" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Description">Organizacija</MudNavLink>
                 <MudNavLink Class="navlink-hover" Href="/projects" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ImportContacts">Projekti</MudNavLink>
                 <MudNavLink Class="navlink-hover" Href="/activities" Match="NavLinkMatch.All" Icon="@CustomIcons.ActivityGrayFilled">Aktivnosti</MudNavLink>
@@ -58,6 +61,9 @@
     [Inject]
     protected IOrganizationService OrganizationService { get; set; } = default!;
 
+    [Inject]
+    protected NavigationManager Navigation{ get; set; }
+
 
     MudTheme MyCustomTheme = new MudTheme()
         {
@@ -83,8 +89,13 @@
         var defaultOrganization = await OrganizationService.DefaultOrganizationAsync();
 
         if (defaultOrganization != null)
-            await GetSelectedOrganizationAsync(defaultOrganization.Id);        
+            await GetSelectedOrganizationAsync(defaultOrganization.Id);
+        // else
+        //     this.Navigation.NavigateTo("/organization");
+
     }
+
+   
 
     private async Task GetSelectedOrganizationAsync(int organizationId)
     {

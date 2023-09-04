@@ -15,8 +15,8 @@
         <MudGrid>   
             @foreach (var project in projects)
             {
-                <MudItem sm="12" md="6">                    
-                    <MudCard Outlined="true" Elevation="2" @onclick="(()=> ShowProjectAsync(project))">
+                <MudItem sm="12" md="6">
+                    <MudCard class="rounded-lg" Elevation="5" @onclick="(()=> ShowProjectAsync(project))">
                         <MudCardHeader>
                             <CardHeaderContent>
                                 <MudText Typo="Typo.h4">@project.Attributes.Name</MudText>
@@ -29,7 +29,7 @@
                             <MudText Typo="Typo.h6">@((MarkupString)project.Attributes.Description)</MudText>
                         </MudCardContent>
                         <MudCardActions >
-                                <MudStack  Row Spacing="6" Justify="Justify.FlexEnd" style="width:100%">
+                                <MudStack Row Spacing="6" Justify="Justify.FlexEnd" style="width:100%; margin-bottom:20px;">
                                     <MudButton @onclick="(()=> GetAllActivitiesAsync(project))" Variant="Variant.Filled" Color="Color.Primary">Ogled aktivnosti</MudButton>
                                     <MudButton @onclick="(()=> AddActivityAsync(project))" Variant="Variant.Filled" Color="Color.Secondary">Dodaj aktivnost</MudButton>                              
                                 </MudStack>

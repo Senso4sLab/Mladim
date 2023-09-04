@@ -1,46 +1,38 @@
 ﻿
 <MudForm @ref="@loginForm" Model="@loginUser" Validation="@(loginUserValidator.ValidateValue)" OnValidSubmit="OnValidSubmit">
-    <MudGrid Justify="Justify.Center">
-        <MudItem xs="12" md="6">
-            <MudCard Elevation="4" Class="pa-3">
-                @if (!string.IsNullOrWhiteSpace(_errorMessage))
+    <MudStack Justify="Justify.Center" Spacing="2" style="width:500px;margin: 0px auto;">
+
+      @*   <MudText Typo="Typo.h5" style="margin: 10px auto;">Dobrodošel na vstopni strani</MudText> *@
+
+        <MudImage Src="logo.jpg" style="width:250px; margin: 40px auto;"></MudImage>
+
+        @if (!string.IsNullOrWhiteSpace(_errorMessage))
+        {
+            <MudAlert Severity="Severity.Error" Variant="Variant.Filled">@_errorMessage</MudAlert>
+        }
+        
+
+        <MudTextField Label="Email"
+        @bind-Value="loginUser.Email" For="@(() => loginUser.Email)" Variant="Variant.Outlined" />
+
+        <MudTextField Label="Geslo"
+        @bind-Value="loginUser.Password" For="@(() => loginUser.Password)"
+                      InputType="@PasswordInput" Variant="Variant.Outlined"
+                      Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonPasswordClick" AdornmentAriaLabel="Pokaži geslo" />      
+
+
+        <MudButton OnClick="@OnValidSubmit" Variant="Variant.Filled" Color="Color.Primary" Disabled="_isBusy" Class="my-5">
+
+            <MudStack Row="true" Spacing="4" AlignItems="AlignItems.Center">
+                <MudText Typo="Typo.h6">Vpis</MudText>
+                @if (_isBusy)
                 {
-                    <MudAlert Severity="Severity.Error" Variant="Variant.Filled">@_errorMessage</MudAlert>
+                    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
                 }
-                <MudCardHeader>
-                    <MudText Typo="Typo.h6">Dobrodošli na vstopni strani Mladim</MudText>
-                </MudCardHeader>
+            </MudStack>
+        </MudButton>
 
-                <MudCardContent>
-                    <MudTextField Label="Email"
-                    @bind-Value="loginUser.Email" For="@(() => loginUser.Email)" Variant="Variant.Outlined" />
-                    <MudTextField Label="Geslo" Class="mt-3"
-                    @bind-Value="loginUser.Password" For="@(() => loginUser.Password)" Variant="Variant.Outlined"
-                                  InputType="@PasswordInput"
-                                  Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonPasswordClick" AdornmentAriaLabel="Pokaži geslo" />
-                </MudCardContent>
-
-                <MudCardActions>
-                    <MudButton OnClick="@OnValidSubmit"
-                               Variant="Variant.Filled"
-                               Color="Color.Primary"
-                               Disabled="_isBusy"
-                               Class="ml-auto">
-
-                        <MudStack Row="true" Spacing="4" AlignItems="AlignItems.Center">
-
-                            <MudText Typo="Typo.h6">Vpiši se</MudText>
-                            @if (_isBusy)
-                            {
-                                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
-                            }
-
-                        </MudStack>
-                    </MudButton>
-                </MudCardActions>
-            </MudCard>
-        </MudItem>
-    </MudGrid>
+    </MudStack>   
 </MudForm>
 
 

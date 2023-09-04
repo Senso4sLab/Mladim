@@ -26,17 +26,17 @@ public class GetFileQueryHandler : IRequestHandler<GetFileQuery, FileResponse?>
         
         if (file == null)
             return null;
-
-        var path = Path.Combine(this.Env.ContentRootPath, "Files", file.FolderName, file.StoredFileName);
+        
+        var path = Path.Combine(this.Env.WebRootPath, "Files", file.FolderName, file.StoredFileName);
 
         var memory = new MemoryStream();
         using (var strem = new FileStream(path, FileMode.Open))
         {
-            await strem.CopyToAsync(memory);    
+            await strem.CopyToAsync(memory);
         }
         memory.Position = 0;
 
-        return FileResponse.Create(memory, file.FileName, file.ContentType);    
+        return FileResponse.Create(memory, file.FileName, file.ContentType);     
             
     }
 
@@ -56,7 +56,6 @@ public class GetFileQueryHandler : IRequestHandler<GetFileQuery, FileResponse?>
             var activity = await this.UnitOfWork.ActivityRepository.FindAsync(aId);
             return activity?.Files.FirstOrDefault(af => af.FileName == fileName);
         }
-
         return null;
     }
 }

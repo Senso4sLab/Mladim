@@ -62,7 +62,7 @@ public class UpdateStaffMemberCommandHandler : IRequestHandler<UpdateStaffMember
         if (await this.AuthService.ReplaceClaimAsync(appUser, claim))
         {
             var organization = await this.UnitOfWork.OrganizationRepository.FirstOrDefaultAsync(o => o.Id == staffMember.OrganizationId, false);
-            var emailContent = string.Format(this.EmailContent.ContentUserAddedNewClaim, organization!.Attributes.Name, claim.Type);
+            var emailContent = string.Format(this.EmailContent.ContentUserAddedNewClaim, organization!.Attributes.Name, claim.Type);            
             await SendEmailAsync(emailContent, request.Email);
         }
 

@@ -21,21 +21,22 @@ public class AddOrganizationProfileImageCommandHandler : IRequestHandler<AddOrga
   
     public async Task<string> Handle(AddOrganizationImageProfileCommand request, CancellationToken cancellationToken)
     {
-        var organization = await this.UnitOfWork.OrganizationRepository.FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
-        ArgumentNullException.ThrowIfNull(organization);
+        //var organization = await this.UnitOfWork.OrganizationRepository.FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
+        //ArgumentNullException.ThrowIfNull(organization);
 
         string folderPath = Path.Combine("Images", "OrganizationProfiles");
 
-        if (organization.Attributes.LogoUrl != null)
-            this.FileApiService.DeleteFile(organization.Attributes.LogoUrl, folderPath);
+        //if (organization.Attributes.LogoUrl != null)
+        //    this.FileApiService.DeleteFile(organization.Attributes.LogoUrl);
 
         string trustedFileName = await this.FileApiService.AddFileAsync(request.Data.ToArray(), Path.Combine("Images", "OrganizationProfiles"), request.FileName);
 
-        organization.Attributes.LogoUrl = $"Files\\{folderPath}\\{trustedFileName}";
+        //organization.Attributes.LogoUrl = $"Files\\{folderPath}\\{trustedFileName}";
 
-        await this.UnitOfWork.SaveChangesAsync();
+        //await this.UnitOfWork.SaveChangesAsync();
 
-        return organization.Attributes.LogoUrl;
+        //return organization.Attributes.LogoUrl;
 
+        return $"Files\\{folderPath}\\{trustedFileName}";
     }
 }

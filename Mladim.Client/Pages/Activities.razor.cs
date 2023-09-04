@@ -68,10 +68,8 @@ public partial class Activities
 
     private void FindSelectedProject()
     {
-        if (this.ProjectId is int id && this.projects.FirstOrDefault(p => p.Id == id) is NamedEntityVM project)
-            this.selectedProjects.Add(project);
-        else
-            this.ProjectId = null;
+        if (this.ProjectId is int id && this.projects.FirstOrDefault(p => p.Id == id) is NamedEntityVM project)                  
+           this.selectedProjects.Add(project);       
     }      
     
 
@@ -123,7 +121,7 @@ public partial class Activities
 
 
     public void SelectedActivity(RowSelectEventArgs<ActivityForGantt> args) =>    
-        this.Navigation.NavigateTo($"/activity/{args.Data.Id}");
+        this.Navigation.NavigateTo($"/activity/{args.Data.ActivityId}");
       
 
     private async Task OnDateRangeChanged(DateRange dateRange)

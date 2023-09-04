@@ -46,18 +46,23 @@ public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand,
         project.Groups.AddRange(addGroup);
 
         // files
-        
-        project.Files.Where(f => !request.Files.Any(rf => rf.FileName == f.FileName)).ToList().ForEach(f =>
-        {
-            FileApiService.DeleteFile(f.StoredFileName, f.FolderName);
-            project.Files.Remove(f);
-        });
 
-        request.Files.Where(rf => !project.Files.Any(f => f.FileName == rf.FileName)).ToList().ForEach(async f =>
+        var removedFiles = project.Files.Where(f => !request.Files.Any(rf => rf.FileName == f.FileName)).ToList();
+        
+        foreach(var file in removedFiles)
         {
-            string trustedFileName = await FileApiService.AddFileAsync(f.Data.ToArray(), "Projects", f.FileName);
-            project.Files.Add(AttachedFile.Create(f.FileName, trustedFileName, f.ContentType,"Projects"));
-        });
+            var fileUrl = Path.Combine("Files",file.FolderName, file.StoredFileName);
+            FileApiService.DeleteFile(fileUrl);
+            project.Files.Remove(file);
+        }     
+
+        var addedFiles = request.Files.Where(rf => !project.Files.Any(f => f.FileName == rf.FileName)).ToList();
+        
+        foreach(var file in addedFiles)
+        {
+            string trustedFileName = await FileApiService.AddFileAsync(file.Data.ToArray(), "Projects", file.FileName);
+            project.Files.Add(AttachedFile.Create(file.FileName, trustedFileName, file.ContentType, "Projects"));
+        }     
 
         return await this.UnitOfWork.SaveChangesAsync();      
     }

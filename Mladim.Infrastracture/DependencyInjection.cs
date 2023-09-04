@@ -13,20 +13,13 @@ using Mladim.Application.Contracts.EmailService;
 using Mladim.Application.Contracts.Identity;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Application.Models;
-using Mladim.Client.Services.StorageService;
 using Mladim.Domain.IdentityModels;
 
 using Mladim.Infrastracture.Identity;
 using Mladim.Infrastracture.MailService;
 using Mladim.Infrastracture.Persistance;
 using Mladim.Infrastracture.Repositories;
-using Mladim.Infrastracture.StorageService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Mladim.Infrastracture;
 
@@ -58,8 +51,8 @@ public static class DependencyInjection
         });
 
         collection.AddTransient<IEmailService, EmailService>();
-
-        collection.AddScoped<IFileStorageService, InAppStorageService>();
+      
+        //collection.AddScoped<IFileStorageService, InAppStorageService>();
         collection.AddHttpContextAccessor();
 
 

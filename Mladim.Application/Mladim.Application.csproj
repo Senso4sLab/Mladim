@@ -7,19 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Accounts\Commands\AddAppUser\**" />
     <Compile Remove="Features\Members\BaseMembers\**" />
     <Compile Remove="Features\Members\Commands\**" />
     <Compile Remove="Features\Members\Queries\**" />
+    <EmbeddedResource Remove="Features\Accounts\Commands\AddAppUser\**" />
     <EmbeddedResource Remove="Features\Members\BaseMembers\**" />
     <EmbeddedResource Remove="Features\Members\Commands\**" />
     <EmbeddedResource Remove="Features\Members\Queries\**" />
+    <None Remove="Features\Accounts\Commands\AddAppUser\**" />
     <None Remove="Features\Members\BaseMembers\**" />
     <None Remove="Features\Members\Commands\**" />
     <None Remove="Features\Members\Queries\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Features\Accounts\Commands\AddAppUser\" />
   </ItemGroup>
 
   <ItemGroup>

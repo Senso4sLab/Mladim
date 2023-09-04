@@ -4,6 +4,7 @@ using Mladim.Client.Models;
 using Mladim.Client.Services.HttpService.Generic;
 using Mladim.Client.ViewModels.Organization;
 using Mladim.Domain.Dtos.Organization;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Mladim.Client.Services.FileService;
 
@@ -11,6 +12,8 @@ public interface IFileService
 {
     Task<Stream?> GetFileStreamByProjectIdAsync(string fileName, int projectId);
     Task<Stream?> GetFileStreamByActivityIdAsync(string fileName, int activityId);
+
+    Task<bool> DeleteFileAsync(string url);
     Task<string?> AddOrganizationImageAsync(int organizationId, List<byte> data, string fileName, OrganizationImageType type);
     Task<string?> AddUserProfileImageAsync(string userId, List<byte> data, string fileName);
 }
@@ -61,6 +64,13 @@ public class FileService : IFileService
         var userProfileImageUrl = this.MladimApiUrls.AddUserProfileImage;
         var urlProfile = await this.HttpClient.PostAsync<AddUserProfileImageDto>(userProfileImageUrl, AddUserProfileImageDto.Create(userId, data, fileName));
         return urlProfile;
+    }
+
+    public async Task<bool> DeleteFileAsync(string filePath)
+    {
+        var url = string.Format(this.MladimApiUrls.DeleteFile, filePath);
+        var response = await this.HttpClient.DeleteAsync(url);
+        return response;
     }
 }
 

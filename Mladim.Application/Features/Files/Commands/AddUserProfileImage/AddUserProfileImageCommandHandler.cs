@@ -2,6 +2,7 @@
 using MediatR;
 using Mladim.Application.Contracts.File;
 using Mladim.Application.Contracts.Persistence;
+using Mladim.Domain.IdentityModels;
 
 namespace Mladim.Application.Features.Files.Commands.AddUserProfileImage;
 
@@ -22,15 +23,15 @@ public class AddUserProfileImageCommandHandler : IRequestHandler<AddUserProfileI
 
         string folderPath = Path.Combine("Images", "UserProfiles");
 
-        if (appUser.ImageUrl != null)
-            this.FileApiService.DeleteFile(appUser.ImageUrl, folderPath);
+        //if (appUser.ImageUrl != null)
+        //    this.FileApiService.DeleteFile(appUser.ImageUrl);
 
         string trustedFileName = await this.FileApiService.AddFileAsync(request.Data.ToArray(), Path.Combine("Images", "UserProfiles"), request.FileName);
 
-        appUser.ImageUrl = $"Files\\{folderPath}\\{trustedFileName}";
+        //appUser.ImageUrl = $"Files\\{folderPath}\\{trustedFileName}";
 
-        await this.UnitOfWork.SaveChangesAsync();
+        // await this.UnitOfWork.SaveChangesAsync();
 
-        return appUser.ImageUrl;
+        return $"Files\\{folderPath}\\{trustedFileName}";
     }
 }

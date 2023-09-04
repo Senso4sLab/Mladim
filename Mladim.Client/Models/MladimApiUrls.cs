@@ -59,4 +59,7 @@ public class MladimApiUrls
 
     public string GetOrganizationStatistics { get; set; }  = string.Empty;
     public string GetProjectStatistics { get; set; } = string.Empty;
+
+
+    public string DeleteFile { get; set; } = string.Empty;
 }

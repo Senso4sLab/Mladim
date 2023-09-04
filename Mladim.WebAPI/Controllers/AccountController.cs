@@ -31,6 +31,17 @@ public class AccountController : ControllerBase
         return Ok(response);
     }
 
+
+
+    [Authorize]
+    [HttpPost("{appUser}/addRole/{appRole}")]
+    public async Task<ActionResult<string>> AddRoleAsync(string appUser, string appRole)
+    {
+        var response = await this.AuthService.AddUserRoleAsync(appUser, appRole);
+        return Ok(response);
+    }
+
+
     [HttpPost("confirmRegistration")]
     public async Task<ActionResult<Result<AuthResponse>>> RegisterConfirmationAsync(UserRegistrationConfirmation request)
     {

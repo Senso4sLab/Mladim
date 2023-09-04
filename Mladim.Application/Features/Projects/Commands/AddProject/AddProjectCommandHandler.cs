@@ -51,9 +51,5 @@ public class AddProjectCommandHandler : IRequestHandler<AddProjectCommand, bool>
         return result;       
 
     }
-
-
-
-
   
 }

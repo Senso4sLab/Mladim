@@ -125,7 +125,7 @@ public partial class UpsertProject
         Navigation.NavigateTo("/projects");
     }
 
-    public async Task DeleteProjectAsync(ProjectVM project)
+    public async Task DeleteProjectAsync()
     {
         var dialogResponse = await this.PopupService.ShowSimpleTextDialogAsync("Odstranitev projekta", "Ali želite odstraniti projekt?");
 
@@ -182,7 +182,7 @@ public partial class UpsertProject
             string fileName = Path.GetFileName(file.Name);
 
             var buffer = new byte[file.Size];
-            await file.OpenReadStream().ReadAsync(buffer);           
+            await file.OpenReadStream(maxAllowedSize:long.MaxValue).ReadAsync(buffer);           
 
             project.Files.Add(AttachedFileVM.Create(fileName, buffer.ToList(), file.ContentType));           
         }

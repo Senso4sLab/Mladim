@@ -7,4 +7,6 @@ public partial class EmailRegistration
     [Parameter]
     public string EmailToken { get; set; }
 
+   
+
 }

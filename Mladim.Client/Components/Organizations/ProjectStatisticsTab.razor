@@ -5,7 +5,7 @@
 <MudStack Spacing="4" Class="py-5">
     <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
         <div style="width:400px;">
-            <MudSelect T="ProjectVM" Label="Izberi želeni projekt" Value=selectedProject ValueChanged="OnProjectChangedAsync" OpenIcon="@CustomIcons.Projects" Variant=Variant.Outlined AdornmentColor="Color.Primary">
+            <MudSelect T="ProjectVM" Label="Izberi želeni projekt" Value=selectedProject ValueChanged="OnProjectChangedAsync"  Variant=Variant.Outlined AdornmentColor="Color.Primary">
                 @foreach (var project in Projects)
                 {
                     <MudSelectItem Value="@project">@project.Attributes.Name</MudSelectItem>
@@ -15,7 +15,7 @@
         <MudText Color="Color.Primary">Trajanje projekta: @selectedProject?.DateRange?.Start?.ToString("d MMMM, yyyy") - @selectedProject?.DateRange?.End?.ToString("d MMMM, yyyy")</MudText>
     </MudStack>
 
-    @if (projectStatistics != null)
+    @if (projectStatistics != null && projectStatistics.TotalParticipants > 0)
     {
         <MudGrid>
             <MudItem xl="4" sm="6">
@@ -96,7 +96,14 @@
     }
     else
     {
-        <MudText Typo="Typo.h6">Projekt nima nobenih aktivnosti.</MudText>
+        @if (PastActivities)
+        {
+            <MudText Typo="Typo.h6">Projekt nima nobenih aktivnosti.</MudText>
+        }
+        else
+        {
+            <MudText Typo="Typo.h6">Projekt nima nobenih prihajajočih aktivnosti.</MudText>
+        }
     }
 </MudStack>
 

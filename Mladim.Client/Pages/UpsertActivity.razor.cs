@@ -147,7 +147,7 @@ public partial class UpsertActivity
         Navigation.NavigateTo("/activities");
     }
 
-    public void CancelProjectAsync()
+    public void CancelActivityAsync()
     {
         Navigation.NavigateTo("/activities");
     }
@@ -222,7 +222,7 @@ public partial class UpsertActivity
             string fileName = Path.GetFileName(file.Name);
 
             var buffer = new byte[file.Size];
-            await file.OpenReadStream().ReadAsync(buffer);
+            await file.OpenReadStream(maxAllowedSize: long.MaxValue).ReadAsync(buffer);
 
             activity.Files.Add(AttachedFileVM.Create(fileName, buffer.ToList(), file.ContentType));
         }

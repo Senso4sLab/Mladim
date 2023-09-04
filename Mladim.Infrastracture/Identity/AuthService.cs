@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using Mladim.Application.Contracts.Identity;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Application.Models;
+using Mladim.Client.Extensions;
+using Mladim.Domain.Enums;
 using Mladim.Domain.IdentityModels;
 using Mladim.Domain.Models;
 
@@ -31,7 +33,7 @@ public class AuthService : IAuthService
         var user = await this.UserRepository.FindByEmailAsync(email);
 
         if (user == null)
-            return Result<AuthResponse>.Error("Vnešeni podatki so napačni");      
+            return Result<AuthResponse>.Error("Vnešeni podatki so napačni");
 
         if (!await this.UserManager.CheckPasswordAsync(user, password))
             return Result<AuthResponse>.Error("Vnešeni podatki so napačni");
@@ -56,9 +58,9 @@ public class AuthService : IAuthService
             new Claim(ClaimTypes.NameIdentifier, user.Id),
         };
 
-        foreach (var role in await UserManager.GetRolesAsync(user))
-            tokenClaims.Add(new Claim(ClaimTypes.Role, role));
-
+        //foreach (var role in await UserManager.GetRolesAsync(user))
+        //    tokenClaims.Add(new Claim(ClaimTypes.Role, role));
+       
 
         tokenClaims.AddRange(await this.UserManager.GetClaimsAsync(user));
 
@@ -73,30 +75,37 @@ public class AuthService : IAuthService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }    
     
-    public async Task<bool> IsUserAdminAsync(AppUser user)
-    {
-        var roles = await this.UserManager.GetRolesAsync(user);
-        return roles.Any(r => r == "Admin");  
+    public async Task<bool> HasUserRoleAsync(AppUser user, string roleValue)
+    {     
+       var roles = await this.UserManager.GetClaimsAsync(user);
+       return roles.Any(r => r.Type == ClaimTypes.Role && r.Value == roleValue);   
     }
-    public async Task<bool> ExistClaimValueAsync(AppUser user, string claimValue)
-    {
-        var claims = await this.UserManager.GetClaimsAsync(user);
-        return claims.Any(c => c.Value == claimValue);
+
+    public async Task<bool> AddUserRoleAsync(string userId, string role)
+    { 
+        if (!Enum.TryParse<ApplicationRole>(role, out _))
+            throw new ArgumentException("Application role type is not defined");
+
+        var user = await this.UserManager.FindByIdAsync(userId);
+
+        ArgumentNullException.ThrowIfNull(user);
+
+        if (await HasUserRoleAsync(user, role))
+           return false;
+
+        Claim claim = new Claim(ClaimTypes.Role, role);
+        var identityResult = await this.UserManager.AddClaimAsync(user, claim);
+
+       return identityResult.Succeeded;
     }
-    //public async Task<AppUser> CreateUserWithClaimAsync(string name, string surname, string email, Claim claim)
+
+
+    //public async Task<bool> ExistClaimValueAsync(AppUser user, string claimValue)
     //{
-    //    var user = UserRegistration.Create(name, surname, name, email, GenerateRandomUserPassword());  
-
-
-    //    var registrationResponse = await CreateUserAsync(user);
-
-    //    if(!registrationResponse.Succeeded)
-    //        throw new Exception(registrationResponse.Message);
-
-    //    await UpsertClaimAsync(registrationResponse.Value!, claim);
-
-    //    return registrationResponse.Value!;
+    //    var claims = await this.UserManager.GetClaimsAsync(user);
+    //    return claims.Any(c => c.Value == claimValue);
     //}
+   
 
     public async Task<bool> AddClaimAsync(AppUser user, Claim newClaim)
     {
@@ -116,7 +125,10 @@ public class AuthService : IAuthService
 
         var foundClaim = claims.FirstOrDefault(c => c.Value == newClaim.Value);
 
-        if (foundClaim == null || foundClaim?.ToString() != newClaim.ToString())
+        if (foundClaim == null)
+            return false;
+
+        if (foundClaim!.ToString() == newClaim.ToString())
             return false;
 
         var claimResponse = await this.UserManager.ReplaceClaimAsync(user, foundClaim, newClaim);

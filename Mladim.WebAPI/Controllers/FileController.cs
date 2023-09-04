@@ -8,6 +8,7 @@ using Mladim.Application.Features.Activities.Queries.GetActivity;
 using Mladim.Application.Features.Files.Commands.AddOrganizationBannerImage;
 using Mladim.Application.Features.Files.Commands.AddOrganizationProfileImage;
 using Mladim.Application.Features.Files.Commands.AddUserProfileImage;
+using Mladim.Application.Features.Files.Commands.DeleteFile;
 using Mladim.Application.Features.Files.Queries;
 using Mladim.Domain.Dtos;
 
@@ -57,6 +58,14 @@ namespace Mladim.WebAPI.Controllers
             var url = await this.Mediator.Send(userProfile);
 
             return Ok(url);
+        }
+
+        [HttpDelete("{*filePath}")]
+        public async Task<ActionResult<bool>> DeleteFile(string filePath)
+        {
+            var response = await this.Mediator.Send(new DeleteFileCommand { FullFilePath = filePath});
+
+            return Ok(response);
         }
 
     }

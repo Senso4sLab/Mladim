@@ -17,5 +17,7 @@ public class ProjectVM
     public IEnumerable<NamedEntityVM> Partners { get; set; } = new List<NamedEntityVM>();
     public List<AttachedFileVM> Files { get; set; } = new List<AttachedFileVM>();
 
+    
+
     public bool IsCompleted(DateTime dateTime) => this.DateRange.End < dateTime;
 }

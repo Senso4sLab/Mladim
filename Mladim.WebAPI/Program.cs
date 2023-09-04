@@ -15,7 +15,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 builder.Services.AddRazorPages();
 
-builder.Services.AddScoped<IFileApiService, FileApiSerive>();
+builder.Services.AddScoped<IFileApiService, FileApiService>();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
@@ -30,6 +30,8 @@ builder.Services.AddSwaggerGen(options =>
     });
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+
+
 
 
 var app = builder.Build();

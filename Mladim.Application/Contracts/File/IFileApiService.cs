@@ -9,6 +9,7 @@ namespace Mladim.Application.Contracts.File;
 
 public interface IFileApiService
 {
-    bool DeleteFile(string trustedFileName, string folder);
+    //bool DeleteFile(string trustedFileName, string folder);
     Task<string> AddFileAsync(byte[] file, string folder, string fileName);
+    bool DeleteFile(string fileUrl);
 }

@@ -47,7 +47,7 @@ public partial class Login
         this._errorMessage = response.Message;
 
         if (response.Succeeded)
-            this.Navigation.NavigateTo("/");           
+            this.Navigation.NavigateTo("/organization");           
         
     }
 

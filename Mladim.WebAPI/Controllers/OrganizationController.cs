@@ -13,6 +13,7 @@ using Mladim.Application.Features.Organizations.Queries.GetOrganizations;
 using Mladim.Application.Features.Organizations.Queries.GetOrganizationStatistics;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Dtos.Organization;
+using Mladim.Domain.Enums;
 
 namespace Mladim.WebAPI.Controllers;
 
@@ -38,6 +39,8 @@ public class OrganizationController : ControllerBase
     public async Task<ActionResult<int>> UpdateAsync(UpdateOrganizationCommand request)
     {
         var response = await this.Mediator.Send(request);
+
+
         return Ok(response);
     }
 
@@ -55,11 +58,18 @@ public class OrganizationController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("{orgId}/assignedTo/{userId}")]
-    public async Task<ActionResult<bool>> AssignOrganizationToUser(int orgId, string userId)
+    [HttpGet("{orgId}/assign/{claim}/to/{userId}")]
+    public async Task<ActionResult<bool>> AssignOrganizationToUser(int orgId, int claim ,string userId)
     {
-        var response = await this.Mediator.Send(new AssignOrganizationCommand { AppUserId = userId, OrganizationId = orgId });
-        return Ok(response);
+        var appClaim = Enum.IsDefined(typeof(ApplicationClaim), claim);
+
+        if(appClaim)
+        {
+            var response = await this.Mediator.Send(new AssignOrganizationCommand { AppUserId = userId, OrganizationId = orgId, Claim = (ApplicationClaim)claim });
+            return Ok(response);
+        }
+
+        return BadRequest();        
     }
 
 

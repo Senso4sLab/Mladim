@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -10,7 +10,8 @@
     <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -25,10 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\Files\Activities\f5ucqnx4.lc3..png" />
-    <None Include="wwwroot\Files\Projects\4fbimamt.5ot..png" />
-    <None Include="wwwroot\Files\Projects\l5wp3yrp.jrh..png" />
-    <None Include="wwwroot\Files\Projects\zrbpk0w1.fux..png" />
+    <Folder Include="wwwroot\Files\Activities\" />
+    <Folder Include="wwwroot\Files\Projects\" />
   </ItemGroup>
 
   

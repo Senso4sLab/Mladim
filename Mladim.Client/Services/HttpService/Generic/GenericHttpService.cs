@@ -13,7 +13,7 @@ public class GenericHttpService : IGenericHttpService
     }    
 
     public async Task<bool> DeleteAsync(string url)
-    {
+    {        
         var response = await Client.DeleteAsync(url);
         return response.IsSuccessStatusCode ? await response.Content.ReadFromJsonAsync<bool>() : false;
     }

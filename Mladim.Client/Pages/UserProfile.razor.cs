@@ -85,6 +85,12 @@ public partial class UserProfile
     {
         var image = await GenerateByteImageAsync(e);
 
+        if(appUser.ImageUrl != null)
+        {
+            var response = await this.FileService.DeleteFileAsync(appUser.ImageUrl);
+            appUser.ImageUrl = null;
+        }
+
         var url = await this.FileService.AddUserProfileImageAsync(this.appUser.Id, image.data, image.name);
 
         this.appUser.ImageUrl = url;      

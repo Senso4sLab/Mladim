@@ -238,3 +238,12 @@ public enum ApplicationClaim
     Admin = 2,    
 }
 
+
+public enum ApplicationRole
+{
+    [Display(Name = "Skrbnik")]
+    Admin = 1,
+   
+}
+
+
