@@ -19,24 +19,28 @@
     {
         <MudGrid>
             <MudItem xl="4" sm="6">
-                <SfAccumulationChart Title="Razporeditev udeležencev po letih" EnableAnimation="true" EnableSmartLabels="true">
-                    <AccumulationChartSeriesCollection>
-                        <AccumulationChartSeries DataSource="@projectStatistics.AgeDoughnut" XName="Name" YName="Value" InnerRadius="80%">
-                            <AccumulationDataLabelSettings Visible="true" Name="Text" Position="AccumulationLabelPosition.Outside"></AccumulationDataLabelSettings>
-                        </AccumulationChartSeries>
-                    </AccumulationChartSeriesCollection>
-                    <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Far"></AccumulationChartLegendSettings>
-                </SfAccumulationChart>
+                <MudPaper Outlined="true">
+                    <SfAccumulationChart Title="Razporeditev udeležencev po letih" EnableAnimation="true" EnableSmartLabels="true">
+                        <AccumulationChartSeriesCollection>
+                            <AccumulationChartSeries DataSource="@projectStatistics.AgeDoughnut" PointColorMapping="Fill" XName="Name" YName="Value" InnerRadius="80%">
+                                <AccumulationDataLabelSettings Visible="true" Name="Text" Position="AccumulationLabelPosition.Outside"></AccumulationDataLabelSettings>
+                            </AccumulationChartSeries>
+                        </AccumulationChartSeriesCollection>
+                        <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Far"></AccumulationChartLegendSettings>
+                    </SfAccumulationChart>
+                </MudPaper>
             </MudItem>
             <MudItem xl ="4" sm="6">
-                <SfAccumulationChart Title="Razporeditev udeležencev po spolu" EnableAnimation="true" EnableSmartLabels="true">
-                    <AccumulationChartSeriesCollection>
-                        <AccumulationChartSeries DataSource="@projectStatistics.GenderDoughnut" XName="Name" YName="Value" InnerRadius="80%">
-                            <AccumulationDataLabelSettings Visible="true" Name="Text" Position="AccumulationLabelPosition.Outside"></AccumulationDataLabelSettings>
-                        </AccumulationChartSeries>
-                    </AccumulationChartSeriesCollection>
-                    <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Far"></AccumulationChartLegendSettings>
-                </SfAccumulationChart>
+                   <MudPaper Outlined="true">
+                        <SfAccumulationChart Title="Razporeditev udeležencev po spolu" EnableAnimation="true" EnableSmartLabels="true">
+                            <AccumulationChartSeriesCollection>
+                                <AccumulationChartSeries DataSource="@projectStatistics.GenderDoughnut" PointColorMapping="Fill" XName="Name" YName="Value" InnerRadius="80%">                                
+                                    <AccumulationDataLabelSettings Visible="true" Name="Text" Position="AccumulationLabelPosition.Outside"></AccumulationDataLabelSettings>
+                                </AccumulationChartSeries>
+                            </AccumulationChartSeriesCollection>
+                            <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Far"></AccumulationChartLegendSettings>
+                        </SfAccumulationChart>
+                </MudPaper>
             </MudItem>
             <MudItem xl ="4" sm="12">
                 <MudGrid>
@@ -75,7 +79,9 @@
 
     @if (activities.Any())
     {
-        <SfGantt class="pt-5" DataSource="@activities" RowHeight="40" TaskbarHeight="30">
+        <MudText Typo="Typo.h6">Seznam prihajajočih aktivnosti</MudText>
+
+        <SfGantt class="pt-5" DataSource="@activities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true>
             <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId" />
 
             <GanttColumns>

@@ -36,7 +36,7 @@ public partial class ProjectStatisticsTab
     //private List<DoughnutPiece> AgeDoughnut = new List<DoughnutPiece>();
 
     public void SelectedActivity(RowSelectEventArgs<ActivityForGantt> args) =>
-      this.Navigation.NavigateTo($"/activity/{args.Data.Id}");
+      this.Navigation.NavigateTo($"/activity/{args.Data.ActivityId}");
        
 
     protected override async Task  OnInitializedAsync()

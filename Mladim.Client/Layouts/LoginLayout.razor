@@ -1,18 +1,27 @@
 ﻿@using MudBlazor.Utilities;
 @inherits LayoutComponentBase
 
-<MudThemeProvider Theme="MyCustomTheme"/>
+<MudThemeProvider Theme="MyCustomTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 
-<MudContainer>
-    <MudGrid Justify="Justify.Center" Style="align-items: center; height: 100vh;">
-        <MudItem xs="12">
-            @Body
-        </MudItem>
-    </MudGrid>
-</MudContainer>
+<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge">
+
+
+    <MudStack Row style="height:100vh;" AlignItems="AlignItems.Center">
+      
+            <Login />
+   
+          
+       
+        
+      <div style="background-color:black; height:100%">
+          @Body
+      </div>
+    </MudStack>
+ </MudContainer>
+
 
 @code
 {

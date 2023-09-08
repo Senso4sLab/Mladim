@@ -3,7 +3,7 @@
 
 <MudStack Spacing="4" Class="py-5">
     <div style="width:200px;">
-        <MudSelect T="int" Label="Izberi leto" Value=selectedYear ValueChanged="OnYearChangedAsync" OpenIcon="@Icons.Material.Filled.CalendarMonth" Variant=Variant.Outlined AdornmentColor="Color.Primary">
+        <MudSelect T="int" Label="Izberi leto" Value=selectedYear ValueChanged="OnYearChangedAsync" OpenIcon="@Icons.Material.Filled.CalendarMonth" Adornment="Adornment.Start" Variant=Variant.Outlined AdornmentColor="Color.Primary">
             @foreach (int year in availableYears)
             {
                 <MudSelectItem Value="@year">@year</MudSelectItem>
@@ -61,7 +61,9 @@
 
     @if (activities.Any())
     {
-        <SfGantt class="pt-5" DataSource="@activities" RowHeight="40" TaskbarHeight="30">
+        <MudText Typo="Typo.h6">Seznam prihajajočih aktivnosti</MudText>
+
+        <SfGantt class="pt-5" DataSource="@activities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true>
             <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId" />
 
             <GanttColumns>

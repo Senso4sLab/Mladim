@@ -9,6 +9,7 @@
                 Bordered="true" Dense="true" EditTrigger="DataGridEditTrigger.Manual">
             <Columns>
                 <PropertyColumn Property="x => x.Name" Title="Ime" />
+                <PropertyColumn Property="x => x.Surname" Title="Priimek" />   
                 <PropertyColumn Property="x => x.Gender.GetDisplayAttribute()" Title="Spol">
                     <EditTemplate>
                         <MudSelect @bind-Value="context.Item.Gender" Margin="@Margin.Dense">

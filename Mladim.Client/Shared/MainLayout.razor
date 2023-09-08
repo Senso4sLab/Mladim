@@ -16,8 +16,8 @@
         <UserLoginSettings />
     </MudAppBar>
 
-    <MudDrawer @bind-Open="@_drawerOpen" Elevation="0" DisableOverlay=true Variant="DrawerVariant.Mini" OpenMiniOnHover=true MiniWidth="65px">
-        <div class="bg-white rounded-tr-xl" style="height:100%; overflow:hidden; border-right:1px solid #eeeeee">
+    <MudDrawer @bind-Open="@_drawerOpen" Elevation="0" DisableOverlay=false Variant="DrawerVariant.Mini" OpenMiniOnHover=true MiniWidth="65px"  style="background-color:#4da456; ">
+        <div style="height:50%; overflow:hidden; border-right:1px solid #eeeeee;background-color:#ffffff;" class="rounded-tr-xl">
             <div style="padding: 30px 2px;">
                 @if (_drawerOpen)
                 {              
@@ -32,7 +32,10 @@
                 <MudNavLink Class="navlink-hover" Href="/organization" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Description">Organizacija</MudNavLink>
                 <MudNavLink Class="navlink-hover" Href="/projects" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ImportContacts">Projekti</MudNavLink>
                 <MudNavLink Class="navlink-hover" Href="/activities" Match="NavLinkMatch.All" Icon="@CustomIcons.ActivityGrayFilled">Aktivnosti</MudNavLink>
-            </MudNavMenu>           
+            </MudNavMenu>          
+        </div>
+        <div style="height:50%; overflow:hidden; background-color:white;" >
+            <div style="height:100%; width:100%; border-right:1px solid #eeeeee;" class="rounded-br-xl"/>          
         </div>
     </MudDrawer>
     <MudMainContent>
@@ -69,12 +72,20 @@
         {
             Palette = new PaletteLight()
             {
-                Primary = new MudColor("#4da456"),//Colors.  Colors.Blue.Default,
+                Primary = new MudColor("#4da456"),
                 Secondary = new MudColor("#394241"),
                 AppbarBackground = new MudColor("#4da456"),
-                DrawerBackground = new MudColor("#4da456"),
+               
+               
                 DrawerText = new MudColor("#000000"),                
-            },                  
+            },
+            Typography = new Typography()
+            {
+                Default = new Default()
+                {
+                    FontFamily =  new[]{"Poppins", "Helvetica", "Arial", "sans-serif"}
+                }
+            }
         };
 
 
