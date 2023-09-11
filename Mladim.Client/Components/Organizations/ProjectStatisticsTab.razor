@@ -83,7 +83,7 @@
 
         <SfGantt class="pt-5" DataSource="@activities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true>
             <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId" />
-
+            <GanttSplitterSettings ColumnIndex=5></GanttSplitterSettings>
             <GanttColumns>
                 <GanttColumn Field="Id" HeaderText="Št."></GanttColumn>
                 <GanttColumn Field="ActivityName" HeaderText="Ime aktivnosti"></GanttColumn>

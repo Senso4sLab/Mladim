@@ -20,7 +20,6 @@
                          <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Size="Size.Large">
                              <MudIcon Style="color:#FFFFFF;" Icon="@Icons.Material.Filled.Person" Size="Size.Large" />
                          </MudAvatar>
-
                          <MudStack Spacing="1">
                              <MudText Typo="Typo.h6">@(organizationStatistics.IndividualParticipants + organizationStatistics.AnonymousParticipants)</MudText>
                              <MudText Typo="Typo.h6">Udeleženci</MudText>
@@ -65,7 +64,7 @@
 
         <SfGantt class="pt-5" DataSource="@activities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true>
             <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId" />
-
+            <GanttSplitterSettings ColumnIndex=5></GanttSplitterSettings>
             <GanttColumns>
                 <GanttColumn Field="Id" HeaderText="Št."></GanttColumn>
                 <GanttColumn Field="ActivityName" HeaderText="Ime aktivnosti"></GanttColumn>

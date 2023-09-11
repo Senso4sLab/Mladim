@@ -3,6 +3,7 @@ using Mladim.Client.ViewModels;
 using Mladim.Client.Services.PopupService;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.Models;
+using Mladim.Client.Services.Authentication;
 
 namespace Mladim.Client.Pages;
 
@@ -13,6 +14,9 @@ public partial class Projects
 
     [Inject]
     public IProjectService ProjectService { get; set; }
+
+    [Inject]
+    public IAuthService AuthService { get; set; }
 
     [Inject]
     protected NavigationManager Navigation { get; set; }
@@ -34,7 +38,8 @@ public partial class Projects
 
     private async Task<List<ProjectVM>> GetProjects()
     {
-        var projects = await this.ProjectService.GetByOrganizationIdAsync(defaultOrg!.Id); 
+        var userId = await AuthService.GetUserIdentityAsync();
+        var projects = await this.ProjectService.GetByOrganizationIdAsync(defaultOrg!.Id, userId!); 
         return projects.ToList();
     }
 

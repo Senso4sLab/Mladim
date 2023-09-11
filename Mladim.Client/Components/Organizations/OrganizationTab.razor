@@ -10,15 +10,18 @@
                     <MudText Class="py-3" Typo="Typo.body2">Logo organizacije</MudText>
                     <div style="height:200px; ">
                         <MudImage Src="@(Organization.Attributes.LogoUrl ?? "Files\\Images\\OrganizationProfiles\\default_org_logo.png")" Alt="logo" Elevation="0" Class="rounded-lg d-inline" Height="200" />
-                        <MudFileUpload Disabled=@ReadOnly style="translate:-20px 150px;" Class="d-inline-block" T="IBrowserFile" FilesChanged="UploadProfileImage">
-                            <ButtonTemplate>
-                                <MudFab  HtmlTag="label"
-                                        Size="Size.Small"
-                                        Color="Color.Primary"
-                                        Icon="@Icons.Material.Filled.Edit"
-                                        for="@context" />
-                            </ButtonTemplate>
-                        </MudFileUpload>
+                        @if(!ReadOnly)
+                        {
+                            <MudFileUpload style="transform:translate(-20px, 150px)" Class="d-inline-block" T="IBrowserFile" FilesChanged="UploadProfileImage">
+                                <ButtonTemplate>
+                                    <MudFab  HtmlTag="label"
+                                            Size="Size.Small"
+                                            Color="Color.Primary"
+                                            Icon="@Icons.Material.Filled.Edit"
+                                            for="@context" />
+                                </ButtonTemplate>
+                            </MudFileUpload>
+                        }
                     </div>                   
                 </MudItem>
                 <MudItem xs="12" sm="6">
@@ -26,16 +29,18 @@
                     <div>
                         
                         <MudImage Src="@(Organization.Attributes.BannerUrl ?? "Files\\Images\\OrganizationBanners\\default_org_banner.png")" Alt="banner" Elevation="0" Class="rounded-lg d-inline" Height="200" />
-                        
-                        <MudFileUpload Disabled=@ReadOnly style="translate:-20px 150px;" Class="d-inline-block" T="IBrowserFile" FilesChanged="UploadBannerImage">
-                            <ButtonTemplate>
+                        @if (!ReadOnly)
+                        {
+                            <MudFileUpload style="transform:translate(-20px, 150px)" Class="d-inline-block" T="IBrowserFile" FilesChanged="UploadBannerImage">
+                                <ButtonTemplate>
                                 <MudFab HtmlTag="label"
                                         Size="Size.Small"
                                         Color="Color.Primary"
                                         Icon="@Icons.Material.Filled.Edit"
                                         for="@context" />
-                            </ButtonTemplate>
-                        </MudFileUpload>
+                                </ButtonTemplate>
+                            </MudFileUpload>
+                        }
                     </div>
                 </MudItem>
                 <MudItem xs="12" sm="6">
@@ -64,7 +69,16 @@
         </MudExpansionPanel>       
 
         <MudExpansionPanel Style="font-weight:bold;" Text="Opis" Class="my-2">
-            <SfRichTextEditor Readonly ="ReadOnly" @bind-Value="@Organization.Attributes.Description" Placeholder="Nekaj o organizaciji"/>                 
+            @if(ReadOnly)
+            {
+                <div style="font-weight:normal;">
+                    @((MarkupString)Organization.Attributes.Description)
+                </div>
+            }
+            else
+            {
+                <SfRichTextEditor @bind-Value="@Organization.Attributes.Description" Placeholder="Nekaj o organizaciji" />
+            }                      
         </MudExpansionPanel>
         
         <MudExpansionPanel Style="font-weight:bold;" Text="Profili na družbenih omrežjih" Class="my-2">

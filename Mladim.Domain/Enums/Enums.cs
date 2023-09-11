@@ -227,22 +227,20 @@ public enum GroupType
     Activity = 2,
 };
 
-
+[Flags]
 public enum ApplicationClaim
 {
     [Display(Name = "Delavec")]
-    Worker = 0,
+    Worker = 1,
     [Display(Name = "Menedžer")]
-    Manager = 1,
-    [Display(Name = "Administrator")]
-    Admin = 2,    
+    Manager = 2,    
 }
 
-
+[Flags]
 public enum ApplicationRole
 {
-    [Display(Name = "Skrbnik")]
-    Admin = 1,
+    [Display(Name = "Administrator")]
+    Admin = 16,
    
 }
 

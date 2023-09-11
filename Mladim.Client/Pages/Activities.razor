@@ -36,7 +36,7 @@
                      </MudSelect>
                  </MudItem>
                  <MudItem sm="6" xl="3" xs="12">
-                     <MudSelect T="NamedEntityVM" SelectedValuesChanged="OnActivityLeaderChanged" Label="Izberi vodnjo aktivnosti" Variant="Variant.Outlined" Clearable>
+                     <MudSelect T="NamedEntityVM" SelectedValuesChanged="OnActivityLeaderChanged" Label="Izberi vodjo aktivnosti" Variant="Variant.Outlined" Clearable>
                      @foreach (var activityLead in activityLeads)
                         {
                             <MudSelectItem T="NamedEntityVM" Value="@activityLead">@activityLead.FullName</MudSelectItem>
@@ -48,9 +48,9 @@
 
             @if (filteredActivities.Count > 0)
             { 
-                <SfGantt class="pt-5" DataSource="@filteredActivities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true>
+                <SfGantt  class="pt-5" DataSource="@filteredActivities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true>
                     <GanttTaskFields Id="Id" Name="ActivityName"  StartDate="StartDate" EndDate="EndDate"  ParentID="ParentId"/>
-
+                    <GanttSplitterSettings ColumnIndex=5 ></GanttSplitterSettings>
                     <GanttColumns>
                         <GanttColumn Field="Id" HeaderText="Št."></GanttColumn>
                         <GanttColumn Field="ActivityName" HeaderText="Ime aktivnosti"></GanttColumn>

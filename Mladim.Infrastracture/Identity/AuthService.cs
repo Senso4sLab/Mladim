@@ -60,7 +60,7 @@ public class AuthService : IAuthService
 
         //foreach (var role in await UserManager.GetRolesAsync(user))
         //    tokenClaims.Add(new Claim(ClaimTypes.Role, role));
-       
+
 
         tokenClaims.AddRange(await this.UserManager.GetClaimsAsync(user));
 
@@ -81,19 +81,19 @@ public class AuthService : IAuthService
        return roles.Any(r => r.Type == ClaimTypes.Role && r.Value == roleValue);   
     }
 
-    public async Task<bool> AddUserRoleAsync(string userId, string role)
+    public async Task<bool> AddUserRoleAsync(string userId, string roleValue)
     { 
-        if (!Enum.TryParse<ApplicationRole>(role, out _))
+        if (!Enum.TryParse<ApplicationRole>(roleValue, out _))
             throw new ArgumentException("Application role type is not defined");
 
         var user = await this.UserManager.FindByIdAsync(userId);
 
         ArgumentNullException.ThrowIfNull(user);
 
-        if (await HasUserRoleAsync(user, role))
+        if (await HasUserRoleAsync(user, roleValue))
            return false;
 
-        Claim claim = new Claim(ClaimTypes.Role, role);
+        Claim claim = new Claim(ClaimTypes.Role, roleValue);
         var identityResult = await this.UserManager.AddClaimAsync(user, claim);
 
        return identityResult.Succeeded;

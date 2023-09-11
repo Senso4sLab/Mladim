@@ -4,7 +4,7 @@
 <MudForm @ref="@passwordForm" Model="@urlRegistration" Validation="@(urlRegistrationValidator.ValidateValue)" OnValidSubmit="OnValidSubmit" > 
    <MudStack Justify="Justify.Center" Spacing="2" style="width:500px;margin: 0px auto;">
 
-        <MudImage Src="logo.jpg" style="width:250px; margin: 10px auto;"></MudImage>
+        <MudImage Src="logo.png" style="width:250px; margin: 10px auto;"></MudImage>
 
         @if (!string.IsNullOrWhiteSpace(_errorMessage))
         {

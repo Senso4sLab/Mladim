@@ -13,10 +13,12 @@
                 <PropertyColumn Property="x => x.FullName" Title="Ime" />
                 <PropertyColumn Property="x => x.Description" Title="Opis" />
                 <PropertyColumn Property="x => x.ContactPerson" Title="Kontaktna oseba" />
-                <PropertyColumn Property="x => x.Email" Title="Email" />              
-                <TemplateColumn CellClass="d-flex justify-end">
+                <PropertyColumn Property="x => x.Email" Title="Email" />
+                <TemplateColumn >
                     <CellTemplate>
-                        <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" @onclick="@(() => UpdatePartnerAsync(context.Item))"/>
+                       <MudStack Justify="Justify.Center" AlignItems="AlignItems.End">
+                             <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" @onclick="@(() => UpdatePartnerAsync(context.Item))" />
+                       </MudStack>
                     </CellTemplate>
                 </TemplateColumn>
         </Columns>

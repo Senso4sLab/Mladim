@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Mladim.Client.ViewModels;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using System.ComponentModel;
+using Mladim.Client.Services.Authentication;
 
 namespace Mladim.Client.Pages;
 
@@ -10,6 +11,10 @@ public partial class Dashboard
 
     [Inject]
     public IProjectService ProjectService { get; set; } = default!;
+
+
+    [Inject]
+    public IAuthService AuthService { get; set; } = default!;
 
     //[Inject]
     //public IActivityService ActivityService { get; set; } = default!;
@@ -48,8 +53,11 @@ public partial class Dashboard
         }
     }
 
-    public async Task<IEnumerable<ProjectVM>> ProjectsByOrganizationAsync(int organizationId) =>
-        await this.ProjectService.GetByOrganizationIdAsync(organizationId);    
+    public async Task<IEnumerable<ProjectVM>> ProjectsByOrganizationAsync(int organizationId)
+    {
+        var userId = await this.AuthService.GetUserIdentityAsync();
+        return await this.ProjectService.GetByOrganizationIdAsync(organizationId, userId!);
+    }
     
 
 

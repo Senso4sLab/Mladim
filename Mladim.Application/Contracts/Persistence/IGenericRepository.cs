@@ -17,4 +17,5 @@ public interface IGenericRepository<T> where T : class
     Task<T?> FindAsync(object id);
     Task<int> CountAsync(Expression<Func<T, bool>> predicate);
     Task<IEnumerable<T>> GetAllAsync(IEnumerable<Expression<Func<T, bool>>> predicates, bool tracking = true);
+    Task<IEnumerable<T>> GetAllAsync(bool tracking = true);
 }

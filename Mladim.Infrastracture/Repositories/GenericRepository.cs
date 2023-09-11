@@ -58,6 +58,17 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             return await DbSet.Where(predicate).AsNoTracking().ToListAsync();
     }
 
+    public virtual async Task<IEnumerable<T>> GetAllAsync(bool tracking = true)
+    {
+        if (tracking)
+            return await DbSet.ToListAsync();
+        else
+            return await DbSet.AsNoTracking().ToListAsync();
+    }
+
+
+
+
     public virtual async Task<IEnumerable<T>> GetAllAsync(IEnumerable<Expression<Func<T, bool>>> predicates, bool tracking = true)
     {       
         var query = DbSet.AsQueryable();
