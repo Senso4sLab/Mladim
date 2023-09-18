@@ -78,25 +78,30 @@
             Palette = new PaletteLight()
             {
                 Primary = new MudColor("#4da456"),
-                Secondary = new MudColor("#394241"),             
-                
-
+                Secondary = new MudColor("#6e7191"),
+                TextPrimary = new MudColor("#6e7191"),
+                // TextSecondary = new MudColor("#ffffff"),
                 AppbarBackground = new MudColor("#4da456"),               
                 DrawerText = new MudColor("#000000"), 
                 Success = new MudColor("#4da456"),
             },
+
             Typography = new Typography()
             {
-
-                H1 = new H1() // card title
+                Default = new Default()
                 {
                     FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
-                    FontSize="1.3rem",
+                   
+                },
+                H1 = new H1() // card title, section title
+                {
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                    FontSize="1rem",
                     FontWeight = 600,
                     LetterSpacing = "-0.024rem",
 
                 },
-                H2 = new H2() // section title
+                H2 = new H2() // section title 
                 {
                     FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
                     FontSize = "1rem",
@@ -107,10 +112,11 @@
                 H3 = new H3() // header tabs
                 {
                     FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
-                    FontSize = "1rem",
+                    FontSize = "0.9rem",
                     FontWeight = 400,
-                    LineHeight = 1.3,
+                    LineHeight = 1.0,
                     TextTransform = "uppercase",
+                    LetterSpacing = "-0.024rem",
                 },
                 H4 = new H4() // menu item
                 {
@@ -119,27 +125,28 @@
                     FontWeight = 400,
                     LineHeight = 1.5,
                 },
-                H5 = new H5() // Call to Action Title
+                H5 = new H5() // User input
+                {
+                    FontFamily = new[] { "Lato", "Poppins", "Arial", "sans-serif" },
+                    FontSize = "0.9rem",
+                    FontWeight = 400,
+                    LineHeight = 1.5,
+                },             
+                Body1 = new Body1() // Graph label
                 {
                     FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
                     FontSize = "0.9rem",
-                    FontWeight = 700,
-                    LineHeight = 1.5,
-                },
-                Body1 = new Body1() // graph label
-                {
-                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
-                    FontSize = "0.8rem",
-                    FontWeight = 500,
+                    FontWeight = 400,
                     LineHeight = 1.0,
-                    LetterSpacing = "0.015rem",
+                    LetterSpacing = "-0.024rem",
                 },
                 Body2 = new Body2() // graph item
                 {
                     FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
-                    FontSize = "0.6rem",
-                    FontWeight = 500,
-                    LineHeight = 1.3,                  
+                    FontSize = "0.8rem",
+                    FontWeight = 400,
+                    LineHeight = 1,
+                    LetterSpacing = "-0.024rem",
                 },
               
                 Button  = new Button()
@@ -158,19 +165,7 @@
                     FontWeight = 400,
                     LineHeight = 1.3,
                     LetterSpacing = "-0.024rem",
-                },
-
-                Subtitle2 = new Subtitle2() // Call to Action Subtitle
-                {
-                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
-                    FontSize = "0.8rem",
-                    FontWeight = 400,
-                    LineHeight = 1.0,
-                }
-               
-
-
-                
+                },                           
             }
         };
 

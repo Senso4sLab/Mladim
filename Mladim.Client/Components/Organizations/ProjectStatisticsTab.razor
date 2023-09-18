@@ -2,6 +2,34 @@
 @using Syncfusion.Blazor.Charts
 
 
+
+
+<style>
+    .e-altrow, tr.e-chart-row:nth-child(odd) {
+        background-color: #EFEFEF;
+    }
+
+
+    .custom-row {
+        font-family: "Poppins";
+        font-size: 0.8rem;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: -0.024rem;
+    }
+
+    .custom-row-label {
+        font-family: "Poppins";
+        font-size: 0.9rem;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: -0.024rem;
+    }
+
+</style>
+
+
+
 <MudStack Spacing="4" Class="py-5">
     <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
         <div style="width:400px;">
@@ -20,25 +48,35 @@
         <MudGrid>
             <MudItem xl="4" sm="6">
                 <MudPaper Outlined="true">
-                    <SfAccumulationChart Title="Razporeditev udeležencev po letih" EnableAnimation="true" EnableSmartLabels="true">
+                    <SfAccumulationChart Title="Razporeditev udeležencev po letih" EnableAnimation="true" EnableSmartLabels="true" CustomClass="custom-row">
+                        <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
                         <AccumulationChartSeriesCollection>
                             <AccumulationChartSeries DataSource="@projectStatistics.AgeDoughnut" PointColorMapping="Fill" XName="Name" YName="Value" InnerRadius="80%">
-                                <AccumulationDataLabelSettings Visible="true" Name="Text" Position="AccumulationLabelPosition.Outside"></AccumulationDataLabelSettings>
+                                <AccumulationDataLabelSettings Visible="true" Name="Text" Position="AccumulationLabelPosition.Outside" >
+                                    <AccumulationChartDataLabelFont FontFamily="Poppins" FontWeight="400" Size="0.8rem" Color="#6e7191" />
+                                </AccumulationDataLabelSettings>
                             </AccumulationChartSeries>
                         </AccumulationChartSeriesCollection>
-                        <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Far"></AccumulationChartLegendSettings>
+                        <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Far">
+                            <AccumulationChartLegendFont FontFamily="Poppins" FontWeight="400" Size="0.8rem" Color="#6e7191" />
+                        </AccumulationChartLegendSettings>
                     </SfAccumulationChart>
                 </MudPaper>
             </MudItem>
             <MudItem xl ="4" sm="6">
                    <MudPaper Outlined="true">
                         <SfAccumulationChart Title="Razporeditev udeležencev po spolu" EnableAnimation="true" EnableSmartLabels="true">
+                        <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191"/>
                             <AccumulationChartSeriesCollection>
                                 <AccumulationChartSeries DataSource="@projectStatistics.GenderDoughnut" PointColorMapping="Fill" XName="Name" YName="Value" InnerRadius="80%">                                
-                                    <AccumulationDataLabelSettings Visible="true" Name="Text" Position="AccumulationLabelPosition.Outside"></AccumulationDataLabelSettings>
+                                    <AccumulationDataLabelSettings Visible="true" Name="Text" Position="AccumulationLabelPosition.Outside">
+                                        <AccumulationChartDataLabelFont FontFamily="Poppins" FontWeight="400" Size="0.8rem" Color="#6e7191" />
+                                    </AccumulationDataLabelSettings>
                                 </AccumulationChartSeries>
                             </AccumulationChartSeriesCollection>
-                            <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Far"></AccumulationChartLegendSettings>
+                            <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Far">
+                            <AccumulationChartLegendFont FontFamily="Poppins" FontWeight="400" Size="0.8rem" Color="#6e7191" />
+                            </AccumulationChartLegendSettings>
                         </SfAccumulationChart>
                 </MudPaper>
             </MudItem>
@@ -81,8 +119,8 @@
     {
         <MudText Typo="Typo.h6">Seznam prihajajočih aktivnosti</MudText>
 
-        <SfGantt class="pt-5" DataSource="@activities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true>
-            <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId" />
+        <SfGantt class="pt-5" DataSource="@activities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true >
+            <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId"/>
             <GanttSplitterSettings ColumnIndex=5></GanttSplitterSettings>
             <GanttColumns>
                 <GanttColumn Field="Id" HeaderText="Št."></GanttColumn>

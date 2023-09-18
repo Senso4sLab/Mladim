@@ -150,6 +150,12 @@ public partial class Activities
     }
 
 
+    public void RowDataBound(RowDataBoundEventArgs<ActivityForGantt> args)
+    {      
+        args.Row.AddClass(new string[] { "custom-row" });        
+    }
+
+
 }
 
 

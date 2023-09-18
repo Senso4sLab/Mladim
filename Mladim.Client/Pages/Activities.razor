@@ -11,6 +11,26 @@
     .e-altrow, tr.e-chart-row:nth-child(odd) {
         background-color: #EFEFEF;
     }
+
+
+    .custom-row
+    {
+        font-family: "Poppins";
+        font-size : 0.8rem;
+        font-weight:400;
+        line-height:normal;
+        letter-spacing: -0.024rem;
+    }
+
+    .custom-row-label {
+        font-family: "Poppins";
+        font-size: 0.9rem;
+        font-weight: 400;
+        line-height: normal;
+        letter-spacing: -0.024rem;
+    }
+
+
 </style>
 
 
@@ -76,11 +96,14 @@
 
             @if (filteredActivities.Count > 0)
             {
-                <SfGantt  class="pt-5" DataSource="@filteredActivities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true>
-                    <GanttTaskFields Id="Id" Name="ActivityName"  StartDate="StartDate" EndDate="EndDate"  ParentID="ParentId"/>
+                <SfGantt  class="pt-5" DataSource="@filteredActivities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true >
+                    
+                    <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId"  CssClass="custom-row-label">
+                        
+                    </GanttTaskFields>
                     <GanttSplitterSettings ColumnIndex=5 ></GanttSplitterSettings>
-                    <GanttColumns>
-                        <GanttColumn Field="Id" HeaderText="Št." Visible=false></GanttColumn>
+                    <GanttColumns  >
+                        <GanttColumn Field="Id" HeaderText="Št."  Visible=false ></GanttColumn>
                         <GanttColumn Field="ActivityName" HeaderText="Ime aktivnosti"></GanttColumn>
                         <GanttColumn Field="ProjectName" HeaderText="Ime projekta"></GanttColumn>
                         <GanttColumn Field="StartDate" HeaderText="Začetek" Width="100"></GanttColumn>
@@ -92,7 +115,7 @@
                             <div class="e-gantt-parent-taskbar" style="background-color:#4da456; height:30px; border: 4px solid #4da456; border-radius:8px;"/>               
                         </TaskbarTemplate>
                     </GanttTemplates>
-                    <GanttEvents TValue="ActivityForGantt" RowSelected="SelectedActivity"></GanttEvents>    
+                    <GanttEvents TValue="ActivityForGantt" RowDataBound="RowDataBound" RowSelected="SelectedActivity"></GanttEvents>    
                 </SfGantt>
             }
         </MudPaper>
