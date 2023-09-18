@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Mladim.Application.Contracts.Persistence;
@@ -16,44 +17,48 @@ public class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuer
 {
     public IUnitOfWork UnitOfWork { get; }
     public IMapper Mapper { get; }
-    public UserManager<AppUser> UserManager { get;}
-    public GetOrganizationsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, UserManager<AppUser> userManager)
+    public HttpContext HttpContext { get; }
+    public GetOrganizationsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
     {
         this.Mapper = mapper;
         this.UnitOfWork = unitOfWork;
-        this.UserManager = userManager; 
+        this.HttpContext = httpContextAccessor.HttpContext; 
     }
 
     public async Task<IEnumerable<OrganizationQueryDto>> Handle(GetOrganizationsQuery request, CancellationToken cancellationToken)
-    { 
-       
-        var user = await this.UserManager.FindByIdAsync(request.AppUserId);
+    {
+        var claims = this.HttpContext.User.Claims;
 
-        ArgumentNullException.ThrowIfNull(user);
+        if (UserIdFromClaim(claims) != request.AppUserId)
+            throw new OperationCanceledException();
 
-        var organizations = await GetOrganizationsByClaimsAsync(user);
+        var organizations = await GetOrganizationsByClaimsAsync(claims, request.AppUserId);
 
         return organizations == null ? Enumerable.Empty<OrganizationQueryDto>() :
             this.Mapper.Map<IEnumerable<OrganizationQueryDto>>(organizations);        
     }
 
 
-    private async Task<IEnumerable<Organization>> GetOrganizationsByClaimsAsync(AppUser user)
+    private async Task<IEnumerable<Organization>> GetOrganizationsByClaimsAsync(IEnumerable<Claim> claims, string userId)
     {
-        var claims = await this.UserManager.GetClaimsAsync(user);
-
         var isAdmin = claims.Any(c => c.ValueType == ClaimTypes.Role && c.Value == nameof(ApplicationRole.Admin));
 
         if (isAdmin)
         {
             return await this.UnitOfWork.OrganizationRepository
-               .GetAllAsync(o => o.AppUsers.Any(a => a.Id == user.Id), false);
+                .GetAllAsync(false);          
         }
         else
-        {
+        {           
             return await this.UnitOfWork.OrganizationRepository
-                .GetAllAsync(false);
+                .GetAllWithAppUser(userId);          
         }
+    }
+
+
+    private string UserIdFromClaim(IEnumerable<Claim> claims)
+    {
+        return claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
     }
         
 }

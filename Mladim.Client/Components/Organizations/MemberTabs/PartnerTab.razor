@@ -1,5 +1,9 @@
 ﻿
-
+<style>
+    .font-size-header-mud-data-grid .mud-table-cell {
+        font-size: 1rem;
+    }
+</style>
 
 
 <MudStack Class="py-10" Spacing="4">
@@ -8,7 +12,8 @@
         <MudSwitch T=bool Checked="IsActive" CheckedChanged="@CheckedChangedAsync" Color="Color.Primary">@(IsActive ? "Aktivni" : "Neaktivni")</MudSwitch>
         </MudStack>
         <MudDataGrid Items="Partners" ReadOnly="false" EditMode="DataGridEditMode.Form"
-                     Bordered="true" Dense="true" EditTrigger="DataGridEditTrigger.Manual">
+                 Bordered="true" Dense="true" EditTrigger="DataGridEditTrigger.Manual" 
+                 HeaderClass="font-size-header-mud-data-grid" RowStyleFunc="RowStyleFunc">
             <Columns>
                 <PropertyColumn Property="x => x.FullName" Title="Ime" />
                 <PropertyColumn Property="x => x.Description" Title="Opis" />

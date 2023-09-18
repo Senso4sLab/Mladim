@@ -17,7 +17,7 @@
     </MudAppBar>
 
     <MudDrawer @bind-Open="@_drawerOpen" Elevation="0" DisableOverlay=false Variant="DrawerVariant.Mini" OpenMiniOnHover=true MiniWidth="65px"  style="background-color:#4da456; ">
-        <div style="height:50%; overflow:hidden; border-right:1px solid #eeeeee;background-color:#ffffff;" class="rounded-tr-xl">
+        <div style="height:50%; overflow:hidden; border-right:1px solid #eeeeee;background-color:#ffffff; border-radius: 0px 20px 0px 0px">
             <div style="padding: 30px 2px;">
                 @if (_drawerOpen)
                 {              
@@ -35,7 +35,7 @@
             </MudNavMenu>          
         </div>
         <div style="height:50%; overflow:hidden; background-color:white;" >
-            <div style="height:100%; width:100%; position:relative;  border-right:1px solid #eeeeee;" class="rounded-br-xl">
+            <div style="height:100%; width:100%; position:relative;  border-right:1px solid #eeeeee; border-radius: 0px 0px 20px 0px;" class="rounded-br-xl">
                 @if (_drawerOpen)
                 {
                     <img style="vertical-align:bottom; position:absolute; left:20px; bottom:10px;  width:80%;" src="calltoaction.png" alt="mobile"/>
@@ -62,7 +62,7 @@
 {
     bool _drawerOpen = false;
 
-    OrganizationVM? SelectedOrganization { get; set; } = null;
+    OrganizationVM? SelectedOrganization { get; set; } = null;   
 
     EventCallback<int> OnSelectedOrganizationChanged => EventCallback.Factory.Create<int>(this, GetSelectedOrganizationAsync);
 
@@ -78,17 +78,99 @@
             Palette = new PaletteLight()
             {
                 Primary = new MudColor("#4da456"),
-                Secondary = new MudColor("#394241"),
+                Secondary = new MudColor("#394241"),             
+                
+
                 AppbarBackground = new MudColor("#4da456"),               
                 DrawerText = new MudColor("#000000"), 
                 Success = new MudColor("#4da456"),
             },
             Typography = new Typography()
             {
-                Default = new Default()
+
+                H1 = new H1() // card title
                 {
-                    FontFamily =  new[]{"Poppins", "Helvetica", "Arial", "sans-serif"}
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                    FontSize="1.3rem",
+                    FontWeight = 600,
+                    LetterSpacing = "-0.024rem",
+
+                },
+                H2 = new H2() // section title
+                {
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                    FontSize = "1rem",
+                    FontWeight = 600,
+                    LineHeight = 1.3,
+
+                },
+                H3 = new H3() // header tabs
+                {
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                    FontSize = "1rem",
+                    FontWeight = 400,
+                    LineHeight = 1.3,
+                    TextTransform = "uppercase",
+                },
+                H4 = new H4() // menu item
+                {
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                    FontSize = "0.9rem",
+                    FontWeight = 400,
+                    LineHeight = 1.5,
+                },
+                H5 = new H5() // Call to Action Title
+                {
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                    FontSize = "0.9rem",
+                    FontWeight = 700,
+                    LineHeight = 1.5,
+                },
+                Body1 = new Body1() // graph label
+                {
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                    FontSize = "0.8rem",
+                    FontWeight = 500,
+                    LineHeight = 1.0,
+                    LetterSpacing = "0.015rem",
+                },
+                Body2 = new Body2() // graph item
+                {
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                    FontSize = "0.6rem",
+                    FontWeight = 500,
+                    LineHeight = 1.3,                  
+                },
+              
+                Button  = new Button()
+                {
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                    FontSize = "0.9rem",
+                    FontWeight = 400,
+                    LineHeight = 1.5,
+                    TextTransform="uppercase",                    
+                },
+
+                Subtitle1 = new Subtitle1() // Card subtitle
+                {
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                    FontSize = "0.9rem",
+                    FontWeight = 400,
+                    LineHeight = 1.3,
+                    LetterSpacing = "-0.024rem",
+                },
+
+                Subtitle2 = new Subtitle2() // Call to Action Subtitle
+                {
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                    FontSize = "0.8rem",
+                    FontWeight = 400,
+                    LineHeight = 1.0,
                 }
+               
+
+
+                
             }
         };
 

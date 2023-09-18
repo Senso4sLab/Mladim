@@ -26,4 +26,5 @@ public class OrganizationAttributesCommandDto
     public OrganizationStatus Status { get; set; }
     public OrganizationFields Fields { get; set; }
     public OrganizationRegions Regions { get; set; }
+    public OrganizationNPMAims NPMAims { get; set; }
 }

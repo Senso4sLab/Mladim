@@ -24,6 +24,15 @@ public class OrganizationRepository : GenericRepository<Organization>, IOrganiza
             .AnyAsync(o => o.AppUsers.Any(u => u.Id == userId));
     }
 
+    public async Task<IEnumerable<Organization>> GetAllWithAppUser(string userId)
+    {
+        return await this.DbSet
+            .Include(o => o.AppUsers)            
+            .Where(o => o.AppUsers.Any(u => u.Id == userId))
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
 }
 
 

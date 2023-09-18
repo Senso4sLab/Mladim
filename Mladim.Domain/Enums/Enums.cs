@@ -114,6 +114,27 @@ public enum OrganizationFields
 
 
 [Flags]
+public enum OrganizationNPMAims
+{
+    [Display(Name = "Participacija in zastopanost")]
+    [Description("Spodbujanje participacije in zastopanosti mladih žensk in moških.")]
+    Participacija = 1,
+    [Display(Name = "Razvoj organizacij, področij sektorja in neorganizirane mladine")]
+    [Description("Spodbujanje ustanavljanja in razvoja organizacij v mladinskem sektorju, razvoja ključnih področij mladinskega sektorja ter zagotavljanje delovanja neorganizirane mladine.")]
+    Razvoj = 2,
+    [Display(Name = "Mednarodno mladinsko delo in mobilnosti")]
+    [Description("Spodbujanje vključevanja v mednarodno mladinsko delo in učnih mobilnosti v mladinskem delu ter njihova krepitev.")]
+    Mobilnost = 4,
+    [Display(Name = "Spodbujanje prostovoljstva med mladimi")]
+    [Description("Spodbujanje prostovoljstva med mladimi.")]
+    prostovoljstvo = 8,   
+};
+
+
+
+
+
+[Flags]
 public enum ActivityTypes
 {
     [Display(Name = "Tabor")]

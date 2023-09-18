@@ -5,58 +5,86 @@
 
 @attribute [Authorize]
 
+
+
+<style>   
+    .e-altrow, tr.e-chart-row:nth-child(odd) {
+        background-color: #EFEFEF;
+    }
+</style>
+
+
+
 <PageTitle>Aktivnosti</PageTitle>
 
  <MudStack Class="py-5" Spacing="3">
     <MudTextField Value="@defaultOrg?.Name" Label="Izbrana organizacija" Variant="Variant.Outlined" ReadOnly="true"></MudTextField>
-    <MudText Typo="Typo.h5">Seznam aktivnosti</MudText>
+   
  
 
-    @if (activities.Count > 0)
+    @if(activities == null)
     {
-         <MudPaper Class="pa-3" >
+        <MudText Typo="Typo.h5">Nalagam...</MudText>
+    }
+    else if (activities?.Count == 0)
+    {
+        <MudText Typo="Typo.h5">Ni aktivnosti za izbrano organizacijo.</MudText>
+    }
+    else
+    {       
+        <MudText Typo="Typo.h5">Seznam aktivnosti</MudText>
+
+        <MudPaper Class="pa-3">
             <MudGrid Spacing="2">
                 <MudItem sm="6" xl="3" xs="12">
-                    <MudDateRangePicker Label="Obdobje" DateRange="dateRange" DateRangeChanged="OnDateRangeChanged" Variant=Variant.Outlined Clearable />
-                 </MudItem>
-                 <MudItem sm="6" xl="3" xs="12">
-                     <MudSelect T="NamedEntityVM" SelectedValues="selectedProjects" SelectedValuesChanged="OnProjectNameChanged" Label="Izberi projekt" Variant="Variant.Outlined" Clearable>
-                        @foreach(var project in projects)
+                    <MudDateRangePicker Label="Obdobje" DateRange="dateRange" DateRangeChanged="OnDateRangeChanged" Variant=Variant.Outlined    
+            Clearable
+                        />
+                    </MudItem>
+                    <MudItem sm="6" xl="3" xs="12">
+                        <MudSelect T="NamedEntityVM" SelectedValues="selectedProjects" SelectedValuesChanged="OnProjectNameChanged" Label="Izberi projekt" Variant="Variant.Outlined"   
+            Clearable
+                        >
+                            @foreach (var project in projects)
                         {
                             <MudSelectItem T="NamedEntityVM" Value="@project">@project.FullName</MudSelectItem>
                         }
                     </MudSelect>
-                 </MudItem>
-                 <MudItem sm="6" xl="3" xs="12">
-                     <MudSelect T="NamedEntityVM" SelectedValuesChanged="OnProjectLeaderChanged" Label="Izberi vodjo projekta" Variant="Variant.Outlined" Clearable>
-                     @foreach (var projectLead in projectLeads)
+                </MudItem>
+                <MudItem sm="6" xl="3" xs="12">
+                    <MudSelect T="NamedEntityVM" SelectedValuesChanged="OnProjectLeaderChanged" Label="Izberi vodjo projekta" Variant="Variant.Outlined"      
+            Clearable
+                        >
+                            @foreach (var projectLead in projectLeads)
                         {
                             <MudSelectItem T="NamedEntityVM" Value="@projectLead">@projectLead.FullName</MudSelectItem>
                         }
-                     </MudSelect>
-                 </MudItem>
-                 <MudItem sm="6" xl="3" xs="12">
-                     <MudSelect T="NamedEntityVM" SelectedValuesChanged="OnActivityLeaderChanged" Label="Izberi vodjo aktivnosti" Variant="Variant.Outlined" Clearable>
-                     @foreach (var activityLead in activityLeads)
+                    </MudSelect>
+                </MudItem>
+                <MudItem sm="6" xl="3" xs="12">
+                    <MudSelect T="NamedEntityVM" SelectedValuesChanged="OnActivityLeaderChanged" Label="Izberi vodjo aktivnosti" Variant="Variant.Outlined"     
+            Clearable
+                        >
+                            @foreach (var activityLead in activityLeads)
                         {
                             <MudSelectItem T="NamedEntityVM" Value="@activityLead">@activityLead.FullName</MudSelectItem>
                         }
-                     </MudSelect>
-                 </MudItem>
-             </MudGrid>
+                    </MudSelect>
+                </MudItem>
+            </MudGrid>
 
 
             @if (filteredActivities.Count > 0)
-            { 
+            {
                 <SfGantt  class="pt-5" DataSource="@filteredActivities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true>
                     <GanttTaskFields Id="Id" Name="ActivityName"  StartDate="StartDate" EndDate="EndDate"  ParentID="ParentId"/>
                     <GanttSplitterSettings ColumnIndex=5 ></GanttSplitterSettings>
                     <GanttColumns>
-                        <GanttColumn Field="Id" HeaderText="Št."></GanttColumn>
+                        <GanttColumn Field="Id" HeaderText="Št." Visible=false></GanttColumn>
                         <GanttColumn Field="ActivityName" HeaderText="Ime aktivnosti"></GanttColumn>
                         <GanttColumn Field="ProjectName" HeaderText="Ime projekta"></GanttColumn>
-                        <GanttColumn Field="StartDate" HeaderText="Začetek"></GanttColumn>
-                        <GanttColumn Field="EndDate" HeaderText="Konec"></GanttColumn>
+                        <GanttColumn Field="StartDate" HeaderText="Začetek" Width="100"></GanttColumn>
+                        <GanttColumn Field="EndDate" HeaderText="Konec" Width="100"></GanttColumn>
                     </GanttColumns>
 
                     <GanttTemplates TValue="ActivityForGantt">
@@ -65,11 +93,11 @@
                         </TaskbarTemplate>
                     </GanttTemplates>
                     <GanttEvents TValue="ActivityForGantt" RowSelected="SelectedActivity"></GanttEvents>    
-                </SfGantt>            
+                </SfGantt>
             }
         </MudPaper>
+        
     }
-
 
 </MudStack>
 

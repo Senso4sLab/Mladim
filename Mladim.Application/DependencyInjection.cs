@@ -22,6 +22,7 @@ public static  class DependencyInjection
         collection.AddAutoMapper(Assembly.GetExecutingAssembly());
         collection.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         collection.Configure<PredefinedEmailContent>(configuration.GetSection(nameof(PredefinedEmailContent)));
+        collection.AddHttpContextAccessor();
         return collection;
     }
 }

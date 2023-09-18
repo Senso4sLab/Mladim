@@ -16,9 +16,8 @@
                 <MudTextField @bind-Value="partner.WebpageUrl" For="@(() => partner.WebpageUrl)" Variant="Variant.Outlined" Label="Spletna stran" />
                 <MudTextField @bind-Value="partner.ContactPerson" For="@(() => partner.ContactPerson)" Variant="Variant.Outlined" Label="Kontaktna oseba" />
                 <MudTextField @bind-Value="partner.Email" For="@(() => partner.Email)" Variant="Variant.Outlined" Label="Email" />
-                <MudTextField @bind-Value="partner.PhoneNumber" For="@(() => partner.PhoneNumber)" Variant="Variant.Outlined" Label="Kontaktna številka" />
-               @*  <MudSwitch @bind-Checked="partner.IsActive" Color="Color.Primary">@(partner.IsActive ? "Aktiven" : "Neaktiven")</MudSwitch> *@
-                </MudStack>
+                <MudTextField @bind-Value="partner.PhoneNumber" For="@(() => partner.PhoneNumber)" Variant="Variant.Outlined" Label="Kontaktna številka" />            
+            </MudStack>
             </MudForm>
         </DialogContent>
         <DialogActions>

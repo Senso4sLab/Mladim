@@ -97,6 +97,11 @@ public partial class ParticipantTab
 
     }
 
+    private string RowStyleFunc(ParticipantVM participant, int index)
+    {
+        return index % 2 == 0 ? "background-color:white" : "background-color:#EFEFEF;";
+    }
+
 
 
 }

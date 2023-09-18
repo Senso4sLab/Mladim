@@ -82,5 +82,10 @@ public partial class StaffMemberTab
 
     }
 
+    private string RowStyleFunc(StaffMemberVM sm, int index)
+    {
+        return index %2 == 0 ? "background-color:white" : "background-color:#EFEFEF;";
+    }
+
 
 }

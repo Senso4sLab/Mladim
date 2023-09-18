@@ -97,4 +97,9 @@ public partial class PartnerTab
             this.PopupService.ShowSnackbarError();
 
     }
+
+    private string RowStyleFunc(PartnerVM partner, int index)
+    {
+        return index % 2 == 0 ? "background-color:white" : "background-color:#EFEFEF;";
+    }
 }

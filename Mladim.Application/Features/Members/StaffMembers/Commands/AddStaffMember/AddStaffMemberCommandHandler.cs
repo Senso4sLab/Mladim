@@ -15,7 +15,7 @@ using System.Security.Claims;
 namespace Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
 public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberCommand, StaffMemberDetailsQueryDto>
 {
-    public IMapper Mapper { get; }
+  IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
     public IAuthService AuthService { get; }
     public IEmailService EmailService { get; } 

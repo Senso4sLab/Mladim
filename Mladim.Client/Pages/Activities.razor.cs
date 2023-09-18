@@ -30,7 +30,7 @@ public partial class Activities
     [Parameter]
     public int? ProjectId { get; set; }
 
-    private List<ActivityForGantt> activities = new List<ActivityForGantt>();
+    private List<ActivityForGantt> activities;
 
     private List<ActivityForGantt> filteredActivities { get; set; } = new List<ActivityForGantt>();
     private IEnumerable<StaffMemberLeadVM> leadStaff { get; set; } = new List<StaffMemberLeadVM>();

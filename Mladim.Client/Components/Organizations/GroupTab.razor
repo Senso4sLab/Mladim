@@ -1,5 +1,9 @@
 ﻿
-
+<style>
+    .font-size-header-mud-data-grid .mud-table-cell {
+        font-size: 1rem;
+    }
+</style>
 <MudStack Class="py-10" Spacing="4">
     <MudStack Row="true" Justify="Justify.SpaceBetween">
         <MudText Typo="Typo.h5">Izberi skupino</MudText>
@@ -10,7 +14,8 @@
             <MudSwitch T=bool Checked="ShowActiveGroups" CheckedChanged="@ShowActiveGroupChangedAsync" Color="Color.Primary">@(ShowActiveGroups ? "Aktivne" : "Neaktivne")</MudSwitch>
     </MudStack>
         <MudDataGrid Items="Groups" ReadOnly="false" EditMode="DataGridEditMode.Form"
-                     Bordered="true" Dense="true" EditTrigger="DataGridEditTrigger.Manual">
+                 Bordered="true" Dense="true" EditTrigger="DataGridEditTrigger.Manual"
+                 HeaderClass="font-size-header-mud-data-grid" RowStyleFunc="RowStyleFunc">
         <Columns>
            <PropertyColumn Property="x => x.FullName" Title="Ime" />
            <PropertyColumn Property="x => x.Description" Title="Opis" />               

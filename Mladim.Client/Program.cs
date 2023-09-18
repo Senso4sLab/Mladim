@@ -17,6 +17,8 @@ using Mladim.Client.Models;
 using Mladim.Client.Services.AccountService;
 using Mladim.Client.Services.FileService;
 using Syncfusion.Blazor;
+using Microsoft.AspNetCore.Authorization;
+using Mladim.Client.Authorization;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -46,7 +48,14 @@ builder.Services.AddScoped(sp => sp.GetService<IHttpClientFactory>()!.CreateClie
 builder.Services.AddSyncfusionBlazor();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());    
 builder.Services.AddTransient<HttpAuthorizationHandler>();
-builder.Services.AddAuthorizationCore();
+builder.Services.AddSingleton<IAuthorizationHandler, UserHasWorkerClaimHandler>();
+
+builder.Services.AddSingleton<IAuthorizationHandler, UserHasWorkerClaimHandler>();
+builder.Services.AddAuthorizationCore(options =>
+{
+    options.AddPolicy("HasWorkerClaim", policy => policy.Requirements.Add(new UserHasWorkerClaim()));
+});
+
 builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
 builder.Services.AddScoped<IPopupService, PopupService>(); 
 {

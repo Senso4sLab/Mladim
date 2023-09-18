@@ -5,15 +5,20 @@
 <PageTitle>Poročila</PageTitle>
 
 <MudStack Class="py-5" Spacing="4">
-   <MudTextField Value="@SelectedOrganization?.Attributes?.Name" Label="Izbrana organizacija" Variant="Variant.Outlined" ReadOnly="true"></MudTextField> 
+   <MudTextField Value="@SelectedOrganization?.Name" Label="Izbrana organizacija" Variant="Variant.Outlined" ReadOnly="true"></MudTextField> 
 
 
     @if (SelectedOrganization != null)
     {
         <MudTabs  Class="py-3" Elevation="0" >
-            <MudTabPanel Text="Statistika">
-                <OrganizationStatisticsTab></OrganizationStatisticsTab>
-            </MudTabPanel>
+
+            @if (IsOrganizationStatisticsVisible)
+            {
+                <MudTabPanel Text="Statistika">
+                    <OrganizationStatisticsTab></OrganizationStatisticsTab>
+                </MudTabPanel>
+            }
+            
             @if (activeProjects.Any())
             {
                 <MudTabPanel Text="Aktivni projekti">
@@ -23,7 +28,7 @@
 
             @if (pastProjects.Any())
             {
-                <MudTabPanel Text="Končani projekti">
+                <MudTabPanel Text="Pretekli projekti">
                     <ProjectStatisticsTab PastActivities=true Projects="pastProjects"></ProjectStatisticsTab>
                 </MudTabPanel>
             }

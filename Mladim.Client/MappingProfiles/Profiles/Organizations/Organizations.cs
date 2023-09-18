@@ -23,8 +23,9 @@ public class Organizations : Profile
            .ForMember(db => db.Types, dto => dto.MapFrom(field => (OrganizationTypes)(field.Types.Sum(x => (int)x))))
            .ForMember(db => db.Status, dto => dto.MapFrom(field => (OrganizationStatus)(field.Status.Sum(x => (int)x))))
            .ForMember(db => db.Fields, dto => dto.MapFrom(field => (OrganizationFields)(field.Fields.Sum(x => (int)x))))
-           .ForMember(db => db.Regions, dto => dto.MapFrom(field => (OrganizationRegions)(field.Regions.Sum(x => (int)x))));      
-           
+           .ForMember(db => db.Regions, dto => dto.MapFrom(field => (OrganizationRegions)(field.Regions.Sum(x => (int)x))))
+           .ForMember(db => db.NPMAims, dto => dto.MapFrom(field => (OrganizationNPMAims)(field.NPMAims.Sum(x => (int)x))));
+
         CreateMap<OrganizationQueryDto, OrganizationVM>();
         CreateMap<OrganizationStatisticQueryDto, OrganizationStatisticVM>();
        
@@ -35,6 +36,7 @@ public class Organizations : Profile
              .ForMember(dto => dto.Types, dt => dt.MapFrom(field => field.Types.ToEnums()))
              .ForMember(dto => dto.Status, dt => dt.MapFrom(field => field.Status.ToEnums()))
              .ForMember(dto => dto.Fields, dt => dt.MapFrom(field => field.Fields.ToEnums()))
-             .ForMember(dto => dto.Regions, dt => dt.MapFrom(field => field.Regions.ToEnums()));       
+             .ForMember(dto => dto.Regions, dt => dt.MapFrom(field => field.Regions.ToEnums()))
+             .ForMember(dto => dto.NPMAims, dt => dt.MapFrom(field => field.NPMAims.ToEnums()));
     }
 }

@@ -61,7 +61,28 @@ public class ActivityRepository : GenericRepository<Activity>, IActivityReposito
             .ToListAsync();
     }
 
-      
+
+    public async Task<IEnumerable<ActivityWithProjectName>> GetActivitiesWithProjectNameAndStaffMember(Expression<Func<Activity, bool>> predicate,  int? upcomingActivities)
+    {
+        var sequence = this.DbSet
+            .Include(a => a.Project)
+            .ThenInclude(p => p.Staff)
+            .ThenInclude(s => s.StaffMember)
+            .Where(predicate);
+
+        if (upcomingActivities is int numActivities)
+        {
+            var currentDate = DateTime.UtcNow;
+            sequence = sequence.Where(a => a.TimeRange.StartDate > currentDate)
+                .OrderByDescending(a => a.TimeRange.StartDate)
+                .Take(numActivities);
+        }
+
+        return await sequence.Select(a => ActivityWithProjectName.Create(a.ProjectId, a.Project.Attributes.Name, a))
+            .ToListAsync();
+    }
+
+
 
 }
 

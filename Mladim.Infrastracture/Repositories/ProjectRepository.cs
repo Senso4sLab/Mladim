@@ -41,5 +41,16 @@ public class ProjectRepository : GenericRepository<Project>,  IProjectRepository
 
         return tracking ? await projectDbSet.FirstOrDefaultAsync(p => p.Id == projectId)
             : await projectDbSet.AsNoTracking().FirstOrDefaultAsync(p => p.Id == projectId);        
-    }    
+    }
+
+    public async Task<IEnumerable<Project>> GetProjectsWithStaffMemberWithAsync(int organizationId, string email)
+    {
+        var projectDbSet = this.DbSet
+           .Include(p => p.Staff).AsNoTracking();
+
+        return await projectDbSet.Where(p => p.OrganizationId == organizationId && p.Staff.Any(s => s.StaffMember.Email == email)).ToListAsync();
+
+    }
+    
+   
 }

@@ -19,5 +19,6 @@ public class OrganizationAttributes : BaseAttibutes
     public OrganizationStatus Status { get; private set; }
     public OrganizationFields Fields { get; private set; }
     public OrganizationRegions Regions { get; private set; }
+    public OrganizationNPMAims NPMAims { get; private set; } 
     private OrganizationAttributes() {}    
 }

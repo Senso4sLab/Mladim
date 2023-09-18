@@ -1,12 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Mladim.Application.Features.Organizations.Commands.AddOrganization;
-using Mladim.Application.Features.Organizations.Commands.DeleteOrganization;
-using Mladim.Application.Features.Organizations.Queries.GetOrganization;
-using Mladim.Application.Features.Organizations.Queries.GetOrganizations;
-using Mladim.Application.Features.Organizations.Queries.GetOrganizationStatistics;
 using Mladim.Application.Features.Projects.Commands.AddProject;
 using Mladim.Application.Features.Projects.Commands.RemoveProject;
 using Mladim.Application.Features.Projects.Commands.UpdateProject;
@@ -14,9 +8,7 @@ using Mladim.Application.Features.Projects.Queries.GetProjectDetails;
 using Mladim.Application.Features.Projects.Queries.GetProjects;
 using Mladim.Application.Features.Projects.Queries.GetProjectStatistics;
 using Mladim.Domain.Dtos;
-using Mladim.Domain.Dtos.Organization;
 using Mladim.Domain.Dtos.Project;
-using Mladim.Domain.Models;
 
 namespace Mladim.WebAPI.Controllers;
 
@@ -48,6 +40,7 @@ public class ProjectController : ControllerBase
     [HttpDelete("{projectId}")]
     public async Task<ActionResult<bool>> RemoveAsync(int projectId)
     {
+       
         var response = await this.Mediator.Send(new RemoveProjectCommand { ProjectId = projectId });
         return Ok(response);
     }

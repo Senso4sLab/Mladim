@@ -26,7 +26,7 @@
 
                 <MudNumericField @bind-Value="staffMember.YearOfBirth" For="@(() => staffMember.YearOfBirth)" Label="Leto rojstva" Variant="Variant.Outlined" Min="@(DateTime.Now.Year - 100)" Max="@DateTime.Now.Year"/>
                 <MudTextField Disabled=!IsNewStaffMember @bind-Value="staffMember.Email" For="@(() => staffMember.Email)" Variant="Variant.Outlined" Label="Email" />
-                <MudSwitch @bind-Checked="staffMember.Claim" Converter="ClaimConverter" Color="Color.Primary">@($"Vloga uporabnika v organizaciji: {GetRoleName(staffMember.Claim)}")</MudSwitch>
+                <MudSwitch Disabled=IsDisabledClaimSwitch @bind-Checked="staffMember.Claim" Converter="ClaimConverter" Color="Color.Primary">@($"Vloga uporabnika v organizaciji: {GetRoleName(staffMember.Claim)}")</MudSwitch>
             </MudStack>
         </MudForm>
     </DialogContent>
@@ -39,22 +39,41 @@
 
 @code
 {
+
+    [Inject]
+    public IAuthService AuthService{ get; set; }
+
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set;}
 
+    [CascadingParameter]
+    public OrganizationVM? SelectedOrganization { get; set; }
+
     [Parameter]
     public StaffMemberVM staffMember { get; set; }
+
+
 
     private MudForm? staffMemberForm;
     private StaffMemberValidator staffMemberValidator = new StaffMemberValidator();
 
     bool IsNewStaffMember => staffMember.Id == 0;
 
+    bool IsDisabledClaimSwitch { get; set; }
+
     private MudBlazor.Converter<ApplicationClaim, bool?> ClaimConverter = new MudBlazor.Converter<ApplicationClaim, bool?>
     {
         SetFunc = claim => claim == ApplicationClaim.Manager,
         GetFunc = switchValue => switchValue is bool val && val ? ApplicationClaim.Manager : ApplicationClaim.Worker,
     };
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if(SelectedOrganization is OrganizationVM organization)
+        {
+            IsDisabledClaimSwitch = await AuthService.IsUserPolicySatisfied(organization.Id.ToString(), "HasWorkerClaim");
+        }
+    }
 
 
 

@@ -39,7 +39,7 @@ public partial class Projects
     private async Task<List<ProjectVM>> GetProjects()
     {
         var userId = await AuthService.GetUserIdentityAsync();
-        var projects = await this.ProjectService.GetByOrganizationIdAsync(defaultOrg!.Id, userId!); 
+        var projects = await this.ProjectService.GetByOrganizationIdAsync(defaultOrg!.Id); 
         return projects.ToList();
     }
 

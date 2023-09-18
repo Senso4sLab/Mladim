@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
@@ -20,31 +21,29 @@ public class GetProjectsByOrganizationQueryHandler : IRequestHandler<GetProjects
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
-    public UserManager<AppUser> UserManager { get; }
-   
-    public GetProjectsByOrganizationQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, UserManager<AppUser> userManager)
+    public HttpContext HttpContext { get; set; }
+
+
+    public GetProjectsByOrganizationQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
     {
         Mapper = mapper;
         UnitOfWork = unitOfWork;       
-        UserManager = userManager;
+      
+        HttpContext = httpContextAccessor!.HttpContext;
     }
    
 
     public async Task<IEnumerable<ProjectQueryDto>> Handle(GetProjectsByOrganizationQuery request, CancellationToken cancellationToken)
-    {
-        var user = await this.UserManager.FindByIdAsync(request.UserId);
+    {      
 
-        ArgumentNullException.ThrowIfNull(user);
-
-        var projects = await GetProjectsByClaimsAsync(user, request.OrganizationId);
+        var projects = await GetProjectsByClaimsAsync(this.HttpContext.User.Claims, request.OrganizationId);
 
         return this.Mapper.Map<IEnumerable<ProjectQueryDto>>(projects);
     }
 
 
-    private async Task<IEnumerable<Project>> GetProjectsByClaimsAsync(AppUser user, int organizationId)
-    {
-        var claims = await this.UserManager.GetClaimsAsync(user);
+    private async Task<IEnumerable<Project>> GetProjectsByClaimsAsync(IEnumerable<Claim> claims, int organizationId)
+    {    
         
         if(IsAdminOrManager(claims,organizationId))
         {
@@ -53,15 +52,15 @@ public class GetProjectsByOrganizationQueryHandler : IRequestHandler<GetProjects
         }
         else
         {
-            return await this.UnitOfWork.ProjectRepository
-                .GetAllAsync(p => p.OrganizationId == organizationId && p.Staff.Any(s => s.StaffMember.Email == user.Email));
+            var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value;
+            return  await this.UnitOfWork.ProjectRepository.GetProjectsWithStaffMemberWithAsync(organizationId, email);           
         }      
     }
 
 
     private bool IsAdminOrManager(IEnumerable <Claim> claims, int organizationId)
     {
-        return claims.Any(c => (c.ValueType == ClaimTypes.Role && c.Value == nameof(ApplicationRole.Admin)) ||
-                         (c.ValueType == nameof(ApplicationClaim.Manager) && c.Value == organizationId.ToString()));
+        return claims.Any(c => (c.Type == ClaimTypes.Role && c.Value == nameof(ApplicationRole.Admin)) ||
+                         (c.Type == nameof(ApplicationClaim.Manager) && c.Value == organizationId.ToString()));
     }
 }

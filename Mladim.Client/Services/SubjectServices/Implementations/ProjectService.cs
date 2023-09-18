@@ -29,9 +29,9 @@ public class ProjectService : IProjectService
         this.MladimApiUrls = MladimApiUrls.Value;
     }
 
-    public async Task<IEnumerable<ProjectVM>> GetByOrganizationIdAsync(int organizationId, string userId)
+    public async Task<IEnumerable<ProjectVM>> GetByOrganizationIdAsync(int organizationId)
     {
-        string url = string.Format(MladimApiUrls.GetProjectsByOrganizationId, organizationId, userId);
+        string url = string.Format(MladimApiUrls.GetProjectsByOrganizationId, organizationId);
         var projects = await HttpClient.GetAllAsync<ProjectQueryDto>(url);
         return this.Mapper.Map<IEnumerable<ProjectVM>>(projects);
     }

@@ -9,6 +9,7 @@ using System.Security.Claims;
 using Mladim.Client.Models;
 using Mladim.Application.Models;
 using Mladim.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Mladim.Client.Services.Authentication;
 
@@ -21,14 +22,18 @@ public class AuthService : IAuthService
     private MladimApiUrls MladimApiUrls {get;}
     private StorageKeys StorageKeys { get; }
 
+    public IAuthorizationService AuthorizationService { get; }
+
     public AuthService(IGenericHttpService httpClient,
                        ILocalStorageService storage,
+                       IAuthorizationService authorizationService,
                        AuthenticationStateProvider authProvider,
                        IOptions<MladimApiUrls> mladimApiUrls, 
                        IOptions<StorageKeys> storageKeys)
     {
         this.HttpClient = httpClient;
         this.Storage = storage;
+        this.AuthorizationService = authorizationService;
         this.AuthStateProvider = authProvider;
         this.MladimApiUrls = mladimApiUrls.Value;
         this.StorageKeys = storageKeys.Value;   
@@ -45,6 +50,8 @@ public class AuthService : IAuthService
         await this.AuthStateProvider.GetAuthenticationStateAsync();
         return response;        
     }
+
+   
 
 
     public async Task<Result<AuthResponse>> ConfirmRegistrationAsync(string email, string emailToken,  string password)
@@ -74,13 +81,23 @@ public class AuthService : IAuthService
         return response == userId;
     }
 
+    public async Task<bool> IsUserPolicySatisfied(string organizationId, string policyName)
+    {
+        var state = await AuthStateProvider.GetAuthenticationStateAsync();
+        var authorizationResult = await this.AuthorizationService.AuthorizeAsync(state.User, organizationId, policyName);
+        return authorizationResult.Succeeded;
+    }
+
 
     public async Task<string?> GetUserIdentityAsync()
     {
+
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+
 
         return authState?.User?.Identity?.IsAuthenticated == true ?
              authState.User.FindFirstValue(ClaimTypes.NameIdentifier) : null;
+      
     }
 
 
