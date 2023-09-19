@@ -1,4 +1,5 @@
 ﻿@using Mladim.Client.Extensions;
+@using Mladim.Client.Services.SubjectServices.Contracts;
 @using Mladim.Client.Validators;
 @using Mladim.Domain.Enums;
 
@@ -38,7 +39,7 @@
 
 
 @code
-{
+    {
 
     [Inject]
     public IAuthService AuthService{ get; set; }
@@ -46,12 +47,14 @@
     [CascadingParameter]
     MudDialogInstance MudDialog { get; set;}
 
-    [CascadingParameter]
-    public OrganizationVM? SelectedOrganization { get; set; }
+    @* [CascadingParameter]
+    public OrganizationVM? SelectedOrganization { get; set; } *@
 
     [Parameter]
     public StaffMemberVM staffMember { get; set; }
 
+    [Inject]
+    protected IOrganizationService OrganizationService { get; set; } = default!;
 
 
     private MudForm? staffMemberForm;
@@ -67,14 +70,16 @@
         GetFunc = switchValue => switchValue is bool val && val ? ApplicationClaim.Manager : ApplicationClaim.Worker,
     };
 
-    protected async override Task OnParametersSetAsync()
+    protected async override Task OnInitializedAsync()
     {
-        if(SelectedOrganization is OrganizationVM organization)
-        {
-            IsDisabledClaimSwitch = await AuthService.IsUserPolicySatisfied(organization.Id.ToString(), "HasWorkerClaim");
-        }
+
+        var defOrganization = await OrganizationService.DefaultOrganizationAsync();
+        if (defOrganization != null)        
+            IsDisabledClaimSwitch = await AuthService.IsUserPolicySatisfied(defOrganization.Id.ToString(), "HasWorkerClaim");
+        
     }
 
+    
 
 
     private async Task OnValidSubmitAsync()

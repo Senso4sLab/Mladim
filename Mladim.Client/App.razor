@@ -5,14 +5,14 @@
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">               
                 <NotAuthorized>
-                  <LoginRedirect/>
+                  <LoginRedirect />
                 </NotAuthorized>
             </AuthorizeRouteView>           
         </Found>
         <NotFound>
-            <PageTitle>Not found</PageTitle>
+            <PageTitle>Napaka</PageTitle>
             <LayoutView Layout="@typeof(MainLayout)">
-                <p role="alert">Sorry, there's nothing at this address.</p>
+                <p role="alert">Stran ne obstaja.</p>
             </LayoutView>
         </NotFound>
     </Router>

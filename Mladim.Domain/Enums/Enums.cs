@@ -147,7 +147,7 @@ public enum ActivityTypes
     [Description("Kontinuirano srečevanje skupine skozi daljši čas. Primeri: srečanja mladinske skupine, animatorjev, skavtov/tabornikov, mladinski študijski krožek, karierni ali zaposlitveni klub.")]
     Srecanje = 4,
     [Display(Name = "Posvet")]
-    [Description("Dogodek na določeno temo, lahko, večdnevni, ponavadi odprte narave in z udeleženci, ki se ne srečujejo kontinuirano. Primeri poimenovanja: konferenca, posvet, okrogla miza...")]
+    [Description("Dogodek na določeno temo lahko večdnevni, ponavadi odprte narave in z udeleženci, ki se ne srečujejo kontinuirano. Primeri poimenovanja: konferenca, posvet, okrogla miza...")]
     Posvet = 8,
     [Display(Name = "Kampanja")]
     [Description("Serija aktivnosti, katerih cilj je spreminjanje vedenj in/ali stališč pri ciljni skupini (primeri ciljnih skupin: odločevalci, mladi, občinska uprava, učenci določene šole, člani mladinskih organizacij...)")]

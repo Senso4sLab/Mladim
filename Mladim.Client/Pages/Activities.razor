@@ -1,6 +1,7 @@
 ﻿@page "/activities"
 @page "/activities/{projectId:int}"
 @using Mladim.Client.ViewModels.Activity;
+@using Syncfusion.Blazor.Grids;
 
 
 @attribute [Authorize]
@@ -54,7 +55,7 @@
         <MudPaper Class="pa-3">
             <MudGrid Spacing="2">
                 <MudItem sm="6" xl="3" xs="12">
-                    <MudDateRangePicker Label="Obdobje" DateRange="dateRange" DateRangeChanged="OnDateRangeChanged" Variant=Variant.Outlined Clearable/>
+                    <MudDateRangePicker Label="Obdobje" Rounded="true" DateFormat="dd-MMM-yyyy" DateRange="dateRange" DateRangeChanged="OnDateRangeChanged" Variant=Variant.Outlined Clearable />
                 </MudItem>
                 <MudItem sm="6" xl="3" xs="12">
                         <MudSelect T="NamedEntityVM" SelectedValues="selectedProjects" SelectedValuesChanged="OnProjectNameChanged" Label="Izberi projekt" Variant="Variant.Outlined"   
@@ -93,23 +94,64 @@
             {
                 <SfGantt  class="pt-5" DataSource="@filteredActivities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true >
                     
-                    <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId"  CssClass="custom-row-label">
+                    <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId">
                         
                     </GanttTaskFields>
-                    <GanttSplitterSettings ColumnIndex=5 ></GanttSplitterSettings>
-                    <GanttColumns  >
-                        <GanttColumn Field="Id" HeaderText="Št."  Visible=false ></GanttColumn>
-                        <GanttColumn Field="ActivityName" HeaderText="Ime aktivnosti"></GanttColumn>
-                        <GanttColumn Field="ProjectName" HeaderText="Ime projekta"></GanttColumn>
-                        <GanttColumn Field="StartDate" HeaderText="Začetek" Width="100"></GanttColumn>
-                        <GanttColumn Field="EndDate" HeaderText="Konec" Width="100"></GanttColumn>
-                    </GanttColumns>
-
-                    <GanttTemplates TValue="ActivityForGantt">
+                    <GanttTooltipSettings ShowTooltip="true" TValue="ActivityForGantt">
                         <TaskbarTemplate>
-                            <div class="e-gantt-parent-taskbar" style="background-color:#4da456; height:30px; border: 4px solid #4da456; border-radius:8px;"/>               
+                            @{
+                                <div>@context.ActivityName</div>                                
+                                <div>Začetek: @context.StartDate.ToShortDateString()</div>
+                                <div>Konec: @context.EndDate.ToShortDateString()</div>
+                             }
                         </TaskbarTemplate>
+                    </GanttTooltipSettings>
+                    <GanttSplitterSettings ColumnIndex=5 ></GanttSplitterSettings>
+                    <GanttColumns>
+                        <GanttColumn Field="Id" HeaderText="Št."  Visible=false>
+                            <HeaderTemplate>
+                                <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
+                                    @((context as GridColumn).HeaderText)
+                                </div>
+                            </HeaderTemplate>
+                        </GanttColumn>
+                        <GanttColumn Field="ActivityName" HeaderText="Ime aktivnosti" >
+                            <HeaderTemplate>
+                                <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
+                                    @((context as GridColumn).HeaderText)
+                                </div>
+                            </HeaderTemplate>
+                        </GanttColumn>
+                        <GanttColumn Field="ProjectName" HeaderText="Ime projekta">
+                            <HeaderTemplate>
+                                <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
+                                    @((context as GridColumn).HeaderText)
+                                </div>
+                            </HeaderTemplate>
+                        </GanttColumn>
+                        <GanttColumn Field="StartDate" HeaderText="Začetek" Width="100">
+                            <HeaderTemplate>
+                                <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
+                                    @((context as GridColumn).HeaderText)
+                                </div>
+                            </HeaderTemplate>
+                        </GanttColumn>
+                        <GanttColumn Field="EndDate" HeaderText="Konec" Width="100">
+                            <HeaderTemplate>
+                                <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
+                                    @((context as GridColumn).HeaderText)
+                                </div>
+                            </HeaderTemplate>
+                        </GanttColumn>
+                    </GanttColumns>
+                   
+                    <GanttTemplates TValue="ActivityForGantt" >
+                        <TaskbarTemplate>
+                            <div class="e-gantt-parent-taskbar" style="background-color:#4da456; height:30px; border: 4px solid #4da456; border-radius:8px;"/>            
+                        </TaskbarTemplate>
+                        
                     </GanttTemplates>
+                    
                     <GanttEvents TValue="ActivityForGantt" RowDataBound="RowDataBound" RowSelected="SelectedActivity"></GanttEvents>    
                 </SfGantt>
             }

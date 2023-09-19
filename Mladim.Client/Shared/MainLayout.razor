@@ -23,6 +23,10 @@
                 {              
                     <MudImage Class="px-5" Src="logo.png" Height="43" Alt="Mladim logo"/>
                 }
+                else
+                {
+                    <div style="height:43px; width: 10px;"/>                  
+                }
             </div>
             <MudNavMenu Color="Color.Primary" Style="font-family:Poppins; font-size: 0.9rem; font-weight: 400; line-height: 1.5;" Rounded=true Margin="Margin.Normal" Class="pa-2">
                 @if(SelectedOrganization != null)
@@ -90,17 +94,16 @@
             {
                 Default = new Default()
                 {
-                    FontFamily = new[] { "Lato", "Helvetica", "Arial", "sans-serif" },
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
                     FontSize = "0.9rem",
                     FontWeight = 400,
                     LineHeight = 1,
                 },
                 H1 = new H1() // user inputs, filenames of uploaded documents
                 {
-                    FontFamily = new[] { "Lato", "Helvetica", "Arial", "sans-serif" },
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
                     FontSize = "0.9rem",
                     FontWeight = 400,
-
                     LineHeight = 1,
                 },
                 H2 = new H2() // section title, card title, graph title, active-inactive slider, KPI value
@@ -127,7 +130,7 @@
                 },
                 H5 = new H5() // card text
                 {
-                    FontFamily = new[] { "Lato", "Helvetica", "Arial", "sans-serif" },
+                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
                     FontSize = "0.9rem",
                     FontWeight = 400,
                     LineHeight = 1.5,

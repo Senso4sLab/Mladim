@@ -8,6 +8,7 @@ public class LoginRedirect : ComponentBase
     protected NavigationManager Navigation { get; set; }
     protected override void OnInitialized()
     {
+        
         this.Navigation.NavigateTo("/login");
     }
 }

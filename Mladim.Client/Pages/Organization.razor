@@ -20,8 +20,9 @@
             <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="@(org => EditOrganizationAsync(SelectedOrganization))"></MudIconButton> 
             <AuthorizeView Roles="Admin">
                 <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddOrganizationAsync" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(org => RemoveOrganizationAsync(SelectedOrganization))"></MudIconButton>
             </AuthorizeView>           
-            <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(org => RemoveOrganizationAsync(SelectedOrganization))"></MudIconButton>
+           
         </MudButtonGroup>
     }
     else

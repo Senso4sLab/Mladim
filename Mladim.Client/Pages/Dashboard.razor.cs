@@ -39,10 +39,7 @@ public partial class Dashboard
         if (SelectedOrganization == null)
             return;
 
-        IsOrganizationStatisticsVisible = !await AuthService.IsUserPolicySatisfied(SelectedOrganization!.Id.ToString(), "HasWorkerClaim");
-
-        if (!IsOrganizationStatisticsVisible)
-            return;
+        IsOrganizationStatisticsVisible = !await AuthService.IsUserPolicySatisfied(SelectedOrganization!.Id.ToString(), "HasWorkerClaim");              
 
         var projects = await ProjectsByOrganizationAsync(SelectedOrganization.Id);
 

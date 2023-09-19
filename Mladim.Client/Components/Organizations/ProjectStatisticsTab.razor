@@ -1,5 +1,6 @@
 ﻿@using Mladim.Client.ViewModels.Activity;
 @using Syncfusion.Blazor.Charts
+@using Syncfusion.Blazor.Grids;
 
 
 
@@ -123,14 +124,44 @@
             <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId"/>
             <GanttSplitterSettings ColumnIndex=5></GanttSplitterSettings>
             <GanttColumns>
-                <GanttColumn Field="Id" HeaderText="Št."></GanttColumn>
-                <GanttColumn Field="ActivityName" HeaderText="Ime aktivnosti"></GanttColumn>
-                <GanttColumn Field="ProjectName" HeaderText="Ime projekta"></GanttColumn>
-                <GanttColumn Field="StartDate" HeaderText="Začetek"></GanttColumn>
-                <GanttColumn Field="EndDate" HeaderText="Konec"></GanttColumn>
+                <GanttColumn Field="Id" HeaderText="Št.">
+                    <HeaderTemplate>
+                        <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
+                            @((context as GridColumn).HeaderText)
+                        </div>
+                    </HeaderTemplate>
+                </GanttColumn>
+                <GanttColumn Field="ActivityName" HeaderText="Ime aktivnosti">
+                    <HeaderTemplate>
+                        <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
+                            @((context as GridColumn).HeaderText)
+                        </div>
+                    </HeaderTemplate>
+                </GanttColumn>
+                <GanttColumn Field="ProjectName" HeaderText="Ime projekta">
+                    <HeaderTemplate>
+                        <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
+                            @((context as GridColumn).HeaderText)
+                        </div>
+                    </HeaderTemplate>
+                </GanttColumn>
+                <GanttColumn Field="StartDate" HeaderText="Začetek">
+                    <HeaderTemplate>
+                        <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
+                            @((context as GridColumn).HeaderText)
+                        </div>
+                    </HeaderTemplate>
+                </GanttColumn>
+                <GanttColumn Field="EndDate" HeaderText="Konec">
+                    <HeaderTemplate>
+                        <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
+                            @((context as GridColumn).HeaderText)
+                        </div>
+                    </HeaderTemplate>
+                </GanttColumn>
             </GanttColumns>
 
-            <GanttTemplates TValue="ActivityForGantt">
+            <GanttTemplates TValue="ActivityForGantt" >
                 <TaskbarTemplate>
                     <div class="e-gantt-parent-taskbar" style="background-color:#4da456; height:30px; border: 4px solid #4da456; border-radius:8px;" />
                 </TaskbarTemplate>

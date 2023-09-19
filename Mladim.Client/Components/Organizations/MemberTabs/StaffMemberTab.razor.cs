@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Mladim.Client.ViewModels;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.Services.PopupService;
-
+using Mladim.Domain.Enums;
 
 namespace Mladim.Client.Components.Organizations.MemberTabs;
 
@@ -33,11 +33,12 @@ public partial class StaffMemberTab
 
     private Task<IEnumerable<StaffMemberVM>> GetStaffByOrganizationId() =>
         this.StaffService.GetByOrganizationIdAsync(this.Organization.Id, this.IsActive);
-   
+
 
     private async Task AddStaffMemberAsync()
     {
-        var staffMember = new StaffMemberVM();
+        var staffMember = new StaffMemberVM() { Claim = ApplicationClaim.Worker };
+
        
 
         var dialogResponse = await this.PopupService.ShowStaffMemberDialog("Nov uporabnik", staffMember);
