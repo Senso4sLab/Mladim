@@ -3,11 +3,11 @@
 
 <MudStack Spacing="4" Class="py-10">   
 
-    <MudExpansionPanels Elevation="1">
-        <MudExpansionPanel Style="font-weight:bold;" Text="Osnovni podatki" Class="my-2" >
+    <MudExpansionPanels Elevation="1" Style="font-size:1rem; font-weight:600; line-height:1.3;">
+        <MudExpansionPanel  Text="Osnovni podatki" Class="my-2" >
             <MudGrid>
                 <MudItem xs="12" sm="6">
-                    <MudText Class="py-3" Typo="Typo.body2">Logo organizacije</MudText>
+                    <MudText Class="py-3" Typo="Typo.h1" Color="Color.Tertiary">Logo organizacije</MudText>
                     <div style="height:200px; ">
                         <MudImage Src="@(Organization.Attributes.LogoUrl ?? "Files\\Images\\OrganizationProfiles\\default_org_logo.png")" Alt="logo" Elevation="0" Class="rounded-lg d-inline" Height="200" />
                         @if(!ReadOnly)
@@ -25,7 +25,7 @@
                     </div>                   
                 </MudItem>
                 <MudItem xs="12" sm="6">
-                    <MudText Class="py-3" Typo="Typo.body2">Logo za vstopno stran</MudText>
+                    <MudText Class="py-3" Typo="Typo.h1" Color="Color.Tertiary">Logo za vstopno stran</MudText>
                     <div>
                         
                         <MudImage Src="@(Organization.Attributes.BannerUrl ?? "Files\\Images\\OrganizationBanners\\default_org_banner.png")" Alt="banner" Elevation="0" Class="rounded-lg d-inline" Height="200" />
@@ -71,9 +71,10 @@
         <MudExpansionPanel Style="font-weight:bold;" Text="Opis" Class="my-2">
             @if(ReadOnly)
             {
-                <div style="font-weight:normal;">
+                <MudText Typo="Typo.h1" Color="Color.Tertiary">@((MarkupString)Organization.Attributes.Description)</MudText>
+               @*  <div style="font-weight:normal;">
                     @((MarkupString)Organization.Attributes.Description)
-                </div>
+                </div> *@
             }
             else
             {
@@ -81,7 +82,7 @@
             }                      
         </MudExpansionPanel>
         
-        <MudExpansionPanel Style="font-weight:bold;" Text="Profili na družbenih omrežjih" Class="my-2">
+        <MudExpansionPanel Text="Profili na družbenih omrežjih" Class="my-2">
             <MudGrid>
                 <MudItem xs="12" sm="6">
                     <MudTextField ReadOnly=@ReadOnly @bind-Value="Organization.SocialMediaUrls.Twiter" Label="Twitter" Variant="Variant.Outlined"></MudTextField>
@@ -98,7 +99,7 @@
             </MudGrid>          
         </MudExpansionPanel>
 
-        <MudExpansionPanel Style="font-weight:bold;" Text="Splošno o organizaciji" Class="my-2">
+        <MudExpansionPanel  Text="Splošno o organizaciji" Class="my-2">
              <MudStack Spacing="4">
                 <MultiSelect ReadOnly=@ReadOnly  TItem="OrganizationTypes" @bind-EnumValues="Organization.Attributes.Types" Label="Vrsta organizacije" />
                 <MultiSelect ReadOnly=@ReadOnly  TItem="OrganizationFields" @bind-EnumValues="Organization.Attributes.Fields" Label="Področje delovanja" />

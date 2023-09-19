@@ -24,7 +24,7 @@
                     <MudImage Class="px-5" Src="logo.png" Height="43" Alt="Mladim logo"/>
                 }
             </div>
-            <MudNavMenu Color="Color.Primary" Rounded=true Margin="Margin.Normal" Class="pa-2">
+            <MudNavMenu Color="Color.Primary" Style="font-family:Poppins; font-size: 0.9rem; font-weight: 400; line-height: 1.5;" Rounded=true Margin="Margin.Normal" Class="pa-2">
                 @if(SelectedOrganization != null)
                 {
                      <MudNavLink Class="navlink-hover" Href="/" Match="NavLinkMatch.All" Icon="@CustomIcons.Dashboard">Poročila</MudNavLink>
@@ -79,60 +79,60 @@
             {
                 Primary = new MudColor("#4da456"),
                 Secondary = new MudColor("#6e7191"),
-                TextPrimary = new MudColor("#6e7191"),
-                // TextSecondary = new MudColor("#ffffff"),
+                Tertiary = new MudColor("43525d"),             
                 AppbarBackground = new MudColor("#4da456"),               
                 DrawerText = new MudColor("#000000"), 
                 Success = new MudColor("#4da456"),
             },
+            
 
             Typography = new Typography()
             {
                 Default = new Default()
                 {
-                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
-                   
+                    FontFamily = new[] { "Lato", "Helvetica", "Arial", "sans-serif" },
+                    FontSize = "0.9rem",
+                    FontWeight = 400,
+                    LineHeight = 1,
                 },
-                H1 = new H1() // card title, section title
+                H1 = new H1() // user inputs, filenames of uploaded documents
                 {
-                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
-                    FontSize="1rem",
-                    FontWeight = 600,
-                    LetterSpacing = "-0.024rem",
+                    FontFamily = new[] { "Lato", "Helvetica", "Arial", "sans-serif" },
+                    FontSize = "0.9rem",
+                    FontWeight = 400,
 
+                    LineHeight = 1,
                 },
-                H2 = new H2() // section title 
+                H2 = new H2() // section title, card title, graph title, active-inactive slider, KPI value
                 {
                     FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
                     FontSize = "1rem",
                     FontWeight = 600,
                     LineHeight = 1.3,
-
                 },
-                H3 = new H3() // header tabs
+                H3 = new H3() // tab headers (organization)
                 {
                     FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
-                    FontSize = "0.9rem",
+                    FontSize = "1rem",
                     FontWeight = 400,
-                    LineHeight = 1.0,
+                    LineHeight = 1.3,
                     TextTransform = "uppercase",
-                    LetterSpacing = "-0.024rem",
                 },
-                H4 = new H4() // menu item
+                H4 = new H4() // menu item, random text (npr. navodila za change password)
                 {
                     FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
                     FontSize = "0.9rem",
                     FontWeight = 400,
                     LineHeight = 1.5,
                 },
-                H5 = new H5() // User input
+                H5 = new H5() // card text
                 {
-                    FontFamily = new[] { "Lato", "Poppins", "Arial", "sans-serif" },
+                    FontFamily = new[] { "Lato", "Helvetica", "Arial", "sans-serif" },
                     FontSize = "0.9rem",
                     FontWeight = 400,
                     LineHeight = 1.5,
-                },             
-                Body1 = new Body1() // Graph label
+                },
+                Body1 = new Body1() // table header
                 {
                     FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
                     FontSize = "0.9rem",
@@ -140,32 +140,22 @@
                     LineHeight = 1.0,
                     LetterSpacing = "-0.024rem",
                 },
-                Body2 = new Body2() // graph item
+                Body2 = new Body2() // table item, graph item
                 {
                     FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
                     FontSize = "0.8rem",
                     FontWeight = 400,
-                    LineHeight = 1,
+                    LineHeight = 1.0,
                     LetterSpacing = "-0.024rem",
                 },
-              
-                Button  = new Button()
+                Button = new Button()
                 {
                     FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
                     FontSize = "0.9rem",
                     FontWeight = 400,
                     LineHeight = 1.5,
-                    TextTransform="uppercase",                    
+                    TextTransform = "uppercase",
                 },
-
-                Subtitle1 = new Subtitle1() // Card subtitle
-                {
-                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
-                    FontSize = "0.9rem",
-                    FontWeight = 400,
-                    LineHeight = 1.3,
-                    LetterSpacing = "-0.024rem",
-                },                           
             }
         };
 

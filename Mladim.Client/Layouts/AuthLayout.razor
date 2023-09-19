@@ -18,20 +18,88 @@
 {
     MudTheme MyCustomTheme = new MudTheme()
         {
-            Palette = new PaletteLight()
-            {
-                Primary = new MudColor("#4da456"),
-                Secondary = new MudColor("#394241"),
-                AppbarBackground = new MudColor("#4da456"),
-                DrawerBackground = new MudColor("#4da456"),
-                DrawerText = new MudColor("#000000"),
-            },
-            Typography = new Typography()
-            {
-                Default = new Default()
+                Palette = new PaletteLight()
                 {
-                    FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" }
+                    Primary = new MudColor("#4da456"),
+                    Secondary = new MudColor("#6e7191"),
+                    Tertiary = new MudColor("43525d"),
+                    AppbarBackground = new MudColor("#4da456"),
+                    DrawerText = new MudColor("#000000"),
+                    Success = new MudColor("#4da456"),
+                },
+
+
+                Typography = new Typography()
+                {
+                    Default = new Default()
+                    {
+                        FontFamily = new[] { "Lato", "Helvetica", "Arial", "sans-serif" },
+                        FontSize = "0.9rem",
+                        FontWeight = 400,
+                        LineHeight = 1,
+                    },
+                    H1 = new H1() // user inputs, filenames of uploaded documents
+                    {
+                        FontFamily = new[] { "Lato", "Helvetica", "Arial", "sans-serif" },
+                        FontSize = "0.9rem",
+                        FontWeight = 400,
+
+                        LineHeight = 1,
+                    },
+                    H2 = new H2() // section title, card title, graph title, active-inactive slider, KPI value
+                    {
+                        FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                        FontSize = "1rem",
+                        FontWeight = 600,
+                        LineHeight = 1.3,
+                    },
+                    H3 = new H3() // tab headers (organization)
+                    {
+                        FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                        FontSize = "1rem",
+                        FontWeight = 400,
+                        LineHeight = 1.3,
+                        TextTransform = "uppercase",
+                    },
+                    H4 = new H4() // menu item, random text (npr. navodila za change password)
+                    {
+                        FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                        FontSize = "0.9rem",
+                        FontWeight = 400,
+                        LineHeight = 1.5,
+                    },
+                    H5 = new H5() // card text
+                    {
+                        FontFamily = new[] { "Lato", "Helvetica", "Arial", "sans-serif" },
+                        FontSize = "0.9rem",
+                        FontWeight = 400,
+                        LineHeight = 1.5,
+                    },
+                    Body1 = new Body1() // table header
+                    {
+                        FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                        FontSize = "0.9rem",
+                        FontWeight = 400,
+                        LineHeight = 1.0,
+                        LetterSpacing = "-0.024rem",
+                    },
+                    Body2 = new Body2() // table item, graph item
+                    {
+                        FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                        FontSize = "0.8rem",
+                        FontWeight = 400,
+                        LineHeight = 1.0,
+                        LetterSpacing = "-0.024rem",
+                    },
+                    Button = new Button()
+                    {
+                        FontFamily = new[] { "Poppins", "Helvetica", "Arial", "sans-serif" },
+                        FontSize = "0.9rem",
+                        FontWeight = 400,
+                        LineHeight = 1.5,
+                        TextTransform = "uppercase",
+                    },
                 }
-            }
         };
+    }
 }

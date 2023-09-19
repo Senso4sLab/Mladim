@@ -8,16 +8,11 @@
 @if (defaultOrg != null)
 {
     <MudStack Class="py-5" Spacing="5">
-        <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-             <MudTextField Style=" font-family: var(--mud-typography-h2-family);
-                                   font-size: var(--mud-typography-h2-size);
-                                   font-weight: var(--mud-typography-h2-weight);
-                                   line-height: var(--mud-typography-h2-lineheight);                                   "
-                           Value="@defaultOrg.Name" Label="Izbrana organizacija" Variant="Variant.Outlined" ReadOnly="true"></MudTextField>
-             <MudButton OnClick="AddNewProjectAsync" Style="height:40px;"  Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Dodaj projekt</MudButton>
+        <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">            
+             <MudText Typo="Typo.h2" Color="Color.Tertiary">@($"{defaultOrg.Name}: Seznam projektov")</MudText>
+             <MudButton OnClick="AddNewProjectAsync" Style="height:40px;"  Variant="Variant.Filled" Color="Color.Primary">Dodaj projekt</MudButton>
         </MudStack>
-
-        <MudText Color="Color.Secondary" Typo="Typo.h2" >Seznam projektov</MudText>
+       
         <MudGrid>   
             @foreach (var project in projects)
             {
@@ -25,19 +20,19 @@
                     <MudCard class="rounded-lg" Elevation="5" @onclick="(()=> ShowProjectAsync(project))">
                         <MudCardHeader>
                             <CardHeaderContent >
-                                <MudText style="min-height:30px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical;" Typo="Typo.h1" >@project.Attributes.Name</MudText>
+                                <MudText style="min-height:30px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical;" Typo="Typo.h2" Color="Color.Tertiary">@project.Attributes.Name</MudText>
                             </CardHeaderContent>
                             <CardHeaderActions>
                                 <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Color="Color.Primary" @onclick="@(()=> ShowProjectAsync(project))" />                          
                             </CardHeaderActions>
                         </MudCardHeader>
                         <MudCardContent>
-                            <MudText style="min-height:100px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 6; line-clamp: 6; -webkit-box-orient: vertical;" Typo="Typo.subtitle1">@((MarkupString)project.Attributes.Description)</MudText>
+                            <MudText style="min-height:100px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 6; line-clamp: 6; -webkit-box-orient: vertical;" Typo="Typo.h5" Color="Color.Tertiary">@((MarkupString)project.Attributes.Description)</MudText>
                         </MudCardContent>
                         <MudCardActions >
                                 <MudStack Row Spacing="6" Justify="Justify.FlexEnd" style="width:100%; margin-bottom:20px;">
-                                    <MudButton @onclick="(()=> GetAllActivitiesAsync(project))" Variant="Variant.Filled" Color="Color.Primary">Ogled aktivnosti</MudButton>
-                                    <MudButton @onclick="(()=> AddActivityAsync(project))" Variant="Variant.Filled" Color="Color.Secondary">Dodaj aktivnost</MudButton>                              
+                                     <MudButton @onclick="(()=> AddActivityAsync(project))" Variant="Variant.Filled" Color="Color.Secondary">Dodaj aktivnost</MudButton>
+                                     <MudButton @onclick="(()=> GetAllActivitiesAsync(project))" Variant="Variant.Filled" Color="Color.Primary">Ogled aktivnosti</MudButton>                                                         
                                 </MudStack>
                         </MudCardActions>
                     </MudCard>

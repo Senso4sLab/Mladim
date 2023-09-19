@@ -2,7 +2,12 @@
 
 <style>
     .font-size-header-mud-data-grid .mud-table-cell {
-        font-size: 1rem;
+        font-size: 0.9rem;
+        font-family:poppins;
+        font-weight:400; 
+        line-height:1.0;
+        letter-spacing : -0.024rem;
+        color: #6e7191;
     }
 </style>
 
@@ -11,7 +16,7 @@
 <MudStack Class="py-10" Spacing="4">
     <MudStack  Row="true" Justify="Justify.SpaceBetween">
         <MudButton OnClick="AddParticipantAsync" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Add" Color="Color.Primary">Nov udeleženec</MudButton>
-        <MudSwitch T=bool Checked="IsActive" CheckedChanged="@CheckedChangedAsync" Color="Color.Primary">@(IsActive ? "Aktivni" : "Neaktivni")</MudSwitch>
+        <MudSwitch Style="font-family:poppins; font-size:1rem; font-weight:600; line-height:1.3;" T=bool Checked="IsActive" CheckedChanged="@CheckedChangedAsync" Color="Color.Primary">@(IsActive ? "Aktivni" : "Neaktivni")</MudSwitch>
     </MudStack>
     <MudDataGrid Items="Participants" ReadOnly="false" EditMode="DataGridEditMode.Form"
                  Bordered="true" Dense="true" EditTrigger="DataGridEditTrigger.Manual" 

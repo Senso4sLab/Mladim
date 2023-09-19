@@ -25,6 +25,8 @@ using MudBlazor;
 using Mladim.Client.Services.PopupService;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Domain.Dtos;
+using MudBlazor.Charts;
+using System.Diagnostics.Metrics;
 
 namespace Mladim.Client.Components.Organizations.MemberTabs;
 
@@ -99,7 +101,9 @@ public partial class ParticipantTab
 
     private string RowStyleFunc(ParticipantVM participant, int index)
     {
-        return index % 2 == 0 ? "background-color:white" : "background-color:#EFEFEF;";
+        string rowCss = "font-size: 0.8rem; font-family:poppins; font-weight:400; line-height:1.0; letter-spacing:-0.024rem; color:#6e7191;";
+
+        return index % 2 == 0 ? rowCss + "background-color:white;" : rowCss +"background-color:#EFEFEF;";
     }
 
 

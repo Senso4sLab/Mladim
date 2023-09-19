@@ -78,4 +78,9 @@ public partial class ProjectStatisticsTab
         }
     }
 
+    public void RowDataBound(RowDataBoundEventArgs<ActivityForGantt> args)
+    {
+        args.Row.AddClass(new string[] { "custom-row" });
+    }
+
 }

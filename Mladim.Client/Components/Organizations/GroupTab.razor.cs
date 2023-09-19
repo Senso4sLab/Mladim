@@ -110,9 +110,11 @@ public partial class GroupTab
             this.PopupService.ShowSnackbarError();
     }
 
-    private string RowStyleFunc(GroupVM g, int index)
+    private string RowStyleFunc(GroupVM participant, int index)
     {
-        return index % 2 == 0 ? "background-color:white" : "background-color:#EFEFEF;";
+        string rowCss = "font-size: 0.8rem; font-family:poppins; font-weight:400; line-height:1.0; letter-spacing:-0.024rem; color:#6e7191;";
+
+        return index % 2 == 0 ? rowCss + "background-color:white;" : rowCss + "background-color:#EFEFEF;";
     }
 
 

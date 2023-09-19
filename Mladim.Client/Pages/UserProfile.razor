@@ -5,7 +5,7 @@
 
    
         <MudStack Row Justify="Justify.SpaceBetween">
-            <MudText Typo="Typo.h5">Moji podatki</MudText>
+            <MudText Typo="Typo.h2" Color="Color.Tertiary">Moji podatki</MudText>
 
             <MudStack Row>      
                 <MudToggleIconButton ToggledChanged="UpdateAccountAsync" Toggled="editableAccount" Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" 
@@ -52,7 +52,7 @@
          </MudForm>
    
         <MudStack Row Justify="Justify.SpaceBetween">
-             <MudText Typo="Typo.h5">Spremembna gesla</MudText>
+         <MudText Typo="Typo.h4" Color="Color.Tertiary">Spremembna gesla</MudText>
              <MudStack Row>
                 <MudToggleIconButton ToggledChanged="ChangePasswordAsync" Toggled="editablePassword" Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary"
                                      ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary"/>
@@ -65,7 +65,7 @@
 
         @if (!editablePassword)
         {
-            <MudText Typo="Typo.body2">Sprememba gesla je možna preko gumba za urejanje.</MudText>
+            <MudText Typo="Typo.h4" Color="Color.Tertiary">Sprememba gesla je možna preko gumba za urejanje.</MudText>
         }
         else
         {

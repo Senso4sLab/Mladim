@@ -72,4 +72,9 @@ public partial class OrganizationStatisticsTab
     {
         return await this.OrganizationService.GetStatisticsByYearAsync(SelectedOrganization!.Id, year);
     }
+
+    public void RowDataBound(RowDataBoundEventArgs<ActivityForGantt> args)
+    {
+        args.Row.AddClass(new string[] { "custom-row" });
+    }
 }

@@ -4,8 +4,8 @@
 <MudDialog Style="min-width:400px;">
     <TitleContent>
         <MudStack Row Justify="Justify.SpaceBetween">
-             <MudText Typo="Typo.h6">@(partner.Id == 0 ? "Nov partner" : "Uredi partnerja")</MudText>
-                <MudSwitch @bind-Checked="partner.IsActive" Color="Color.Primary">@(partner.IsActive ? "Aktiven" : "Neaktiven")</MudSwitch>
+             <MudText Typo="Typo.h2" Color="Color.Tertiary">@(partner.Id == 0 ? "Nov partner" : "Uredi partnerja")</MudText>
+             <MudSwitch @bind-Checked="partner.IsActive" Style="font-family:poppins; font-size:1rem; font-weight:600; line-height:1.3;" Color="Color.Primary">@(partner.IsActive ? "Aktiven" : "Neaktiven")</MudSwitch>
             </MudStack>
         </TitleContent>
     <DialogContent>

@@ -37,33 +37,28 @@
 
 <PageTitle>Aktivnosti</PageTitle>
 
- <MudStack Class="py-5" Spacing="3">
-    <MudTextField Value="@defaultOrg?.Name" Label="Izbrana organizacija" Variant="Variant.Outlined" ReadOnly="true"></MudTextField>
-   
- 
+ <MudStack Class="py-5" Spacing="5">
 
     @if(activities == null)
     {
-        <MudText Typo="Typo.h5">Nalagam...</MudText>
+        <MudText Typo="Typo.h2" Color="Color.Tertiary">Nalagam...</MudText>
     }
     else if (activities?.Count == 0)
     {
-        <MudText Typo="Typo.h5">Ni aktivnosti za izbrano organizacijo.</MudText>
+        <MudText Typo="Typo.h2" Color="Color.Tertiary">@($"{defaultOrg?.Name}: Seznam aktivnosti")</MudText>
+        <MudText Typo="Typo.h2" Color="Color.Tertiary">Ni aktivnosti za izbrano organizacijo.</MudText>
     }
     else
-    {       
-        <MudText Typo="Typo.h5">Seznam aktivnosti</MudText>
-
+    {
+        <MudText Typo="Typo.h2" Color="Color.Tertiary">@($"{defaultOrg?.Name}: Seznam aktivnosti")</MudText>
         <MudPaper Class="pa-3">
             <MudGrid Spacing="2">
                 <MudItem sm="6" xl="3" xs="12">
-                    <MudDateRangePicker Label="Obdobje" DateRange="dateRange" DateRangeChanged="OnDateRangeChanged" Variant=Variant.Outlined    
-            Clearable
-                        />
-                    </MudItem>
-                    <MudItem sm="6" xl="3" xs="12">
+                    <MudDateRangePicker Label="Obdobje" DateRange="dateRange" DateRangeChanged="OnDateRangeChanged" Variant=Variant.Outlined Clearable/>
+                </MudItem>
+                <MudItem sm="6" xl="3" xs="12">
                         <MudSelect T="NamedEntityVM" SelectedValues="selectedProjects" SelectedValuesChanged="OnProjectNameChanged" Label="Izberi projekt" Variant="Variant.Outlined"   
-            Clearable
+                                    Clearable
                         >
                             @foreach (var project in projects)
                         {
