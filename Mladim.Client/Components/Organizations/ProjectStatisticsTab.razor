@@ -122,9 +122,18 @@
 
         <SfGantt class="pt-5" DataSource="@activities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true >
             <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId"/>
+            <GanttTooltipSettings ShowTooltip="true" TValue="ActivityForGantt">
+                <TaskbarTemplate>
+                    @{
+                        <div>@context.ActivityName</div>
+                        <div>Začetek: @context.StartDate.ToShortDateString()</div>
+                        <div>Konec: @context.EndDate.ToShortDateString()</div>
+                    }
+                </TaskbarTemplate>
+            </GanttTooltipSettings>
             <GanttSplitterSettings ColumnIndex=5></GanttSplitterSettings>
             <GanttColumns>
-                <GanttColumn Field="Id" HeaderText="Št.">
+                <GanttColumn Field="Id" HeaderText="Št." Visible=false>
                     <HeaderTemplate>
                         <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
                             @((context as GridColumn).HeaderText)
@@ -145,14 +154,14 @@
                         </div>
                     </HeaderTemplate>
                 </GanttColumn>
-                <GanttColumn Field="StartDate" HeaderText="Začetek">
+                <GanttColumn Field="StartDate" HeaderText="Začetek" Width="100">
                     <HeaderTemplate>
                         <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
                             @((context as GridColumn).HeaderText)
                         </div>
                     </HeaderTemplate>
                 </GanttColumn>
-                <GanttColumn Field="EndDate" HeaderText="Konec">
+                <GanttColumn Field="EndDate" HeaderText="Konec" Width="100">
                     <HeaderTemplate>
                         <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
                             @((context as GridColumn).HeaderText)
