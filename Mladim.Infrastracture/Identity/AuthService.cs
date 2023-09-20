@@ -161,7 +161,8 @@ public class AuthService : IAuthService
 
         var user = await this.UserManager.FindByEmailAsync(email);
 
-        ArgumentNullException.ThrowIfNull(user);
+        if(user == null)
+            return Result<AuthResponse>.Error("Uporabnik ne obstaja.");     
 
         if(!await ConfirmEmailAsync(user, emailToken))
             return Result<AuthResponse>.Error("Potrditev registracije ni uspela.");

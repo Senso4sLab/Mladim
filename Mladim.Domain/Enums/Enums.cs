@@ -194,7 +194,7 @@ public enum ActivityTypes
     [Display(Name = "Dolgotrajsno partnersko sodelovanje")]
     [Description("Kot predstavnik organizacije trajno gojenje odnosov s partnersko organizacijo iz a) drugega sektorja ali b) drugega okolja, npr. druge države.")]
     Partnerstvo = 262144,
-    [Display(Name = "Digitalno mladisnko delo")]
+    [Display(Name = "Digitalno mladinsko delo")]
     [Description("Digitalno mladinsko delo pomeni proaktivno uporabo ali naslavljanje digitalnih medijev in tehnologij v mladinskem delu. Digitalno mladinsko delo ni metoda mladinskega dela, vendar je lahko vključeno v katerokoli okolje mladinskega dela (odprto mladinsko delo, mladinsko informiranje in svetovanje, mladinski klubi...).")]
     Digitalno = 524288,
 };

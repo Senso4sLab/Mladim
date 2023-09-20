@@ -118,7 +118,9 @@
 
     @if (activities.Any())
     {
-        <MudText Typo="Typo.h6">Seznam prihajajočih aktivnosti</MudText>
+        var upcommingActivity = PastActivities ? "" : "prihajajočih";
+
+        <MudText Typo="Typo.h2" Color="Color.Tertiary">@($"Seznam {upcommingActivity} aktivnosti")</MudText>        
 
         <SfGantt class="pt-5" DataSource="@activities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true >
             <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId"/>
@@ -180,14 +182,10 @@
     }
     else
     {
-        @if (PastActivities)
-        {
-            <MudText Typo="Typo.h2" Color="Color.Tertiary">Projekt nima nobenih aktivnosti.</MudText>
-        }
-        else
-        {
-            <MudText Typo="Typo.h2" Color="Color.Tertiary">Projekt nima nobenih prihajajočih aktivnosti.</MudText>
-        }
+        var upcommingActivity = PastActivities ? "" : "prihajajočih";
+               
+        <MudText Typo="Typo.h2" Color="Color.Tertiary">@($"Projekt nima nobenih {upcommingActivity} aktivnosti")</MudText>
+        
     }
 </MudStack>
 
