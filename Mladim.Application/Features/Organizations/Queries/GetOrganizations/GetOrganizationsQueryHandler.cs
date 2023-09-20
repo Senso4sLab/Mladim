@@ -41,7 +41,7 @@ public class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuer
 
     private async Task<IEnumerable<Organization>> GetOrganizationsByClaimsAsync(IEnumerable<Claim> claims, string userId)
     {
-        var isAdmin = claims.Any(c => c.ValueType == ClaimTypes.Role && c.Value == nameof(ApplicationRole.Admin));
+        var isAdmin = claims.Any(c => c.Type == ClaimTypes.Role && c.Value == nameof(ApplicationRole.Admin));
 
         if (isAdmin)
         {

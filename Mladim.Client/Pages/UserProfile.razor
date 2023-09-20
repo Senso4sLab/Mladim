@@ -23,7 +23,9 @@
                  <MudItem sm="12">
                     <div>
                         <MudImage Src="@(appUser.ImageUrl ?? "Files\\Images\\UserProfiles\\default_user_profile.png")" Alt="user_profile" Elevation="0" Class="rounded-lg d-inline" Height="200"/>
-                    <MudFileUpload Disabled=@(!editableAccount) style="transform: translate(-20px, 150px);" Class="d-inline-block" T="IBrowserFile" FilesChanged="UploadUserImageAsync">
+                    @if(editableAccount)
+                    {
+                        <MudFileUpload style="transform: translate(-20px, 150px);" Class="d-inline-block" T="IBrowserFile" FilesChanged="UploadUserImageAsync">
                             <ButtonTemplate>
                                 <MudFab HtmlTag="label"
                                         Size="Size.Small"
@@ -32,6 +34,7 @@
                                         for="@context" />
                             </ButtonTemplate>
                         </MudFileUpload>
+                    }
                     </div>
                  </MudItem>         
                  <MudItem sm="12" md="6">
@@ -76,7 +79,7 @@
                           Variant="Variant.Outlined"
                                 Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonPasswordClick" AdornmentAriaLabel="Pokaži geslo" />
 
-                <MudTextField Label="Novo geslo"
+                <MudTextField Label="Novo geslo" Class="py-3"
                 @bind-Value="userPassword.NewPassword" For="@(() => userPassword.NewPassword)"
                                 InputType="@NewPasswordInput"
                                 Variant="Variant.Outlined"

@@ -75,8 +75,9 @@ public class AuthService : IAuthService
     {
         string url = string.Format(this.MladimApiUrls.Password, userId, password);
 
-        var changePassword = new ChangePassword { UserId = userId, OldPassword = oldPassword, Password = password };
-        var response =  await this.HttpClient.PostAsync<ChangePassword, string>(url, changePassword);
+        var changePassword = new ChangePassword { UserId = userId, OldPassword = oldPassword, Password = password };        
+
+        var response =  await this.HttpClient.PostAsync<ChangePassword>(url, changePassword);
 
         return response == userId;
     }
