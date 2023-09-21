@@ -10,7 +10,7 @@
 <MudSnackbarProvider />
 
 
-<MudLayout>
+<MudLayout >
     <MudAppBar Elevation="0">      
         <MudSpacer />
         <UserLoginSettings />
@@ -51,7 +51,7 @@
         </div>
     </MudDrawer>
     <MudMainContent>
-        <MudContainer>
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge">
             <CascadingValue Value="@OnSelectedOrganizationChanged">          
                 <CascadingValue Value="@SelectedOrganization">
                       @Body

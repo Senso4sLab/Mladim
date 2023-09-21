@@ -28,19 +28,19 @@
     <MudDateRangePicker ReadOnly ="!editable"  Variant="Variant.Outlined" Label="Trajanje projekta" @bind-DateRange="project.DateRange"/>       
 
     <div>
-        <SfRichTextEditor Readonly="!editable" @bind-Value="project.Attributes.Description" Placeholder="Nekaj o projektu" />           
+        <SfRichTextEditor Readonly="!editable" @bind-Value="project.Attributes.Description" Placeholder="Nekaj o projektu" />                  
     </div>
 
     <MudTextField ReadOnly="!editable" @bind-Value="project.Attributes.WebpageUrl" Label="Spletna stran" Variant="Variant.Outlined"></MudTextField>
 
-        <MudSelect ReadOnly="!editable" T="NamedEntityVM" MultiSelection="true" ToStringFunc="@((staff)=> staff.FullName)" @bind-SelectedValues="project.Staff" Variant="Variant.Outlined" Label="Vodje projekta" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect ReadOnly="!editable" T="NamedEntityVM" MultiSelection="true" ToStringFunc="@((staff)=> staff.FullName)" @bind-SelectedValues="project.Staff" Variant="Variant.Outlined" Label="Vodje projekta" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
          @foreach (var staffMember in Staff)
         {
             <MudSelectItem Value="staffMember">@staffMember.FullName</MudSelectItem>
         }
     </MudSelect>
 
-    <MudSelect ReadOnly="!editable" MultiSelection="true" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" @bind-SelectedValues="project.Administration" Variant="Variant.Outlined" Label="Administrativno-tehnično osebje" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect ReadOnly="!editable" MultiSelection="true" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" @bind-SelectedValues="project.Administration" Variant="Variant.Outlined" Label="Administrativno-tehnično osebje" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
         @foreach (var staffMember in Staff)
         {
             <MudSelectItem Value="staffMember">@staffMember.FullName</MudSelectItem>
@@ -49,7 +49,7 @@
 
 
     <MudStack Row Spacing="5" AlignItems="AlignItems.Center">
-        <MudSelect ReadOnly="!editable"  MultiSelection="true" T="NamedEntityVM" ToStringFunc="@((partner)=> partner.FullName)" @bind-SelectedValues="project.Partners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter">
+         <MudSelect ReadOnly="!editable" MultiSelection="true" T="NamedEntityVM" ToStringFunc="@((partner)=> partner.FullName)" @bind-SelectedValues="project.Partners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
             @foreach (var partner in Partners)
             {
                     <MudSelectItem Value="partner">@partner.FullName</MudSelectItem>

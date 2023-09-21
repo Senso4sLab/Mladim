@@ -43,26 +43,28 @@
         
     }
     <div>
-        <SfRichTextEditor Readonly="!editable" @bind-Value="@activity.Attributes.Description" Placeholder="Nekaj o aktivnosti" />
+       
+       <SfRichTextEditor Readonly="!editable" @bind-Value="@activity.Attributes.Description" Placeholder="Nekaj o aktivnosti" />
+          
     </div>
 
     <MultiSelect ReadOnly="!editable" ToolTip= "editable" TItem="ActivityTypes" @bind-EnumValues="activity.Attributes.ActivityTypes" Label="Tip aktivnosti" />
 
-    <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Staff" Variant="Variant.Outlined" Label="Vodje aktivnosti" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Staff" Variant="Variant.Outlined" Label="Vodje aktivnosti" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
          @foreach (var staffMember in staff)
         {
             <MudSelectItem Value="staffMember">@staffMember.FullName</MudSelectItem>
         }
     </MudSelect>
 
-    <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Administration" Variant="Variant.Outlined" Label="Drugi sodelujoči" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Administration" Variant="Variant.Outlined" Label="Drugi sodelujoči" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
         @foreach (var staffMember in staff)
         {
             <MudSelectItem Value="staffMember">@staffMember.FullName</MudSelectItem>
         }
     </MudSelect>
 
-    <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((group)=> group.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Groups" Variant="Variant.Outlined" Label="Skupine udeležencev" AnchorOrigin="Origin.BottomCenter">
+    <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((group)=> group.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Groups" Variant="Variant.Outlined" Label="Skupine udeležencev" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
         @foreach (var participantGroup in participantGroups)
         {
             <MudSelectItem Value="participantGroup">@participantGroup.FullName</MudSelectItem>
@@ -70,7 +72,7 @@
     </MudSelect>
 
     <MudStack  Row Spacing="5" AlignItems="AlignItems.Center">
-        <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((partner)=> partner.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Partners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter">
+         <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((partner)=> partner.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Partners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
              @foreach (var partner in partners)
             {
                 <MudSelectItem Value="partner">@partner.FullName</MudSelectItem>
@@ -81,7 +83,7 @@
     </MudStack>
 
     <MudStack Row Spacing="5" AlignItems="AlignItems.Center">
-        <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((participant)=> participant.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Participants" Variant="Variant.Outlined" Label="Udeleženci" AnchorOrigin="Origin.BottomCenter">
+         <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((participant)=> participant.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Participants" Variant="Variant.Outlined" Label="Udeleženci" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
              @foreach (var participant in participants)
             {
                 <MudSelectItem Value="participant">@participant.FullName</MudSelectItem>
