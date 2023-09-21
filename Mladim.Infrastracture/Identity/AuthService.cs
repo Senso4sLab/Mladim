@@ -173,7 +173,7 @@ public class AuthService : IAuthService
         var result = await UserManager.ResetPasswordAsync(user, token, password);
 
         if (!result.Succeeded)
-            return Result<AuthResponse>.Error(string.Join(", ", result.Errors.Select(e => e.Description)));
+            return Result<AuthResponse>.Error("Gesla ni mogoče spremeniti! Preveri, ali vsebuje vsaj vsaj eno veliko črko, eno malo črko, eno številko in en poseben znak.");
      
 
         var authResponse = new AuthResponse

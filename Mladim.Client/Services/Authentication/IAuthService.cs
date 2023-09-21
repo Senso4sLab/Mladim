@@ -7,7 +7,7 @@ namespace Mladim.Client.Services.Authentication;
 
 public interface IAuthService
 {
-    Task<bool> TryChangePasswordAsync(string userId, string oldPassword, string password);
+    Task<Result> TryChangePasswordAsync(string userId, string oldPassword, string password);
     Task<string?> GetUserIdentityAsync();
     Task<Result<AuthResponse>> LoginAsync(LoginUser loginUser);
     Task<bool> IsUserPolicySatisfied(string organizationId, string policyName);

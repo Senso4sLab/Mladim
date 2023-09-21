@@ -92,7 +92,7 @@ public class OrganizationService : IOrganizationService
 
     public async Task<bool> RemoveAsync(int organiozationId)
     {
-        string url = string.Format(MladimApiUrls.GetOrganizationsByUserId, organiozationId);
+        string url = string.Format(MladimApiUrls.RemoveOrganization, organiozationId);
 
         if (await HttpClient.DeleteAsync(url))
         {

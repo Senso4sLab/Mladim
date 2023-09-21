@@ -15,7 +15,7 @@
     }
 </style>
 
-<MudDialog Style="min-width:500px;">
+<MudDialog Style="min-width:600px; padding-bottom:10px;">
     <DialogContent>
         <MudDataGrid T="AnonymousParticipantTableElements" Items="@Elements" ReadOnly=false EditMode="DataGridEditMode.Cell"
                      Bordered="true" Dense="false" EditTrigger="DataGridEditTrigger.Manual"
@@ -41,8 +41,8 @@
         </MudDataGrid>
     </DialogContent>
     <DialogActions>
-        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="Cancel">Prekliči</MudButton>
-        <MudButton Variant="Variant.Filled" OnClick="Submit" Color="Color.Primary">Shrani</MudButton>
+        <MudButton Class="px-5" Variant="Variant.Filled" Color="Color.Secondary" OnClick="Cancel">Prekliči</MudButton>
+        <MudButton Class="px-5 mr-5" Variant="Variant.Filled" OnClick="Submit" Color="Color.Primary">Shrani</MudButton>
     </DialogActions>
 </MudDialog>
 

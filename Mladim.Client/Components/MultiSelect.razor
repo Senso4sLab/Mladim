@@ -5,7 +5,7 @@
 @typeparam TItem where TItem : struct, Enum
 
 
-<MudSelect MultiSelection="true" Lines=@Lines T="TItem" SelectedValues="EnumValues" SelectedValuesChanged="EnumValuesChanged" ToStringFunc="@(item => item.GetDisplayAttribute())" Label="@Label" ReadOnly="@ReadOnly" AdornmentColor="Color.Primary" Variant="Variant.Outlined">
+<MudSelect MultiSelection="true" Lines=@Lines T="TItem" SelectedValues="EnumValues" SelectedValuesChanged="EnumValuesChanged" ToStringFunc="@(item => item.GetDisplayAttribute())" Label="@Label" ReadOnly="@ReadOnly" Adornment="@(ReadOnly ? Adornment.None : Adornment.End)" AdornmentColor="Color.Primary" Variant="Variant.Outlined">
     @foreach (var item in Enum.GetValues<TItem>())
     {
         <MudSelectItem  Value="@item">

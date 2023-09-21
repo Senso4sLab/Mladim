@@ -146,13 +146,13 @@ public partial class UserProfile
 
         var passwordChanged = await this.AuthService.TryChangePasswordAsync(appUser.Id, userPassword.OldPassword, userPassword.NewPassword);
 
-        if (passwordChanged)
+        if (passwordChanged.Succeeded)
         {
             this.PopupService.ShowSnackbarSuccess("Geslo je uspešno spremenjeno");
             this.editablePassword = editState;
         }
         else
-            this.PopupService.ShowSnackbarError("Gesla ni mogoče spremeniti");
+            this.PopupService.ShowSnackbarError(passwordChanged.Message);
     }
 
 

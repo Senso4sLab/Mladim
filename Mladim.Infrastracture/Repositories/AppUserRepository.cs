@@ -43,23 +43,26 @@ public class AppUserRepository: IAppUserRepository
         return await this.UserManager.FindByEmailAsync(email);
     }
 
-    public async Task<string> ChangePasswordAsync(string userId, string oldPassword, string newPassword)
+    public async Task<Result> ChangePasswordAsync(string userId, string oldPassword, string newPassword)
     {
         var user = await this.UserManager.FindByIdAsync(userId);
 
-        ArgumentNullException.ThrowIfNull(user);
+        if (user == null)
+            return Result.Error("Uporabnik ne obstaja.");
+
+      
 
         if (!await this.UserManager.CheckPasswordAsync(user, oldPassword))
-            throw new Exception("Uporabniški podatki niso pravilni.");
+            return Result.Error("Vnešeni podatki niso pravilni.");
 
         var token = await UserManager.GeneratePasswordResetTokenAsync(user);
 
         var result = await UserManager.ResetPasswordAsync(user, token, newPassword);
 
         if (!result.Succeeded)
-            throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
+            return Result.Error("Gesla ni mogoče spremeniti! Preveri, ali vsebuje vsaj vsaj eno veliko črko, eno malo črko, eno številko in en poseben znak.");
 
-        return user.Id;
+        return Result.Success();
     }
 }
 

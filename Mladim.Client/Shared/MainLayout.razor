@@ -25,7 +25,10 @@
                 }
                 else
                 {
-                    <div style="height:43px; width: 10px;"/>                  
+                   
+                    <div style="height:43px; width: 100%; margin-left:8px; padding-top:10px;">
+                        <MudImage Src="logo-M-only.png" Width="45" Alt="Mladim M logo" />
+                    </div>
                 }
             </div>
             <MudNavMenu Color="Color.Primary" Style="font-family:Poppins; font-size: 0.9rem; font-weight: 400; line-height: 1.5;" Rounded=true Margin="Margin.Normal" Class="pa-2">
@@ -76,6 +79,9 @@
     [Inject]
     protected NavigationManager Navigation{ get; set; }
 
+    [Inject]
+    public IAuthService AuthService { get; set; } = default!;
+
 
     MudTheme MyCustomTheme = new MudTheme()
         {
@@ -87,8 +93,9 @@
                 AppbarBackground = new MudColor("#4da456"),               
                 DrawerText = new MudColor("#000000"), 
                 Success = new MudColor("#4da456"),
+                
             },
-            
+
 
             Typography = new Typography()
             {
@@ -173,11 +180,20 @@
     {
         var defaultOrganization = await OrganizationService.DefaultOrganizationAsync();
 
-        if (defaultOrganization != null)
-            await GetSelectedOrganizationAsync(defaultOrganization.Id);
-        // else
-        //     this.Navigation.NavigateTo("/organization");
+        if (defaultOrganization == null)
+        {
+            if (await AuthService.GetUserIdentityAsync() is string userId && await FirstOrganizationAsSelectedOneAsync(userId) is OrganizationVM organization)
+                defaultOrganization = DefaultOrganization.Create(organization);
+            else
+                return;
+        }       
+        await this.GetSelectedOrganizationAsync(defaultOrganization.Id);
+    }
 
+    private async Task<OrganizationVM?> FirstOrganizationAsSelectedOneAsync(string userId)
+    {
+        var organizations = await OrganizationService.GetByUserIdAsync(userId);
+        return organizations.FirstOrDefault();
     }
 
    

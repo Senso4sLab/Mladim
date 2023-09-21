@@ -22,13 +22,21 @@ public class RemoveOrganizationHandlerCommand : IRequestHandler<RemoveOrganizati
 
     public async Task<bool> Handle(RemoveOrganizationCommand request, CancellationToken cancellationToken)
     {
-        var organization = await this.UnitOfWork.OrganizationRepository
-            .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
+        try
+        {
+            var organization = await this.UnitOfWork.OrganizationRepository
+                .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
 
-        ArgumentNullException.ThrowIfNull(organization);
+            ArgumentNullException.ThrowIfNull(organization);
 
-        this.UnitOfWork.OrganizationRepository.Remove(organization);
+            this.UnitOfWork.OrganizationRepository.Remove(organization);
 
-        return await UnitOfWork.SaveChangesAsync() > 0;
+            return await UnitOfWork.SaveChangesAsync() > 0;
+        }
+        catch(Exception ex) 
+        {
+            string message = ex.Message;
+            return false;
+        }
     }
 }

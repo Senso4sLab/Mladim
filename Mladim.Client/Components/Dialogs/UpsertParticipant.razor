@@ -3,7 +3,7 @@
 @using Mladim.Domain.Enums;
 
 
-<MudDialog Style="min-width:400px;">
+<MudDialog Style="min-width:600px; padding-bottom:10px;">
     <TitleContent>
         <MudStack Row Justify="Justify.SpaceBetween">
              <MudText Typo="Typo.h2" Color="Color.Tertiary">@(participant.Id == 0 ? "Nov udeleženec" : "Uredi udeleženca")</MudText>
@@ -30,8 +30,8 @@
             </MudForm>
         </DialogContent>
         <DialogActions>
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="Cancel">Prekliči</MudButton>
-            <MudButton Variant="Variant.Filled" OnClick="OnValidSubmitAsync" Color="Color.Primary">@(participant.Id == 0 ? "Dodaj" : "Spremeni")</MudButton>
+            <MudButton Class="px-5" Variant="Variant.Filled" Color="Color.Secondary" OnClick="Cancel">Prekliči</MudButton>
+            <MudButton Class="px-5 mr-5" Variant="Variant.Filled" OnClick="OnValidSubmitAsync" Color="Color.Primary">@(participant.Id == 0 ? "Dodaj" : "Spremeni")</MudButton>
         </DialogActions>    
 </MudDialog>
 

@@ -10,7 +10,7 @@ public class UserHasWorkerClaimHandler : AuthorizationHandler<UserHasWorkerClaim
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, UserHasWorkerClaim requirement, string orgId)
     {
        var existManagerClaim = context.User.Claims
-               .Any(c => c.Type == nameof(ApplicationClaim.Manager) && c.Value == orgId);              
+               .Any(c => c.Type == nameof(ApplicationClaim.Worker) && c.Value == orgId);              
 
         if (existManagerClaim)
             context.Succeed(requirement);

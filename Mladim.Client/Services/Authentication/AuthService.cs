@@ -71,15 +71,15 @@ public class AuthService : IAuthService
    
 
 
-    public async Task<bool> TryChangePasswordAsync(string userId, string oldPassword, string password)
+    public async Task<Result> TryChangePasswordAsync(string userId, string oldPassword, string password)
     {
         string url = string.Format(this.MladimApiUrls.Password, userId, password);
 
         var changePassword = new ChangePassword { UserId = userId, OldPassword = oldPassword, Password = password };        
 
-        var response =  await this.HttpClient.PostAsync<ChangePassword>(url, changePassword);
+        var response =  await this.HttpClient.PostAsync<ChangePassword, Result>(url, changePassword);
 
-        return response == userId;
+        return response;
     }
 
     public async Task<bool> IsUserPolicySatisfied(string organizationId, string policyName)

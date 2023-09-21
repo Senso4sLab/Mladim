@@ -59,7 +59,7 @@ public class AccountController : ControllerBase
 
     [Authorize]
     [HttpPost("password")]
-    public async Task<ActionResult<string>> ChangePasswordAsync(ChangePasswordCommand changePasswordCommand)
+    public async Task<ActionResult<Result>> ChangePasswordAsync(ChangePasswordCommand changePasswordCommand)
     {
         var response = await this.Mediater.Send(changePasswordCommand);
         return Ok(response);

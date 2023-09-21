@@ -7,20 +7,40 @@ using System.Threading.Tasks;
 namespace Mladim.Domain.Models;
 
 
-
-public class Result<T>
+public class Result
 {
-    public T? Value { get; set; } = default!;
-
     public string Message { get; set; } = string.Empty;
     public bool Succeeded { get; set; }
 
-    public Result() 
+    public Result() { }
+    private Result(string message, bool isSucceed)
+    {
+        this.Message = message;
+        this.Succeeded = isSucceed;
+    }
+
+    public static Result Error(string message) =>
+       new Result(message, false);
+
+    public static Result Success(string message = "Uspešno izvedeno") =>
+        new Result(message, true);
+}
+
+
+
+public class Result<T> : Result
+{
+    public T? Value { get; set; } = default!;
+
+    //public string Message { get; set; } = string.Empty;
+    //public bool Succeeded { get; set; }
+
+    public Result() : base()
     {
 
     }
 
-    private Result(string message, bool isSucceed) 
+    private Result(string message, bool isSucceed)
     {
         this.Message = message;
         this.Succeeded = isSucceed;       

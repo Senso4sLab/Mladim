@@ -7,7 +7,7 @@ namespace Mladim.Application.Contracts.Persistence;
 public interface IAppUserRepository
 {
     Task<Result<AppUser>> CreateAsync(AppUser user, string password);
-    Task<string> ChangePasswordAsync(string userId, string oldPassword, string newPassword);
+    Task<Result> ChangePasswordAsync(string userId, string oldPassword, string newPassword);
     Task<AppUser?> FindByEmailAsync(string email);
     Task<AppUser?> FindByIdAsync(string userId);
     Task<bool> ExistUserAsync(string userId);
