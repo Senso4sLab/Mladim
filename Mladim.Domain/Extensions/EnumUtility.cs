@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace Mladim.Client.Extensions;
+namespace Mladim.Domain.Extensions;
 
 public static class EnumUtility
 {

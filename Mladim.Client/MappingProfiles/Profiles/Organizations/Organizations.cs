@@ -6,6 +6,7 @@ using Mladim.Domain.Dtos;
 using Mladim.Domain.Dtos.Attributes;
 using Mladim.Domain.Dtos.Organization;
 using Mladim.Domain.Enums;
+using Mladim.Domain.Extensions;
 
 namespace Mladim.Client.MappingProfiles.Profiles.Organizations;
 

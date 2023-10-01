@@ -43,7 +43,7 @@ public partial class Registration
         if (!passwordForm.IsValid)
             return;
         
-        _isBusy = true;
+        _isBusy = true;  
 
         var response = await this.AuthService.ConfirmRegistrationAsync(urlRegistration.Email, Token!, urlRegistration.Password);            
            

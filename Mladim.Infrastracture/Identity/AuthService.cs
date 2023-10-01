@@ -159,6 +159,8 @@ public class AuthService : IAuthService
     public async Task<Result<AuthResponse>> RegisterConfirmationAsync(string email, string emailToken, string password)
     {
 
+        emailToken = emailToken.Replace(' ', '+');
+
         var user = await this.UserManager.FindByEmailAsync(email);
 
         if(user == null)

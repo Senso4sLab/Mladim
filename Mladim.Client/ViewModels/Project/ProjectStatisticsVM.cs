@@ -5,6 +5,7 @@ using Mladim.Client.Extensions;
 using Mladim.Client.Models;
 using Mladim.Client.ViewModels.Members.Participants;
 using Mladim.Domain.Enums;
+using Mladim.Domain.Extensions;
 
 namespace Mladim.Client.ViewModels.Project;
 

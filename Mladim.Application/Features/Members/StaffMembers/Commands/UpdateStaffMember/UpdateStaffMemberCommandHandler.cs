@@ -5,6 +5,7 @@ using Mladim.Application.Contracts.EmailService;
 using Mladim.Application.Contracts.Identity;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Application.Models;
+using Mladim.Domain.Enums;
 using Mladim.Domain.IdentityModels;
 using Mladim.Domain.Models;
 using System;
@@ -13,6 +14,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Mladim.Domain.Extensions;
 
 namespace Mladim.Application.Features.Members.StaffMembers.Commands.UpdateStaffMember;
 
@@ -62,8 +64,14 @@ public class UpdateStaffMemberCommandHandler : IRequestHandler<UpdateStaffMember
         if (await this.AuthService.ReplaceClaimAsync(appUser, claim))
         {
             var organization = await this.UnitOfWork.OrganizationRepository.FirstOrDefaultAsync(o => o.Id == staffMember.OrganizationId, false);
-            var emailContent = string.Format(this.EmailContent.ContentUserAddedNewClaim, organization!.Attributes.Name, claim.Type);            
-            await SendEmailAsync(emailContent, request.Email);
+
+            if (Enum.TryParse(claim.Type, out ApplicationClaim appClaim) && organization != null)
+            {
+                var emailContent = string.Format(this.EmailContent.ContentUserAddedNewClaim, organization!.Attributes.Name, appClaim.GetDisplayAttribute());
+                await SendEmailAsync(emailContent, request.Email);               
+            }
+            else
+                throw new Exception("Izbrani tip uporabnika ne obstaja");          
         }
 
         return dbResponse;

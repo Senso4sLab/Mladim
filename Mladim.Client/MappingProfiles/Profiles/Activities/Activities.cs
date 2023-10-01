@@ -9,6 +9,7 @@ using Mladim.Domain.Dtos.DateTimeRange;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
 using MudBlazor;
+using Mladim.Domain.Extensions;
 
 namespace Mladim.Client.MappingProfiles.Profiles.Activities;
 

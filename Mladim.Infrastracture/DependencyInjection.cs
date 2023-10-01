@@ -25,19 +25,30 @@ namespace Mladim.Infrastracture;
 
 public static class DependencyInjection
 {
+   
+
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection collection, IConfiguration configuration)
     {
         collection.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-        });
-        
+        });        
+
         collection.AddIdentity<AppUser, IdentityRole>(options =>
         {
             options.User.RequireUniqueEmail = true;
+            options.Tokens.EmailConfirmationTokenProvider = "email_confirmation_provider";
         })
         .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddDefaultTokenProviders();
+        .AddDefaultTokenProviders()
+        .AddTokenProvider<EmailConfirmationTokenProvider<AppUser>>("email_confirmation_provider");
+
+
+        collection.Configure<EmailConfirmationTokenProviderOptions>(options =>
+        {
+            options.TokenLifespan = TimeSpan.FromDays(7);
+        });
+
 
         collection.AddScoped<IUnitOfWork, UnitOfWork>();
         collection.AddTransient<IAuthService, AuthService>();

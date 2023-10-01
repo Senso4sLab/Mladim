@@ -5,8 +5,7 @@ namespace Mladim.Client.Pages;
 public partial class EmailRegistration
 {
     [Parameter]
-    public string EmailToken { get; set; }
-
-   
+    [SupplyParameterFromQuery]
+    public string? EmailId{ get; set; }   
 
 }

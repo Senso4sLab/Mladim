@@ -8,9 +8,12 @@ using Mladim.Application.Contracts.Persistence;
 using Mladim.Application.Extensions;
 using Mladim.Application.Models;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Enums;
 using Mladim.Domain.IdentityModels;
 using Mladim.Domain.Models;
 using System.Security.Claims;
+using Mladim.Domain.Extensions;
+
 
 namespace Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
 public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberCommand, StaffMemberDetailsQueryDto>
@@ -57,8 +60,9 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
             await this.UnitOfWork.SaveChangesAsync();
 
 
-            var emailToken = await this.AuthService.EmailTokenAsync(user);
-            var registrationUrl = $"{HttpContextAccessor?.HttpContext?.AppBaseUrl()}/registration/{emailToken}";
+            var emailToken = await this.AuthService.EmailTokenAsync(user);            
+
+            var registrationUrl = $"{HttpContextAccessor?.HttpContext?.AppBaseUrl()}/registration?EmailId={emailToken}";
             var emailContent = string.Format(this.EmailContent.ContentAddedNewUser, organization.Attributes.Name, registrationUrl);
             await SendEmailAsync(emailContent, request.Email);
         }
@@ -72,8 +76,14 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
             await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);
             await this.UnitOfWork.SaveChangesAsync();
 
-            var emailContent = string.Format(this.EmailContent.ContentUserAddedNewOrganization, organization.Attributes.Name, claim.Type);
-            await SendEmailAsync(emailContent, request.Email);
+            if (Enum.TryParse(claim.Type, out ApplicationClaim appClaim))
+            {
+
+                var emailContent = string.Format(this.EmailContent.ContentUserAddedNewOrganization, organization.Attributes.Name, appClaim.GetDisplayAttribute());
+                await SendEmailAsync(emailContent, request.Email);
+            }
+            else
+                throw new Exception("Izbrani tip uporabnika ne obstaja");
         }
 
         return this.Mapper.Map<StaffMemberDetailsQueryDto>(staffMember);
