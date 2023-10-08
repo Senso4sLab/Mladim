@@ -1,0 +1,16 @@
+﻿@using Mladim.Client.ViewModels.Anketa;
+
+
+<MudText Typo="Typo.h2">@($"{this.Number}. {this.Question.Text}")</MudText>
+
+<MudCheckBox @bind-Checked="@Question.Answer" Color="Color.Secondary" CheckedIcon="@Icons.Material.Filled.ThumbUp" UncheckedIcon="@Icons.Material.Filled.ThumbDown"></MudCheckBox>
+
+
+@code 
+{
+    [Parameter]
+    public BooleanResponseQuestionVM Question{ get; set; }
+
+    [Parameter]
+    public int Number{ get; set; }
+}

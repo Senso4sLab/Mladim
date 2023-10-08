@@ -58,21 +58,12 @@
         <MudIconButton Disabled ="!editable" Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="AddPartnerAsync" />      
     </MudStack>
 
-
-    <MudFileUpload Disabled="!editable" T="IReadOnlyList<IBrowserFile>" Multiple MaximumFileCount=5 FilesChanged="UploadFilesToProject">
-        <ButtonTemplate>
-            <MudButton HtmlTag="label"
-                       Variant="Variant.Filled"
-                       Color="Color.Primary"
-                       StartIcon="@Icons.Material.Filled.CloudUpload"
-                       for="@context">
-                Naloži datoteke
-            </MudButton>
-        </ButtonTemplate>
-    </MudFileUpload>
+  
 
     @if (project.Files.Count > 0)
     {
+        <MudText Typo="Typo.h2" Color="Color.Tertiary">Dokumenti</MudText>
+
         <MudPaper Class="d-flex align-content-start flex-wrap flex-grow-1 gap-4" Elevation="0">
             @foreach (var file in project.Files)
             {
@@ -91,6 +82,21 @@
                  </MudPaper>
             }
         </MudPaper>
+    }
+
+    @if (UpdateState && editable)
+    {
+        <MudFileUpload T="IReadOnlyList<IBrowserFile>" Multiple MaximumFileCount=5 FilesChanged="UploadFilesToProject">
+            <ButtonTemplate>
+                <MudButton HtmlTag="label"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                           for="@context">
+                    Naloži datoteke
+                </MudButton>
+            </ButtonTemplate>
+        </MudFileUpload>
     }
 
 </MudStack>

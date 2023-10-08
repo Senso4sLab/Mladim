@@ -1,0 +1,46 @@
+﻿@page "/survey/{activityId:int}"
+@using Mladim.Client.Components.Anketa;
+@using Mladim.Client.ViewModels.Anketa;
+@using Mladim.Domain.Enums;
+@using Mladim.Domain.Extensions;
+
+@layout SurveyLayout
+
+<PageTitle>Anketa</PageTitle>
+<MudStack Spacing="3">
+
+<MudText Typo="Typo.h2" Color="Color.Tertiary">@($"Prošnja za povratno informacijo o aktivnosti {Activity?.Attributes.Name}.")</MudText>
+
+<MudText Typo="Typo.h1" Color="Color.Tertiary">To povabilo si dobil/-a zaradi tvoje udeležbe na omenjeni aktivnosti. Tvoje povratne informacije so namenjene bodočim izboljšavam podobnih aktivnosti, ki jih organizacija izvaja. Vsi podatki so anonimni, osebnih informacij ne zbiramo. Najlepša hvala!</MudText>
+
+<div style="width:250px;">
+        <MudSelect SelectedValueChanged=SelectedGenderChanged  T="Gender" ToStringFunc="@(gender => gender.GetDisplayAttribute())" Variant="Variant.Outlined" Label="Spol:" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var gender in Enum.GetValues<Gender>())
+        {
+            <MudSelectItem Value="gender">@gender.GetDisplayAttribute()</MudSelectItem>
+        }
+    </MudSelect>
+
+    <MudTextField @bind-Value="@participantAge" Label="Star sem:" Variant="Variant.Outlined" InputType="InputType.Number"> </MudTextField>
+</div>
+    
+
+    @for(int i=0; i < Questions.Count(); i++)
+    {
+        if (Questions[i].GetType() == typeof(RatingResponseQuestionVM))
+        {
+            <RatingQuestion Number="i" Question="@(Questions[i] as RatingResponseQuestionVM)"></RatingQuestion>
+        }
+        else if (Questions[i].GetType() == typeof(BooleanResponseQuestionVM))
+        {
+            <BooleanQuestion Number="i" Question="@(Questions[i] as BooleanResponseQuestionVM)"></BooleanQuestion>
+        }
+        else if (Questions[i].GetType() == typeof(TextResponseQuestionVM))
+        {
+            <TextQuestion Number="i" Question="@(Questions[i] as TextResponseQuestionVM)"></TextQuestion>
+        }
+    } 
+
+
+</MudStack>
+

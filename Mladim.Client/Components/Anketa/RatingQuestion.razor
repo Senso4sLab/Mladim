@@ -1,0 +1,48 @@
+﻿@using Mladim.Client.ViewModels.Anketa;
+@using Syncfusion.Blazor.Inputs;
+
+
+<style>
+    
+    .e-rating-item-container:not(.e-rating-selected) .emoji {
+        filter: grayscale(1);
+    }
+</style>
+
+<MudText Typo="Typo.h2">@($"{this.Number}. {this.Question.Text}")</MudText>   
+
+    <SfRating Precision="PrecisionType.Half" @bind-Value=Question.Answer EnableSingleSelection=true EnableAnimation=true ShowLabel=false ShowTooltip=false>
+        <EmptyTemplate>
+            @{
+            if (context.Index == 0)
+            {
+                <span class='angry emoji'>😡</span>
+            }
+            else if (context.Index == 1)
+            {
+                <span class='disagree emoji'>🙁</span>
+            }
+            else if (context.Index == 2)
+            {
+                <span class='neutral emoji'>😐</span>
+            }
+            else if (context.Index == 3)
+            {
+                <span class='agree emoji'>🙂</span>
+            }
+            else
+            {
+                <span class='happy emoji'>😀</span>
+            }
+        }
+        </EmptyTemplate>
+    </SfRating>
+
+    @code
+    {
+        [Parameter]
+        public RatingResponseQuestionVM Question { get; set; }
+
+        [Parameter]
+        public int Number { get; set; }
+}

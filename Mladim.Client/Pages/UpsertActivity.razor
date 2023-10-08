@@ -1,9 +1,6 @@
-﻿@page "/project/{projectId:int}/activity"
-@page "/activity/{activityId:int}"
+﻿
 @using Mladim.Domain.Enums;
-@attribute [Authorize]
-
-<PageTitle>Aktivnost</PageTitle>
+@using Syncfusion.Blazor.BarcodeGenerator
 
 <MudStack Class="pt-5 pb-8" Spacing="4">
     <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
@@ -20,11 +17,12 @@
                 <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error" OnClick="@(() => DeleteActivityAsync())" />
             }
 
-
             <MudIconButton Color="Color.Secondary" Size="Size.Small" Icon="@Icons.Material.Filled.Cancel" OnClick="CancelActivityAsync" />
 
         </MudButtonGroup>
      </MudStack>
+
+    
 
      <MudTextField ReadOnly="!editable" @bind-Value="activity.Attributes.Name" Variant="Variant.Outlined" Label="Ime aktivnosti">@activity.Attributes.Name</MudTextField>
      <MudDateRangePicker ReadOnly="!editable" Variant="Variant.Outlined" Label="Trajanje aktivnosti" @bind-DateRange="activity.DateRange" />
@@ -42,10 +40,11 @@
         </MudGrid>     
         
     }
-    <div>
-       
-       <SfRichTextEditor Readonly="!editable" @bind-Value="@activity.Attributes.Description" Placeholder="Nekaj o aktivnosti" />
-          
+
+    <MudCheckBox @bind-Checked="@activity.Attributes.IsGrouped" Label="Skupinska aktivnost" Color="Color.Primary"></MudCheckBox>
+
+    <div>       
+       <SfRichTextEditor Readonly="!editable" @bind-Value="@activity.Attributes.Description" Placeholder="Nekaj o aktivnosti" />          
     </div>
 
     <MultiSelect ReadOnly="!editable" ToolTip= "editable" TItem="ActivityTypes" @bind-EnumValues="activity.Attributes.ActivityTypes" Label="Tip aktivnosti" />
@@ -97,23 +96,12 @@
          <MudText Typo="Typo.h4" Color="Color.Tertiary" Align="Align.Center">Drugi udeleženci (starostna skupina in spol) - skupaj: @TotalAnonymousParticipants.</MudText>
         <MudIconButton Disabled="!editable" Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="AddAnonymousParticipantAsync" />
             
-    </MudStack>
-
-     <MudFileUpload Disabled="!editable" T="IReadOnlyList<IBrowserFile>" Multiple MaximumFileCount=5 FilesChanged="UploadFilesToProject">
-         <ButtonTemplate>
-             <MudButton HtmlTag="label"
-                        Variant="Variant.Filled"
-                        Color="Color.Primary"
-                        StartIcon="@Icons.Material.Filled.CloudUpload"
-                        for="@context">
-                Naloži datoteke
-             </MudButton>
-         </ButtonTemplate>
-     </MudFileUpload>
-    
+    </MudStack>    
 
     @if (activity.Files.Count > 0)
     {
+        <MudText Typo="Typo.h2" Color="Color.Tertiary">Dokumenti</MudText>
+
         <MudPaper Class="d-flex align-content-start flex-wrap flex-grow-1 gap-4" Elevation="0">
             @foreach (var file in activity.Files)
             {
@@ -133,6 +121,38 @@
                 </MudPaper>      
             }
         </MudPaper>
+    }
+
+    @if (UpdateState && editable)
+    {
+        <MudFileUpload T="IReadOnlyList<IBrowserFile>" Multiple MaximumFileCount=5 FilesChanged="UploadFilesToProject">
+            <ButtonTemplate>
+                <MudButton HtmlTag="label"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                           for="@context">
+                    Naloži datoteke
+                </MudButton>
+            </ButtonTemplate>
+        </MudFileUpload>
+    }
+
+    @if(QrUrl != null && UpdateState)
+    {
+        <MudText Typo="Typo.h2" Color="Color.Tertiary">Prenesi QR kodo</MudText>
+        
+        <div class="d-flex justify-content-start">
+             <MudPaper Elevation="3" >
+                 <MudStack AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="0">
+                    <SfQRCodeGenerator @ref="@qrCode" Width="200px" Height="200px" Value="@QrUrl">
+                        <QRCodeGeneratorDisplayText  Visibility="false" Size="0" Position="TextPosition.Top">                                                     
+                        </QRCodeGeneratorDisplayText>                                             
+                    </SfQRCodeGenerator>
+                    <MudButton  Class="cursor-pointer" Color=Color.Primary EndIcon="@Icons.Material.Filled.FileDownload" OnClick="ExportQRCode">Prenesi</MudButton>
+                </MudStack> 
+            </MudPaper>
+        </div>
     }
 
  </MudStack>

@@ -39,6 +39,7 @@
                 <MudNavLink Class="navlink-hover" Href="/organization" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Description">Organizacija</MudNavLink>
                 <MudNavLink Class="navlink-hover" Href="/projects" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ImportContacts">Projekti</MudNavLink>
                 <MudNavLink Class="navlink-hover" Href="/activities" Match="NavLinkMatch.All" Icon="@CustomIcons.ActivityGrayFilled">Aktivnosti</MudNavLink>
+                <MudNavLink Class="navlink-hover" Href="/enka" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.QuestionAnswer">1ka Mladim</MudNavLink>
             </MudNavMenu>          
         </div>
         <div style="height:50%; overflow:hidden; background-color:white;" >
@@ -83,7 +84,7 @@
     public IAuthService AuthService { get; set; } = default!;
 
 
-    MudTheme MyCustomTheme = new MudTheme()
+    public static MudTheme MyCustomTheme = new MudTheme()
         {
             Palette = new PaletteLight()
             {

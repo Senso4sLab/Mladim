@@ -1,0 +1,34 @@
+﻿@page "/project/{projectId:int}/activity"
+@page "/activity/{activityId:int}"
+
+@using Mladim.Domain.Enums;
+@using Syncfusion.Blazor.BarcodeGenerator
+@attribute [Authorize]
+
+
+<PageTitle>Aktivnost</PageTitle>
+
+
+<MudTabs Class="py-3" Elevation="0">
+    <MudTabPanel Text="Podatki" Style="font-size:1rem; font-weight:400; line-height:1.3;">
+        <UpsertActivity ActivityId="@ActivityId" ProjectId="@ProjectId"/>
+    </MudTabPanel>
+    <MudTabPanel Text="Rezultati ankete" Style="font-size:1rem; font-weight:400; line-height:1.3;" Disabled=@(ActivityId == null)>
+       <MudStack Class="pt-5 pb-8" Spacing="4">
+            <MudText Typo="Typo.h2" Color="Color.Tertiary">V delu</MudText>
+       </MudStack>       
+    </MudTabPanel>
+</MudTabs>
+
+
+
+
+
+@code 
+{
+    [Parameter]
+    public int? ActivityId { get; set; }
+
+    [Parameter]
+    public int? ProjectId { get; set; }
+}

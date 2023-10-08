@@ -8,6 +8,7 @@ using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.Models;
 using Mladim.Client.Services.FileService;
 using Mladim.Client.ViewModels.AttachedFile;
+using Syncfusion.Blazor.BarcodeGenerator;
 
 namespace Mladim.Client.Pages;
 
@@ -68,6 +69,9 @@ public partial class UpsertActivity
 
     private long maxFileSize = 1024 * 1024 * 3;
     private int maxAllowedFiles = 5;
+    private SfQRCodeGenerator qrCode;
+
+    string? QrUrl { get; set; } = null;
 
     protected async override Task OnInitializedAsync()
     {
@@ -84,6 +88,7 @@ public partial class UpsertActivity
         if (UpdateState)
         {
             activity = await ActivityService.GetByActivityIdAsync(ActivityId.Value);
+            QrUrl = GetQrUrl(activity.Id);
             editable = false;
         }
         else
@@ -91,7 +96,20 @@ public partial class UpsertActivity
     }
 
 
-   
+
+    private string GetQrUrl(int activityId)
+    {
+        return $"{this.Navigation.BaseUri}survey/{activityId}";
+    }
+
+    public void ExportQRCode()
+    {
+        qrCode.Export($"QRCode_{this.activity.Attributes.Name}", BarcodeExportType.JPG);
+    }
+
+
+
+
 
     public async Task OnActivityEditableChanged(bool toggled)
     {
