@@ -4,7 +4,7 @@
 <MudStack Spacing="4" Class="py-10">   
 
     <MudExpansionPanels Elevation="1" Style="font-size:1rem; font-weight:600; line-height:1.3;">
-        <MudExpansionPanel  Text="Osnovni podatki" Class="my-2" >
+        <MudExpansionPanel IsExpandedChanged=@InfoEpansionPanelExpandedChanged IsExpanded=@InfoExpansionPanelOpen Text="Osnovni podatki" Class="my-2">
             <MudGrid>
                 <MudItem xs="12" sm="6">
                     <MudText Class="py-3" Typo="Typo.h1" Color="Color.Tertiary">Logo organizacije</MudText>

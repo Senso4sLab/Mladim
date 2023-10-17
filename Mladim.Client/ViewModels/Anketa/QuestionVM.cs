@@ -9,7 +9,7 @@ namespace Mladim.Client.ViewModels.Anketa;
 
 public abstract class QuestionVM
 {
-    public string Text { get; protected set;}
+    public string Text { get; set;}
 
     protected QuestionVM(string text) =>
         this.Text = text;
@@ -27,7 +27,7 @@ public class RatingResponseQuestionVM : QuestionVM
 
 public class BooleanResponseQuestionVM : QuestionVM
 {
-    public bool Answer { get; set; } = true;
+    public double Answer { get; set; }
     private BooleanResponseQuestionVM(string text) : base(text) { }
 
     public static BooleanResponseQuestionVM Create(string text) =>
@@ -43,4 +43,35 @@ public class TextResponseQuestionVM : QuestionVM
     public static TextResponseQuestionVM Create(string text) =>
         new TextResponseQuestionVM(text);
 
+}
+
+
+
+public class MultipleRatingQuestionsVM : QuestionVM
+{
+    public List<RatingResponseQuestionVM> RatingResponseQuestions = new List<RatingResponseQuestionVM>();    
+    private MultipleRatingQuestionsVM(string text):base(text) { }
+
+    public MultipleRatingQuestionsVM AddRatingButtonResponse(string response)
+    {
+        RatingResponseQuestions.Add(RatingResponseQuestionVM.Create(response));
+        return this;
+    }
+
+
+    public static MultipleRatingQuestionsVM Create(string question)
+    {
+        return new MultipleRatingQuestionsVM(question);
+    }
+}
+
+
+public class RadioButtonResponseVM : QuestionVM
+{
+    public int Answer { get; set; }
+
+    private RadioButtonResponseVM(string text) : base(text) { }
+
+    public static RadioButtonResponseVM Create(string text) =>
+        new RadioButtonResponseVM(text);
 }

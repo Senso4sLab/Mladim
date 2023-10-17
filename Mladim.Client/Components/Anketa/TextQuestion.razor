@@ -3,7 +3,7 @@
 
 <MudText Typo="Typo.h2">@($"{this.Number}. {this.Question.Text}")</MudText>
 
-<MudTextField @bind-Value=@Question.Answer Typo="Typo.h1"></MudTextField>   
+    <MudTextField Class="mud-width-full" Variant="Variant.Outlined" @bind-Value=@Question.Answer Typo="Typo.h1"></MudTextField>
 
 
     @code

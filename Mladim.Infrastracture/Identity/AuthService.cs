@@ -30,23 +30,26 @@ public class AuthService : IAuthService
    
     public async Task<Result<AuthResponse>> LoginAsync(string email, string password)
     {
-        var user = await this.UserRepository.FindByEmailAsync(email);
+        
+            var user = await this.UserRepository.FindByEmailAsync(email);
 
-        if (user == null)
-            return Result<AuthResponse>.Error("Vnešeni podatki so napačni");
+            if (user == null)
+                return Result<AuthResponse>.Error("Vnešeni podatki so napačni");
 
-        if (!await this.UserManager.CheckPasswordAsync(user, password))
-            return Result<AuthResponse>.Error("Vnešeni podatki so napačni");
+            if (!await this.UserManager.CheckPasswordAsync(user, password))
+                return Result<AuthResponse>.Error("Vnešeni podatki so napačni");
 
-        var authResponse =  new AuthResponse
-        {
-            Id     = user.Id,
-            Name   = user.Name,
-            Email  = user.Email!,
-            Token  = await CreateTokenAsync(user),
-        };
+            var authResponse = new AuthResponse
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email!,
+                Token = await CreateTokenAsync(user),
+            };
 
-        return Result<AuthResponse>.Success(authResponse);         
+            return Result<AuthResponse>.Success(authResponse);
+        
+    
     }
 
     private async Task<string> CreateTokenAsync(AppUser user)

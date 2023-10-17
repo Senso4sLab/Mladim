@@ -41,7 +41,7 @@
         
     }
 
-    <MudCheckBox @bind-Checked="@activity.Attributes.IsGrouped" Label="Skupinska aktivnost" Color="Color.Primary"></MudCheckBox>
+    <MudCheckBox  @bind-Checked="@activity.Attributes.IsGroup" ReadOnly=!editable Label="Skupinska aktivnost" Color="Color.Primary"></MudCheckBox>
 
     <div>       
        <SfRichTextEditor Readonly="!editable" @bind-Value="@activity.Attributes.Description" Placeholder="Nekaj o aktivnosti" />          
@@ -93,7 +93,7 @@
     </MudStack>
 
     <MudStack Row Spacing="5" AlignItems="AlignItems.Baseline" Justify="Justify.SpaceBetween">
-         <MudText Typo="Typo.h4" Color="Color.Tertiary" Align="Align.Center">Drugi udeleženci (starostna skupina in spol) - skupaj: @TotalAnonymousParticipants.</MudText>
+        <MudText Typo="Typo.h4" Color="Color.Tertiary" Align="Align.Center">Drugi udeleženci (starostna skupina in spol) - skupaj: @TotalAnonymousParticipants.</MudText>
         <MudIconButton Disabled="!editable" Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="AddAnonymousParticipantAsync" />
             
     </MudStack>    
@@ -143,15 +143,18 @@
         <MudText Typo="Typo.h2" Color="Color.Tertiary">Prenesi QR kodo</MudText>
         
         <div class="d-flex justify-content-start">
-             <MudPaper Elevation="3" >
-                 <MudStack AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="0">
-                    <SfQRCodeGenerator @ref="@qrCode" Width="200px" Height="200px" Value="@QrUrl">
-                        <QRCodeGeneratorDisplayText  Visibility="false" Size="0" Position="TextPosition.Top">                                                     
-                        </QRCodeGeneratorDisplayText>                                             
-                    </SfQRCodeGenerator>
-                    <MudButton  Class="cursor-pointer" Color=Color.Primary EndIcon="@Icons.Material.Filled.FileDownload" OnClick="ExportQRCode">Prenesi</MudButton>
-                </MudStack> 
-            </MudPaper>
+            <MudStack>
+                <MudPaper Elevation="3" >
+                     <MudStack AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="0">
+                        <SfQRCodeGenerator @ref="@qrCode" Width="200px" Height="200px" Value="@QrUrl">
+                            <QRCodeGeneratorDisplayText  Visibility="false" Size="0" Position="TextPosition.Top">                                                     
+                            </QRCodeGeneratorDisplayText>                                             
+                        </SfQRCodeGenerator>                  
+                        <MudButton Class="cursor-pointer" Color=Color.Primary EndIcon="@Icons.Material.Filled.FileDownload" OnClick="ExportQRCode">Prenesi</MudButton>
+                    </MudStack> 
+                </MudPaper>
+                <MudLink Href="@QrUrl" Typo="Typo.h2" Color="Color.Tertiary">Povezava do ankete</MudLink>              
+            </MudStack>
         </div>
     }
 

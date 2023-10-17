@@ -5,6 +5,7 @@ namespace Mladim.Domain.Models;
 public class ActivityAttributes : BaseAttibutes
 {
     public ActivityTypes ActivityTypes { get; protected set; }
+    public bool IsGroup { get; set; }
     
    
     private ActivityAttributes(string name, string description, ActivityTypes activityTypes)

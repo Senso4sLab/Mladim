@@ -17,10 +17,13 @@ public partial class OrganizationTab
      [Inject]
     IFileService FileService { get; set; } = default!;
 
+    bool InfoExpansionPanelOpen = true;
+   
 
-    protected override void OnParametersSet()
+    private void InfoEpansionPanelExpandedChanged(bool value)
     {
-        base.OnParametersSet();
+        InfoExpansionPanelOpen = value;
+        StateHasChanged();
     }
 
 

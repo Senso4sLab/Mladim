@@ -1,9 +1,37 @@
 ﻿@using Mladim.Client.ViewModels.Anketa;
+@using Syncfusion.Blazor.Inputs
 
+
+
+<style>
+    .thumb
+    {
+        color: #4da456;
+    }
+
+    .e-rating-item-container:not(.e-rating-selected) .thumb {
+        filter: grayscale(1);
+    }
+</style>
 
 <MudText Typo="Typo.h2">@($"{this.Number}. {this.Question.Text}")</MudText>
 
-<MudCheckBox @bind-Checked="@Question.Answer" Color="Color.Secondary" CheckedIcon="@Icons.Material.Filled.ThumbUp" UncheckedIcon="@Icons.Material.Filled.ThumbDown"></MudCheckBox>
+    <SfRating @bind-Value=@Question.Answer EnableSingleSelection=true ShowLabel=false ShowTooltip=false>
+        <EmptyTemplate>
+        @{          
+            if (context.Index == 0)
+            {
+                <span class="oi oi-thumb-up thumb"></span>               
+            }
+            else if (context.Index == 1)
+            {
+                <span class=" oi oi-thumb-down thumb"></span>                
+            }           
+        }
+        </EmptyTemplate>
+    </SfRating>
+
+
 
 
 @code 

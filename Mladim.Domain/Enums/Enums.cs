@@ -230,8 +230,10 @@ public enum Gender
     Male = 32,
     [Display(Name = "Ženska")]
     Female = 64,
-    [Display(Name ="Drugo")]
+    [Display(Name ="Nebinarno")]
     Other = 128,
+    [Display(Name = "Ne želim se opredeliti")]
+    Undefined = 256,
 };
 
 [Flags]

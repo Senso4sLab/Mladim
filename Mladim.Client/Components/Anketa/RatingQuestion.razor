@@ -9,11 +9,11 @@
     }
 </style>
 
-<MudText Typo="Typo.h2">@($"{this.Number}. {this.Question.Text}")</MudText>   
-
-    <SfRating Precision="PrecisionType.Half" @bind-Value=Question.Answer EnableSingleSelection=true EnableAnimation=true ShowLabel=false ShowTooltip=false>
+<MudText Typo="Typo.h2">@Title</MudText>
+    <SfRating @bind-Value=@Question.Answer
+              EnableSingleSelection=true ShowLabel=false ShowTooltip=false>
         <EmptyTemplate>
-            @{
+        @{
             if (context.Index == 0)
             {
                 <span class='angry emoji'>😡</span>
@@ -39,10 +39,17 @@
     </SfRating>
 
     @code
-    {
-        [Parameter]
-        public RatingResponseQuestionVM Question { get; set; }
+{
+    [Parameter]
+    public RatingResponseQuestionVM Question { get; set; }
 
-        [Parameter]
-        public int Number { get; set; }
+    [Parameter]
+    public int? Number { get; set; }
+
+    private string Title = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        Title = Number == null ? $"{this.Question.Text}" : $"{this.Number}. {this.Question.Text}";
+    }
 }

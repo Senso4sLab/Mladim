@@ -1,0 +1,44 @@
+﻿
+
+<style>
+    .btn:focus {
+        background-color: #4da456;
+    }
+    .btn
+    {
+        background-color: #6e7191;
+        border-color: #6e7191;
+    }
+    .btn:hover
+    {
+      background-color: #4da456;
+      border-color: #4da456;
+    }
+</style>
+
+<div>
+    <MudText>Kako si?</MudText>
+    <div class="row">       
+        <div class="btn-group" >
+            <button type="button" @onclick="@(() => selectedValue = 1)" class="btn btn-primary">NE DRŽI</button>
+            <button type="button" @onclick="@(() => selectedValue = 2)" class="btn btn-primary">DELNO DRŽI</button>
+            <button type="button" @onclick="@(()=> selectedValue = 3)"  class="btn btn-primary">DRŽI</button>
+            <button type="button" @onclick="@(()=> selectedValue = 4)"  class="btn btn-primary">ZELO DRŽI</button>
+        </div>        
+    </div>
+    <label>@selectedValue</label>
+</div>
+
+
+
+
+@code 
+{
+
+    int? selectedValue = null;
+
+    private void ButtonOnClickedEvent(int i)
+    {
+        
+    }
+}
