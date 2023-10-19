@@ -124,7 +124,7 @@ public partial class Ankete
 
     private void SelectedGenderChanged(Gender gender)
     {
-
+        
         this.Questions = gender == Gender.Male ? GetQuestionsMale().ToList() : GetQuestionsFemale().ToList();
 
         StateHasChanged();
