@@ -54,13 +54,13 @@
     MudDialogInstance MudDialog { get; set; }
 
     [Parameter]                          
-    public List<AnonymousParticipantsVM> AnonymousParticipants { get; set; }
+    public List<AnonymousParticipantGroupVM> AnonymousParticipants { get; set; }
 
 
     private List<AnonymousParticipantTableElements> Elements { get; set; }
 
 
-    private List<AnonymousParticipantTableElements> GetTableElements(IEnumerable<AnonymousParticipantsVM> aParticipants) =>
+    private List<AnonymousParticipantTableElements> GetTableElements(IEnumerable<AnonymousParticipantGroupVM> aParticipants) =>
        Enum.GetValues<AgeGroups>().Select(ageGroup => new AnonymousParticipantTableElements()
            {
                AgeGroup = ageGroup,
@@ -78,9 +78,9 @@
         this.Elements = GetTableElements(AnonymousParticipants);
     }
 
-    private IEnumerable<AnonymousParticipantsVM> GetParticipantFromTable() =>
+    private IEnumerable<AnonymousParticipantGroupVM> GetParticipantFromTable() =>
         Elements.GroupBy(e => e.AgeGroup)
-            .SelectMany(g => Enum.GetValues<Gender>().Select(gender => new AnonymousParticipantsVM()
+            .SelectMany(g => Enum.GetValues<Gender>().Select(gender => new AnonymousParticipantGroupVM()
                 {
                     AgeGroup = g.Key,
                     Gender = gender,

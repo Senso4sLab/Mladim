@@ -62,4 +62,7 @@ public class MladimApiUrls
 
 
     public string DeleteFile { get; set; } = string.Empty;
+    public string GetSurveyQuestionnairy { get; set; } = string.Empty;
+    
+
 }

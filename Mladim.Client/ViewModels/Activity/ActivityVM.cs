@@ -21,6 +21,6 @@ public class ActivityVM
     public IEnumerable<NamedEntityVM> Groups { get; set; } = new List<NamedEntityVM>();
     public IEnumerable<NamedEntityVM> Partners { get; set; } = new List<NamedEntityVM>();
     public IEnumerable<NamedEntityVM> Participants { get; set; } = new List<NamedEntityVM>();
-    public IEnumerable<AnonymousParticipantsVM> AnonymousParticipantActivities { get; set; } = new List<AnonymousParticipantsVM>();
+    public IEnumerable<AnonymousParticipantGroupVM> AnonymousParticipantActivities { get; set; } = new List<AnonymousParticipantGroupVM>();
     public List<AttachedFileVM> Files { get; set; } = new List<AttachedFileVM>();
 }

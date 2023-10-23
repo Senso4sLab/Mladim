@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.AnonymousParticipants.Queries.GetAnonymousParticipants;
 
-public class GetAnonymousParticipantsQuery : IRequest<IEnumerable<AnonymousParticipantQueryDto>>
+public class GetAnonymousParticipantsQuery : IRequest<IEnumerable<AnonymousParticipantGroupQueryDto>>
 {
     public int ActivityId { get; set; }
-
-    //public int? ProjectId { get; set; } TODO
+   
 }

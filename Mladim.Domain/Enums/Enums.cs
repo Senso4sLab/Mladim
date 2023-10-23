@@ -267,4 +267,50 @@ public enum ApplicationRole
    
 }
 
+[Flags]
+public enum SurveyQuestionCategory
+{
+    General = 1,
+    Group = 2,
+    Repetitive = 4,
+}
+
+public enum SurveyQuestionType
+{
+    Boolean = 1,
+    Rating = 2,
+    Multiple = 3,
+    Text = 4,   
+}
+
+
+[Flags]
+public enum SurveyBooleanResponseType
+{
+    None = 0,
+    ThumpsUp = 1,
+    ThumpsDown = 2,    
+}
+
+
+public enum SurveyRatingResponseType
+{
+    None = 0,
+    OneSmile = 1,
+    TwoSmiles = 2,
+    ThreeSmiles = 3,
+    FourSmiles = 4,
+    FiveSmiles = 5,
+}
+
+
+public enum SurveyMultipleResponseType
+{
+    None = 0,
+    Incorrect = 1,
+    PartiallyCorrect = 2,    
+    Correct = 3,
+    VeryCorrect = 4,
+}
+
 

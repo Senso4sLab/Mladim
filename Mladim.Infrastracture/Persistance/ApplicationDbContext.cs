@@ -1,7 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Abstractions;
+using Mladim.Domain.Enums;
 using Mladim.Domain.IdentityModels;
 using Mladim.Domain.Models;
+using Mladim.Domain.Models.Survey.Questions;
+using Mladim.Domain.Models.Survey.Responses;
+using Mladim.Infrastracture.Persistance.Conversions;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Mladim.Infrastracture.Persistance;
@@ -24,11 +30,34 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     public DbSet<ActivityGroup> ActivityGroups { get; set; }
     public DbSet<Group> Groups { get; set; }  
     public DbSet<AttachedFile> Files { get; set; }
+    public DbSet<SurveyQuestionnairy> Questionnairies { get; set; }
+    public DbSet<SurveyResponse> SurveryResponses { get; set; }   
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        modelBuilder.Entity<FemaleSurveyQuestion>();
+        modelBuilder.Entity<MaleSurveyQuestion>();
+
+        modelBuilder.Entity<SurveryRatingResponse>();
+        modelBuilder.Entity<SurveryTextResponse>();
+        modelBuilder.Entity<SurveryBooleanResponse>();
+        modelBuilder.Entity<SurveryMultipleResponse>();
+
+
+        DbSeeds.GeneratedSeeds(modelBuilder);
+
+
         base.OnModelCreating(modelBuilder);
     }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.Properties<List<string>>().HaveConversion<SurveyQuestionConverter>();
+        configurationBuilder.Properties<List<SurveyMultipleResponseType>>().HaveConversion<SurveyMultipleResponseTypeConverter>();
+        base.ConfigureConventions(configurationBuilder);
+    }
 }
+

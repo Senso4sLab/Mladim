@@ -21,6 +21,8 @@ public interface IUnitOfWork : IDisposable
     IAnonymousParticipantRepository AnonymousParticipantRepository { get; }
     IAppUserRepository AppUserRepository { get; }
 
+    ISurveyRepository SurveyRepository { get; }
+
     //IGenericRepository<T> GetRepository<T>() where T : class;
 
     void ConfigEntitiesState<T>(EntityState state, IEnumerable<T> entities) where T : class;

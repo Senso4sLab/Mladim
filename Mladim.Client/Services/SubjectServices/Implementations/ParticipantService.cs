@@ -58,5 +58,13 @@ public class ParticipantService : IParticipantService
         var baseDto = await this.HttpService.GetAllAsync<NamedEntityDto>(url);
         return this.Mapper.Map<IEnumerable<NamedEntityVM>>(baseDto);
     }
-   
+
+
+    public async Task<int> AddAnonymousParticipant(AnonymousParticipantVM anonymousParticipant, int activityId)
+    {
+        string url = string.Format(this.ApiUrls.GetParticipantsByOrganizationId, activityId); //TODO
+        var baseDto = await this.HttpService.PostAsync<AnonymousParticipantDto, int> (url, )
+        return this.Mapper.Map<IEnumerable<NamedEntityVM>>(baseDto);
+    }
+
 }

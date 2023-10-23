@@ -14,14 +14,14 @@ public class AnonymousParticipantProfile : Profile
 {
 	public AnonymousParticipantProfile()
 	{
-        CreateMap<AnonymousParticipantGroup, AnonymousParticipantQueryDto>()
+        CreateMap<AnonymousParticipantGroup, AnonymousParticipantGroupQueryDto>()
              .ForMember(dest => dest.Number, m => m.MapFrom(src => src.Number))
              .ForMember(dest => dest.AgeGroup, m => m.MapFrom(src => src.AnonymousParticipant.AgeGroup))
              .ForMember(dest => dest.Gender, m => m.MapFrom(src => src.AnonymousParticipant.Gender));
 
-        CreateMap<AnonymousParticipantCommandDto, AnonymousParticipant>();
+        CreateMap<AnonymousParticipantGroupCommandDto, AnonymousParticipant>();
 
-        CreateMap<AnonymousParticipantCommandDto, AnonymousParticipantGroup>()
+        CreateMap<AnonymousParticipantGroupCommandDto, AnonymousParticipantGroup>()
             .ForMember(dest => dest.Number, m => m.MapFrom(src => src.Number))
             .ForMember(dest => dest.AnonymousParticipant, m => m.MapFrom(src => src));
 

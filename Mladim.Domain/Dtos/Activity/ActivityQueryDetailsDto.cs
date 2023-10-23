@@ -13,7 +13,7 @@ public class ActivityQueryDetailsDto
     public List<GroupQueryDto> Groups { get; set; } = new();
     public List<ParticipantQueryDto> Participants { get; set; } = new();
     public List<StaffMemberQueryDto> Staff { get; set; } = new();
-    public List<AnonymousParticipantQueryDto> AnonymousParticipantActivities { get; set; } = new();
+    public List<AnonymousParticipantGroupQueryDto> AnonymousParticipantActivities { get; set; } = new();
     public List<AttachedFileQueryDto> Files { get; set; } = new();
 
 }

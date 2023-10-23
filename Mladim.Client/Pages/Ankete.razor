@@ -1,7 +1,7 @@
 ﻿@page "/survey/{activityId:int}"
 
 @using Mladim.Client.Components.Anketa;
-@using Mladim.Client.ViewModels.Anketa;
+
 @using Mladim.Domain.Enums;
 @using Mladim.Domain.Extensions;
 
@@ -17,18 +17,23 @@
     <MudText Typo="Typo.h1" Color="Color.Tertiary">To povabilo si dobil/-a zaradi tvoje udeležbe na omenjeni aktivnosti. Tvoje povratne informacije so namenjene bodočim izboljšavam podobnih aktivnosti, ki jih organizacija izvaja. Vsi podatki so anonimni, osebnih informacij ne zbiramo. Najlepša hvala!</MudText>
 
     <div style="width:250px;">
-            <MudSelect ValueChanged=SelectedGenderChanged  T="Gender" ToStringFunc="@(gender => gender.GetDisplayAttribute())" Variant="Variant.Outlined" Label="Spol:" AnchorOrigin="Origin.BottomCenter">
+            <MudSelect @bind-Value="@AnonymousParticipant.Gender" T="Gender" ToStringFunc="@(gender => gender.GetDisplayAttribute())" Variant="Variant.Outlined" Label="Spol:" AnchorOrigin="Origin.BottomCenter">
                 @foreach (var gender in Enum.GetValues<Gender>())
                 {
                     <MudSelectItem Value="gender">@gender.GetDisplayAttribute()</MudSelectItem>
                 }
         </MudSelect>
 
-        <MudNumericField @bind-Value="@participantAge" Label="Starost:" Variant="Variant.Outlined" InputType="InputType.Number" Min="1" Max="100"> </MudNumericField>
+        <MudSelect @bind-Value="@AnonymousParticipant.AgeGroup"  T="AgeGroups" ToStringFunc="@(age => age.GetDisplayAttribute())" Variant="Variant.Outlined" Label="Starostna skupina:" AnchorOrigin="Origin.BottomCenter">
+            @foreach (var age in Enum.GetValues<AgeGroups>())
+            {
+                <MudSelectItem Value="age">@age.GetDisplayAttribute()</MudSelectItem>
+            }
+        </MudSelect>
     </div>
-    
+    @*
     <SelectButtonQuestion></SelectButtonQuestion>
-    @* @for(int i = 0; i < Questions.Count(); i++)
+     @for(int i = 0; i < Questions.Count(); i++)
     {
         int j = i + 1;
 

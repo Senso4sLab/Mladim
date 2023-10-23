@@ -24,13 +24,13 @@ namespace Mladim.WebAPI.Controllers
 
         [HttpPost]
         public async Task<ActionResult<bool>> AddAsync(AddAnonymousParticipantCommand request)
-        {
+        {           
             var response = await this.Mediator.Send(request);
             return Ok(response);
         }       
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AnonymousParticipantQueryDto>>> GetAsync([FromQuery] GetAnonymousParticipantsQuery query)
+        public async Task<ActionResult<IEnumerable<AnonymousParticipantGroupQueryDto>>> GetAsync([FromQuery] GetAnonymousParticipantsQuery query)
         {
             var response = await this.Mediator.Send(query);
             return Ok(response);

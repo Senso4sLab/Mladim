@@ -109,7 +109,7 @@ namespace Mladim.Client.Services.PopupService
             return !result.Canceled;
         }
 
-        public async Task<IEnumerable<AnonymousParticipantsVM>> ShowAnonymousParticipantGroupsDialog(string title, IEnumerable<AnonymousParticipantsVM> participantInActivity)
+        public async Task<IEnumerable<AnonymousParticipantGroupVM>> ShowAnonymousParticipantGroupsDialog(string title, IEnumerable<AnonymousParticipantGroupVM> participantInActivity)
         {
             var parameters = new DialogParameters();
 
@@ -120,16 +120,16 @@ namespace Mladim.Client.Services.PopupService
 
             var result = await dialog.Result;
 
-            return result.Canceled ? Enumerable.Empty<AnonymousParticipantsVM>() : result.Data as IEnumerable<AnonymousParticipantsVM>;
+            return result.Canceled ? Enumerable.Empty<AnonymousParticipantGroupVM>() : result.Data as IEnumerable<AnonymousParticipantGroupVM>;
         }
 
-        public IEnumerable<AnonymousParticipantsVM> AnnonymousParticipantsByGroupAndGender(IEnumerable<AnonymousParticipantsVM> participantInActivity)
+        public IEnumerable<AnonymousParticipantGroupVM> AnnonymousParticipantsByGroupAndGender(IEnumerable<AnonymousParticipantGroupVM> participantInActivity)
         {
             foreach (var ageGroup in Enum.GetValues<AgeGroups>())
             {
                 foreach (var gender in Enum.GetValues<Gender>())
                 {
-                    var apgroup = new AnonymousParticipantsVM
+                    var apgroup = new AnonymousParticipantGroupVM
                     {
                         AgeGroup = ageGroup,
                         Gender = gender,

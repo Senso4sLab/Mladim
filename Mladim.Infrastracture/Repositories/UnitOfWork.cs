@@ -34,6 +34,9 @@ public class UnitOfWork : IUnitOfWork
 
     public IAppUserRepository AppUserRepository { get; }
 
+    public ISurveyRepository SurveyRepository => 
+        surveyRepository ??= new SurveyRepository(this.Context);
+
     private IOrganizationRepository organizationRepository;
     private IActivityRepository activityRepository;
     private IProjectRepository projectRepository;  
@@ -42,7 +45,7 @@ public class UnitOfWork : IUnitOfWork
     private IParticipantRepository participantRepository;
     private IPartnerRepository partnerRepository;
     private IAnonymousParticipantRepository anonymousParticipantRepository;
-
+    private ISurveyRepository surveyRepository;
 
     public UnitOfWork(IAppUserRepository appUserRepository, ApplicationDbContext context)
     {

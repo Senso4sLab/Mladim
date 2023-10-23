@@ -1,4 +1,5 @@
 ﻿using Mladim.Domain.Enums;
+using Mladim.Domain.Models.Survey.Questions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,8 +36,11 @@ public class Activity : BaseEntity<int>
             anonymousParticipant.Number += apg.Number;
         else
             this.AnonymousParticipantGroups.Add(apg);
-    }   
-   
+    }
+
+    public int? SurveyQuestionnairyId { get;set; }
+    public SurveyQuestionnairy SurveyQuestionnairy { get; set; } = default!;
+
     public int ProjectId { get; set; }
     public Project Project { get; set; } = default!;
     

@@ -29,6 +29,9 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, boo
 
             var activity = this.Mapper.Map<Activity>(request);
 
+            // add default surveyquestionnairy
+            activity.SurveyQuestionnairyId = 1;
+
             this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, activity.Partners);
             this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, activity.Groups);
             this.UnitOfWork.ConfigEntitiesState(EntityState.Unchanged, activity.Participants);

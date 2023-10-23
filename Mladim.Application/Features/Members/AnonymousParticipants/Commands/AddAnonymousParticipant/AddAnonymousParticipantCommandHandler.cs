@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Members.AnonymousParticipants.Commands.AddAnonymousParticipant;
 
-public class AddAnonymousParticipantCommandHandler : IRequestHandler<AddAnonymousParticipantCommand, bool>
+public class AddAnonymousParticipantCommandHandler : IRequestHandler<AddAnonymousParticipantCommand, int>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -20,7 +20,7 @@ public class AddAnonymousParticipantCommandHandler : IRequestHandler<AddAnonymou
         UnitOfWork = unitOfWork;
         Mapper = mapper;
     }
-    public async Task<bool> Handle(AddAnonymousParticipantCommand request, CancellationToken cancellationToken)
+    public async Task<int> Handle(AddAnonymousParticipantCommand request, CancellationToken cancellationToken)
     {
         var activity = await this.UnitOfWork.ActivityRepository
             .FirstOrDefaultAsync(a => a.Id == request.ActivityId);

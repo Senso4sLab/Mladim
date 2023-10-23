@@ -46,7 +46,7 @@ namespace Mladim.WebAPI.Controllers
         }
 
         [HttpGet("anonymous")]
-        public async Task<ActionResult<IEnumerable<AnonymousParticipantQueryDto>>> GetAsync()
+        public async Task<ActionResult<IEnumerable<AnonymousParticipantGroupQueryDto>>> GetAsync()
         {
             var response = await this.Mediator.Send(new GetAnonymousParticipantsQuery());
             return Ok(response);

@@ -8,9 +8,9 @@ public class AnonymousParticipants : Profile
 {
     public AnonymousParticipants()
     {
-        CreateMap<AnonymousParticipantQueryDto, AnonymousParticipantsVM>();
+        CreateMap<AnonymousParticipantGroupQueryDto, AnonymousParticipantGroupVM>();
 
-        CreateMap<AnonymousParticipantsVM, AnonymousParticipantCommandDto>();
+        CreateMap<AnonymousParticipantGroupVM, AnonymousParticipantGroupCommandDto>();
 
     }
 }
