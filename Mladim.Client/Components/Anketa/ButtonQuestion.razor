@@ -1,0 +1,45 @@
+﻿@using Mladim.Client.ViewModels.Survey;
+@using Mladim.Domain.Enums;
+
+
+<style>    
+    .btn:focus,
+    .btn:hover
+    {
+        background-color: #4da456;
+        border-color: #4da456;      
+    }
+    .btn
+    {
+        background-color: #6e7191;
+        border-color: #6e7191;
+    }   
+</style>
+
+
+           
+<MudText Color="Color.Tertiary" Typo="Typo.h2">@Text</MudText>
+<div class="row">
+  <div class="btn-group">
+       <button type="button" @onclick="@(() =>EventResponse.InvokeAsync((Index,SurveyMultipleResponseType.Incorrect)))" class="btn btn-primary shadow-none">NE DRŽI</button>
+        <button type="button" @onclick="@(() => EventResponse.InvokeAsync((Index,SurveyMultipleResponseType.PartiallyCorrect)))" class="btn btn-primary shadow-none ">DELNO DRŽI</button>
+        <button type="button" @onclick="@(() => EventResponse.InvokeAsync((Index,SurveyMultipleResponseType.Correct)))" class="btn btn-primary shadow-none">DRŽI</button>
+        <button type="button" @onclick="@(() => EventResponse.InvokeAsync((Index,SurveyMultipleResponseType.VeryCorrect)))" class="btn btn-primary shadow-none">ZELO DRŽI</button>
+   </div>
+</div>
+
+
+@code 
+{
+
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter]
+    public int Index{ get; set; }
+
+    [Parameter]
+    public EventCallback<(int Index, SurveyMultipleResponseType Response)> EventResponse { get; set; }
+
+    
+}

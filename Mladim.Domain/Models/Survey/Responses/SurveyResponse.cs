@@ -5,14 +5,20 @@ using Mladim.Domain.Models.Survey.Questions;
 namespace Mladim.Domain.Models.Survey.Responses;
 
 
+public class SurveyQuestionnairyResponse
+{
+    public int Id { get; set; }
+    public List<SurveyResponse> Responses { get; set; } = new();
+    public int AnonymousParticipantId { get; set; }
+    public AnonymousParticipant AnonymousParticipant { get; set; }
 
+    public int ActivityId { get; set; }
+}
 
 public abstract class SurveyResponse
 {
     public int Id { get; set; }
-    public int QuestionId { get; set; }    
-    public SurveyQuestion Question {get;set;} = default!;
-    public int ActivityId { get; set; }    
+    public int UniqueQuestionId { get; set; }   
 }
 
 public abstract class SurveyResponse<T> : SurveyResponse

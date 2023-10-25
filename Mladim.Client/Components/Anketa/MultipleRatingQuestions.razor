@@ -1,11 +1,12 @@
-@* @using Mladim.Client.ViewModels.Anketa;
+@using Mladim.Client.ViewModels.Survey;
 
 
-<MudText Typo="Typo.h2">@($"{this.Number}. {this.Question.Text}")</MudText>
 
-    <MudStack Spacing="3" Class="mx-4" Justify="Justify.FlexStart" AlignItems="AlignItems.Start">
+<MudText Typo="Typo.h2">@($"{this.Number}. {this.Question.Texts.FirstOrDefault()}")</MudText>
 
-    @foreach (var item in Question.RatingResponseQuestions)
+ <MudStack Spacing="3">
+
+    @foreach (var item in Question.Texts.Take(1..))
     {
         
     }
@@ -20,15 +21,18 @@
 @code
 {
     [Parameter]
-    public MultipleRatingQuestionsVM Question { get; set; }
-
-    [Parameter]
     public int Number { get; set; }
 
+    [Parameter]
+    public SurveyQuestionVM Question { get; set; }
 
-    protected override Task OnInitializedAsync()
+    [Parameter]
+    public SurveryMultipleResponseVM SurveryResponse { get; set; }
+
+
+    private void ValueChanged(double value)
     {
-        return base.OnInitializedAsync();
+       
     }
 
-} *@
+}

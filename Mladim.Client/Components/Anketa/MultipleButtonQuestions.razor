@@ -1,0 +1,58 @@
+﻿@using Mladim.Client.ViewModels.Survey;
+@using Mladim.Domain.Enums;
+
+
+<style>
+    .btn:focus,
+    .btn:hover {
+        background-color: #4da456;
+        border-color: #4da456;
+    }
+
+    .btn {
+        background-color: #6e7191;
+        border-color: #6e7191;
+    }
+</style>
+
+<MudText Color="Color.Tertiary" Typo="Typo.h2">@this.Question.Texts.FirstOrDefault()</MudText>
+
+<MudStack Spacing="3">
+    @for (int i = 1; i < count; i++)
+    {
+        <MudStack Spacing="3">
+            <ButtonQuestion Text="@Question.Texts[i]" Index="@(i-1)" EventResponse="MultipleButtonResponse"></ButtonQuestion>
+        </MudStack>
+    }
+
+
+</MudStack>
+
+
+
+@code
+{
+
+    [Parameter]
+    public SurveyQuestionVM Question { get; set; }
+
+    [Parameter]
+    public SurveryMultipleResponseVM SurveryResponse { get; set; }
+
+    int? selectedValue = null;
+
+    int count = 0;
+
+    protected override void OnInitialized()
+    {
+        count = Question.Texts.Count;
+
+        foreach (var item in Enumerable.Range(1, count))
+            SurveryResponse.Response.Add(SurveyMultipleResponseType.None);
+    }
+
+    private void MultipleButtonResponse((int index, SurveyMultipleResponseType type) tuple)
+    {
+        SurveryResponse.Response[tuple.index] = tuple.type;
+    }
+}

@@ -11,11 +11,10 @@ public class SurveyProfile : Profile
 {
     public SurveyProfile()
     {
-        CreateMap<SurveyQuestionQueryDto, SurveyQuestionVM>()
-            .Include<MaleSurveyQuestionDto, MaleSurveyQuestionVM>()
-            .Include<FemaleSurveyQuestionDto, FemaleSurveyQuestionVM>();
-
-        CreateMap<SurveyQuestionnairyQueryDto, SurveyQuestionnairyVM>();
+        CreateMap<SurveyQuestionQueryDto, SurveyQuestionVM>();
+        CreateMap<MaleSurveyQuestionDto, SurveyQuestionVM>();
+        CreateMap<FemaleSurveyQuestionDto, SurveyQuestionVM>();
+        CreateMap<SurveyQuestionnairyQueryDto, SurveyQuestionResponseVM>();
        
     }
 }

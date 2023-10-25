@@ -1,5 +1,7 @@
-﻿@* @using Mladim.Client.ViewModels.Anketa;
+﻿
+@using Mladim.Client.ViewModels.Survey;
 @using Syncfusion.Blazor.Inputs
+@using Mladim.Domain.Enums;
 
 
 
@@ -14,9 +16,9 @@
     }
 </style>
 
-<MudText Typo="Typo.h2">@($"{this.Number}. {this.Question.Text}")</MudText>
+<MudText Typo="Typo.h2">@this.Question.Texts.FirstOrDefault())</MudText>
 
-    <SfRating @bind-Value=@Question.Answer EnableSingleSelection=true ShowLabel=false ShowTooltip=false>
+    <SfRating ValueChanged="ValueChanged" EnableSingleSelection=true ShowLabel=false ShowTooltip=false>
         <EmptyTemplate>
         @{          
             if (context.Index == 0)
@@ -36,10 +38,17 @@
 
 @code 
 {
-    [Parameter]
-    public BooleanResponseQuestionVM Question{ get; set; }
+   
 
     [Parameter]
-    public int Number{ get; set; }
+    public SurveyQuestionVM Question{ get; set; }
+
+    [Parameter]
+    public SurveryBooleanResponseVM SurveryResponse { get; set; }
+
+
+    private void ValueChanged(double value)
+    {
+        SurveryResponse.Response = (SurveyBooleanResponseType)value;
+    }
 }
- *@

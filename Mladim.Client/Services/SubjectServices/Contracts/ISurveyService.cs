@@ -5,5 +5,5 @@ namespace Mladim.Client.Services.SubjectServices.Contracts;
 
 public interface ISurveyService
 {
-    Task<SurveyQuestionnairyVM> GetSurveyQuestionnairyAsync(int activityId, Gender gender);
+    Task<IEnumerable<SurveyQuestionVM>> GetSurveyQuestionnairyAsync(int activityId, Gender gender);
 }

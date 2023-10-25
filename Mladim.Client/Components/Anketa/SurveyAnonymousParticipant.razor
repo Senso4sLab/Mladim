@@ -1,0 +1,30 @@
+﻿@using Mladim.Domain.Enums;
+@using Mladim.Domain.Extensions;
+@using Mladim.Domain.Models;
+
+
+    <MudSelect @bind-Value="@AnonymousParticipant.Gender" T="Gender" ToStringFunc="@(gender => gender.GetDisplayAttribute())" Variant="Variant.Outlined" Label="Spol:" AnchorOrigin="Origin.BottomCenter">
+        @foreach (var gender in Enum.GetValues<Gender>())
+        {
+            <MudSelectItem Value="gender">@gender.GetDisplayAttribute()</MudSelectItem>
+        }
+    </MudSelect>
+
+    <MudSelect @bind-Value="@AnonymousParticipant.AgeGroup" T="AgeGroups" ToStringFunc="@(age => age.GetDisplayAttribute())" Variant="Variant.Outlined" Label="Starostna skupina:" AnchorOrigin="Origin.BottomCenter">
+        @foreach (var age in Enum.GetValues<AgeGroups>())
+        {
+            <MudSelectItem Value="age">@age.GetDisplayAttribute()</MudSelectItem>
+        }
+    </MudSelect>
+
+    <MudButton Color=Color.Primary OnClick="@(() => AnonymousButton.InvokeAsync(AnonymousParticipant))">Nadaljuj</MudButton>
+
+
+@code
+{
+
+    private AnonymousParticipantVM AnonymousParticipant { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<AnonymousParticipantVM> AnonymousButton { get; set; }
+}

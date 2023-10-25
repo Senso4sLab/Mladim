@@ -1,11 +1,14 @@
 ﻿using Mladim.Domain.Enums;
+using Mladim.Domain.Models.Survey.Responses;
 
 namespace Mladim.Domain.Models;
 
 public class AnonymousParticipant
 {
+    public int Id { get; set; } 
     public Gender Gender { get; set; }
     public AgeGroups AgeGroup { get; set; }
+    public List<SurveyQuestionnairyResponse> SurveyQuestionnairyResponse { get; set; } = new();
 
     private AnonymousParticipant()
     {

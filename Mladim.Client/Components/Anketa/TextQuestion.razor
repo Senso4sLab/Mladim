@@ -1,16 +1,19 @@
-﻿
+﻿@using Mladim.Client.ViewModels.Survey;
+@using Mladim.Domain.Enums;
+@using Mladim.Domain.Extensions;
+@using Mladim.Domain.Models;
+
+<MudText Typo="Typo.h2">@this.Question.Texts.FirstOrDefault()")</MudText>
+
+<MudTextField Class="mud-width-full" Variant="Variant.Outlined" @bind-Value=@SurveryResponse.Response Typo="Typo.h1"></MudTextField>
 
 
-@* <MudText Typo="Typo.h2">@($"{this.Number}. {this.Question.Text}")</MudText>
-
-    <MudTextField Class="mud-width-full" Variant="Variant.Outlined" @bind-Value=@Question.Answer Typo="Typo.h1"></MudTextField>
-
-
-    @code
-    {
+@code
+{
     [Parameter]
-    public TextResponseQuestionVM Question { get; set; }
+    public SurveyQuestionVM Question { get; set; }
 
     [Parameter]
-    public int Number { get; set; }
-} *@
+    public SurveryTextResponseVM SurveryResponse { get; set; }
+   
+}

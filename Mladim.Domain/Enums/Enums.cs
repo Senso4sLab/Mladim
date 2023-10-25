@@ -287,20 +287,20 @@ public enum SurveyQuestionType
 [Flags]
 public enum SurveyBooleanResponseType
 {
-    None = 0,
-    ThumpsUp = 1,
-    ThumpsDown = 2,    
+ 
+    ThumpsUp = 0,
+    ThumpsDown = 1,    
 }
 
 
 public enum SurveyRatingResponseType
 {
-    None = 0,
-    OneSmile = 1,
-    TwoSmiles = 2,
-    ThreeSmiles = 3,
-    FourSmiles = 4,
-    FiveSmiles = 5,
+   
+    OneSmile = 0,
+    TwoSmiles = 1,
+    ThreeSmiles = 2,
+    FourSmiles = 3,
+    FiveSmiles = 4,
 }
 
 

@@ -17,22 +17,20 @@ public class SurveyService : ISurveyService
     private IMapper Mapper { get; }
     private MladimApiUrls MladimApiUrls { get; }
     private IGenericHttpService HttpClient { get; }
-    private StorageKeys StorageKeys { get; }
+    
 
-    public SurveyService(IGenericHttpService httpClient, IOptions<MladimApiUrls> MladimApiUrls,
-      IOptions<StorageKeys> storageKeys, IMapper mapper)
+    public SurveyService(IGenericHttpService httpClient, IOptions<MladimApiUrls> MladimApiUrls, IMapper mapper)
     {
         this.Mapper = mapper;
-        this.HttpClient = httpClient;
-        this.StorageKeys = storageKeys.Value;
+        this.HttpClient = httpClient;        
         this.MladimApiUrls = MladimApiUrls.Value;
     }
 
-    public async Task<SurveyQuestionnairyVM> GetSurveyQuestionnairyAsync(int activityId, Gender gender)
+    public async Task<IEnumerable<SurveyQuestionVM>> GetSurveyQuestionnairyAsync(int activityId, Gender gender)
     {
         string url = string.Format(MladimApiUrls.GetSurveyQuestionnairy, activityId, gender);
-        var questionnairy = await HttpClient.GetAsync<SurveyQuestionnairyQueryDto>(url);
-        return this.Mapper.Map<SurveyQuestionnairyVM>(questionnairy);
+        var questionnairy = await HttpClient.GetAsync<IEnumerable<SurveyQuestionQueryDto>>(url);
+        return this.Mapper.Map<IEnumerable<SurveyQuestionVM>>(questionnairy);
     }
 
 

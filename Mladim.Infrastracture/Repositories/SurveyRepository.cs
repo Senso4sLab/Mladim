@@ -17,14 +17,12 @@ public class SurveyRepository : GenericRepository<SurveyQuestion> , ISurveyRepos
     {
     }
 
-
-
-    public async Task<SurveyQuestionnairy> GetSurveyQuestionnairy(int questionnairyId, Gender gender, SurveyQuestionCategory category)
+    public async Task<IEnumerable<SurveyQuestion>> GetSurveyQuestionnairy(int questionnairyId, Gender gender, SurveyQuestionCategory category)
     {
         var sequence = GetByQuestionnairtyId(this.DbSet, questionnairyId);
         sequence = GetByGender(sequence, gender);
         sequence = GetByCategory(sequence, category);
-        return SurveyQuestionnairy.Create(questionnairyId, await sequence.ToListAsync());
+        return await sequence.ToListAsync();
     }
 
     private IQueryable<SurveyQuestion> GetByQuestionnairtyId(IQueryable<SurveyQuestion> surveyQuestions, int questionnairyId) =>
