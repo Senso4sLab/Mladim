@@ -2,7 +2,7 @@
 
 namespace Mladim.Domain.Models.Survey.Questions;
 
-public abstract class SurveyQuestion
+public class SurveyQuestion
 {
     public int Id { get; set; }
     public List<string> Texts { get; set; } = new();    

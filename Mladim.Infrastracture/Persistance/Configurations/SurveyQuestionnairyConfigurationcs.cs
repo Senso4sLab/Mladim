@@ -18,3 +18,9 @@ public class SurveyQuestionnairyConfigurationcs : IEntityTypeConfiguration<Surve
         builder.HasData(SurveyQuestionnairy.Create(1));
     }
 }
+
+
+
+
+
+

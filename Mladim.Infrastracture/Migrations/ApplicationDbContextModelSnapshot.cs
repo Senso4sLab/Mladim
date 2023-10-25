@@ -34,7 +34,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasIndex("GroupsId");
 
-                    b.ToTable("ActivityActivityGroup");
+                    b.ToTable("ActivityActivityGroup", (string)null);
                 });
 
             modelBuilder.Entity("ActivityParticipant", b =>
@@ -49,7 +49,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasIndex("ParticipantsId");
 
-                    b.ToTable("ActivityParticipant");
+                    b.ToTable("ActivityParticipant", (string)null);
                 });
 
             modelBuilder.Entity("ActivityPartner", b =>
@@ -64,7 +64,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasIndex("PartnersId");
 
-                    b.ToTable("ActivityPartner");
+                    b.ToTable("ActivityPartner", (string)null);
                 });
 
             modelBuilder.Entity("AppUserOrganization", b =>
@@ -79,7 +79,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasIndex("OrganizationsId");
 
-                    b.ToTable("AppUserOrganization");
+                    b.ToTable("AppUserOrganization", (string)null);
                 });
 
             modelBuilder.Entity("GroupMember", b =>
@@ -94,7 +94,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasIndex("MembersId");
 
-                    b.ToTable("GroupMember");
+                    b.ToTable("GroupMember", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -321,16 +321,11 @@ namespace Mladim.Infrastracture.Migrations
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SurveyQuestionnairyId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("SurveyQuestionnairyId");
-
-                    b.ToTable("Activities");
+                    b.ToTable("Activities", (string)null);
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.Group", b =>
@@ -361,7 +356,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Groups");
+                    b.ToTable("Groups", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Group");
 
@@ -403,7 +398,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Member");
+                    b.ToTable("Member", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Member");
 
@@ -420,7 +415,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Organizations");
+                    b.ToTable("Organizations", (string)null);
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.Partner", b =>
@@ -458,7 +453,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Partners");
+                    b.ToTable("Partners", (string)null);
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.Project", b =>
@@ -476,7 +471,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasIndex("OrganizationId");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.StaffMemberActivity", b =>
@@ -494,7 +489,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasIndex("ActivityId");
 
-                    b.ToTable("StaffMemberActivity");
+                    b.ToTable("StaffMemberActivity", (string)null);
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.StaffMemberProject", b =>
@@ -512,86 +507,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("StaffMemberProject");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Survey.Questions.SurveyQuestion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Category")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Texts")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SurveyQuestion");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("SurveyQuestion");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Survey.Responses.SurveyResponse", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ActivityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("SurveryResponses");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("SurveyResponse");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Survey.SurveyQuestionnairy", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Questionnairies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1
-                        });
+                    b.ToTable("StaffMemberProject", (string)null);
                 });
 
             modelBuilder.Entity("PartnerProject", b =>
@@ -606,7 +522,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasIndex("ProjectsId");
 
-                    b.ToTable("PartnerProject");
+                    b.ToTable("PartnerProject", (string)null);
                 });
 
             modelBuilder.Entity("ProjectProjectGroup", b =>
@@ -621,174 +537,7 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.HasIndex("ProjectsId");
 
-                    b.ToTable("ProjectProjectGroup");
-                });
-
-            modelBuilder.Entity("SurveyQuestionSurveyQuestionnairy", b =>
-                {
-                    b.Property<int>("QuestionsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SurveyQuestionnairiesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("QuestionsId", "SurveyQuestionnairiesId");
-
-                    b.HasIndex("SurveyQuestionnairiesId");
-
-                    b.ToTable("SurveyQuestionSurveyQuestionnairy");
-
-                    b.HasData(
-                        new
-                        {
-                            QuestionsId = 1,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 2,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 3,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 4,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 5,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 6,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 7,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 8,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 9,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 10,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 11,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 12,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 13,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 14,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 15,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 16,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 17,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 18,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 19,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 20,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 21,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 22,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 23,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 24,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 25,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 26,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 27,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 28,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 29,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 30,
-                            SurveyQuestionnairiesId = 1
-                        });
+                    b.ToTable("ProjectProjectGroup", (string)null);
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.ActivityGroup", b =>
@@ -833,294 +582,6 @@ namespace Mladim.Infrastracture.Migrations
                         .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("StaffMember");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Survey.Questions.FemaleSurveyQuestion", b =>
-                {
-                    b.HasBaseType("Mladim.Domain.Models.Survey.Questions.SurveyQuestion");
-
-                    b.HasDiscriminator().HasValue("FemaleSurveyQuestion");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Category = 1,
-                            Texts = "[\"Po\\u010Dutila sem se varno in prijetno.\"]",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Category = 1,
-                            Texts = "[\"Bila sem sli\\u0161ana in sprejeta.\"]",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Category = 1,
-                            Texts = "[\"Sodelovala sem pri na\\u010Drtovanju ali izvedbi te aktivnosti/dogodka\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Category = 1,
-                            Texts = "[\"Spodbujena sem bila k aktivni udele\\u017Ebi.\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Category = 1,
-                            Texts = "[\"Z aktivnostjo sem bila zadovoljna.\"]",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Category = 1,
-                            Texts = "[\"Z eno ali nekaj besedami opi\\u0161i, kaj si z udele\\u017Ebo pridobila.\"]",
-                            Type = 4
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Category = 1,
-                            Texts = "[\"Ali si zaradi svojih telesnih zna\\u010Dilnosti, socialnega polo\\u017Eaja, narodnosti ali barve ko\\u017Ee v slab\\u0161em polo\\u017Eaju kot ve\\u010Dina ostalih?\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Category = 2,
-                            Texts = "[\"Cilji, zaradi katerih smo delovali v skupini, so mi bili jasni.\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Category = 2,
-                            Texts = "[\"Sodelovala sem pri oblikovanju ciljev skupine in skupinskega dela.\"]",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Category = 2,
-                            Texts = "[\"Moja pri\\u010Dakovanja, ki sem jih imela od sodelovanja v skupini, so bila jasna in znana drugim (npr.mentorju.)\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Category = 2,
-                            Texts = "[\"Zaradi sodelovanja v aktivnosti sem:\",\"bolj samozavestena\",\"bolj sposobna delati v skupini\",\"se je izbolj\\u0161al moj u\\u010Dni uspeh\",\"la\\u017Eje branim svoje mnenje\",\"verjamem, da je skupaj mogo\\u010De dose\\u010Di pomembne spremembe\"]",
-                            Type = 3
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Category = 2,
-                            Texts = "[\"Mentor ni posegal v delo skupine in v smer, v katero se je razvijalo.\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Category = 2,
-                            Texts = "[\"Mentor je vzpostavil varen in vklju\\u010Dujo\\u010D prostor.\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Category = 2,
-                            Texts = "[\"Moja skupina se je redno sre\\u010Devala (vsaj dvakrat mese\\u010Dno).\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Category = 2,
-                            Texts = "[\"V skupini smo poleg vsebinskih aktivnosti izvajali tudi aktivnosti, ki so krepile skupino (npr. teambuilding ipd.)\"]",
-                            Type = 2
-                        });
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Survey.Questions.MaleSurveyQuestion", b =>
-                {
-                    b.HasBaseType("Mladim.Domain.Models.Survey.Questions.SurveyQuestion");
-
-                    b.HasDiscriminator().HasValue("MaleSurveyQuestion");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 16,
-                            Category = 1,
-                            Texts = "[\"Po\\u010Dutil sem se varno in prijetno.\"]",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Category = 1,
-                            Texts = "[\"Bil sem sli\\u0161an in sprejet.\"]",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Category = 1,
-                            Texts = "[\"Sodeloval sem pri na\\u010Drtovanju ali izvedbi te aktivnosti/dogodka\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Category = 1,
-                            Texts = "[\"Spodbujen sem bil k aktivni udele\\u017Ebi.\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Category = 1,
-                            Texts = "[\"Z aktivnostjo sem bil zadovoljn.\"]",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 21,
-                            Category = 1,
-                            Texts = "[\"Z eno ali nekaj besedami opi\\u0161i, kaj si z udele\\u017Ebo pridobil.\"]",
-                            Type = 4
-                        },
-                        new
-                        {
-                            Id = 22,
-                            Category = 1,
-                            Texts = "[\"Ali si zaradi svojih telesnih zna\\u010Dilnosti, socialnega polo\\u017Eaja, narodnosti ali barve ko\\u017Ee v slab\\u0161em polo\\u017Eaju kot ve\\u010Dina ostalih?\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 23,
-                            Category = 2,
-                            Texts = "[\"Cilji, zaradi katerih smo delovali v skupini, so mi bili jasni.\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 24,
-                            Category = 2,
-                            Texts = "[\"Sodeloval sem pri oblikovanju ciljev skupine in skupinskega dela.\"]",
-                            Type = 2
-                        },
-                        new
-                        {
-                            Id = 25,
-                            Category = 2,
-                            Texts = "[\"Moja pri\\u010Dakovanja, ki sem jih imel od sodelovanja v skupini, so bila jasna in znana drugim (npr.mentorju.)\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 26,
-                            Category = 2,
-                            Texts = "[\"Zaradi sodelovanja v aktivnosti sem:\",\"bolj samozavesten\",\"bolj sposoben delati v skupini\",\"se je izbolj\\u0161al moj u\\u010Dni uspeh\",\"la\\u017Eje branim svoje mnenje\",\"verjamem, da je skupaj mogo\\u010De dose\\u010Di pomembne spremembe\"]",
-                            Type = 3
-                        },
-                        new
-                        {
-                            Id = 27,
-                            Category = 2,
-                            Texts = "[\"Mentor ni posegal v delo skupine in v smer, v katero se je razvijalo.\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 28,
-                            Category = 2,
-                            Texts = "[\"Mentor je vzpostavil varen in vklju\\u010Dujo\\u010D prostor.\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 29,
-                            Category = 2,
-                            Texts = "[\"Moja skupina se je redno sre\\u010Devala (vsaj dvakrat mese\\u010Dno).\"]",
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 30,
-                            Category = 2,
-                            Texts = "[\"V skupini smo poleg vsebinskih aktivnosti izvajali tudi aktivnosti, ki so krepile skupino (npr. teambuilding ipd.)\"]",
-                            Type = 2
-                        });
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Survey.Responses.SurveryBooleanResponse", b =>
-                {
-                    b.HasBaseType("Mladim.Domain.Models.Survey.Responses.SurveyResponse");
-
-                    b.Property<int>("Response")
-                        .HasColumnType("int");
-
-                    b.ToTable("SurveryResponses", t =>
-                        {
-                            t.Property("Response")
-                                .HasColumnName("SurveryBooleanResponse_Response");
-                        });
-
-                    b.HasDiscriminator().HasValue("SurveryBooleanResponse");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Survey.Responses.SurveryMultipleResponse", b =>
-                {
-                    b.HasBaseType("Mladim.Domain.Models.Survey.Responses.SurveyResponse");
-
-                    b.Property<string>("Response")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable("SurveryResponses", t =>
-                        {
-                            t.Property("Response")
-                                .HasColumnName("SurveryMultipleResponse_Response");
-                        });
-
-                    b.HasDiscriminator().HasValue("SurveryMultipleResponse");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Survey.Responses.SurveryRatingResponse", b =>
-                {
-                    b.HasBaseType("Mladim.Domain.Models.Survey.Responses.SurveyResponse");
-
-                    b.Property<int>("Response")
-                        .HasColumnType("int");
-
-                    b.ToTable("SurveryResponses", t =>
-                        {
-                            t.Property("Response")
-                                .HasColumnName("SurveryRatingResponse_Response");
-                        });
-
-                    b.HasDiscriminator().HasValue("SurveryRatingResponse");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Survey.Responses.SurveryTextResponse", b =>
-                {
-                    b.HasBaseType("Mladim.Domain.Models.Survey.Responses.SurveyResponse");
-
-                    b.Property<string>("Response")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("SurveryTextResponse");
                 });
 
             modelBuilder.Entity("ActivityActivityGroup", b =>
@@ -1257,11 +718,81 @@ namespace Mladim.Infrastracture.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mladim.Domain.Models.Survey.SurveyQuestionnairy", "SurveyQuestionnairy")
-                        .WithMany("Activities")
-                        .HasForeignKey("SurveyQuestionnairyId");
+                    b.OwnsMany("Mladim.Domain.Models.Activity.AnonymousParticipantGroups#Mladim.Domain.Models.AnonymousParticipantGroup", "AnonymousParticipantGroups", b1 =>
+                        {
+                            b1.Property<int>("ActivityId")
+                                .HasColumnType("int");
 
-                    b.OwnsMany("Mladim.Domain.Models.AttachedFile", "Files", b1 =>
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<int>("Number")
+                                .HasColumnType("int");
+
+                            b1.HasKey("ActivityId", "Id");
+
+                            b1.ToTable("AnonymousParticipantGroup", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("ActivityId");
+
+                            b1.OwnsOne("Mladim.Domain.Models.Activity.AnonymousParticipantGroups#Mladim.Domain.Models.AnonymousParticipantGroup.AnonymousParticipant#Mladim.Domain.Models.AnonymousParticipant", "AnonymousParticipant", b2 =>
+                                {
+                                    b2.Property<int>("AnonymousParticipantGroupActivityId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<int>("AnonymousParticipantGroupId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<int>("AgeGroup")
+                                        .HasColumnType("int");
+
+                                    b2.Property<int>("Gender")
+                                        .HasColumnType("int");
+
+                                    b2.HasKey("AnonymousParticipantGroupActivityId", "AnonymousParticipantGroupId");
+
+                                    b2.ToTable("AnonymousParticipantGroup", (string)null);
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("AnonymousParticipantGroupActivityId", "AnonymousParticipantGroupId");
+                                });
+
+                            b1.Navigation("AnonymousParticipant")
+                                .IsRequired();
+                        });
+
+                    b.OwnsOne("Mladim.Domain.Models.Activity.Attributes#Mladim.Domain.Models.ActivityAttributes", "Attributes", b1 =>
+                        {
+                            b1.Property<int>("ActivityId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("ActivityTypes")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Description")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<bool>("IsGroup")
+                                .HasColumnType("bit");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ActivityId");
+
+                            b1.ToTable("Activities", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("ActivityId");
+                        });
+
+                    b.OwnsMany("Mladim.Domain.Models.Activity.Files#Mladim.Domain.Models.AttachedFile", "Files", b1 =>
                         {
                             b1.Property<int>("ActivityId")
                                 .HasColumnType("int");
@@ -1290,13 +821,13 @@ namespace Mladim.Infrastracture.Migrations
 
                             b1.HasKey("ActivityId", "Id");
 
-                            b1.ToTable("Activities_Files");
+                            b1.ToTable("Activities_Files", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ActivityId");
                         });
 
-                    b.OwnsOne("Mladim.Domain.Models.DateTimeRange", "TimeRange", b1 =>
+                    b.OwnsOne("Mladim.Domain.Models.Activity.TimeRange#Mladim.Domain.Models.DateTimeRange", "TimeRange", b1 =>
                         {
                             b1.Property<int>("ActivityId")
                                 .HasColumnType("int");
@@ -1315,84 +846,10 @@ namespace Mladim.Infrastracture.Migrations
 
                             b1.HasKey("ActivityId");
 
-                            b1.ToTable("Activities");
+                            b1.ToTable("Activities", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ActivityId");
-                        });
-
-                    b.OwnsOne("Mladim.Domain.Models.ActivityAttributes", "Attributes", b1 =>
-                        {
-                            b1.Property<int>("ActivityId")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("ActivityTypes")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("Description")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<bool>("IsGroup")
-                                .HasColumnType("bit");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("ActivityId");
-
-                            b1.ToTable("Activities");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ActivityId");
-                        });
-
-                    b.OwnsMany("Mladim.Domain.Models.AnonymousParticipantGroup", "AnonymousParticipantGroups", b1 =>
-                        {
-                            b1.Property<int>("ActivityId")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("int");
-
-                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
-
-                            b1.Property<int>("Number")
-                                .HasColumnType("int");
-
-                            b1.HasKey("ActivityId", "Id");
-
-                            b1.ToTable("AnonymousParticipantGroup");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ActivityId");
-
-                            b1.OwnsOne("Mladim.Domain.Models.AnonymousParticipant", "AnonymousParticipant", b2 =>
-                                {
-                                    b2.Property<int>("AnonymousParticipantGroupActivityId")
-                                        .HasColumnType("int");
-
-                                    b2.Property<int>("AnonymousParticipantGroupId")
-                                        .HasColumnType("int");
-
-                                    b2.Property<int>("AgeGroup")
-                                        .HasColumnType("int");
-
-                                    b2.Property<int>("Gender")
-                                        .HasColumnType("int");
-
-                                    b2.HasKey("AnonymousParticipantGroupActivityId", "AnonymousParticipantGroupId");
-
-                                    b2.ToTable("AnonymousParticipantGroup");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("AnonymousParticipantGroupActivityId", "AnonymousParticipantGroupId");
-                                });
-
-                            b1.Navigation("AnonymousParticipant")
-                                .IsRequired();
                         });
 
                     b.Navigation("AnonymousParticipantGroups");
@@ -1404,15 +861,13 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.Navigation("Project");
 
-                    b.Navigation("SurveyQuestionnairy");
-
                     b.Navigation("TimeRange")
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.Organization", b =>
                 {
-                    b.OwnsOne("Mladim.Domain.Models.OrganizationAttributes", "Attributes", b1 =>
+                    b.OwnsOne("Mladim.Domain.Models.Organization.Attributes#Mladim.Domain.Models.OrganizationAttributes", "Attributes", b1 =>
                         {
                             b1.Property<int>("OrganizationId")
                                 .HasColumnType("int");
@@ -1475,13 +930,13 @@ namespace Mladim.Infrastracture.Migrations
 
                             b1.HasKey("OrganizationId");
 
-                            b1.ToTable("Organizations");
+                            b1.ToTable("Organizations", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("OrganizationId");
                         });
 
-                    b.OwnsOne("Mladim.Domain.Models.SocialMediaUrls", "SocialMediaUrls", b1 =>
+                    b.OwnsOne("Mladim.Domain.Models.Organization.SocialMediaUrls#Mladim.Domain.Models.SocialMediaUrls", "SocialMediaUrls", b1 =>
                         {
                             b1.Property<int>("OrganizationId")
                                 .HasColumnType("int");
@@ -1500,7 +955,7 @@ namespace Mladim.Infrastracture.Migrations
 
                             b1.HasKey("OrganizationId");
 
-                            b1.ToTable("Organizations");
+                            b1.ToTable("Organizations", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("OrganizationId");
@@ -1521,7 +976,31 @@ namespace Mladim.Infrastracture.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("Mladim.Domain.Models.AttachedFile", "Files", b1 =>
+                    b.OwnsOne("Mladim.Domain.Models.Project.Attributes#Mladim.Domain.Models.ProjectAttibutes", "Attributes", b1 =>
+                        {
+                            b1.Property<int>("ProjectId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Description")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("WebpageUrl")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ProjectId");
+
+                            b1.ToTable("Projects", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("ProjectId");
+                        });
+
+                    b.OwnsMany("Mladim.Domain.Models.Project.Files#Mladim.Domain.Models.AttachedFile", "Files", b1 =>
                         {
                             b1.Property<int>("ProjectId")
                                 .HasColumnType("int");
@@ -1550,13 +1029,13 @@ namespace Mladim.Infrastracture.Migrations
 
                             b1.HasKey("ProjectId", "Id");
 
-                            b1.ToTable("Projects_Files");
+                            b1.ToTable("Projects_Files", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ProjectId");
                         });
 
-                    b.OwnsOne("Mladim.Domain.Models.DateTimeRange", "TimeRange", b1 =>
+                    b.OwnsOne("Mladim.Domain.Models.Project.TimeRange#Mladim.Domain.Models.DateTimeRange", "TimeRange", b1 =>
                         {
                             b1.Property<int>("ProjectId")
                                 .HasColumnType("int");
@@ -1575,31 +1054,7 @@ namespace Mladim.Infrastracture.Migrations
 
                             b1.HasKey("ProjectId");
 
-                            b1.ToTable("Projects");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ProjectId");
-                        });
-
-                    b.OwnsOne("Mladim.Domain.Models.ProjectAttibutes", "Attributes", b1 =>
-                        {
-                            b1.Property<int>("ProjectId")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("Description")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("WebpageUrl")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("ProjectId");
-
-                            b1.ToTable("Projects");
+                            b1.ToTable("Projects", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ProjectId");
@@ -1654,17 +1109,6 @@ namespace Mladim.Infrastracture.Migrations
                     b.Navigation("StaffMember");
                 });
 
-            modelBuilder.Entity("Mladim.Domain.Models.Survey.Responses.SurveyResponse", b =>
-                {
-                    b.HasOne("Mladim.Domain.Models.Survey.Questions.SurveyQuestion", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-                });
-
             modelBuilder.Entity("PartnerProject", b =>
                 {
                     b.HasOne("Mladim.Domain.Models.Partner", null)
@@ -1695,21 +1139,6 @@ namespace Mladim.Infrastracture.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SurveyQuestionSurveyQuestionnairy", b =>
-                {
-                    b.HasOne("Mladim.Domain.Models.Survey.Questions.SurveyQuestion", null)
-                        .WithMany()
-                        .HasForeignKey("QuestionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mladim.Domain.Models.Survey.SurveyQuestionnairy", null)
-                        .WithMany()
-                        .HasForeignKey("SurveyQuestionnairiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Mladim.Domain.Models.Activity", b =>
                 {
                     b.Navigation("Staff");
@@ -1725,11 +1154,6 @@ namespace Mladim.Infrastracture.Migrations
                     b.Navigation("Activities");
 
                     b.Navigation("Staff");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Survey.SurveyQuestionnairy", b =>
-                {
-                    b.Navigation("Activities");
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.StaffMember", b =>

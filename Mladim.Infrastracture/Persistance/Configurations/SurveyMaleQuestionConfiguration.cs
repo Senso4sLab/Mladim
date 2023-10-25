@@ -17,37 +17,37 @@ public class SurveyMaleQuestionConfiguration : IEntityTypeConfiguration<MaleSurv
     public void Configure(EntityTypeBuilder<MaleSurveyQuestion> builder)
     {
 
-        builder.HasData(SurveyQuestion.CreateMaleQuestion(16, SurveyQuestionType.Rating, SurveyQuestionCategory.General)
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(1, SurveyQuestionType.Rating, SurveyQuestionCategory.General)
             .AddText("Počutil sem se varno in prijetno."));
 
-        builder.HasData(SurveyQuestion.CreateMaleQuestion(17, SurveyQuestionType.Rating, SurveyQuestionCategory.General)
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(2, SurveyQuestionType.Rating, SurveyQuestionCategory.General)
             .AddText("Bil sem slišan in sprejet."));
 
-        builder.HasData(SurveyQuestion.CreateMaleQuestion(18, SurveyQuestionType.Boolean, SurveyQuestionCategory.General)
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(3, SurveyQuestionType.Boolean, SurveyQuestionCategory.General)
             .AddText("Sodeloval sem pri načrtovanju ali izvedbi te aktivnosti/dogodka"));
 
-        builder.HasData(SurveyQuestion.CreateMaleQuestion(19, SurveyQuestionType.Boolean, SurveyQuestionCategory.General)
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(4, SurveyQuestionType.Boolean, SurveyQuestionCategory.General)
             .AddText("Spodbujen sem bil k aktivni udeležbi."));
 
-        builder.HasData(SurveyQuestion.CreateMaleQuestion(20, SurveyQuestionType.Rating, SurveyQuestionCategory.General)
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(5, SurveyQuestionType.Rating, SurveyQuestionCategory.General)
             .AddText("Z aktivnostjo sem bil zadovoljn."));
 
-        builder.HasData(SurveyQuestion.CreateMaleQuestion(21, SurveyQuestionType.Text, SurveyQuestionCategory.General)
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(6, SurveyQuestionType.Text, SurveyQuestionCategory.General)
             .AddText("Z eno ali nekaj besedami opiši, kaj si z udeležbo pridobil."));
 
-        builder.HasData(SurveyQuestion.CreateMaleQuestion(22, SurveyQuestionType.Boolean, SurveyQuestionCategory.General)
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(7, SurveyQuestionType.Boolean, SurveyQuestionCategory.General)
             .AddText("Ali si zaradi svojih telesnih značilnosti, socialnega položaja, narodnosti ali barve kože v slabšem položaju kot večina ostalih?"));
 
-        builder.HasData(SurveyQuestion.CreateMaleQuestion(23, SurveyQuestionType.Boolean, SurveyQuestionCategory.Group)
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(8, SurveyQuestionType.Boolean, SurveyQuestionCategory.Group)
             .AddText("Cilji, zaradi katerih smo delovali v skupini, so mi bili jasni."));
 
-        builder.HasData(SurveyQuestion.CreateMaleQuestion(24, SurveyQuestionType.Rating, SurveyQuestionCategory.Group)
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(9, SurveyQuestionType.Rating, SurveyQuestionCategory.Group)
             .AddText("Sodeloval sem pri oblikovanju ciljev skupine in skupinskega dela."));
 
-        builder.HasData(SurveyQuestion.CreateMaleQuestion(25, SurveyQuestionType.Boolean, SurveyQuestionCategory.Group)
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(10, SurveyQuestionType.Boolean, SurveyQuestionCategory.Group)
             .AddText("Moja pričakovanja, ki sem jih imel od sodelovanja v skupini, so bila jasna in znana drugim (npr.mentorju.)"));
 
-        builder.HasData(SurveyQuestion.CreateMaleQuestion(26, SurveyQuestionType.Multiple, SurveyQuestionCategory.Group)
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(11, SurveyQuestionType.Multiple, SurveyQuestionCategory.Group)
             .AddText("Zaradi sodelovanja v aktivnosti sem:")
             .AddText("bolj samozavesten")
             .AddText("bolj sposoben delati v skupini")
@@ -55,16 +55,16 @@ public class SurveyMaleQuestionConfiguration : IEntityTypeConfiguration<MaleSurv
             .AddText("lažje branim svoje mnenje")
             .AddText("verjamem, da je skupaj mogoče doseči pomembne spremembe"));
 
-        builder.HasData(SurveyQuestion.CreateMaleQuestion(27, SurveyQuestionType.Boolean, SurveyQuestionCategory.Group)
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(12, SurveyQuestionType.Boolean, SurveyQuestionCategory.Group)
             .AddText("Mentor ni posegal v delo skupine in v smer, v katero se je razvijalo."));
 
-        builder.HasData(SurveyQuestion.CreateMaleQuestion(28, SurveyQuestionType.Boolean, SurveyQuestionCategory.Group)
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(13, SurveyQuestionType.Boolean, SurveyQuestionCategory.Group)
             .AddText("Mentor je vzpostavil varen in vključujoč prostor."));
 
-        builder.HasData(SurveyQuestion.CreateMaleQuestion(29, SurveyQuestionType.Boolean, SurveyQuestionCategory.Group)
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(14, SurveyQuestionType.Boolean, SurveyQuestionCategory.Group)
             .AddText("Moja skupina se je redno srečevala (vsaj dvakrat mesečno)."));
 
-        builder.HasData(SurveyQuestion.CreateMaleQuestion(30, SurveyQuestionType.Rating, SurveyQuestionCategory.Group)
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(15, SurveyQuestionType.Rating, SurveyQuestionCategory.Group)
             .AddText("V skupini smo poleg vsebinskih aktivnosti izvajali tudi aktivnosti, ki so krepile skupino (npr. teambuilding ipd.)"));
 
     }

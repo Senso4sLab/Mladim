@@ -12,14 +12,15 @@ namespace Mladim.Domain.Models.Survey.Questions;
 public class SurveyQuestionnairy
 {
     public int Id { get; set; }
-    public List<SurveyQuestion> Questions { get; set; } = new();
-
+    public List<SurveyQuestion> MaleQuestions { get; set; } = new();
+    public List<SurveyQuestion> FemaleQuestions { get; set; } = new();
     public static SurveyQuestionnairy Create(int id) => 
         new SurveyQuestionnairy { Id = id };
 
-    public SurveyQuestionnairy AddQuestion(SurveyQuestion question)
+    public SurveyQuestionnairy AddQuestion(SurveyQuestion maleQuestion, SurveyQuestion femaleQuestion)
     {
-        Questions.Add(question);
+        MaleQuestions.Add(maleQuestion);
+        FemaleQuestions.Add(femaleQuestion);
         return this;
     }
 

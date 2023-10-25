@@ -26,10 +26,10 @@ public class AnonymousParticipantProfile : Profile
             .ForMember(dest => dest.AnonymousParticipant, m => m.MapFrom(src => src));
 
         
-        CreateMap<AddAnonymousParticipantCommand, AnonymousParticipant>();        
-        CreateMap<AddAnonymousParticipantCommand, AnonymousParticipantGroup>()
-            .ForMember(dest => dest.Number, m => m.MapFrom(src => src.Number))
-            .ForMember(dest => dest.AnonymousParticipant, m => m.MapFrom(src => src));
+        //CreateMap<AddAnonymousParticipantCommand, AnonymousParticipant>();        
+        //CreateMap<AddAnonymousParticipantCommand, AnonymousParticipantGroup>()
+        //    .ForMember(dest => dest.Number, m => m.MapFrom(src => src.Number))
+        //    .ForMember(dest => dest.AnonymousParticipant, m => m.MapFrom(src => src));
 
     }
 }

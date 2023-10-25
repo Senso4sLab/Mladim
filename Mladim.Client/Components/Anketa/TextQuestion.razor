@@ -1,7 +1,7 @@
-﻿@using Mladim.Client.ViewModels.Anketa;
+﻿
 
 
-<MudText Typo="Typo.h2">@($"{this.Number}. {this.Question.Text}")</MudText>
+@* <MudText Typo="Typo.h2">@($"{this.Number}. {this.Question.Text}")</MudText>
 
     <MudTextField Class="mud-width-full" Variant="Variant.Outlined" @bind-Value=@Question.Answer Typo="Typo.h1"></MudTextField>
 
@@ -13,4 +13,4 @@
 
     [Parameter]
     public int Number { get; set; }
-}
+} *@

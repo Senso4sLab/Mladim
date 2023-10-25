@@ -9,6 +9,7 @@ using Mladim.Domain.Models.Survey.Responses;
 using Mladim.Infrastracture.Persistance.Conversions;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Reflection.Metadata;
 
 namespace Mladim.Infrastracture.Persistance;
 
@@ -31,23 +32,24 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     public DbSet<Group> Groups { get; set; }  
     public DbSet<AttachedFile> Files { get; set; }
     public DbSet<SurveyQuestionnairy> Questionnairies { get; set; }
-    public DbSet<SurveyResponse> SurveryResponses { get; set; }   
+    //public DbSet<SurveyResponse> SurveryResponses { get; set; }   
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        modelBuilder.Entity<FemaleSurveyQuestion>();
-        modelBuilder.Entity<MaleSurveyQuestion>();
 
-        modelBuilder.Entity<SurveryRatingResponse>();
-        modelBuilder.Entity<SurveryTextResponse>();
-        modelBuilder.Entity<SurveryBooleanResponse>();
-        modelBuilder.Entity<SurveryMultipleResponse>();
+        //modelBuilder.Entity<SurveryRatingResponse>();
+        //modelBuilder.Entity<SurveryTextResponse>();
+        //modelBuilder.Entity<SurveryBooleanResponse>();
+        //modelBuilder.Entity<SurveryMultipleResponse>();
 
+        modelBuilder.Entity<SurveyQuestion>().UseTpcMappingStrategy();
+        modelBuilder.Entity<FemaleSurveyQuestion>().ToTable("FemaleSurveyQuestion");
+        modelBuilder.Entity<MaleSurveyQuestion>().ToTable("MaleSurveyQuestion");
 
-        DbSeeds.GeneratedSeeds(modelBuilder);
+        //DbSeeds.GeneratedSeeds(modelBuilder);
 
 
         base.OnModelCreating(modelBuilder);
@@ -56,7 +58,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<List<string>>().HaveConversion<SurveyQuestionConverter>();
-        configurationBuilder.Properties<List<SurveyMultipleResponseType>>().HaveConversion<SurveyMultipleResponseTypeConverter>();
+        //configurationBuilder.Properties<List<SurveyMultipleResponseType>>().HaveConversion<SurveyMultipleResponseTypeConverter>();
         base.ConfigureConventions(configurationBuilder);
     }
 }

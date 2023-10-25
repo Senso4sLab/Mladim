@@ -60,11 +60,6 @@ public class ParticipantService : IParticipantService
     }
 
 
-    public async Task<int> AddAnonymousParticipant(AnonymousParticipantVM anonymousParticipant, int activityId)
-    {
-        string url = string.Format(this.ApiUrls.GetParticipantsByOrganizationId, activityId); //TODO
-        var baseDto = await this.HttpService.PostAsync<AnonymousParticipantDto, int> (url, )
-        return this.Mapper.Map<IEnumerable<NamedEntityVM>>(baseDto);
-    }
+    
 
 }
