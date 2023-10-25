@@ -8,7 +8,10 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Contracts.Persistence;
 
-public interface ISurveyRepository : IGenericRepository<SurveyQuestionnairy>
+public interface ISurveyRepository : IGenericRepository<SurveyQuestion>
 {
-   Task<IEnumerable<SurveyQuestion>> GetSurveyQuestions(Gender gender, SurveyQuestionCategory category);
+    //   Task<IEnumerable<SurveyQuestion>> GetSurveyQuestions(Gender gender, SurveyQuestionCategory category);
+
+    //    Task<SurveyQuestionnairy?> GetSurveyQuestionnairy(Gender gender, SurveyQuestionCategory category);
+    Task<SurveyQuestionnairy> GetSurveyQuestionnairy(int questionnairyId, Gender gender, SurveyQuestionCategory category);
 }

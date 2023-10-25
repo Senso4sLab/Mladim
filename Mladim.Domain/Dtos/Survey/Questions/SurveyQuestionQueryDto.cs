@@ -16,6 +16,8 @@ public class SurveyQuestionQueryDto
     public SurveyQuestionCategory Category { get; set; }
     public SurveyQuestionType Type { get; set; }
 
+    public int UniqueQuestionId { get; set; }
+
     protected SurveyQuestionQueryDto() { }
 
     protected SurveyQuestionQueryDto(int id, SurveyQuestionType type, SurveyQuestionCategory category)

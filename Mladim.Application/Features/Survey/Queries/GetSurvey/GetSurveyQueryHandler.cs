@@ -33,9 +33,9 @@ public class GetSurveyQueryHandler : IRequestHandler<GetSurveyQuery, SurveyQuest
 
         var questionCategory = activity.Attributes.IsGroup ? SurveyQuestionCategory.General | SurveyQuestionCategory.Group : SurveyQuestionCategory.General;
 
-        var surveyQuestions = await this.UnitOfWork.SurveyRepository.GetSurveyQuestions(request.Gender, questionCategory);
+        var questionnairy = await this.UnitOfWork.SurveyRepository.GetSurveyQuestionnairy(activity.SurveyQuestionnairyId!.Value,request.Gender, questionCategory);
 
-        return SurveyQuestionnairyQueryDto.Create(activity.SurveyQuestionnairyId!.Value, this.Mapper.Map<IEnumerable<SurveyQuestionQueryDto>>(surveyQuestions));      
+        return this.Mapper.Map<SurveyQuestionnairyQueryDto>(questionnairy);      
 
     }
 

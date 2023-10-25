@@ -155,7 +155,6 @@ public partial class Activities
         args.Row.AddClass(new string[] { "custom-row" });        
     }
 
-
 }
 
 

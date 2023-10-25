@@ -14,7 +14,7 @@ public class SurveyQuestionnairyConfigurationcs : IEntityTypeConfiguration<Surve
 {
     public void Configure(EntityTypeBuilder<SurveyQuestionnairy> builder)
     {
-        //builder.Navigation(sq => sq.Questions).AutoInclude();
+        builder.Navigation(sq => sq.Questions).AutoInclude();
         builder.HasData(SurveyQuestionnairy.Create(1));
     }
 }

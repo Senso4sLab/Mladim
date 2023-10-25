@@ -11,31 +11,35 @@ using System.Threading.Tasks;
 
 namespace Mladim.Infrastracture.Repositories;
 
-public class SurveyRepository : GenericRepository<SurveyQuestionnairy> , ISurveyRepository
+public class SurveyRepository : GenericRepository<SurveyQuestion> , ISurveyRepository
 {
     public SurveyRepository(ApplicationDbContext context) : base(context)
     {
     }
 
-    public async Task<IEnumerable<SurveyQuestion>> GetSurveyQuestions(Gender gender, SurveyQuestionCategory category) => gender
-        switch
+
+
+    public async Task<SurveyQuestionnairy> GetSurveyQuestionnairy(int questionnairyId, Gender gender, SurveyQuestionCategory category)
     {
-        Gender.Male => await this.DbSet
-            .SelectMany(x => x.Questions)
-            .OfType<MaleSurveyQuestion>()
-            .Where(q => q.Category == category)
-            .ToListAsync(),
-        Gender.Female or Gender.Undefined or Gender.Other =>await this.DbSet
-            .SelectMany(x => x.Questions)
-            .OfType<FemaleSurveyQuestion>()
-            .Where(q => q.Category == category)
-            .ToListAsync(),
-        _ => new List<FemaleSurveyQuestion>(),
+        var sequence = GetByQuestionnairtyId(this.DbSet, questionnairyId);
+        sequence = GetByGender(sequence, gender);
+        sequence = GetByCategory(sequence, category);
+        return SurveyQuestionnairy.Create(questionnairyId, await sequence.ToListAsync());
+    }
+
+    private IQueryable<SurveyQuestion> GetByQuestionnairtyId(IQueryable<SurveyQuestion> surveyQuestions, int questionnairyId) =>
+        surveyQuestions.Where(sq => sq.SurveyQuestionnairies.Any(q => q.Id == questionnairyId));
+
+    private IQueryable<SurveyQuestion> GetByGender(IQueryable<SurveyQuestion> sequence, Gender gender) => gender
+            switch
+    {
+        Gender.Male => sequence.OfType<MaleSurveyQuestion>(),
+        Gender.Female or Gender.Undefined or Gender.Other => sequence.OfType<FemaleSurveyQuestion>(),
+        _ => throw new NotImplementedException(),
     };
 
+    private IQueryable<SurveyQuestion> GetByCategory(IQueryable<SurveyQuestion> surveyQuestions, SurveyQuestionCategory category) =>
+        surveyQuestions.Where(sq => (sq.Category & category) > 0);   
 
 
-    
-
-    
 }
