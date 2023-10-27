@@ -8,7 +8,7 @@ public class AnonymousParticipant
     public int Id { get; set; } 
     public Gender Gender { get; set; }
     public AgeGroups AgeGroup { get; set; }
-    public List<SurveyQuestionnairyResponse> SurveyQuestionnairyResponse { get; set; } = new();
+    //public List<SurveyQuestionnairyResponse> SurveyQuestionnairyResponse { get; set; } = new();
 
     private AnonymousParticipant()
     {

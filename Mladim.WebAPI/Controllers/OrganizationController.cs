@@ -54,8 +54,10 @@ public class OrganizationController : ControllerBase
     [HttpGet("{orgId}")]
     public async Task<ActionResult<OrganizationQueryDto?>> GetAsync(int orgId)
     {
+      
         var response = await this.Mediator.Send(new GetOrganizationQuery { OrganizationId = orgId });
-        return Ok(response);
+        return Ok(response);   
+       
     }
 
     [HttpGet("{orgId}/assign/{claim}/to/{userId}")]

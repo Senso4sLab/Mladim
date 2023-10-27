@@ -1,36 +1,53 @@
 ﻿@using Mladim.Client.ViewModels.Survey;
 @using Mladim.Domain.Enums;
+@using Syncfusion.Blazor.SplitButtons
 
 
-<style>    
-    .btn:focus,
-    .btn:hover
-    {
-        background-color: #4da456;
-        border-color: #4da456;      
-    }
+<style>
+
     .btn
     {
-        background-color: #6e7191;
-        border-color: #6e7191;
+        background-color: #43525d;
+        border-color: #43525d;
+        font-family: 'Poppins', 'Helvetica', Arial, sans-serif;
+        font-size: 0.8rem;
+        font-weight : 400;
+        line-height: normal;
     }   
+
+
+    .btn:focus,
+    .btn:hover,
+    .btn:active {
+        background-color: #4da456;       
+        border-color: #4da456;
+    }
+
+    .active
+    {
+        background-color: #4da456 !important;
+        border-color: #4da456;
+    }
 </style>
 
 
            
-<MudText Color="Color.Tertiary" Typo="Typo.h2">@Text</MudText>
+<MudText Color="Color.Tertiary" Typo="Typo.h1">@Text</MudText>
+
 <div class="row">
   <div class="btn-group">
-       <button type="button" @onclick="@(() =>EventResponse.InvokeAsync((Index,SurveyMultipleResponseType.Incorrect)))" class="btn btn-primary shadow-none">NE DRŽI</button>
-        <button type="button" @onclick="@(() => EventResponse.InvokeAsync((Index,SurveyMultipleResponseType.PartiallyCorrect)))" class="btn btn-primary shadow-none ">DELNO DRŽI</button>
-        <button type="button" @onclick="@(() => EventResponse.InvokeAsync((Index,SurveyMultipleResponseType.Correct)))" class="btn btn-primary shadow-none">DRŽI</button>
-        <button type="button" @onclick="@(() => EventResponse.InvokeAsync((Index,SurveyMultipleResponseType.VeryCorrect)))" class="btn btn-primary shadow-none">ZELO DRŽI</button>
+        @foreach (var button in buttonCss)
+        {
+            <button type="button" @onclick="(() => onClick(button))"  class="@button.CssClass">@button.Text</button>
+        }
+            
    </div>
 </div>
 
 
-@code 
+@code
 {
+    //@onclick="@(() =>EventResponse.InvokeAsync((Index,SurveyMultipleResponseType.Incorrect)))"
 
     [Parameter]
     public string Text { get; set; }
@@ -41,5 +58,40 @@
     [Parameter]
     public EventCallback<(int Index, SurveyMultipleResponseType Response)> EventResponse { get; set; }
 
-    
+
+
+    List<BtnStyle> buttonCss = new();
+
+    protected override void OnInitialized()
+    {
+        var brnStyle = new BtnStyle() { Text = "NE DRŽI", CssClass = "btn btn-primary shadow-none" };
+        buttonCss.Add(brnStyle);
+        brnStyle = new BtnStyle() { Text = "DELNO DRŽI", CssClass = "btn btn-primary shadow-none" };
+        buttonCss.Add(brnStyle);
+
+        brnStyle = new BtnStyle() { Text = "DRŽI", CssClass = "btn btn-primary shadow-none" };
+        buttonCss.Add(brnStyle);
+
+        brnStyle = new BtnStyle() { Text = "ZELO DRŽI", CssClass = "btn btn-primary shadow-none" };
+        buttonCss.Add(brnStyle);
+    }
+
+
+    void onClick(BtnStyle value)
+    {
+        foreach (var btn in buttonCss)
+            btn.CssClass = "btn btn-primary shadow-none";
+
+        value.CssClass = "btn btn-primary shadow-none active";
+        StateHasChanged();
+
+    }
+
+
+    public class BtnStyle
+    {
+        public string Text { get; set; }
+        public string CssClass { get; set; } = string.Empty;
+    }
+
 }

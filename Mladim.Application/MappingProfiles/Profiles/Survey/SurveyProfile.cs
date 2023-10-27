@@ -16,6 +16,11 @@ public class SurveyProfile : Profile
 {
     public SurveyProfile()
     {
+
+        CreateMap<MaleSurveyQuestion, MaleSurveyQuestionDto>();
+        CreateMap<FemaleSurveyQuestion, FemaleSurveyQuestionDto>();
+
+
         CreateMap<SurveyQuestion, SurveyQuestionQueryDto>()
             .Include<MaleSurveyQuestion, MaleSurveyQuestionDto>()
             .Include<FemaleSurveyQuestion, FemaleSurveyQuestionDto>();

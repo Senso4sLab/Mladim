@@ -49,7 +49,8 @@ public class OrganizationService : IOrganizationService
     {
         string url = string.Format(MladimApiUrls.GetOrganizationsByUserId, userId);
         var organizations = await HttpClient.GetAllAsync<OrganizationQueryDto>(url);
-        return this.Mapper.Map<IEnumerable<OrganizationVM>>(organizations);
+        return this.Mapper.Map<IEnumerable<OrganizationVM>>(organizations);        
+       
     }
 
    

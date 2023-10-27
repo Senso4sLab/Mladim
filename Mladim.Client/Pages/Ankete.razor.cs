@@ -3,7 +3,7 @@ using Mladim.Client.ViewModels;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Domain.Enums;
 using Mladim.Client.ViewModels.Survey;
-
+using Mladim.Client.Validators;
 
 namespace Mladim.Client.Pages;
 
@@ -18,10 +18,15 @@ public partial class Ankete
     [Inject]
     public ISurveyService SurveyService { get; set; } = default!;
 
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }    
+
+
     private ActivityVM? Activity;
     private AnonymousParticipantVM AnonymousParticipant = new();
+    
 
-    private IEnumerable<SurveyQuestionResponseVM> Survey = new List<SurveyQuestionResponseVM>();  
+    private List<SurveyQuestionResponseVM> Survey = new List<SurveyQuestionResponseVM>();  
    
     private bool isSurveyActive = false;
     protected override async Task OnInitializedAsync()
@@ -42,4 +47,10 @@ public partial class Ankete
         var surveyQuestions = await this.SurveyService.GetSurveyQuestionnairyAsync(this.ActivityId, gender);
         return surveyQuestions.Select(SurveyQuestionResponseVM.Create).ToList();
     }   
+
+
+    private void SurveyEndClick()
+    {
+        this.NavigationManager.NavigateTo("/survey/end");
+    }
 }

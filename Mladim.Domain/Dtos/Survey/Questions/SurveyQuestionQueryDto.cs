@@ -18,7 +18,7 @@ public class SurveyQuestionQueryDto
 
     public int UniqueQuestionId { get; set; }
 
-    protected SurveyQuestionQueryDto() { }
+    public SurveyQuestionQueryDto() { }
 
     protected SurveyQuestionQueryDto(int id, SurveyQuestionType type, SurveyQuestionCategory category)
     {
@@ -37,7 +37,7 @@ public class SurveyQuestionQueryDto
 
 public class FemaleSurveyQuestionDto : SurveyQuestionQueryDto
 {
-    private FemaleSurveyQuestionDto(): base()
+    public FemaleSurveyQuestionDto(): base()
     { }
 
     public FemaleSurveyQuestionDto(int id, SurveyQuestionType type, SurveyQuestionCategory questionType) : base(id, type, questionType)
@@ -48,7 +48,7 @@ public class FemaleSurveyQuestionDto : SurveyQuestionQueryDto
 
 public class MaleSurveyQuestionDto : SurveyQuestionQueryDto
 {
-    private MaleSurveyQuestionDto() :base()
+    public MaleSurveyQuestionDto() :base()
     { 
     }
 

@@ -3,9 +3,9 @@
 @using Mladim.Domain.Extensions;
 @using Mladim.Domain.Models;
 
-<MudText Typo="Typo.h2">@this.Question.Texts.FirstOrDefault()")</MudText>
+<MudText Typo="Typo.h2">@this.Question.Texts.FirstOrDefault()</MudText>
 
-<MudTextField Class="mud-width-full" Variant="Variant.Outlined" @bind-Value=@SurveryResponse.Response Typo="Typo.h1"></MudTextField>
+<MudTextField Class="mud-width-full" Lines=3 Variant="Variant.Outlined" @bind-Value=@SurveryResponse.Response Typo="Typo.h1"></MudTextField>
 
 
 @code

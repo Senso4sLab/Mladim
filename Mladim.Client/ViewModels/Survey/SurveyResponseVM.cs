@@ -58,6 +58,6 @@ public class SurveryMultipleResponseVM : SurveyResponseVM<List<SurveyMultipleRes
 {
     public SurveryMultipleResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
     {
-
+        this.Response = new List<SurveyMultipleResponseType>();
     }
 }

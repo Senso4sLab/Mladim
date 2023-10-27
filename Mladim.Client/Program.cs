@@ -71,6 +71,7 @@ builder.Services.AddScoped<IPopupService, PopupService>();
     builder.Services.AddScoped<IAccountService, AccountService>();
     builder.Services.AddScoped<IGroupService, GroupService>();
     builder.Services.AddScoped<IFileService, FileService>();
+    builder.Services.AddScoped<ISurveyService, SurveyService>();   
 }
 {
     builder.Services.Configure<MladimApiUrls>(builder.Configuration.GetSection("MladimApiUrls"));

@@ -1,8 +1,7 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Mladim.Application.Features.Files.Queries;
 using Mladim.Application.Features.Survey.Queries.GetSurvey;
+using Mladim.Domain.Dtos.Survey.Questions;
 
 namespace Mladim.WebAPI.Controllers
 {
@@ -19,15 +18,12 @@ namespace Mladim.WebAPI.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetSurvey([FromQuery] GetSurveyQuery getSurveyQuery)
+        public async Task<ActionResult<IEnumerable<SurveyQuestionQueryDto>>> GetSurvey([FromQuery] GetSurveyQuery getSurveyQuery)
         {
             var surveyQuestionnairy = await this.Mediator.Send(getSurveyQuery);            
 
             return Ok(surveyQuestionnairy);
 
         }
-
-
-
     }
 }
