@@ -50,6 +50,15 @@ public class ActivityController : ControllerBase
         return Ok(response);
     }
 
+    //[HttpGet("{activityId}")]
+    //public async Task<ActionResult<ActivityQueryDetailsDto?>> GetAsync(int activityId)
+    //{
+    //    var response = await this.Mediator.Send(new GetActivityQuery { ActivityId = activityId });
+    //    return Ok(response);
+    //}
+
+
+
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ActivityQueryDto>>> GetAllByQueryAsync([FromQuery] GetActivitiesQuery query)
     {

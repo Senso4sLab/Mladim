@@ -29,10 +29,10 @@ public partial class Ankete
     private List<SurveyQuestionResponseVM> Survey = new List<SurveyQuestionResponseVM>();  
    
     private bool isSurveyActive = false;
-    protected override async Task OnInitializedAsync()
-    {
-        this.Activity = await ActivityService.GetByActivityIdAsync(ActivityId);       
-    } 
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    this.Activity = await ActivityService.GetActivityNameAsync(ActivityId);       
+    //} 
 
     private async Task OnClickAnonymousParticipant(AnonymousParticipantVM ap)
     {

@@ -16,6 +16,10 @@ public class MladimApiUrls
 
 
     public string GetActivityById { get; set; } = string.Empty;
+
+    public string GetActivityNameById { get; set; } = string.Empty;
+
+
     public string GetActivitiesByOrganizationId { get; set; } = string.Empty;
     public string GetActivitiesByProjectId { get; set; } = string.Empty;
     public string RemoveActivity { get; set; } = string.Empty;

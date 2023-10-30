@@ -10,4 +10,5 @@ public interface IActivityService
     Task<bool> RemoveAsync(int activityId);
     Task<bool> UpdateAsync(ActivityVM activity);
     Task<IEnumerable<ActivityWithProjectNameVM>> GetByOrganizationIdAsync(int organizationId, int? upcommingActivities = null);
+    Task<ActivityVM?> GetActivityNameAsync(int activityId);
 }
