@@ -1,57 +1,102 @@
 ﻿
 @using Syncfusion.Blazor.Inputs;
-
 @using Mladim.Client.ViewModels.Survey;
-
 @using Mladim.Domain.Enums;
 
-<style>
-    
-    .e-rating-item-container:not(.e-rating-selected) .emoji {
-        filter: grayscale(1);
-    }
-</style>
 
-<MudText Typo="Typo.h2">@Question.Texts.FirstOrDefault()</MudText>
-<SfRating ValueChanged="ValueChanged" EnableSingleSelection=true ShowLabel=false ShowTooltip=false>
-        <EmptyTemplate>
-        @{
-            if (context.Index == 0)
-            {
-                <span class='angry emoji'>😡</span>
-            }
-            else if (context.Index == 1)
-            {
-                <span class='disagree emoji'>🙁</span>
-            }
-            else if (context.Index == 2)
-            {
-                <span class='neutral emoji'>😐</span>
-            }
-            else if (context.Index == 3)
-            {
-                <span class='agree emoji'>🙂</span>
-            }
-            else
-            {
-                <span class='happy emoji'>😀</span>
-            }
-        }
-        </EmptyTemplate>
-    </SfRating>
 
-@code
-{
+<div>
+    <ValidationMessage style="margin-bottom:0.4rem;" For="@(() => SurveryResponse.Response)" />
+    <div class="row">   
+        <div class="col-12">
+            <div @onmouseleave="MouseMoveOutOfRates">
+                @foreach (var rate in SmileRates)
+                {
+                    <i class="@rate.CssClass px-1" @onmouseover="(() =>MouseOverRate(rate.RateValue))"
+                    @onclick="(() => OnRateClick(rate.RateValue))"></i>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+
 
     [Parameter]
-    public SurveyQuestionVM Question { get; set; }
+    public QuestionRatingResponseVM SurveryResponse { get; set; }
 
-    [Parameter]
-    public SurveryRatingResponseVM SurveryResponse { get; set; }
+    private List<SmileRate> SmileRates = new List<SmileRate>();   
 
 
-    private void ValueChanged(double value)
+    protected override void OnInitialized()
     {
-        SurveryResponse.Response = (SurveyRatingResponseType)value;
+        this.SmileRates = GetSmileRates().ToList();
     }
+
+    private IEnumerable<SmileRate> GetSmileRates()
+    {
+        yield return new SmileRate(SurveyRatingResponseType.OneSmile);
+        yield return new SmileRate(SurveyRatingResponseType.TwoSmiles);
+        yield return new SmileRate(SurveyRatingResponseType.ThreeSmiles);
+        yield return new SmileRate(SurveyRatingResponseType.FourSmiles);
+        yield return new SmileRate(SurveyRatingResponseType.FiveSmiles);
+    }
+
+
+    private void MouseMoveOutOfRates()
+    {
+        DefiningRateActivity(this.SurveryResponse.Response);
+        StateHasChanged();
+    }
+
+
+    private void DefiningRateActivity(SurveyRatingResponseType rateResponse)
+    {
+        foreach (var rate in SmileRates)
+        {
+            if (rate.RateValue <= rateResponse)
+                rate.Active();
+            else
+                rate.NoActive();
+        }
+    }
+
+
+    private void OnRateClick(SurveyRatingResponseType rate)
+    {
+        this.SurveryResponse.Response = rate;
+    }
+
+
+    void MouseOverRate(SurveyRatingResponseType rateValue)
+    {
+        DefiningRateActivity(rateValue);
+        StateHasChanged();
+    }
+
+
+    public class SmileRate
+    {
+        public string CssClass { get; set; } = string.Empty;
+        public SurveyRatingResponseType RateValue { get; }
+
+        private string NotActiveSmile => "bi bi-emoji-smile";
+        private string ActiveSmile => $"{NotActiveSmile} smile-active";
+
+
+        public SmileRate(SurveyRatingResponseType rateValue)
+        {
+            this.RateValue = rateValue;
+            this.CssClass = NotActiveSmile;
+        }
+
+        public void Active() =>
+            this.CssClass = ActiveSmile;
+
+        public void NoActive() =>
+            this.CssClass = NotActiveSmile;
+    }   
 }

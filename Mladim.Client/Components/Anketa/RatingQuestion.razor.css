@@ -1,0 +1,9 @@
+﻿.bi-emoji-smile {
+    font-weight: bold;
+    -webkit-text-stroke-width: 1px;
+    font-size: 30px;
+}
+
+.smile-active {
+    color: #4da456 !important;
+}

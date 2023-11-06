@@ -1,0 +1,74 @@
+﻿@page "/survey/{activityId:int}"
+
+@using Mladim.Client.Components.Anketa;
+@using Mladim.Client.ViewModels.Survey;
+@using Mladim.Domain.Enums;
+@using Mladim.Domain.Extensions;
+
+
+@layout SurveyLayout
+
+<PageTitle>Anketa</PageTitle>
+
+<MudContainer Class="py-5">   
+    <MudStack>
+        <MudStack Spacing="4" AlignItems="AlignItems.Center">      
+           <MudImage Height="50" Src="logo.png"></MudImage>
+            @if (showSurvey)
+            {
+                <MudImage Height="70" Src="step2.png" Class="d-flex align-center justify-center py-3"></MudImage>
+            }
+            else
+            {
+                <MudImage Height="70" Src="step1.png" Class="d-flex align-center justify-center py-3"></MudImage>
+            }
+            <MudText Typo="Typo.h2" Color="Color.Tertiary">@($"Prošnja za povratno informacijo o aktivnosti {activityName}.")</MudText>
+            <MudText Typo="Typo.h1" Color="Color.Tertiary">To povabilo si dobil/-a zaradi tvoje udeležbe na omenjeni aktivnosti. Tvoje povratne informacije so namenjene bodočim izboljšavam podobnih aktivnosti, ki jih organizacija izvaja. Vsi podatki so anonimni, osebnih informacij ne zbiramo. Najlepša hvala!</MudText>
+        </MudStack>       
+       
+            @if (showSurvey)
+            {
+                <EditForm Model="@SurveyResponse" OnValidSubmit="@SurveyValidSubmit">
+                    <ObjectGraphDataAnnotationsValidator />
+                    
+                    @foreach (var (question, response) in SurveyResponse)
+                    {
+                        <MudText Typo="Typo.h2" Color="Color.Tertiary" Class="py-3">@question.Texts.FirstOrDefault()</MudText>
+
+                        if (response is QuestionTextResponseVM textResponse)
+                        {                           
+                            <TextQuestion SurveryResponse="textResponse" />
+                        }
+                        else if (response is QuestionRatingResponseVM ratingResponse)
+                        {                            
+                            <RatingQuestion SurveryResponse="ratingResponse"/>
+                        }
+                        else if (response is QuestionBooleanResponseVM boleanResponse)
+                        {
+                            <BooleanQuestion SurveryResponse="boleanResponse"></BooleanQuestion>
+                        }
+                        else if (response is QuestionMultiButtonResponseVM multiButtonResponse)
+                        {
+                            @foreach(var subQuestion in question.Texts.Take(1 ..))
+                            {
+                                <MudText Color="Color.Tertiary" Typo="Typo.h1" Class="py-3">@subQuestion</MudText>
+                                <ButtonQuestion SurveyResponse="multiButtonResponse" />
+                            }                           
+                        }                   
+                    }                   
+                    <button  class="btn btn-primary my-4" type="submit">POŠLJI</button>
+                </EditForm>
+            }
+            else
+            {
+                <SurveyAnonymousParticipant AnonymousButton="OnClickAnonymousParticipant"></SurveyAnonymousParticipant>
+            }
+    </MudStack>  
+</MudContainer>
+  
+   
+
+
+
+
+

@@ -9,4 +9,5 @@ public interface IGenericHttpService
     Task<TOut?> PostAsync<TIn, TOut>(string url, TIn request);
     Task<Stream> GetStreamAsync(string url);
     Task<string?> PostAsync<TIn>(string url, TIn request);
+    Task<string> GetStringAsync(string url);
 }

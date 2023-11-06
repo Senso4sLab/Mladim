@@ -9,12 +9,12 @@ public class SurveyQuestionVM
     public List<string> Texts { get; set; } = new();    
     public SurveyQuestionType Type { get; set; }    
 
-    public SurveyResponseVM CreateSurveyResponse() => Type switch
+    public QuestionResponseVM CreateSurveyResponse() => Type switch
     {
-        SurveyQuestionType.Boolean => new SurveryBooleanResponseVM(UniqueQuestionId),
-        SurveyQuestionType.Text => new SurveryTextResponseVM(UniqueQuestionId),
-        SurveyQuestionType.Rating => new SurveryRatingResponseVM(UniqueQuestionId),
-        SurveyQuestionType.Multiple => new SurveryMultipleResponseVM(UniqueQuestionId),
+        SurveyQuestionType.Boolean => new QuestionBooleanResponseVM(UniqueQuestionId),
+        SurveyQuestionType.Text => new QuestionTextResponseVM(UniqueQuestionId),
+        SurveyQuestionType.Rating => new QuestionRatingResponseVM(UniqueQuestionId),
+        SurveyQuestionType.Multiple => new QuestionMultiButtonResponseVM(UniqueQuestionId),
         _ => throw new NotImplementedException(),
     };
     

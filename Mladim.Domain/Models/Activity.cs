@@ -1,5 +1,6 @@
 ﻿using Mladim.Domain.Enums;
 using Mladim.Domain.Models.Survey.Questions;
+using Mladim.Domain.Models.Survey.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,7 @@ public class Activity : BaseEntity<int>
 
     public int? SurveyQuestionnairyId { get;set; }
     public SurveyQuestionnairy SurveyQuestionnairy { get; set; } = default!;
+    public List<AnonymousSurveyResponse> AnonymousSurveyResponses { get; set; } = new();
 
     public int ProjectId { get; set; }
     public Project Project { get; set; } = default!;

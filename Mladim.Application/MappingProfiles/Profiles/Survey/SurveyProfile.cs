@@ -2,8 +2,10 @@
 using Mladim.Application.Features.Members.Partners.Commands.AddPartner;
 using Mladim.Application.Features.Members.StaffMembers.Commands.UpdatePartner;
 using Mladim.Domain.Dtos.Survey.Questions;
+using Mladim.Domain.Dtos.Survey.Responses;
 using Mladim.Domain.Models;
 using Mladim.Domain.Models.Survey.Questions;
+using Mladim.Domain.Models.Survey.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +28,24 @@ public class SurveyProfile : Profile
             .Include<FemaleSurveyQuestion, FemaleSurveyQuestionDto>();
 
         CreateMap<SurveyQuestionnairy, SurveyQuestionnairyQueryDto>();
+
+
+        CreateMap<AnonymousSurveyResponseDto, AnonymousSurveyResponse>().ReverseMap();
+
+
+        CreateMap<QuestionRatingResponseDto, QuestionRatingResponse>().ReverseMap();
+        CreateMap<QuestionTextResponseDto, QuestionTextResponse>().ReverseMap();
+        CreateMap<QuestionBooleanResponseDto, QuestionBooleanResponse>().ReverseMap();
+        CreateMap<QuestionMultiButtonResponseDto, QuestionMultiButtonResponse>().ReverseMap();
+
+
+        CreateMap<QuestionResponseDto, QuestionResponse>()
+            .Include<QuestionRatingResponseDto, QuestionRatingResponse>()
+            .Include<QuestionTextResponseDto, QuestionTextResponse>()
+            .Include<QuestionBooleanResponseDto, QuestionBooleanResponse>()
+            .Include<QuestionMultiButtonResponseDto, QuestionMultiButtonResponse>().ReverseMap();
+
+
 
 
 

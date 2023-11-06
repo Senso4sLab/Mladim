@@ -2,6 +2,7 @@
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Models.Survey.Questions;
+using Mladim.Domain.Models.Survey.Responses;
 using Mladim.Infrastracture.Persistance;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace Mladim.Infrastracture.Repositories;
 
-public class SurveyRepository : GenericRepository<SurveyQuestion> , ISurveyRepository
+public class SurveyQuestionRepository : GenericRepository<SurveyQuestion> , ISurveyQuestionRepository
 {
-    public SurveyRepository(ApplicationDbContext context) : base(context)
+    public SurveyQuestionRepository(ApplicationDbContext context) : base(context)
     {
     }
 
@@ -37,7 +38,6 @@ public class SurveyRepository : GenericRepository<SurveyQuestion> , ISurveyRepos
     };
 
     private IQueryable<SurveyQuestion> GetByCategory(IQueryable<SurveyQuestion> surveyQuestions, SurveyQuestionCategory category) =>
-        surveyQuestions.Where(sq => (sq.Category & category) > 0);   
-
-
+        surveyQuestions.Where(sq => (sq.Category & category) > 0);
+    
 }

@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace Mladim.Domain.Dtos.Members.AnonymousParticipants;
 
 public class AnonymousParticipantCommandDto
-{
-    public int ActivityId { get; set; }
+{   
     public Gender Gender { get; set; }
     public AgeGroups AgeGroup { get; set; }
 }

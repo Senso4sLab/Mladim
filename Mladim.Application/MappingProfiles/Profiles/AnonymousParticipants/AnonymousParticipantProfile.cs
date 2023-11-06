@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Mladim.Application.Features.Members.AnonymousParticipants.Commands.AddAnonymousParticipant;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.Members.AnonymousParticipants;
 using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,11 @@ public class AnonymousParticipantProfile : Profile
             .ForMember(dest => dest.Number, m => m.MapFrom(src => src.Number))
             .ForMember(dest => dest.AnonymousParticipant, m => m.MapFrom(src => src));
 
+
+        CreateMap<AnonymousParticipantCommandDto, AnonymousParticipant>().ReverseMap();
         
+
+
         //CreateMap<AddAnonymousParticipantCommand, AnonymousParticipant>();        
         //CreateMap<AddAnonymousParticipantCommand, AnonymousParticipantGroup>()
         //    .ForMember(dest => dest.Number, m => m.MapFrom(src => src.Number))

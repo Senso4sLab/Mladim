@@ -4,10 +4,12 @@ using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Domain.Enums;
 using Mladim.Client.ViewModels.Survey;
 using Mladim.Client.Validators;
+using Mladim.Client.ViewModels.Activity;
+using System.ComponentModel.DataAnnotations;
 
 namespace Mladim.Client.Pages;
 
-public partial class Ankete
+public partial class Survey
 {
     [Parameter]
     public int ActivityId { get; set; }
@@ -19,38 +21,35 @@ public partial class Ankete
     public ISurveyService SurveyService { get; set; } = default!;
 
     [Inject]
-    public NavigationManager NavigationManager { get; set; }    
+    public NavigationManager NavigationManager { get; set; } = default!;    
 
 
-    private ActivityVM? Activity;
-    private AnonymousParticipantVM AnonymousParticipant = new();
+    private string? activityName;
+    private bool showSurvey = false;
+
+    private AnonymousParticipantVM AnonymousParticipant = new();   
+    private List<SurveyQuestionResponseVM> SurveyResponse { get; set; } = new List<SurveyQuestionResponseVM>();
     
-
-    private List<SurveyQuestionResponseVM> Survey = new List<SurveyQuestionResponseVM>();  
-   
-    private bool isSurveyActive = false;
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    this.Activity = await ActivityService.GetActivityNameAsync(ActivityId);       
-    //} 
+    protected override async Task OnInitializedAsync()
+    {
+        activityName = await ActivityService.GetActivityNameAsync(ActivityId);
+    }
 
     private async Task OnClickAnonymousParticipant(AnonymousParticipantVM ap)
     {
         AnonymousParticipant = ap;
-        isSurveyActive = true;
-        Survey = await GetSurveyAsync(AnonymousParticipant.Gender);
+        showSurvey = true;
+        SurveyResponse = await GetSurveyAsync(AnonymousParticipant.Gender);
     }
-
-
     private async Task<List<SurveyQuestionResponseVM>> GetSurveyAsync(Gender gender)
     {
         var surveyQuestions = await this.SurveyService.GetSurveyQuestionnairyAsync(this.ActivityId, gender);
         return surveyQuestions.Select(SurveyQuestionResponseVM.Create).ToList();
     }   
 
-
-    private void SurveyEndClick()
+    private async Task SurveyValidSubmit()
     {
+        var succeed = await SurveyService.PostAnonymousSurveyResponseAsync(this.ActivityId, AnonymousSurveyResponseVM.Create(AnonymousParticipant, SurveyResponse.Select(sr => sr.Response)));
         this.NavigationManager.NavigateTo("/survey/end");
-    }
+    }   
 }

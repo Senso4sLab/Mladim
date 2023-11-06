@@ -568,6 +568,28 @@ namespace Mladim.Infrastracture.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Mladim.Domain.Models.Survey.Responses.AnonymousSurveyResponse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ActivityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Responses")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
+
+                    b.ToTable("AnonymousSurveyResponse");
+                });
+
             modelBuilder.Entity("PartnerProject", b =>
                 {
                     b.Property<int>("PartnersId")
@@ -1601,6 +1623,42 @@ namespace Mladim.Infrastracture.Migrations
                     b.Navigation("StaffMember");
                 });
 
+            modelBuilder.Entity("Mladim.Domain.Models.Survey.Responses.AnonymousSurveyResponse", b =>
+                {
+                    b.HasOne("Mladim.Domain.Models.Activity", "Activity")
+                        .WithMany("AnonymousSurveyResponses")
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Mladim.Domain.Models.AnonymousParticipant", "AnonymousParticipant", b1 =>
+                        {
+                            b1.Property<int>("AnonymousSurveyResponseId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("AgeGroup")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Gender")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Id")
+                                .HasColumnType("int");
+
+                            b1.HasKey("AnonymousSurveyResponseId");
+
+                            b1.ToTable("AnonymousSurveyResponse");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AnonymousSurveyResponseId");
+                        });
+
+                    b.Navigation("Activity");
+
+                    b.Navigation("AnonymousParticipant")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PartnerProject", b =>
                 {
                     b.HasOne("Mladim.Domain.Models.Partner", null)
@@ -1648,6 +1706,8 @@ namespace Mladim.Infrastracture.Migrations
 
             modelBuilder.Entity("Mladim.Domain.Models.Activity", b =>
                 {
+                    b.Navigation("AnonymousSurveyResponses");
+
                     b.Navigation("Staff");
                 });
 

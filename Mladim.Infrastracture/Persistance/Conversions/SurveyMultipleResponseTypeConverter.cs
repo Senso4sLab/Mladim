@@ -9,20 +9,20 @@ using System.Text.Json;
 
 namespace Mladim.Infrastracture.Persistance.Conversions;
 
-public class SurveyMultipleResponseTypeConverter : ValueConverter<List<SurveyMultipleResponseType>, string>
+public class SurveyMultipleResponseTypeConverter : ValueConverter<List<SurveyButtonResponseType>, string>
 {
     public SurveyMultipleResponseTypeConverter() : base(v => Serialize(v), v => DeSerialize(v))        
     {
         
     }
 
-    private static string Serialize(List<SurveyMultipleResponseType> surveyMultipleResponseTypes)
+    private static string Serialize(List<SurveyButtonResponseType> surveyMultipleResponseTypes)
     {
         return JsonSerializer.Serialize(surveyMultipleResponseTypes) ?? string.Empty;
     }
 
-    private static List<SurveyMultipleResponseType> DeSerialize(string json)
+    private static List<SurveyButtonResponseType> DeSerialize(string json)
     {
-        return JsonSerializer.Deserialize<List<SurveyMultipleResponseType>>(json) ?? new List<SurveyMultipleResponseType>();
+        return JsonSerializer.Deserialize<List<SurveyButtonResponseType>>(json) ?? new List<SurveyButtonResponseType>();
     }    
 }

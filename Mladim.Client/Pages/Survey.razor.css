@@ -1,0 +1,17 @@
+﻿.btn-primary:focus,
+.btn-primary:active
+.btn-primary:hover {
+    background-color: #408747 !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+
+
+.btn-primary {
+    background-color: #4da456 !important;
+    border: none !important;
+    transition-duration: 0.4s !important;
+    width: 100%;
+}

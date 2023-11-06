@@ -7,21 +7,21 @@
 
     <MudStack style="width:100%;"  Spacing="3" Justify="Justify.Center">    
         <MudForm style="min-width:80%; margin-left:auto; margin-right:auto;"  Model="@AnonymousParticipant" @ref=@form Validation="@(anonymousParticipantValidator.ValidateValue)">
-        <MudStack Spacing=3 Justify="Justify.Center">
-            <MudSelect  @bind-Value="@AnonymousParticipant.Gender" For="@(() => AnonymousParticipant.Gender)" T="Gender" ToStringFunc="@(gender => gender.GetDisplayAttribute())" Variant="Variant.Outlined" Label="Spol:" AnchorOrigin="Origin.BottomCenter">
-                    @foreach (var gender in Enum.GetValues<Gender>())
-                    {
-                        <MudSelectItem Value="gender">@gender.GetDisplayAttribute()</MudSelectItem>
-                    }
-                </MudSelect>
-                <MudSelect @bind-Value="@AnonymousParticipant.AgeGroup" For="@(()=> AnonymousParticipant.AgeGroup)" T="AgeGroups" ToStringFunc="@(age => age.GetDisplayAttribute())" Variant="Variant.Outlined" Label="Starostna skupina:" AnchorOrigin="Origin.BottomCenter">
-                    @foreach (var age in Enum.GetValues<AgeGroups>())
-                    {
-                        <MudSelectItem Value="age">@age.GetDisplayAttribute()</MudSelectItem>
-                    }
-                </MudSelect>    
-                <MudButton Variant=Variant.Filled Color=Color.Primary OnClick="@ShowSurveyQuestions">Nadaljuj</MudButton>
-        </MudStack>
+            <MudStack Spacing=3 Justify="Justify.Center">
+                <MudSelect  @bind-Value="@AnonymousParticipant.Gender" For="@(() => AnonymousParticipant.Gender)" T="Gender" ToStringFunc="@(gender => gender.GetDisplayAttribute())" Variant="Variant.Outlined" Label="Spol:" AnchorOrigin="Origin.BottomCenter">
+                        @foreach (var gender in Enum.GetValues<Gender>())
+                        {
+                            <MudSelectItem Value="gender">@gender.GetDisplayAttribute()</MudSelectItem>
+                        }
+                    </MudSelect>
+                    <MudSelect @bind-Value="@AnonymousParticipant.AgeGroup" For="@(()=> AnonymousParticipant.AgeGroup)" T="AgeGroups" ToStringFunc="@(age => age.GetDisplayAttribute())" Variant="Variant.Outlined" Label="Starostna skupina:" AnchorOrigin="Origin.BottomCenter">
+                        @foreach (var age in Enum.GetValues<AgeGroups>())
+                        {
+                            <MudSelectItem Value="age">@age.GetDisplayAttribute()</MudSelectItem>
+                        }
+                    </MudSelect>    
+                    <MudButton Variant=Variant.Filled Color=Color.Primary OnClick="@ShowSurveyQuestions">Nadaljuj</MudButton>
+            </MudStack>
         </MudForm>  
     </MudStack>
 

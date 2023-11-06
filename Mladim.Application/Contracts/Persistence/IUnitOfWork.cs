@@ -21,7 +21,9 @@ public interface IUnitOfWork : IDisposable
     IAnonymousParticipantRepository AnonymousParticipantRepository { get; }
     IAppUserRepository AppUserRepository { get; }
 
-    ISurveyRepository SurveyRepository { get; }
+    ISurveyQuestionRepository SurveyQuestionRepository { get; }
+
+    ISurveyResponseRepository SurveyResponseRepository { get; }
 
     //IGenericRepository<T> GetRepository<T>() where T : class;
 

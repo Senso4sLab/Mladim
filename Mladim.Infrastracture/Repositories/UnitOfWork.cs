@@ -31,11 +31,13 @@ public class UnitOfWork : IUnitOfWork
 
     public IAnonymousParticipantRepository AnonymousParticipantRepository =>
         anonymousParticipantRepository ??= new AnonymousParticipantRepository(this.Context);
-
     public IAppUserRepository AppUserRepository { get; }
 
-    public ISurveyRepository SurveyRepository => 
-        surveyRepository ??= new SurveyRepository(this.Context);
+    public ISurveyQuestionRepository SurveyQuestionRepository => 
+        surveyQuestionRepository ??= new SurveyQuestionRepository(this.Context);   
+
+    public ISurveyResponseRepository SurveyResponseRepository =>
+        surveyResponseRepository ??= new SurveyResponseRepository(this.Context);
 
     private IOrganizationRepository organizationRepository;
     private IActivityRepository activityRepository;
@@ -45,7 +47,8 @@ public class UnitOfWork : IUnitOfWork
     private IParticipantRepository participantRepository;
     private IPartnerRepository partnerRepository;
     private IAnonymousParticipantRepository anonymousParticipantRepository;
-    private ISurveyRepository surveyRepository;
+    private ISurveyQuestionRepository surveyQuestionRepository;
+    private ISurveyResponseRepository surveyResponseRepository;
 
     public UnitOfWork(IAppUserRepository appUserRepository, ApplicationDbContext context)
     {

@@ -1,0 +1,20 @@
+﻿.btn-primary {
+    color: red !important;
+    background-color: transparent !important;
+    border: none;
+    font-size: large;
+}
+
+    .btn-check:active + .btn-primary,
+    .btn-check:checked + .btn-primary,
+    .btn-primary.active,
+    .btn-primary:active,
+    .show > .btn-primary.dropdown-toggle {
+        background-color: transparent !important;
+        border-color: transparent !important;
+        color: #4da456 !important;
+        border: none !important;
+    }
+
+
+

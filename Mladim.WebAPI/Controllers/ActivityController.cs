@@ -6,6 +6,7 @@ using Mladim.Application.Features.Activities.Commands.RemoveActivity;
 using Mladim.Application.Features.Activities.Commands.UpdateActivity;
 using Mladim.Application.Features.Activities.Queries.GetActivities;
 using Mladim.Application.Features.Activities.Queries.GetActivity;
+using Mladim.Application.Features.Activities.Queries.GetActivityName;
 using Mladim.Domain.Dtos;
 
 namespace Mladim.WebAPI.Controllers;
@@ -50,12 +51,13 @@ public class ActivityController : ControllerBase
         return Ok(response);
     }
 
-    //[HttpGet("{activityId}")]
-    //public async Task<ActionResult<ActivityQueryDetailsDto?>> GetAsync(int activityId)
-    //{
-    //    var response = await this.Mediator.Send(new GetActivityQuery { ActivityId = activityId });
-    //    return Ok(response);
-    //}
+    [AllowAnonymous]
+    [HttpGet("name/{activityId}")]
+    public async Task<ActionResult<string?>> GetNameAsync(int activityId)
+    {
+        var response = await this.Mediator.Send(new GetActivityNameQuery { ActivityId = activityId });
+        return Ok(response);
+    }
 
 
 

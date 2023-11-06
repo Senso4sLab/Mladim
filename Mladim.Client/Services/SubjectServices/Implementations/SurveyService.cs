@@ -6,7 +6,9 @@ using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.ViewModels;
 using Mladim.Client.ViewModels.Survey;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.Members.AnonymousParticipants;
 using Mladim.Domain.Dtos.Survey.Questions;
+using Mladim.Domain.Dtos.Survey.Responses;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Models.Survey.Questions;
 
@@ -28,11 +30,24 @@ public class SurveyService : ISurveyService
 
     public async Task<IEnumerable<SurveyQuestionVM>> GetSurveyQuestionnairyAsync(int activityId, Gender gender)
     {
-        string url = string.Format(MladimApiUrls.GetSurveyQuestionnairy, activityId, gender);
+        string url = string.Format(MladimApiUrls.GetSurveyQuestionnaire, activityId, gender);
         var questionnairy = await HttpClient.GetAsync<IEnumerable<SurveyQuestionQueryDto>>(url);
         return this.Mapper.Map<IEnumerable<SurveyQuestionVM>>(questionnairy);
     }
 
+    public async Task<bool> PostAnonymousSurveyResponseAsync(int activityId, AnonymousSurveyResponseVM anonymousSurveyResponse)
+    {
+        string url = string.Format(MladimApiUrls.AnonymousSurveyCommand, activityId);
+        //var questionResponseDto = this.Mapper.Map<IEnumerable<QuestionResponseDto>>(anonymousSurveyResponse.Responses);
+        //var anonymousParticipant = this.Mapper.Map<AnonymousParticipantCommandDto>(anonymousSurveyResponse.AnonymousParticipant);        
+        
+        return await HttpClient.PostAsync<AnonymousSurveyResponseDto, bool>(url, this.Mapper.Map<AnonymousSurveyResponseDto>(anonymousSurveyResponse));      
+    }
 
-
+    public async Task<IEnumerable<AnonymousSurveyResponseVM>> GetAnonymousSurveyResponsesAsync(int activityId)
+    {
+        string url = string.Format(MladimApiUrls.GetSurveyResponses, activityId);
+        var responses = await HttpClient.GetAsync<IEnumerable<AnonymousSurveyResponseDto>>(url);
+        return this.Mapper.Map<IEnumerable<AnonymousSurveyResponseVM>>(responses);       
+    }
 }

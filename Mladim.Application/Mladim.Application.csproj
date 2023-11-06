@@ -39,8 +39,4 @@
     <ProjectReference Include="..\Mladim.Domain\Mladim.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Survey\Commands\" />
-  </ItemGroup>
-
 </Project>

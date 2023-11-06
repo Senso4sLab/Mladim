@@ -42,15 +42,11 @@ public class ActivityService : IActivityService
         return this.Mapper.Map<ActivityVM>(activity);
     }
 
-    public async Task<ActivityVM?> GetActivityNameAsync(int activityId)
+    public async Task<string?> GetActivityNameAsync(int activityId)
     {
         string url = string.Format(MladimApiUrls.GetActivityNameById, activityId);
-        var activity = await HttpClient.GetAsync<string>(url);
-        return this.Mapper.Map<ActivityVM>(activity);
+        return await HttpClient.GetStringAsync(url);        
     }
-
-
-
 
     public async Task<IEnumerable<ActivityWithProjectNameVM>> GetByProjectIdAsync(int projectId, int? upcommingActivities = null)
     {

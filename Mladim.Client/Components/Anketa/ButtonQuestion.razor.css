@@ -1,0 +1,23 @@
+﻿.btn-primary {
+    background-color: #43525d !important;
+    border-color: #43525d !important;
+    font-family: 'Poppins', 'Helvetica', Arial, sans-serif !important;
+    font-size: 0.8rem !important;
+    font-weight: 400 !important;
+    line-height: normal !important;
+    color: white !important;
+}
+
+    .btn-primary:focus,
+    .btn-primary:hover,
+    .btn-primary:active {
+        background-color: #4da456 !important;
+        border-color: #4da456 !important;
+        color: white !important;
+    }
+
+.group-btn-active {
+    background-color: #4da456 !important;
+    border-color: #4da456 !important;
+    color: white !important;
+}

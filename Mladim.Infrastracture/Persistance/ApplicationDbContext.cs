@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Abstractions;
+using Mladim.Client.ViewModels.Survey;
 using Mladim.Domain.Enums;
 using Mladim.Domain.IdentityModels;
 using Mladim.Domain.Models;
@@ -41,12 +42,12 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
 
-        //modelBuilder.Entity<SurveryRatingResponse>();
-        //modelBuilder.Entity<SurveryTextResponse>();
-        //modelBuilder.Entity<SurveryBooleanResponse>();
-        //modelBuilder.Entity<SurveryMultipleResponse>();
+        //modelBuilder.Entity<QuestionRatingResponseVM>();
+        //modelBuilder.Entity<QuestionTextResponseVM>();
+        //modelBuilder.Entity<QuestionBooleanResponseVM>();
+        //modelBuilder.Entity<QuestionMultiButtonResponseVM>();
 
-        
+
         modelBuilder.Entity<FemaleSurveyQuestion>();
         modelBuilder.Entity<MaleSurveyQuestion>();
 

@@ -5,50 +5,40 @@
 
 
 
-<style>
-    .thumb
-    {
-        color: #4da456;
-    }
-
-    .e-rating-item-container:not(.e-rating-selected) .thumb {
-        color: #6E7191; 
-    }
-</style>
-
-<MudText Typo="Typo.h2">@this.Question.Texts.FirstOrDefault()</MudText>
-
-    <SfRating ValueChanged="ValueChanged" EnableSingleSelection=true ShowLabel=false ShowTooltip=false>
-        <EmptyTemplate>
-        @{          
-            if (context.Index == 0)
-            {
-                <span class="oi oi-thumb-up thumb"></span>               
-            }
-            else if (context.Index == 1)
-            {
-                <span class=" oi oi-thumb-down thumb"></span>                
-            }           
-        }
-        </EmptyTemplate>
-    </SfRating>
 
 
+<div class="row">   
+    <ValidationMessage For="@(() => SurveryResponse.Response)"></ValidationMessage>
+    <div class="col-12">
+        <div class="btn-group" role="group">
+            <input type="radio" class="btn-check" name="@name" @onclick="(()=>OnThumbClick(SurveyBooleanResponseType.ThumpsUp))" id="@randomThumbUpId" autocomplete="off">
+            <label class="btn btn-primary shadow-none" for="@randomThumbUpId">
+                <span class="oi oi-thumb-up thumb"></span>
+            </label>
 
+            <input type="radio" class="btn-check" name="@name" @onclick="(()=>OnThumbClick(SurveyBooleanResponseType.ThumpsDown))" id="@randomThumbDownId" autocomplete="off">
+            <label class="btn btn-primary shadow-none" for="@randomThumbDownId">
+                <span class="oi oi-thumb-down thumb"></span>
+            </label>
+        </div>
+    </div>
+</div>
 
-@code 
+@code
 {
-   
+    private string randomThumbUpId   = Guid.NewGuid().ToString();
+    private string randomThumbDownId = Guid.NewGuid().ToString();
+    private string name = Guid.NewGuid().ToString();
 
     [Parameter]
-    public SurveyQuestionVM Question{ get; set; }
+    public SurveyQuestionVM Question { get; set; }
 
     [Parameter]
-    public SurveryBooleanResponseVM SurveryResponse { get; set; }
+    public QuestionBooleanResponseVM SurveryResponse { get; set; }
 
-
-    private void ValueChanged(double value)
+    private void OnThumbClick(SurveyBooleanResponseType response)
     {
-        SurveryResponse.Response = (SurveyBooleanResponseType)value;
-    }
+        SurveryResponse.Response = response;
+    }   
+    
 }

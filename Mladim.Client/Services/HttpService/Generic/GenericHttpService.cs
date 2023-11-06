@@ -27,6 +27,10 @@ public class GenericHttpService : IGenericHttpService
     public Task<TOut?> GetAsync<TOut>(string url) =>    
         this.Client.GetFromJsonAsync<TOut?>(url);
 
+
+    public Task<string> GetStringAsync(string url) =>
+        this.Client.GetStringAsync(url);
+
     public async Task<Stream> GetStreamAsync(string url)
     {
         var responseMessage = await this.Client.GetAsync(url);
@@ -49,6 +53,8 @@ public class GenericHttpService : IGenericHttpService
     public async Task<string?> PostAsync<TIn>(string url, TIn request)
     {
         var response = await Client.PostAsJsonAsync<TIn>(url, request);
+        var content = await response.Content.ReadAsStringAsync();
+
         return response.IsSuccessStatusCode ? await response.Content.ReadAsStringAsync() : default(string);
     }
 }

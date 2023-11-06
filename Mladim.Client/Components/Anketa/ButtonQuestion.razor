@@ -3,95 +3,84 @@
 @using Syncfusion.Blazor.SplitButtons
 
 
-<style>
 
-    .btn
-    {
-        background-color: #6E7191;
-        border-color: #6E7191;
-        font-family: 'Poppins', 'Helvetica', Arial, sans-serif;
-        font-size: 0.8rem;
-        font-weight : 400;
-        line-height: normal;
-    }   
+<div>
+    <ValidationMessage style="margin-bottom:0.4rem;" For="@(() => buttonResponse.ButtonType)" />
 
-
-    .btn:focus,
-    .btn:hover,
-    .btn:active {
-        background-color: #4da456;       
-        border-color: #4da456;
-    }
-
-    .active
-    {
-        background-color: #4da456 !important;
-        border-color: #4da456;
-    }
-</style>
-
-
-           
-<MudText Color="Color.Tertiary" Typo="Typo.h1">@Text</MudText>
-
-<div class="row">
-  <div class="btn-group">
-        @foreach (var button in buttonCss)
-        {
-            <button type="button" @onclick="(() => onClick(button))"  class="@button.CssClass">@button.Text</button>
-        }
-            
-   </div>
+    <div class="row">
+        <div class="btn-group col-sm-12 col-lg-7">
+            @foreach (var groupBtn in GroupButtons)
+            {
+                <button type="button" @onclick="(() => OnButtonClick(groupBtn.Value))" class="@groupBtn.CssClass">@groupBtn.Text</button>
+            }
+        </div>
+    </div>
 </div>
 
 
-@code
+@code 
 {
-    //@onclick="@(() =>EventResponse.InvokeAsync((Index,SurveyMultipleResponseType.Incorrect)))"
+    private SurveryButtonResponseVM buttonResponse;
 
     [Parameter]
-    public string Text { get; set; }
+    public QuestionMultiButtonResponseVM SurveyResponse { get; set; }
 
-    [Parameter]
-    public int Index{ get; set; }
-
-    [Parameter]
-    public EventCallback<(int Index, SurveyMultipleResponseType Response)> EventResponse { get; set; }
-
-
-
-    List<BtnStyle> buttonCss = new();
+    private List<GroupBtn> GroupButtons = new List<GroupBtn>();
 
     protected override void OnInitialized()
     {
-        var brnStyle = new BtnStyle() { Text = "NE DRŽI", CssClass = "btn btn-primary shadow-none" };
-        buttonCss.Add(brnStyle);
-        brnStyle = new BtnStyle() { Text = "DELNO DRŽI", CssClass = "btn btn-primary shadow-none" };
-        buttonCss.Add(brnStyle);
-
-        brnStyle = new BtnStyle() { Text = "DRŽI", CssClass = "btn btn-primary shadow-none" };
-        buttonCss.Add(brnStyle);
-
-        brnStyle = new BtnStyle() { Text = "ZELO DRŽI", CssClass = "btn btn-primary shadow-none" };
-        buttonCss.Add(brnStyle);
+        buttonResponse = new SurveryButtonResponseVM();
+        SurveyResponse.Response.Add(buttonResponse);
+        GroupButtons = GetgroupButtons().ToList();
     }
 
 
-    void onClick(BtnStyle value)
+    private IEnumerable<GroupBtn> GetgroupButtons()
     {
-        foreach (var btn in buttonCss)
-            btn.CssClass = "btn btn-primary shadow-none";
+        yield return new GroupBtn("NE DRŽI", SurveyButtonResponseType.Incorrect);
+        yield return new GroupBtn("DELNO DRŽI", SurveyButtonResponseType.PartiallyCorrect);
+        yield return new GroupBtn("DRŽI", SurveyButtonResponseType.Correct);
+        yield return new GroupBtn("ZELO DRŽI", SurveyButtonResponseType.VeryCorrect);
 
-        value.CssClass = "btn btn-primary shadow-none active";
+    }
+
+    private void OnButtonClick(SurveyButtonResponseType btnType)
+    {
+        foreach (var groupBtn in GroupButtons)
+        {
+            if (groupBtn.Value == btnType)
+                groupBtn.Active();
+            else
+                groupBtn.NoActive();
+        }
+
+        buttonResponse.ButtonType = btnType;
+
         StateHasChanged();
-
     }
 
 
-    public class BtnStyle
+    public class GroupBtn
     {
-        public string Text { get; set; }
         public string CssClass { get; set; } = string.Empty;
-    }
+        public SurveyButtonResponseType Value { get; }
+        public string Text { get; }
 
+        private string NotActiveSmile => "btn btn-primary shadow-none";
+        private string ActiveSmile => $"{NotActiveSmile} group-btn-active";
+
+
+        public GroupBtn(string text, SurveyButtonResponseType value)
+        {
+            this.Text = text;
+            this.Value = value;
+            this.CssClass = NotActiveSmile;
+        }
+
+        public void Active() =>
+            this.CssClass = ActiveSmile;
+
+        public void NoActive() =>
+            this.CssClass = NotActiveSmile;
+    }
 }
