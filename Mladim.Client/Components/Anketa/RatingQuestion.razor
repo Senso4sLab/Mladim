@@ -12,7 +12,7 @@
             <div @onmouseleave="MouseMoveOutOfRates">
                 @foreach (var rate in SmileRates)
                 {
-                    <i class="@rate.CssClass px-1" @onmouseover="(() =>MouseOverRate(rate.RateValue))"
+                    <i style="color:#6e7191;" class="@rate.CssClass px-1" @onmouseover="(() =>MouseOverRate(rate.RateValue))"
                     @onclick="(() => OnRateClick(rate.RateValue))"></i>
                 }
             </div>

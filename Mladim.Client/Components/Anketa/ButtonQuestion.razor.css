@@ -1,6 +1,6 @@
 ﻿.btn-primary {
-    background-color: #43525d !important;
-    border-color: #43525d !important;
+    background-color: red !important;
+    border-color: #6e7191 !important;
     font-family: 'Poppins', 'Helvetica', Arial, sans-serif !important;
     font-size: 0.8rem !important;
     font-weight: 400 !important;
@@ -16,8 +16,14 @@
         color: white !important;
     }
 
+.btn-group {
+    background-color: #6e7191 !important;
+    border-color: #6e7191 !important;
+}  
+
+
 .group-btn-active {
-    background-color: #4da456 !important;
-    border-color: #4da456 !important;
+    background-color: #6e7191 !important;
+    border-color: #6e7191 !important;
     color: white !important;
 }
