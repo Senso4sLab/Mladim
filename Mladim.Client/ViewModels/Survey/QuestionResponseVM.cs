@@ -6,10 +6,8 @@ namespace Mladim.Client.ViewModels.Survey;
 
 
 public abstract class QuestionResponseVM
-{  
- 
+{   
     public int UniqueQuestionId { get; set; }
-
     public QuestionResponseVM(int uniqueQuestionId)
     {
         this.UniqueQuestionId = uniqueQuestionId;   
@@ -62,5 +60,23 @@ public class QuestionMultiButtonResponseVM : QuestionResponseVM
 public class SurveryButtonResponseVM
 {
     [ButtonResponseValidator]
-    public SurveyButtonResponseType ButtonType { get; set; } = SurveyButtonResponseType.None;
+    public SurveyButtonResponseType ButtonType { get; set; }
+}
+
+
+public class ParticipantQuestionResponse
+{
+    public AnonymousParticipantVM AnonymousParticipant { get; set; }
+    public QuestionResponseVM QuestionResponse { get; set; }
+
+    private ParticipantQuestionResponse(AnonymousParticipantVM anonymousParticipant, QuestionResponseVM questionResponse)
+    {
+        this.AnonymousParticipant = anonymousParticipant;
+        this.QuestionResponse = questionResponse;
+    }
+
+    public static ParticipantQuestionResponse Create(AnonymousParticipantVM anonymousParticipant, QuestionResponseVM questionResponse)
+    {
+        return new ParticipantQuestionResponse(anonymousParticipant, questionResponse);
+    }
 }

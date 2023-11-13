@@ -287,29 +287,40 @@ public enum SurveyQuestionType
 
 public enum SurveyBooleanResponseType
 {
-    None = 0,
+   
+    [Display(Name = "Da")]
     ThumpsUp = 1,
+    [Display(Name = "Ne")]
     ThumpsDown = 2,    
 }
 
 
 public enum SurveyRatingResponseType
 {
-    None = 0,
+    
+    [Display(Name = "1-smeško")]
     OneSmile = 1,
+    [Display(Name = "2-smeška")]
     TwoSmiles = 2,
+    [Display(Name = "3-smeški")]
     ThreeSmiles = 3,
+    [Display(Name = "4-smeški")]
     FourSmiles = 4,
+    [Display(Name = "5-smeškov")]
     FiveSmiles = 5,
 }
 
 
 public enum SurveyButtonResponseType
 {
-    None = 0,
+    
+    [Display(Name = "Nepravilno")]
     Incorrect = 1,
-    PartiallyCorrect = 2,    
+    [Display(Name = "Delno pravilno")]
+    PartiallyCorrect = 2,
+    [Display(Name = "Pravilno")]
     Correct = 3,
+    [Display(Name = "Zelo pravilno")]
     VeryCorrect = 4,
 }
 

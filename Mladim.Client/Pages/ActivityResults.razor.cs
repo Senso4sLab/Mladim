@@ -2,6 +2,12 @@ using global::Microsoft.AspNetCore.Components;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Domain.Enums;
 using Mladim.Client.ViewModels.Survey;
+using Mladim.Client.ViewModels;
+using System.Linq;
+using System.Collections.Generic;
+using Syncfusion.Blazor.PivotView;
+using MudBlazor;
+using Mladim.Client.Components.Dialogs;
 
 namespace Mladim.Client.Pages;
 
@@ -11,43 +17,63 @@ public partial class ActivityResults
     [Inject]
     public ISurveyService SurveyService { get; set; } = default!;
 
+    [Inject]
+    public IDialogService DialogService { get; set; } = default!;
+
     [Parameter]
     public int? ActivityId { get; set; }
 
-    private IEnumerable<SurveyQuestionVM> SurveyQuestions = new List<SurveyQuestionVM>();
-    private IEnumerable<AnonymousSurveyResponseVM> SurveyResponses = new List<AnonymousSurveyResponseVM>();
+    private IEnumerable<SurveyResponsesGroupedByQuestion> SurveyResponsesGroupByQuestions = new List<SurveyResponsesGroupedByQuestion>();
 
     protected async override Task OnInitializedAsync()
     {
         if (ActivityId is null)
             return;
 
-        SurveyQuestions = await SurveyService.GetSurveyQuestionnairyAsync(ActivityId.Value, Gender.Female);
-        SurveyResponses = await SurveyService.GetAnonymousSurveyResponsesAsync(ActivityId.Value);
-
-
-        var responseGroupByGender = SurveyResponses.SelectMany(sr => sr.Responses, (asr, response) => new
-        {
-            Gender = asr.AnonymousParticipant.Gender,
-            QuestionResponse = response,
-        }).GroupBy(u => new { u.Gender, u.QuestionResponse.UniqueQuestionId })
-        .Select(g => new SurveyResponseGroupByGender(g.Key.Gender, g.Select(g => g.QuestionResponse)));
-
+        SurveyResponsesGroupByQuestions = await GetSurveyResponsesGroupByQuestionAsync();
     }
 
 
-    public class SurveyResponseGroupByGender
+    private async Task<IEnumerable<SurveyResponsesGroupedByQuestion>> GetSurveyResponsesGroupByQuestionAsync()
     {
-        public Gender Gender { get; set; }
-        public List<QuestionResponseVM> QuestionResponses { get; set; } = new();
+        IEnumerable<SurveyQuestionVM> surveyQuestions = await SurveyService.GetSurveyQuestionnairyAsync(ActivityId!.Value, Gender.Female);
+        IEnumerable<AnonymousSurveyResponseVM> surveyResponses = await SurveyService.GetAnonymousSurveyResponsesAsync(ActivityId.Value);
 
-        public SurveyResponseGroupByGender(Gender gender, IEnumerable<QuestionResponseVM> questionResponses)
-        {
-            this.Gender = gender;
-            this.QuestionResponses = questionResponses.ToList();    
-        }
-
+        return surveyResponses.SelectMany(sr => sr.Responses, (asr, response) => new
+            {
+                Participant = asr.AnonymousParticipant,
+                QuestionResponse = response,
+            })
+            .GroupBy(u => u.QuestionResponse.UniqueQuestionId)
+            .Select(g => SurveyResponsesGroupedByQuestion.Create(surveyQuestions.FirstOrDefault(sq => sq.UniqueQuestionId == g.Key), g.Select(a => ParticipantQuestionResponse.Create(a.Participant, a.QuestionResponse))))
+            .ToList();
     }
+
+
+    private async Task OnClickTextsResponseCommands(SurveyTextResponsesGroupedByQuestion textGroupResponses)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true };
+        DialogParameters surveyTextResponsesParameters = new DialogParameters();
+        surveyTextResponsesParameters.Add("Question", textGroupResponses.SurveyQuestion?.Texts.FirstOrDefault());
+        surveyTextResponsesParameters.Add("AnonymousCommands", textGroupResponses.GetAnonymousComments().ToList());
+        this.DialogService.Show<ShowTextQuestionCommands>("", surveyTextResponsesParameters, options);
+    }
+
+
+    
+
+
+
+
+    private string RowStyleFunc(SurveyResponsesGroupedByQuestion question, int index)
+    {
+        string rowCss = "font-size: 0.8rem; font-family:poppins; font-weight:400; line-height:1.0; letter-spacing:-0.024rem; color:#6e7191;";
+
+        return index % 2 == 0 ? rowCss + "background-color:white;" : rowCss + "background-color:#EFEFEF;";
+    }
+
+
+
 
 
 }

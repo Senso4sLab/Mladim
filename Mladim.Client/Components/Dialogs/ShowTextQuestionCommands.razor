@@ -1,0 +1,43 @@
+﻿@using Mladim.Client.Pages;
+@using Mladim.Client.ViewModels.Survey;
+@using Mladim.Domain.Extensions;
+
+<MudDialog Style="min-width:600px; padding-bottom:10px;" >
+    <TitleContent>
+        <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+             <MudText Color="Color.Tertiary" Typo="Typo.h2">@Question</MudText>
+            @*  <MudText Color="Color.Tertiary" Typo="Typo.h1">@($"{AnonymousCommands.Count} odgovorov")</MudText> *@
+        </MudStack>
+    </TitleContent>
+    <DialogContent>
+        <MudStack Spacing="0" Justify="Justify.FlexStart" Style="max-height: 500px; overflow-y: scroll">
+        @for (int anonymousCommandIndex = 0; anonymousCommandIndex < AnonymousCommands.Count; anonymousCommandIndex++)
+        {
+            var anonymousCommand = AnonymousCommands[anonymousCommandIndex];
+            <MudStack Row Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+                 <MudText Color="Color.Tertiary" Typo="Typo.h2" Class="py-1">@anonymousCommand.Participant.Gender.GetDisplayAttribute()</MudText>
+                 <MudText Color="Color.Tertiary" Typo="Typo.h2" Class="py-1 mx-5">@anonymousCommand.Participant.AgeGroup.GetDisplayAttribute() </MudText>
+             </MudStack>
+            <MudText Color="Color.Tertiary" Typo="Typo.h2" Class="py-1">@anonymousCommand.Comment </MudText>
+            @if (anonymousCommandIndex < AnonymousCommands.Count - 1)
+            {
+                <MudDivider  />
+            }
+        }
+         </MudStack>
+    </DialogContent>    
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    public MudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public string Question{ get; set; }
+
+    [Parameter]
+    public List<AnonymousCommand> AnonymousCommands { get; set; } = new();
+
+  
+
+}

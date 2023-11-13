@@ -7,7 +7,7 @@ public class RatingResponseValidator : ValidationAttribute
 {
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
-        if (value is SurveyRatingResponseType type && type is not SurveyRatingResponseType.None)
+        if (value is SurveyRatingResponseType type)
             return null;
         else
             return new ValidationResult("Odgovor je obvezen", new[] { validationContext.MemberName! });
