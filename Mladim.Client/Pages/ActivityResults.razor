@@ -4,6 +4,10 @@
 
 
 <MudStack Class="pt-5 pb-8" Spacing="4">
+   <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+         <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">Prikaz rezultatkov v odvisnosit od </MudText>
+         <MudSwitch Color="Color.Tertiary"  @bind-Checked=resultsRespectTo LabelPosition="LabelPosition.Start" Converter="@(new CustomStringToBoolConverter())">@resultsRespectTo</MudSwitch>
+   </MudStack>
     @foreach (var surveyResponsesGroupByQuestion in SurveyResponsesGroupByQuestions)
     {
         if (surveyResponsesGroupByQuestion is SurveyRatingResponsesGroupedByQuestion ratingResponseGroup)
