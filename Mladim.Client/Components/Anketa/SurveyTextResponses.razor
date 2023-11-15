@@ -1,0 +1,27 @@
+﻿@using Mladim.Client.Components.Dialogs;
+@using Mladim.Client.ViewModels.Survey;
+@inject IDialogService DialogService;
+
+
+<MudPaper Class="p-2">
+    <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+         <MudText Color="Color.Tertiary" Typo="Typo.h2">@TextResponseGroup.Question</MudText>
+         <MudButton OnClick="@OnClickTextsResponseCommands" Color="Color.Tertiary" Variant="Variant.Filled">Komentarji</MudButton>
+     </MudStack>
+ </MudPaper>
+
+@code 
+ {
+    [Parameter]
+    public SurveyTextResponsesGroupedByQuestion TextResponseGroup{ get; set; }
+
+
+    private void OnClickTextsResponseCommands()
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true };
+        DialogParameters surveyTextResponsesParameters = new DialogParameters();
+        surveyTextResponsesParameters.Add("Question", TextResponseGroup.Question);
+        surveyTextResponsesParameters.Add("AnonymousCommands", TextResponseGroup.GetAnonymousComments().ToList());
+        this.DialogService.Show<ShowTextQuestionCommands>("", surveyTextResponsesParameters, options);
+    }
+}

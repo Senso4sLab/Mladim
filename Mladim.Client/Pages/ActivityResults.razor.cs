@@ -24,8 +24,7 @@ public partial class ActivityResults
     public int? ActivityId { get; set; }
 
     private IEnumerable<SurveyResponsesGroupedByQuestion> SurveyResponsesGroupByQuestions = new List<SurveyResponsesGroupedByQuestion>();
-
-    string resultsRespectTo = "Spol";
+    public SurveyResponseSelector selector { get; set; } = new GenderSurveyResponseSelector();   
 
     protected async override Task OnInitializedAsync()
     {
@@ -33,6 +32,12 @@ public partial class ActivityResults
             return;
 
         SurveyResponsesGroupByQuestions = await GetSurveyResponsesGroupByQuestionAsync();
+    }
+
+
+    private void OnSwitcerStateChanged(bool? switchState)
+    {
+        selector = switchState is true ? new AgeGroupSurveyResponseSelector() : new GenderSurveyResponseSelector();       
     }
 
 
@@ -51,22 +56,6 @@ public partial class ActivityResults
             .ToList();
     }
 
-
-    private async Task OnClickTextsResponseCommands(SurveyTextResponsesGroupedByQuestion textGroupResponses)
-    {
-        var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true };
-        DialogParameters surveyTextResponsesParameters = new DialogParameters();
-        surveyTextResponsesParameters.Add("Question", textGroupResponses.SurveyQuestion?.Texts.FirstOrDefault());
-        surveyTextResponsesParameters.Add("AnonymousCommands", textGroupResponses.GetAnonymousComments().ToList());
-        this.DialogService.Show<ShowTextQuestionCommands>("", surveyTextResponsesParameters, options);
-    }
-
-
-    
-
-
-
-
     private string RowStyleFunc(SurveyResponsesGroupedByQuestion question, int index)
     {
         string rowCss = "font-size: 0.8rem; font-family:poppins; font-weight:400; line-height:1.0; letter-spacing:-0.024rem; color:#6e7191;";
@@ -74,45 +63,43 @@ public partial class ActivityResults
         return index % 2 == 0 ? rowCss + "background-color:white;" : rowCss + "background-color:#EFEFEF;";
     }
 
-
-
-    public class CustomStringToBoolConverter : BoolConverter<string>
+    public class CustomSelectorToBoolConverter : BoolConverter<SurveyResponseSelector>
     {
 
-        public CustomStringToBoolConverter()
+        public CustomSelectorToBoolConverter()
         {
             SetFunc = OnSet;
             GetFunc = OnGet;
         }
 
-        private string TrueString = "spola";
-        private string FalseString = "starostne skupine";       
+        private SurveyResponseSelector Gender = new GenderSurveyResponseSelector();
+        private SurveyResponseSelector AgeGroup = new AgeGroupSurveyResponseSelector();
 
-        private string OnGet(bool? value)
+        private SurveyResponseSelector OnGet(bool? value)
         {
             try
             {
-                return (value == true) ? TrueString : FalseString;
+                return (value == true) ? Gender : AgeGroup;
             }
             catch (Exception e)
             {
                 UpdateGetError("Conversion error: " + e.Message);
-                return TrueString;
+                return new GenderSurveyResponseSelector();
             }
         }
 
-        private bool? OnSet(string arg)
-        {
-            if (arg == null)
-                return null;
+        private bool? OnSet(SurveyResponseSelector? arg)
+        {           
             try
             {
-                if (arg == TrueString)
+                if (arg == null)
                     return true;
-                if (arg == FalseString)
+                if (arg.GetType() == typeof(GenderSurveyResponseSelector))
+                    return true;
+                if (arg.GetType() == typeof(AgeGroupSurveyResponseSelector))
                     return false;
                 else
-                    return null;
+                    return true;
             }
             catch (FormatException e)
             {
@@ -121,7 +108,9 @@ public partial class ActivityResults
             }
         }
 
-    }
+    }   
+
+    
 }
 
 

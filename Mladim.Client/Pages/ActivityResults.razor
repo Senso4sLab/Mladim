@@ -1,156 +1,31 @@
 ﻿@using Mladim.Client.ViewModels.Survey;
 @using Mladim.Domain.Enums;
 @using Mladim.Domain.Extensions;
+@using Mladim.Client.Components.Anketa;
 
 
 <MudStack Class="pt-5 pb-8" Spacing="4">
    <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-         <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">Prikaz rezultatkov v odvisnosit od </MudText>
-         <MudSwitch Color="Color.Tertiary"  @bind-Checked=resultsRespectTo LabelPosition="LabelPosition.Start" Converter="@(new CustomStringToBoolConverter())">@resultsRespectTo</MudSwitch>
+         <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">Prikaz rezultatov glede na</MudText>
+         <MudSwitch Color="Color.Tertiary"  CheckedChanged="((bool arg) => OnSwitcerStateChanged(arg))" LabelPosition="LabelPosition.Start">@selector.Description</MudSwitch>
    </MudStack>
     @foreach (var surveyResponsesGroupByQuestion in SurveyResponsesGroupByQuestions)
     {
-        if (surveyResponsesGroupByQuestion is SurveyRatingResponsesGroupedByQuestion ratingResponseGroup)
+        if (surveyResponsesGroupByQuestion is SurveyRatingResponsesGroupedByQuestion ratingResponses)
         {
-            <MudPaper Class="p-2">
-                <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@ratingResponseGroup.SurveyQuestion?.Texts.FirstOrDefault()</MudText>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Spol</th>
-                            @foreach (var type in Enum.GetValues<SurveyRatingResponseType>())
-                            {
-                                <th scope="col">@type.GetDisplayAttribute()</th>                               
-                            }
-                            <th scope="col">Skupaj</th>                           
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach(var gender in Enum.GetValues<Gender>())
-                        {
-                            <tr>
-                                <th scope="row">@gender.GetDisplayAttribute()</th>
-                                @foreach (var numOfParticipants in ratingResponseGroup.GetNumberOfParticipantsByGender(gender))
-                                {
-                                    <td>@numOfParticipants</td>
-                                }
-                                <td>@ratingResponseGroup.GetNumberOfParticipantsByGender(gender).Sum()</td>
-                            </tr>
-                        }
-                         <tr>
-                            <th scope="row">Skupaj</th>                          
-
-                            @foreach (var numOfParticipants in ratingResponseGroup.GetNumberOfParticipantsByGender(Gender.Male | Gender.Female | Gender.Undefined | Gender.Other))
-                            {
-                                <td>@numOfParticipants</td>
-                            }
-                            <td>@ratingResponseGroup.GetNumberOfParticipantsByGender(Gender.Male | Gender.Female | Gender.Undefined | Gender.Other).Sum()</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </MudPaper>
+            <SurveyRatingResponses RatingResponseGroup="ratingResponses"  Selector="selector"/>
         }
-        else if (surveyResponsesGroupByQuestion is SurveyBoleanResponsesGroupedByQuestion boleanResponseGroup)
+        else if (surveyResponsesGroupByQuestion is SurveyBoleanResponsesGroupedByQuestion boleanResponses)
         {
-            <MudPaper Class="p-2">
-                <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@boleanResponseGroup.SurveyQuestion?.Texts.FirstOrDefault()</MudText>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Spol</th>
-                            @foreach (var type in Enum.GetValues<SurveyBooleanResponseType>())
-                            {
-                                <th scope="col">@type.GetDisplayAttribute()</th>
-                            }
-                            <th scope="col">Skupaj</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var gender in Enum.GetValues<Gender>())
-                        {
-                            <tr>
-                                <th scope="row">@gender.GetDisplayAttribute()</th>
-                                @foreach (var numOfParticipants in boleanResponseGroup.GetNumberOfParticipantsByGender(gender))
-                                {
-                                    <td>@numOfParticipants</td>
-                                }
-                                <td>@boleanResponseGroup.GetNumberOfParticipantsByGender(gender).Sum()</td>
-                            </tr>
-                        }
-                        <tr>
-                            <th scope="row">Skupaj</th>
-
-                            @foreach (var numOfParticipants in boleanResponseGroup.GetNumberOfParticipantsByGender(Gender.Male | Gender.Female | Gender.Undefined | Gender.Other))
-                            {
-                                <td>@numOfParticipants</td>
-                            }
-                            <td>@boleanResponseGroup.GetNumberOfParticipantsByGender(Gender.Male | Gender.Female | Gender.Undefined | Gender.Other).Sum()</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </MudPaper>
+            <SurveyBoleanReponses BoleanResponseGroup="boleanResponses" Selector="selector" />
         }
-        else if(surveyResponsesGroupByQuestion is SurveyButtonGroupResponsesGroupedByQuestion buttonResponseGroup)
+        else if(surveyResponsesGroupByQuestion is SurveyButtonGroupResponsesGroupedByQuestion buttonResponses)
         {
-            <MudPaper Class="p-2">               
-                @for(int numQuestion = 0; numQuestion < buttonResponseGroup.SurveyQuestion?.Texts.Count; numQuestion++ )
-                {
-                    var text = buttonResponseGroup.SurveyQuestion?.Texts[numQuestion];
-                    
-                    if(numQuestion == 0)
-                    {
-                        <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@text</MudText>
-                        continue;
-                    }
-
-                    <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h1">@text</MudText>
-                    
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Spol</th>
-                                @foreach (var type in Enum.GetValues<SurveyButtonResponseType>())
-                                {
-                                    <th scope="col">@type.GetDisplayAttribute()</th>
-                                }
-                                <th scope="col">Skupaj</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var gender in Enum.GetValues<Gender>())
-                            {
-                                <tr>
-                                    <th scope="row">@gender.GetDisplayAttribute()</th>
-                                    @foreach (var numOfParticipants in buttonResponseGroup.GetNumberOfParticipantsByGender(gender, numQuestion - 1))
-                                    {
-                                        <td>@numOfParticipants</td>
-                                    }
-                                    <td>@buttonResponseGroup.GetNumberOfParticipantsByGender(gender, numQuestion - 1).Sum()</td>
-                                </tr>
-                            }
-                            <tr>
-                                <th scope="row">Skupaj</th>
-
-                                @foreach (var numOfParticipants in buttonResponseGroup.GetNumberOfParticipantsByGender(Gender.Male | Gender.Female | Gender.Undefined | Gender.Other, numQuestion - 1))
-                                {
-                                    <td>@numOfParticipants</td>
-                                }
-                                <td>@buttonResponseGroup.GetNumberOfParticipantsByGender(Gender.Male | Gender.Female | Gender.Undefined | Gender.Other, numQuestion - 1).Sum()</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                }
-                
-            </MudPaper>
+            <SurveyButtonGroupResponses ButtonResponseGroup="buttonResponses" Selector="selector" />
         }
-        else if(surveyResponsesGroupByQuestion is SurveyTextResponsesGroupedByQuestion textResponseGroup)
+        else if(surveyResponsesGroupByQuestion is SurveyTextResponsesGroupedByQuestion textResponses)
         {
-             <MudPaper Class="p-2">
-                 <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-                     <MudText Color="Color.Tertiary" Typo="Typo.h2">@textResponseGroup.SurveyQuestion?.Texts.FirstOrDefault()</MudText>
-                     <MudButton OnClick="@(() => OnClickTextsResponseCommands(textResponseGroup))" Color="Color.Tertiary" Variant="Variant.Filled">Komentarji</MudButton>
-                 </MudStack>                
-             </MudPaper>
+            <SurveyTextResponses TextResponseGroup="textResponses" />
         }
     }
 </MudStack>

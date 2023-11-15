@@ -1,0 +1,55 @@
+﻿@using Mladim.Client.ViewModels.Survey;
+@using Mladim.Domain.Enums;
+@using Mladim.Domain.Extensions;
+
+<MudPaper Class="p-2">
+    <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@BoleanResponseGroup.Question</MudText>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">@Selector.Description</th>
+                @foreach (var type in Enum.GetValues<SurveyBooleanResponseType>())
+                {
+                    <th scope="col">@type.GetDisplayAttribute()</th>
+                }
+                <th scope="col">Skupaj</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var participant in Selector.ParticipantPredicates)
+            {
+                <tr>
+                    <th scope="row">@participant.Name</th>                  
+
+                    @foreach (var numOfParticipants in BoleanResponseGroup.NumberOfParticipantsByCriteria(participant.Predicate))
+                    {                      
+                        <td>@numOfParticipants</td>
+                    }
+                    <td>@BoleanResponseGroup.NumberOfParticipantsByCriteria(participant.Predicate).Sum()</td>
+                </tr>
+            }
+
+            <tr>
+                <th scope="row">Skupaj</th>              
+
+                @foreach (var numOfParticipants in BoleanResponseGroup.NumberOfParticipantsByCriteria())
+                {                   
+                    <td>@numOfParticipants</td>
+                }
+                <td>@BoleanResponseGroup.NumberOfParticipantsByCriteria().Sum()</td>
+            </tr>
+        </tbody>
+    </table>
+</MudPaper>
+
+@code
+{
+    [Parameter]
+    public SurveyBoleanResponsesGroupedByQuestion BoleanResponseGroup { get; set; } = default!;
+
+    [Parameter]
+    public SurveyResponseSelector Selector { get; set; } = default!;
+
+   
+}

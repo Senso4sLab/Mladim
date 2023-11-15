@@ -1,0 +1,56 @@
+﻿@using Mladim.Client.ViewModels.Survey;
+@using Mladim.Domain.Enums;
+@using Mladim.Domain.Extensions;
+
+
+
+<MudPaper Class="p-2">
+    <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@ButtonResponseGroup.Question</MudText>
+
+    @foreach(var buttonResponse in ButtonResponseGroup.ButtonGroupResponses)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">@Selector.Description</th>
+                    @foreach (var type in Enum.GetValues<SurveyButtonResponseType>())
+                    {
+                        <th scope="col">@type.GetDisplayAttribute()</th>
+                    }
+                    <th scope="col">Skupaj</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var predicate in Selector.ParticipantPredicates)
+                {
+                    <tr>
+                        <th scope="row">@predicate.Name</th>
+                        @foreach (var numOfParticipants in buttonResponse.NumberOfParticipantsByCriteria(predicate.Predicate))
+                        {
+                            <td>@numOfParticipants</td>
+                        }
+                        <td>@buttonResponse.NumberOfParticipantsByCriteria(predicate.Predicate).Sum()</td>
+                    </tr>
+                }
+                <tr>
+                    <th scope="row">Skupaj</th>
+
+                    @foreach (var numOfParticipants in buttonResponse.NumberOfParticipantsByCriteria())
+                    {
+                        <td>@numOfParticipants</td>
+                    }
+                    <td>@buttonResponse.NumberOfParticipantsByCriteria().Sum()</td>
+                </tr>
+            </tbody>
+        </table>
+    }
+</MudPaper>
+
+@code
+{
+    [Parameter]
+    public SurveyButtonGroupResponsesGroupedByQuestion ButtonResponseGroup { get; set; } = default!;
+
+    [Parameter]
+    public SurveyResponseSelector Selector { get; set; } = default!;
+}

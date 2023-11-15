@@ -3,13 +3,12 @@
 @using Mladim.Domain.Extensions;
 
 <MudPaper Class="p-2">
-    <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@RatingResponseGroup.SurveyQuestion?.Texts.FirstOrDefault()</MudText>
-    
+    <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@RatingResponseGroup.Question</MudText>   
     
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">Spol</th>
+                <th scope="col">@Selector.Description</th>
                 @foreach (var type in Enum.GetValues<SurveyRatingResponseType>())
                 {
                     <th scope="col">@type.GetDisplayAttribute()</th>
@@ -21,52 +20,25 @@
             @foreach(var participant in Selector.ParticipantPredicates)
             {
                 <tr>
-                    <th scope="row">@participant.Name</th>
-                    
-                    totalParticipant  = 0;
+                    <th scope="row">@participant.Name</th>                  
 
-                    @await foreach (var numOfParticipants in RatingResponseGroup.NumberOfParticipantsBy(participant.Predicate))
-                    {
-                        totalParticipant += numOfParticipants;
+                    @foreach (var numOfParticipants in RatingResponseGroup.NumberOfParticipantsByCriteria(participant.Predicate))
+                    {                       
                         <td>@numOfParticipants</td>
                     }
-                    <td>@totalParticipant</td>
+                    <td>@RatingResponseGroup.NumberOfParticipantsByCriteria(participant.Predicate).Sum()</td>
                 </tr>
             }
 
-            <tr>
-                <th scope="row">Skupaj</th>
-
-                @foreach (var numOfParticipants in RatingResponseGroup.GetNumberOfParticipantsByGender(Gender.Male | Gender.Female | Gender.Undefined | Gender.Other))
-                {
-                    <td>@numOfParticipants</td>
-                }
-                <td>@RatingResponseGroup.GetNumberOfParticipantsByGender(Gender.Male | Gender.Female | Gender.Undefined | Gender.Other).Sum()</td>
-            </tr>
-
-
-
-
-            @foreach (var gender in Enum.GetValues<Gender>())
-            {
                 <tr>
-                    <th scope="row">@gender.GetDisplayAttribute()</th>
-                    @foreach (var numOfParticipants in RatingResponseGroup.GetNumberOfParticipantsByGender(gender))
+                    <th scope="row">Skupaj</th>                   
+
+                    @foreach (var numOfParticipants in RatingResponseGroup.NumberOfParticipantsByCriteria())
                     {                        
                         <td>@numOfParticipants</td>
                     }
-                    <td>@RatingResponseGroup.GetNumberOfParticipantsByGender(gender).Sum()</td>
-                </tr>
-            }
-            <tr>
-                <th scope="row">Skupaj</th>
-
-                @foreach (var numOfParticipants in RatingResponseGroup.GetNumberOfParticipantsByGender(Gender.Male | Gender.Female | Gender.Undefined | Gender.Other))
-                {
-                    <td>@numOfParticipants</td>
-                }
-                <td>@RatingResponseGroup.GetNumberOfParticipantsByGender(Gender.Male | Gender.Female | Gender.Undefined | Gender.Other).Sum()</td>
-            </tr>
+                <td>@RatingResponseGroup.NumberOfParticipantsByCriteria().Sum()</td>
+                </tr>           
         </tbody>
     </table>
 </MudPaper>
@@ -79,6 +51,6 @@
     [Parameter]
     public SurveyResponseSelector Selector { get; set; } = default!;
 
-    int totalParticipant = 0;
+   
 
 }
