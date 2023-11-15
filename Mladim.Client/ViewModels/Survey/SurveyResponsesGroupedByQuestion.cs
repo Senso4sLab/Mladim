@@ -1,9 +1,11 @@
 ﻿using Mladim.Domain.Enums;
+using System.Dynamic;
+
 
 namespace Mladim.Client.ViewModels.Survey;
 
 
-public class SurveyResponsesGroupedByQuestion
+public abstract class SurveyResponsesGroupedByQuestion
 {
     public SurveyQuestionVM? SurveyQuestion { get; set; }
 
@@ -15,6 +17,8 @@ public class SurveyResponsesGroupedByQuestion
         this.ParticipantQuestionResponses = participantQuestionResponses.ToList();
     }
 
+    public abstract IAsyncEnumerable<List<int>> NumberOfParticipantsBy(Predicate<AnonymousParticipantVM> participant = null);
+
 
     public static SurveyResponsesGroupedByQuestion Create(SurveyQuestionVM? surveyQuestion, IEnumerable<ParticipantQuestionResponse> participantQuestionResponses)
     {
@@ -23,7 +27,7 @@ public class SurveyResponsesGroupedByQuestion
             SurveyQuestionType.Text => new SurveyTextResponsesGroupedByQuestion(surveyQuestion, participantQuestionResponses),
             SurveyQuestionType.Rating => new SurveyRatingResponsesGroupedByQuestion(surveyQuestion, participantQuestionResponses),
             SurveyQuestionType.Boolean => new SurveyBoleanResponsesGroupedByQuestion(surveyQuestion, participantQuestionResponses),
-            SurveyQuestionType.Multiple => new SurveyButtonResponsesGroupedByQuestion(surveyQuestion, participantQuestionResponses),
+            SurveyQuestionType.Multiple => new SurveyButtonGroupResponsesGroupedByQuestion(surveyQuestion, participantQuestionResponses),
             _ => throw new NotImplementedException()
         };
     }
@@ -45,11 +49,15 @@ public class SurveyTextResponsesGroupedByQuestion : SurveyResponsesGroupedByQues
             .ToList();
 
     }
-        
+
+    public async override IAsyncEnumerable<List<int>> NumberOfParticipantsBy(Predicate<AnonymousParticipantVM> participant = null)
+    {
+        yield return new List<int>(); 
+    }
 }
 
 
-public class SurveyRatingResponsesGroupedByQuestion : SurveyResponsesGroupedByQuestion, ISurveyParticipantStatistics
+public class SurveyRatingResponsesGroupedByQuestion : SurveyResponsesGroupedByQuestion
 {
     public SurveyRatingResponsesGroupedByQuestion(SurveyQuestionVM? surveyQuestion,
             IEnumerable<ParticipantQuestionResponse> participantQuestionResponses) : base(surveyQuestion, participantQuestionResponses)
@@ -57,35 +65,21 @@ public class SurveyRatingResponsesGroupedByQuestion : SurveyResponsesGroupedByQu
 
     }
 
-    public List<int> GetNumberOfParticipantsByAge(AgeGroups ageGroup, int numOfQuestion = 0)
+    public async override IAsyncEnumerable<List<int>> NumberOfParticipantsBy(Predicate<AnonymousParticipantVM> participant = null)
     {
-        return this.ParticipantQuestionResponses.Where(r => ageGroup.HasFlag(r.AnonymousParticipant.AgeGroup))
-            .Select(r => r.QuestionResponse)
-            .OfType<QuestionRatingResponseVM>()
-            .GroupBy(g => g.Response)
-            .Select(g => (type: g.Key, count: g.Count()))
-            .UnionBy(Enum.GetValues<SurveyRatingResponseType>().Select(type => (type, count: 0)), tuple => tuple.type)
-            .OrderBy(g => g.type)
-            .Select(g => g.count)
-            .ToList();
-    }
-
-    public List<int> GetNumberOfParticipantsByGender(Gender gender, int numOfQuestion = 0)
-    {
-
-        return this.ParticipantQuestionResponses.Where(r => gender.HasFlag(r.AnonymousParticipant.Gender))
-            .Select(r => r.QuestionResponse)
-            .OfType<QuestionRatingResponseVM>()
-            .GroupBy(g => g.Response)
-            .Select(g => (type: g.Key, count: g.Count()))
-            .UnionBy(Enum.GetValues<SurveyRatingResponseType>().Select(type => (type, count: 0)), tuple => tuple.type)
-            .OrderBy(g => g.type)
-            .Select(g => g.count)
-            .ToList();
-    }
+        yield return this.ParticipantQuestionResponses.Where(pqr => participant(pqr.AnonymousParticipant))
+             .Select(r => r.QuestionResponse)
+             .OfType<QuestionRatingResponseVM>()
+             .GroupBy(g => g.Response)
+             .Select(g => (type: g.Key, count: g.Count()))
+             .UnionBy(Enum.GetValues<SurveyRatingResponseType>().Select(type => (type, count: 0)), tuple => tuple.type)
+             .OrderBy(g => g.type)
+             .Select(g => g.count)
+             .ToList();
+    }    
 }
 
-public class SurveyBoleanResponsesGroupedByQuestion : SurveyResponsesGroupedByQuestion, ISurveyParticipantStatistics
+public class SurveyBoleanResponsesGroupedByQuestion : SurveyResponsesGroupedByQuestion
 {
     public SurveyBoleanResponsesGroupedByQuestion(SurveyQuestionVM? surveyQuestion,
              IEnumerable<ParticipantQuestionResponse> participantQuestionResponses) : base(surveyQuestion, participantQuestionResponses)
@@ -93,22 +87,9 @@ public class SurveyBoleanResponsesGroupedByQuestion : SurveyResponsesGroupedByQu
 
     }
 
-    public List<int> GetNumberOfParticipantsByAge(AgeGroups ageGroup, int numOfQuestion = 0)
+    public async override IAsyncEnumerable<List<int>> NumberOfParticipantsBy(Predicate<AnonymousParticipantVM> participant = null)
     {
-        return this.ParticipantQuestionResponses.Where(r => ageGroup.HasFlag(r.AnonymousParticipant.AgeGroup))
-            .Select(r => r.QuestionResponse)
-            .OfType<QuestionBooleanResponseVM>()
-            .GroupBy(g => g.Response)
-            .Select(g => (type: g.Key, count: g.Count()))
-            .UnionBy(Enum.GetValues<SurveyBooleanResponseType>().Select(type => (type, count: 0)), tuple => tuple.type)
-            .OrderBy(g => g.type)
-            .Select(g => g.count)
-            .ToList();
-    }
-
-    public List<int> GetNumberOfParticipantsByGender(Gender gender, int numOfQuestion = 0)
-    {
-        return this.ParticipantQuestionResponses.Where(r => gender.HasFlag(r.AnonymousParticipant.Gender))
+        yield return this.ParticipantQuestionResponses.Where(pqr => participant(pqr.AnonymousParticipant))
            .Select(r => r.QuestionResponse)
            .OfType<QuestionBooleanResponseVM>()
            .GroupBy(g => g.Response)
@@ -117,56 +98,62 @@ public class SurveyBoleanResponsesGroupedByQuestion : SurveyResponsesGroupedByQu
            .OrderBy(g => g.type)
            .Select(g => g.count)
            .ToList();
-    }
+    }  
 }
 
 
-public class SurveyButtonResponsesGroupedByQuestion : SurveyResponsesGroupedByQuestion, ISurveyParticipantStatistics
+public class SurveyButtonResponsesGroupedByQuestion : SurveyResponsesGroupedByQuestion
 {
     public SurveyButtonResponsesGroupedByQuestion(SurveyQuestionVM? surveyQuestion,
              IEnumerable<ParticipantQuestionResponse> participantQuestionResponses) : base(surveyQuestion, participantQuestionResponses)
     {
 
     }
-
-    public List<int> GetNumberOfParticipantsByAge(AgeGroups ageGroup, int numOfQuestion = 0)
+    public override IAsyncEnumerable<List<int>> NumberOfParticipantsBy(Predicate<AnonymousParticipantVM> participant = null)
     {
-        return this.ParticipantQuestionResponses.Where(r => ageGroup.HasFlag(r.AnonymousParticipant.AgeGroup))
-            .Select(r => r.QuestionResponse)
-            .OfType<QuestionMultiButtonResponseVM>()
-            .GroupBy(g => g.Response[numOfQuestion].ButtonType)
-            .Select(g => (type: g.Key, count: g.Count()))
-            .UnionBy(Enum.GetValues<SurveyButtonResponseType>().Select(type => (type, count: 0)), tuple => tuple.type)
-            .OrderBy(g => g.type)
-            .Select(g => g.count)
-            .ToList();
-
-    }
-
-    public List<int> GetNumberOfParticipantsByGender(Gender gender, int numOfQuestion = 0)
-    {
-        return this.ParticipantQuestionResponses.Where(r => gender.HasFlag(r.AnonymousParticipant.Gender))
-           .Select(r => r.QuestionResponse)
-           .OfType<QuestionMultiButtonResponseVM>()
-           .GroupBy(g => g.Response[numOfQuestion].ButtonType)
-           .Select(g => (type: g.Key, count: g.Count()))
-           .UnionBy(Enum.GetValues<SurveyButtonResponseType>().Select(type => (type, count: 0)), tuple => tuple.type)
-           .OrderBy(g => g.type)
-           .Select(g => g.count)
-           .ToList();
+        throw new NotImplementedException();
     }
 }
 
 
 
-
-
-
-
-
-public interface ISurveyParticipantStatistics
+public class SurveyButtonGroupResponsesGroupedByQuestion : SurveyResponsesGroupedByQuestion
 {
-    List<int> GetNumberOfParticipantsByGender(Gender gender, int numOfQuestion = 0);
-    List<int> GetNumberOfParticipantsByAge(AgeGroups ageGroup, int numOfQuestion = 0);
+
+    public SurveyButtonGroupResponsesGroupedByQuestion(SurveyQuestionVM? surveyQuestion,
+             IEnumerable<ParticipantQuestionResponse> participantQuestionResponses) : base(surveyQuestion, participantQuestionResponses)
+    {
+
+    }
+
+    public override IAsyncEnumerable<List<int>> NumberOfParticipantsBy(Predicate<AnonymousParticipantVM> participant = null)
+    {
+
+        var query = participant == null ? this.ParticipantQuestionResponses : 
+            this.ParticipantQuestionResponses.Where(pqr => participant(pqr.AnonymousParticipant));        
+
+        return query
+          .Select(r => r.QuestionResponse)
+          .OfType<QuestionMultiButtonResponseVM>()
+          .SelectMany(qmb => qmb.Response, (dd, s) => new { Index = dd.Response.IndexOf(s), s.ButtonType })
+          .GroupBy(g => g.Index, x => x.ButtonType)
+          .Select(s => s.GroupBy(d => d).Select(t => (key: t.Key, count: t.Count())))
+          .Select(c => c.UnionBy(Enum.GetValues<SurveyButtonResponseType>().Select(t => (key: t, count: 0)), tuple => tuple.key))
+          .OrderBy(o => o.OrderBy(or => or.key))
+          .Select(s => s.Select(s => s.count).ToList())
+          .ToAsyncEnumerable();
+         
+         //.GroupBy(g => {     g.Response[numOfQuestion].ButtonType)
+         //.Select(g => (type: g.Key, count: g.Count()))
+         //.UnionBy(Enum.GetValues<SurveyButtonResponseType>().Select(type => (type, count: 0)), tuple => tuple.type)
+         //.OrderBy(g => g.type)
+         //.Select(g => g.count)
+         //.ToList();
+    }
 }
+
+
+
+
+
 

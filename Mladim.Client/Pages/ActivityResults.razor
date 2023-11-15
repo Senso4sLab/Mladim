@@ -90,7 +90,7 @@
                 </table>
             </MudPaper>
         }
-        else if(surveyResponsesGroupByQuestion is SurveyButtonResponsesGroupedByQuestion buttonResponseGroup)
+        else if(surveyResponsesGroupByQuestion is SurveyButtonGroupResponsesGroupedByQuestion buttonResponseGroup)
         {
             <MudPaper Class="p-2">               
                 @for(int numQuestion = 0; numQuestion < buttonResponseGroup.SurveyQuestion?.Texts.Count; numQuestion++ )
