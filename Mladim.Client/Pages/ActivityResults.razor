@@ -4,11 +4,14 @@
 @using Mladim.Client.Components.Anketa;
 
 
-<MudStack Class="pt-5 pb-8" Spacing="4">
-   <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-         <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">Prikaz rezultatov glede na</MudText>
-         <MudSwitch Color="Color.Tertiary"  CheckedChanged="((bool arg) => OnSwitcerStateChanged(arg))" LabelPosition="LabelPosition.Start">@selector.Description</MudSwitch>
-   </MudStack>
+<MudStack Class="py-5" Spacing="4" >
+   
+        <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+             <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">Prikaz rezultatov glede na</MudText>
+             <MudIconButton Icon="@Icons.Material.Filled.FileDownload" OnClick="@OnClickCsvExportFile">Prenesi rezultate</MudIconButton>
+       </MudStack>     
+       <MudSwitch Color="Color.Tertiary"  @bind-Checked="selector" LabelPosition="LabelPosition.End" Converter="@customSelectorToBoolConverter">@selector.Description</MudSwitch>
+       
     @foreach (var surveyResponsesGroupByQuestion in SurveyResponsesGroupByQuestions)
     {
         if (surveyResponsesGroupByQuestion is SurveyRatingResponsesGroupedByQuestion ratingResponses)
