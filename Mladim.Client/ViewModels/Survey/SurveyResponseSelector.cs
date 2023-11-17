@@ -6,11 +6,15 @@ namespace Mladim.Client.ViewModels.Survey;
 public abstract class SurveyResponseSelector
 {
     public string? Description { get; protected set; }
-    public List<ParticipantPredicate> ParticipantPredicates { get; set; } = new();
+    public List<ParticipantPredicate> ParticipantPredicatesByType { get; set; } = new();
 }
 
 
-public record ParticipantPredicate(string Name, Predicate<AnonymousParticipantVM> Predicate);
+public record ParticipantPredicate(string Name, Predicate<AnonymousParticipantVM> Predicate)
+{
+    public static ParticipantPredicate All() => 
+        new ParticipantPredicate("Skupaj", _ => true);
+}
 
 
 public class GenderSurveyResponseSelector : SurveyResponseSelector
@@ -18,9 +22,10 @@ public class GenderSurveyResponseSelector : SurveyResponseSelector
     public GenderSurveyResponseSelector()
     {
         this.Description = "Spol";
-        
-        this.ParticipantPredicates = Enum.GetValues<Gender>()
+
+        this.ParticipantPredicatesByType = Enum.GetValues<Gender>()
             .Select(g => new ParticipantPredicate(g.GetDisplayAttribute(), p => p.Gender == g))
+            .Union(new[] { ParticipantPredicate.All() })
             .ToList();          
     }
 }
@@ -31,8 +36,9 @@ public class AgeGroupSurveyResponseSelector : SurveyResponseSelector
     {
         this.Description = "Starostna skupina";
 
-        this.ParticipantPredicates = Enum.GetValues<AgeGroups>()
+        this.ParticipantPredicatesByType = Enum.GetValues<AgeGroups>()
             .Select(a => new ParticipantPredicate(a.GetDisplayAttribute(), p => p.AgeGroup == a))
+            .Union(new[] { ParticipantPredicate.All() })
             .ToList();
     }
 }

@@ -17,28 +17,19 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var participant in Selector.ParticipantPredicates)
-            {
-                <tr>
-                    <th scope="row">@participant.Name</th>                  
 
-                    @foreach (var numOfParticipants in BoleanResponseGroup.NumberOfParticipantsByCriteria(participant.Predicate))
-                    {                      
-                        <td>@numOfParticipants</td>
-                    }
-                    <td>@BoleanResponseGroup.NumberOfParticipantsByCriteria(participant.Predicate).Sum()</td>
-                </tr>
-            }
+            @foreach (var row in surveyParticipantListRow)
+            {               
+                    <tr>
+                        <th scope="row">@row.Criterion</th>
 
-            <tr>
-                <th scope="row">Skupaj</th>              
-
-                @foreach (var numOfParticipants in BoleanResponseGroup.NumberOfParticipantsByCriteria())
-                {                   
-                    <td>@numOfParticipants</td>
-                }
-                <td>@BoleanResponseGroup.NumberOfParticipantsByCriteria().Sum()</td>
-            </tr>
+                        @foreach (var participantsByType in row.ParticipantsByType)
+                        {
+                            <td>@participantsByType.NumOfParticipants</td>
+                        }
+                        <td>@row.ParticipantsByType.Sum(pt => pt.NumOfParticipants)</td>
+                    </tr>                              
+            }           
         </tbody>
     </table>
 </MudPaper>
@@ -51,5 +42,24 @@
     [Parameter]
     public SurveyResponseSelector Selector { get; set; } = default!;
 
-   
+    private IEnumerable<SurveyParticipantRow> surveyParticipantListRow = new List<SurveyParticipantRow>();
+
+    // protected override void OnInitialized()
+    // {
+    //     surveyParticipantListRow = GetSurveyParticipantRows();
+    // }
+
+    private IEnumerable<SurveyParticipantRow> GetSurveyParticipantRows() =>
+        this.Selector.ParticipantPredicatesByType
+            .Select(pp => BoleanResponseGroup.NumberOfParticipantsByCriterion(pp))
+            .ToList();
+
+
+    protected override void OnParametersSet()
+    {
+        surveyParticipantListRow = GetSurveyParticipantRows();
+    }
+
+
+
 }

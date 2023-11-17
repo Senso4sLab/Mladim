@@ -1,6 +1,6 @@
 ﻿using Mladim.Domain.Enums;
-using System.Dynamic;
-
+using Mladim.Client.Extensions;
+using Mladim.Domain.Extensions;
 
 namespace Mladim.Client.ViewModels.Survey;
 
@@ -16,9 +16,9 @@ public abstract class SurveyResponsesGroupedByQuestion
        this.ParticipantQuestionResponses = participantQuestionResponses.ToList();
     }
 
-    public abstract IEnumerable<int> NumberOfParticipantsByCriteria(Predicate<AnonymousParticipantVM> participant = null);
+    public abstract SurveyParticipantRow NumberOfParticipantsByCriterion(ParticipantPredicate participantPredicate);
 
-    public abstract string PrintResultsCsvFormat();
+    //public abstract string PrintResultsCsvFormat();
 
     public static SurveyResponsesGroupedByQuestion Create(SurveyQuestionVM? surveyQuestion, IEnumerable<ParticipantQuestionResponse> participantQuestionResponses)
     {
@@ -50,8 +50,8 @@ public class SurveyTextResponsesGroupedByQuestion : SurveyResponsesGroupedByQues
 
     }
 
-    public override IEnumerable<int> NumberOfParticipantsByCriteria(Predicate<AnonymousParticipantVM> participant = null) =>
-        new List<int>();  
+    public override SurveyParticipantRow NumberOfParticipantsByCriterion(ParticipantPredicate participantPredicate) =>
+        new SurveyParticipantRow(string.Empty, new List<(string SurveyReponseType, int NumOfParticipants)>());  
   
 }
 
@@ -64,28 +64,24 @@ public class SurveyRatingResponsesGroupedByQuestion : SurveyResponsesGroupedByQu
 
     }
 
-    public override IEnumerable<int> NumberOfParticipantsByCriteria(Predicate<AnonymousParticipantVM> participant = null)
+    public override SurveyParticipantRow NumberOfParticipantsByCriterion(ParticipantPredicate pp)
     {
-        var query = participant == null ? this.ParticipantQuestionResponses :
-           this.ParticipantQuestionResponses.Where(pqr => participant(pqr.AnonymousParticipant));
 
-        return query.Select(r => r.QuestionResponse)
+        return new SurveyParticipantRow(pp.Name, this.ParticipantQuestionResponses
+             .Where(pqr => pp.Predicate(pqr.AnonymousParticipant))
+             .Select(r => r.QuestionResponse)
              .OfType<QuestionRatingResponseVM>()
              .GroupBy(g => g.Response)
              .Select(g => (type: g.Key, count: g.Count()))
              .UnionBy(Enum.GetValues<SurveyRatingResponseType>().Select(type => (type, count: 0)), tuple => tuple.type)
              .OrderBy(g => g.type)
-             .Select(g => g.count)
-             .ToList();
-    }
-
-    public override string PrintResultsCsvFormat()
-    {
-       
-    }
+             .Select(g => (g.type.GetDisplayAttribute(), g.count))
+             .ToList());
+    }    
 }
 
-public record SurveyRowCsv(string Name, int Participants);
+
+public record SurveyParticipantRow(string Criterion, List<(string SurveyReponseType, int NumOfParticipants)> ParticipantsByType);
 
 
 public class SurveyBoleanResponsesGroupedByQuestion : SurveyResponsesGroupedByQuestion
@@ -96,19 +92,19 @@ public class SurveyBoleanResponsesGroupedByQuestion : SurveyResponsesGroupedByQu
 
     }
 
-    public override IEnumerable<int> NumberOfParticipantsByCriteria(Predicate<AnonymousParticipantVM> participant = null)
+    public override SurveyParticipantRow NumberOfParticipantsByCriterion(ParticipantPredicate pp)
     {
-        var query = participant == null ? this.ParticipantQuestionResponses :
-            this.ParticipantQuestionResponses.Where(pqr => participant(pqr.AnonymousParticipant));
-
-        return query.Select(r => r.QuestionResponse)
-           .OfType<QuestionBooleanResponseVM>()
-           .GroupBy(g => g.Response)
-           .Select(g => (type: g.Key, count: g.Count()))
-           .UnionBy(Enum.GetValues<SurveyBooleanResponseType>().Select(type => (type, count: 0)), tuple => tuple.type)
-           .OrderBy(g => g.type)
-           .Select(g => g.count)
-           .ToList();
+        return new SurveyParticipantRow(pp.Name, 
+              this.ParticipantQuestionResponses
+             .Where(pqr => pp.Predicate(pqr.AnonymousParticipant))
+             .Select(r => r.QuestionResponse)
+             .OfType<QuestionBooleanResponseVM>()
+             .GroupBy(g => g.Response)
+             .Select(g => (type: g.Key, count: g.Count()))
+             .UnionBy(Enum.GetValues<SurveyBooleanResponseType>().Select(type => (type, count: 0)), tuple => tuple.type)
+             .OrderBy(g => g.type)
+             .Select(g => (g.type.GetDisplayAttribute(), g.count))
+             .ToList());
     }  
 }
 
@@ -121,19 +117,19 @@ public class SurveyButtonResponsesGroupedByQuestion : SurveyResponsesGroupedByQu
     {
         this.Index = index;
     }
-    public override IEnumerable<int> NumberOfParticipantsByCriteria(Predicate<AnonymousParticipantVM> participant = null)
+    public override SurveyParticipantRow NumberOfParticipantsByCriterion(ParticipantPredicate pp)
     {
-        var query = participant == null ? this.ParticipantQuestionResponses :
-            this.ParticipantQuestionResponses.Where(pqr => participant(pqr.AnonymousParticipant));
-
-        return query.Select(r => r.QuestionResponse)
+        return new SurveyParticipantRow(pp.Name,
+            this.ParticipantQuestionResponses
+           .Where(pqr => pp.Predicate(pqr.AnonymousParticipant))
+           .Select(r => r.QuestionResponse)
            .OfType<QuestionMultiButtonResponseVM>()
            .GroupBy(g => g.Response[this.Index].ButtonType)
            .Select(g => (type: g.Key, count: g.Count()))
            .UnionBy(Enum.GetValues<SurveyButtonResponseType>().Select(type => (type, count: 0)), tuple => tuple.type)
            .OrderBy(g => g.type)
-           .Select(g => g.count)
-           .ToList();
+           .Select(g => (g.type.GetDisplayAttribute(), g.count))
+           .ToList());
     }
 }
 
@@ -148,11 +144,11 @@ public class SurveyButtonGroupResponsesGroupedByQuestion : SurveyResponsesGroupe
         ButtonGroupResponses.AddRange(questions.Skip(1).Select((q, index) => new SurveyButtonResponsesGroupedByQuestion(q, index, participantQuestionResponses)).ToList()); 
     }
 
-    public override IEnumerable<int> NumberOfParticipantsByCriteria(Predicate<AnonymousParticipantVM> participant = null)
-    {       
-        foreach (var group in ButtonGroupResponses)         
-            foreach(var num in group.NumberOfParticipantsByCriteria(participant))
-                yield return num;               
+    public override SurveyParticipantRow NumberOfParticipantsByCriterion(ParticipantPredicate pp)
+    {
+        return new SurveyParticipantRow(pp.Name, this.ButtonGroupResponses
+            .SelectMany(bgr => bgr.NumberOfParticipantsByCriterion(pp).ParticipantsByType).ToList());
+
     }
 }
 

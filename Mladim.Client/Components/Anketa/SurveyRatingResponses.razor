@@ -17,7 +17,19 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(var participant in Selector.ParticipantPredicates)
+            @foreach (var row in surveyParticipantListRow)
+            {
+                <tr>
+                    <th scope="row">@row.Criterion</th>
+
+                    @foreach (var participantsByType in row.ParticipantsByType)
+                    {
+                        <td>@participantsByType.NumOfParticipants</td>
+                    }
+                    <td>@row.ParticipantsByType.Sum(pt => pt.NumOfParticipants)</td>
+                </tr>
+            }
+            @*  @foreach(var participant in Selector.ParticipantPredicatesByType)
             {
                 <tr>
                     <th scope="row">@participant.Name</th>                  
@@ -38,7 +50,7 @@
                         <td>@numOfParticipants</td>
                     }
                 <td>@RatingResponseGroup.NumberOfParticipantsByCriteria().Sum()</td>
-                </tr>           
+                </tr>  *@          
         </tbody>
     </table>
 </MudPaper>
@@ -51,6 +63,20 @@
     [Parameter]
     public SurveyResponseSelector Selector { get; set; } = default!;
 
-   
+    private IEnumerable<SurveyParticipantRow> surveyParticipantListRow = new List<SurveyParticipantRow>();
 
+    // protected override void OnInitialized()
+    // {
+    //     surveyParticipantListRow = GetSurveyParticipantRows();
+    // }
+
+    private IEnumerable<SurveyParticipantRow> GetSurveyParticipantRows() =>
+        this.Selector.ParticipantPredicatesByType
+            .Select(pp => RatingResponseGroup.NumberOfParticipantsByCriterion(pp))
+            .ToList();
+
+    protected override void OnParametersSet()
+    {
+        surveyParticipantListRow = GetSurveyParticipantRows();
+    }
 }

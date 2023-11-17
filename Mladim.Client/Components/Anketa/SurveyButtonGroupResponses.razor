@@ -21,26 +21,19 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var predicate in Selector.ParticipantPredicates)
+
+                @foreach (var row in GetSurveyParticipantRows(buttonResponse))
                 {
                     <tr>
-                        <th scope="row">@predicate.Name</th>
-                        @foreach (var numOfParticipants in buttonResponse.NumberOfParticipantsByCriteria(predicate.Predicate))
-                        {
-                            <td>@numOfParticipants</td>
-                        }
-                        <td>@buttonResponse.NumberOfParticipantsByCriteria(predicate.Predicate).Sum()</td>
-                    </tr>
-                }
-                <tr>
-                    <th scope="row">Skupaj</th>
+                        <th scope="row">@row.Criterion</th>
 
-                    @foreach (var numOfParticipants in buttonResponse.NumberOfParticipantsByCriteria())
-                    {
-                        <td>@numOfParticipants</td>
-                    }
-                    <td>@buttonResponse.NumberOfParticipantsByCriteria().Sum()</td>
-                </tr>
+                        @foreach (var participantsByType in row.ParticipantsByType)
+                        {
+                            <td>@participantsByType.NumOfParticipants</td>
+                        }
+                        <td>@row.ParticipantsByType.Sum(pt => pt.NumOfParticipants)</td>
+                    </tr>
+                }              
             </tbody>
         </table>
     }
@@ -52,5 +45,15 @@
     public SurveyButtonGroupResponsesGroupedByQuestion ButtonResponseGroup { get; set; } = default!;
 
     [Parameter]
-    public SurveyResponseSelector Selector { get; set; } = default!;
+    public SurveyResponseSelector Selector { get; set; } = default!;   
+
+    protected override void OnInitialized()
+    {
+        
+    }
+
+    private IEnumerable<SurveyParticipantRow> GetSurveyParticipantRows(SurveyButtonResponsesGroupedByQuestion btg) =>
+        this.Selector.ParticipantPredicatesByType
+            .Select(pp => btg.NumberOfParticipantsByCriterion(pp))
+            .ToList();
 }
