@@ -18,6 +18,8 @@ public abstract class SurveyResponsesGroupedByQuestion
 
     public abstract IEnumerable<int> NumberOfParticipantsByCriteria(Predicate<AnonymousParticipantVM> participant = null);
 
+    public abstract string PrintResultsCsvFormat();
+
     public static SurveyResponsesGroupedByQuestion Create(SurveyQuestionVM? surveyQuestion, IEnumerable<ParticipantQuestionResponse> participantQuestionResponses)
     {
         return surveyQuestion?.Type switch
@@ -75,8 +77,16 @@ public class SurveyRatingResponsesGroupedByQuestion : SurveyResponsesGroupedByQu
              .OrderBy(g => g.type)
              .Select(g => g.count)
              .ToList();
-    }    
+    }
+
+    public override string PrintResultsCsvFormat()
+    {
+       
+    }
 }
+
+public record SurveyRowCsv(string Name, int Participants);
+
 
 public class SurveyBoleanResponsesGroupedByQuestion : SurveyResponsesGroupedByQuestion
 {
