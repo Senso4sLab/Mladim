@@ -1,16 +1,18 @@
 ﻿using Mladim.Domain.Enums;
 using Mladim.Client.Extensions;
 using Mladim.Domain.Extensions;
+using CsvHelper;
 
 namespace Mladim.Client.ViewModels.Survey;
 
 
 public abstract class SurveyResponsesGroupedByQuestion
 {
-    public string? Question {  get; set; }
+    public string Question {  get; set; }
+    
     public List<ParticipantQuestionResponse> ParticipantQuestionResponses = new();
 
-    public SurveyResponsesGroupedByQuestion(string? question, IEnumerable<ParticipantQuestionResponse> participantQuestionResponses)
+    public SurveyResponsesGroupedByQuestion(string question, IEnumerable<ParticipantQuestionResponse> participantQuestionResponses)
     {
        this.Question = question;
        this.ParticipantQuestionResponses = participantQuestionResponses.ToList();
@@ -18,8 +20,7 @@ public abstract class SurveyResponsesGroupedByQuestion
 
     public abstract SurveyParticipantRow NumberOfParticipantsByCriterion(ParticipantPredicate participantPredicate);
 
-    //public abstract string PrintResultsCsvFormat();
-
+    public abstract void SurveyResponseCSVFormat(CsvWriter writter);
     public static SurveyResponsesGroupedByQuestion Create(SurveyQuestionVM? surveyQuestion, IEnumerable<ParticipantQuestionResponse> participantQuestionResponses)
     {
         return surveyQuestion?.Type switch
@@ -51,8 +52,12 @@ public class SurveyTextResponsesGroupedByQuestion : SurveyResponsesGroupedByQues
     }
 
     public override SurveyParticipantRow NumberOfParticipantsByCriterion(ParticipantPredicate participantPredicate) =>
-        new SurveyParticipantRow(string.Empty, new List<(string SurveyReponseType, int NumOfParticipants)>());  
-  
+        new SurveyParticipantRow(string.Empty, new List<ParticipantsPerType> ());
+
+    public override void SurveyResponseCSVFormat(CsvWriter writter)
+    {
+        
+    }
 }
 
 
@@ -75,13 +80,30 @@ public class SurveyRatingResponsesGroupedByQuestion : SurveyResponsesGroupedByQu
              .Select(g => (type: g.Key, count: g.Count()))
              .UnionBy(Enum.GetValues<SurveyRatingResponseType>().Select(type => (type, count: 0)), tuple => tuple.type)
              .OrderBy(g => g.type)
-             .Select(g => (g.type.GetDisplayAttribute(), g.count))
+             .Select(g => new ParticipantsPerType(g.type.GetDisplayAttribute(), g.count))
              .ToList());
-    }    
+    }
+
+    public override void SurveyResponseCSVFormat(CsvWriter writter)
+    {
+      
+            writter.WriteComment(Question);
+            writter.NextRecord();
+            //foreach (var response in ParticipantQuestionResponses)
+            //{
+            //    writter.WriteRecords(response.ParticipantsPerType);
+            //    writter.NextRecord();
+            //}
+             
+        
+    }
 }
 
 
-public record SurveyParticipantRow(string Criterion, List<(string SurveyReponseType, int NumOfParticipants)> ParticipantsByType);
+
+public record ParticipantsPerType(string Type, int NumOfParticipants);
+
+public record SurveyParticipantRow(string Criterion, List<ParticipantsPerType> ParticipantsPerType);
 
 
 public class SurveyBoleanResponsesGroupedByQuestion : SurveyResponsesGroupedByQuestion
@@ -103,9 +125,14 @@ public class SurveyBoleanResponsesGroupedByQuestion : SurveyResponsesGroupedByQu
              .Select(g => (type: g.Key, count: g.Count()))
              .UnionBy(Enum.GetValues<SurveyBooleanResponseType>().Select(type => (type, count: 0)), tuple => tuple.type)
              .OrderBy(g => g.type)
-             .Select(g => (g.type.GetDisplayAttribute(), g.count))
+             .Select(g => new ParticipantsPerType(g.type.GetDisplayAttribute(), g.count))
              .ToList());
-    }  
+    }
+
+    public override void SurveyResponseCSVFormat(CsvWriter writter)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 
@@ -128,8 +155,13 @@ public class SurveyButtonResponsesGroupedByQuestion : SurveyResponsesGroupedByQu
            .Select(g => (type: g.Key, count: g.Count()))
            .UnionBy(Enum.GetValues<SurveyButtonResponseType>().Select(type => (type, count: 0)), tuple => tuple.type)
            .OrderBy(g => g.type)
-           .Select(g => (g.type.GetDisplayAttribute(), g.count))
+           .Select(g => new ParticipantsPerType(g.type.GetDisplayAttribute(), g.count))
            .ToList());
+    }
+
+    public override void SurveyResponseCSVFormat(CsvWriter writter)
+    {
+        throw new NotImplementedException();
     }
 }
 
@@ -147,8 +179,13 @@ public class SurveyButtonGroupResponsesGroupedByQuestion : SurveyResponsesGroupe
     public override SurveyParticipantRow NumberOfParticipantsByCriterion(ParticipantPredicate pp)
     {
         return new SurveyParticipantRow(pp.Name, this.ButtonGroupResponses
-            .SelectMany(bgr => bgr.NumberOfParticipantsByCriterion(pp).ParticipantsByType).ToList());
+            .SelectMany(bgr => bgr.NumberOfParticipantsByCriterion(pp).ParticipantsPerType).ToList());
 
+    }
+
+    public override void SurveyResponseCSVFormat(CsvWriter writter)
+    {
+        throw new NotImplementedException();
     }
 }
 

@@ -8,7 +8,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">@Selector.Description</th>
+                <th scope="col">@Selector.Name</th>
                 @foreach (var type in Enum.GetValues<SurveyRatingResponseType>())
                 {
                     <th scope="col">@type.GetDisplayAttribute()</th>
@@ -22,35 +22,13 @@
                 <tr>
                     <th scope="row">@row.Criterion</th>
 
-                    @foreach (var participantsByType in row.ParticipantsByType)
+                    @foreach (var participantsByType in row.ParticipantsPerType)
                     {
                         <td>@participantsByType.NumOfParticipants</td>
                     }
-                    <td>@row.ParticipantsByType.Sum(pt => pt.NumOfParticipants)</td>
+                    <td>@row.ParticipantsPerType.Sum(pt => pt.NumOfParticipants)</td>
                 </tr>
-            }
-            @*  @foreach(var participant in Selector.ParticipantPredicatesByType)
-            {
-                <tr>
-                    <th scope="row">@participant.Name</th>                  
-
-                    @foreach (var numOfParticipants in RatingResponseGroup.NumberOfParticipantsByCriteria(participant.Predicate))
-                    {                       
-                        <td>@numOfParticipants</td>
-                    }
-                    <td>@RatingResponseGroup.NumberOfParticipantsByCriteria(participant.Predicate).Sum()</td>
-                </tr>
-            }
-
-                <tr>
-                    <th scope="row">Skupaj</th>                   
-
-                    @foreach (var numOfParticipants in RatingResponseGroup.NumberOfParticipantsByCriteria())
-                    {                        
-                        <td>@numOfParticipants</td>
-                    }
-                <td>@RatingResponseGroup.NumberOfParticipantsByCriteria().Sum()</td>
-                </tr>  *@          
+            }                 
         </tbody>
     </table>
 </MudPaper>

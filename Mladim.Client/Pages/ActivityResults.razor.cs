@@ -9,6 +9,9 @@ using Syncfusion.Blazor.PivotView;
 using MudBlazor;
 using Mladim.Client.Components.Dialogs;
 using Mladim.Client.Utilities.Converters;
+using Microsoft.JSInterop;
+using CsvHelper;
+using System.Globalization;
 
 namespace Mladim.Client.Pages;
 
@@ -23,6 +26,9 @@ public partial class ActivityResults
 
     [Parameter]
     public int? ActivityId { get; set; }
+
+    [Inject]
+    public IJSRuntime JS { get; set; }
 
     private IEnumerable<SurveyResponsesGroupedByQuestion> SurveyResponsesGroupByQuestions = new List<SurveyResponsesGroupedByQuestion>();
     public SurveyResponseSelector selector { get; set; } = new GenderSurveyResponseSelector();   
@@ -50,10 +56,43 @@ public partial class ActivityResults
     }    
 
 
-    private void OnClickCsvExportFile()
+    private async Task OnClickCsvExportFile()
     {
+        var memoryStream = new MemoryStream();
+        var streamWriter = new StreamWriter(memoryStream);    
+        
 
+        
+
+        using (var csv = new CsvWriter(streamWriter, CultureInfo.InvariantCulture))
+        {
+            foreach (var surveyResponses in SurveyResponsesGroupByQuestions) 
+            {
+                csv.WriteComment(surveyResponses.Question);
+                csv.NextRecord();
+                
+                //surveyResponses.
+                //csv.NextRecord();
+            }
+            //foreach (var row in rows)
+            //{
+            //    csv.WriteComment(RatingResponses.Question);
+            //    csv.NextRecord();
+            //    csv.WriteRecords(row.ParticipantsPerType);
+            //    csv.NextRecord();
+            //}
+        }       
+
+        string fileName = $"{selector.Name}_{ActivityId}";
+        if (streamWriter != null)
+        {
+            using var streamRef = new DotNetStreamReference(stream: streamWriter.BaseStream);
+            await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+        }
     }
+
+
+
 }
 
 

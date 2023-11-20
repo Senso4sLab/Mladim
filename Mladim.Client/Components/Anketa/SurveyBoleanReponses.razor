@@ -8,7 +8,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">@Selector.Description</th>
+                <th scope="col">@Selector.Name</th>
                 @foreach (var type in Enum.GetValues<SurveyBooleanResponseType>())
                 {
                     <th scope="col">@type.GetDisplayAttribute()</th>
@@ -23,11 +23,11 @@
                     <tr>
                         <th scope="row">@row.Criterion</th>
 
-                        @foreach (var participantsByType in row.ParticipantsByType)
+                        @foreach (var participantsByType in row.ParticipantsPerType)
                         {
                             <td>@participantsByType.NumOfParticipants</td>
                         }
-                        <td>@row.ParticipantsByType.Sum(pt => pt.NumOfParticipants)</td>
+                        <td>@row.ParticipantsPerType.Sum(pt => pt.NumOfParticipants)</td>
                     </tr>                              
             }           
         </tbody>
