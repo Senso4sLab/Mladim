@@ -52,7 +52,7 @@
         
     }
 
-    private IEnumerable<SurveyParticipantRow> GetSurveyParticipantRows(SurveyButtonResponsesGroupedByQuestion btg) =>
+    private IEnumerable<SurveyParticipantRow> GetSurveyParticipantRows(SurveyButtonResponseGroupedByQuestion btg) =>
         this.Selector.ParticipantPredicatesByType
             .Select(pp => btg.NumberOfParticipantsByCriterion(pp))
             .ToList();

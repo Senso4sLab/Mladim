@@ -12,22 +12,35 @@ public abstract class QuestionResponseVM
     {
         this.UniqueQuestionId = uniqueQuestionId;   
     }
-
 }
 
-public class QuestionRatingResponseVM : QuestionResponseVM
+public class QuestionResponseVM<T> : QuestionResponseVM
+{
+    public virtual T Response { get; set; }
+    
+    public QuestionResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
+    {
+    }
+
+    public QuestionResponseVM(int uniqueQuestionId, T response) : this(uniqueQuestionId)
+    {
+        Response = response;
+    }
+}
+
+public class QuestionRatingResponseVM : QuestionResponseVM<SurveyRatingResponseType>
 {
     [RatingResponseValidator]
-    public SurveyRatingResponseType Response { get; set; }
+    public override SurveyRatingResponseType Response { get; set; }   
+
     public QuestionRatingResponseVM(int uniqueQuestionId) :base(uniqueQuestionId)
     {
         
     }
 }
 
-public class QuestionTextResponseVM : QuestionResponseVM
-{
-    public string Response { get; set; } = string.Empty;
+public class QuestionTextResponseVM : QuestionResponseVM<string>
+{   
     public QuestionTextResponseVM(int uniqueQuestionId):base(uniqueQuestionId)
     {
         
@@ -35,10 +48,10 @@ public class QuestionTextResponseVM : QuestionResponseVM
 }
 
 
-public class QuestionBooleanResponseVM : QuestionResponseVM
+public class QuestionBooleanResponseVM : QuestionResponseVM<SurveyBooleanResponseType>
 {
     [BooleanResponseValidator]
-    public SurveyBooleanResponseType Response { get; set; }
+    public override SurveyBooleanResponseType Response { get; set; }
     public QuestionBooleanResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
     {
 
@@ -46,10 +59,20 @@ public class QuestionBooleanResponseVM : QuestionResponseVM
 }
 
 
-public class QuestionMultiButtonResponseVM : QuestionResponseVM
+public class QuestionButtonResponseVM : QuestionResponseVM<SurveryButtonResponseVM>
 {
     [ValidateComplexType]
-    public List<SurveryButtonResponseVM> Response { get; set; } = new();
+    public override SurveryButtonResponseVM Response { get; set; }
+    public QuestionButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
+    {
+    }
+}
+
+
+public class QuestionMultiButtonResponseVM : QuestionResponseVM<List<QuestionButtonResponseVM>>
+{
+    [ValidateComplexType]
+    public override List<QuestionButtonResponseVM> Response { get; set; } = new();
     public QuestionMultiButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
     {       
 
@@ -57,26 +80,36 @@ public class QuestionMultiButtonResponseVM : QuestionResponseVM
 }
 
 
-public class SurveryButtonResponseVM
+
+public record SurveryButtonResponseVM
 {
     [ButtonResponseValidator]
     public SurveyButtonResponseType ButtonType { get; set; }
 }
 
 
-public class ParticipantQuestionResponse
+
+
+
+public class ParticipantQuestionResponseVM
 {
     public AnonymousParticipantVM AnonymousParticipant { get; set; }
-    public QuestionResponseVM QuestionResponse { get; set; }
 
-    private ParticipantQuestionResponse(AnonymousParticipantVM anonymousParticipant, QuestionResponseVM questionResponse)
+    public ParticipantQuestionResponseVM(AnonymousParticipantVM anonymousParticipant)
+    {
+        this.AnonymousParticipant = anonymousParticipant;
+    }
+}
+
+public class ParticipantQuestionResponseVM<T> : ParticipantQuestionResponseVM
+{
+    public QuestionResponseVM<T> QuestionResponse { get; set; }
+
+    public ParticipantQuestionResponseVM(AnonymousParticipantVM anonymousParticipant, QuestionResponseVM<T> questionResponse) : base(anonymousParticipant)
     {
         this.AnonymousParticipant = anonymousParticipant;
         this.QuestionResponse = questionResponse;
     }
 
-    public static ParticipantQuestionResponse Create(AnonymousParticipantVM anonymousParticipant, QuestionResponseVM questionResponse)
-    {
-        return new ParticipantQuestionResponse(anonymousParticipant, questionResponse);
-    }
+   
 }

@@ -30,7 +30,7 @@ public partial class ActivityResults
     [Inject]
     public IJSRuntime JS { get; set; }
 
-    private IEnumerable<SurveyResponsesGroupedByQuestion> SurveyResponsesGroupByQuestions = new List<SurveyResponsesGroupedByQuestion>();
+    private IEnumerable<SurveyResponsesGroupedByQuestionVM> SurveyResponsesGroupByQuestions = new List<SurveyResponsesGroupedByQuestionVM>();
     public SurveyResponseSelector selector { get; set; } = new GenderSurveyResponseSelector();   
     private CustomSelectorToBoolConverter customSelectorToBoolConverter = new CustomSelectorToBoolConverter();
     protected async override Task OnInitializedAsync()
@@ -40,7 +40,7 @@ public partial class ActivityResults
 
         SurveyResponsesGroupByQuestions = await GetSurveyResponsesGroupByQuestionAsync();
     }
-    private async Task<IEnumerable<SurveyResponsesGroupedByQuestion>> GetSurveyResponsesGroupByQuestionAsync()
+    private async Task<IEnumerable<SurveyResponsesGroupedByQuestionVM>> GetSurveyResponsesGroupByQuestionAsync()
     {
         IEnumerable<SurveyQuestionVM> surveyQuestions = await SurveyService.GetSurveyQuestionnairyAsync(ActivityId!.Value, Gender.Female);
         IEnumerable<AnonymousSurveyResponseVM> surveyResponses = await SurveyService.GetAnonymousSurveyResponsesAsync(ActivityId.Value);
@@ -51,7 +51,7 @@ public partial class ActivityResults
                 QuestionResponse = response,
             })
             .GroupBy(u => u.QuestionResponse.UniqueQuestionId)
-            .Select(g => SurveyResponsesGroupedByQuestion.Create(surveyQuestions.FirstOrDefault(sq => sq.UniqueQuestionId == g.Key), g.Select(a => ParticipantQuestionResponse.Create(a.Participant, a.QuestionResponse))))
+            .Select(g => SurveyResponsesGroupedByQuestionVM.Create(surveyQuestions.FirstOrDefault(sq => sq.UniqueQuestionId == g.Key), g.Select(a => ParticipantQuestionResponseVM.Create(a.Participant, a.QuestionResponse))))
             .ToList();
     }    
 
