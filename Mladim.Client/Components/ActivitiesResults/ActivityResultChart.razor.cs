@@ -16,7 +16,8 @@ public partial class ActivityResultChart
     }
 
 
-    private string GenderColor(Gender gender) => gender switch
+    private string GenderColor(Gender gender) => 
+        gender switch
     {
         Gender.Male => "#4da456",
         Gender.Female => "#ffc700",
@@ -26,7 +27,8 @@ public partial class ActivityResultChart
 
 
 
-    private string AgeGroupColor(AgeGroups age) => age switch
+    private string AgeGroupColor(AgeGroups age) =>
+        age switch
     {
         AgeGroups.Age12_14 => "#4da456",
         AgeGroups.Age15_19 => "#ffc700",
