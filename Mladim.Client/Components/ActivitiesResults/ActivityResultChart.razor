@@ -1,0 +1,39 @@
+﻿@using Syncfusion.Blazor.Charts
+ 
+@* <MudGrid>
+    <MudItem xl="4" sm="6">
+        <MudPaper Outlined="true">
+            <SfAccumulationChart Title="Razporeditev udeležencev po letih" EnableAnimation="true" EnableSmartLabels="true" CustomClass="custom-row">
+                <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
+                    <AccumulationChartSeriesCollection>
+                        <AccumulationChartSeries DataSource="@projectStatistics.AgeDoughnut" PointColorMapping="Fill" XName="Name" YName="Value" InnerRadius="80%">
+                            <AccumulationDataLabelSettings Visible="true" Name="Text" Position="AccumulationLabelPosition.Outside" >
+                                    <AccumulationChartDataLabelFont FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
+                            </AccumulationDataLabelSettings>
+                        </AccumulationChartSeries>
+                    </AccumulationChartSeriesCollection>
+                    <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Near" Position="LegendPosition.Right">
+                        <AccumulationChartLegendFont FontFamily="Poppins" FontWeight="400" Size="0.8rem" Color="#6e7191" />
+                    </AccumulationChartLegendSettings>
+            </SfAccumulationChart>
+        </MudPaper>
+    </MudItem>
+    <MudItem xl ="4" sm="6">
+        <MudPaper Outlined="true">
+            <SfAccumulationChart Title="Razporeditev udeležencev po spolu" EnableAnimation="true" EnableSmartLabels="true">
+                <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191"/>
+                    <AccumulationChartSeriesCollection>
+                        <AccumulationChartSeries DataSource="@projectStatistics.GenderDoughnut" PointColorMapping="Fill" XName="Name" YName="Value" InnerRadius="80%">              
+                            <AccumulationDataLabelSettings Visible="true" Name="Text" Position="AccumulationLabelPosition.Outside">
+                                <AccumulationChartDataLabelFont FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
+                            </AccumulationDataLabelSettings>
+                        </AccumulationChartSeries>
+                    </AccumulationChartSeriesCollection>
+                    <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Near" Position="LegendPosition.Right">
+                            <AccumulationChartLegendFont FontFamily="Poppins" FontWeight="400" Size="0.8rem" Color="#6e7191" />
+                    </AccumulationChartLegendSettings>
+            </SfAccumulationChart>
+        </MudPaper>
+    </MudItem>        
+</MudGrid>       
+ *@

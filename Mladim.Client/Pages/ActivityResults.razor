@@ -2,41 +2,23 @@
 @using Mladim.Domain.Enums;
 @using Mladim.Domain.Extensions;
 @using Mladim.Client.Components.Anketa;
+@using Mladim.Client.Components.ActivitiesResults;
 
 
-<MudStack Class="py-5" Spacing="4" >   
-    <MudStack Spacing="0">
-        <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-             <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">Prikaz rezultatov</MudText>
-             <MudIconButton Icon="@Icons.Material.Filled.FileDownload" OnClick="@OnClickCsvExportFile">Prenesi rezultate</MudIconButton>
-         </MudStack>
-         <MudSwitch Color="Color.Tertiary" @bind-Checked="selector" LabelPosition="LabelPosition.End" Converter="@customSelectorToBoolConverter">
-             <MudText Color="Color.Tertiary" Typo="Typo.h2">
-                 @selector.Name
-             </MudText>
-         </MudSwitch>
+<MudStack Class="pb-5">  
+    <MudStack Row Justify="Justify.FlexEnd">
+        <MudIconButton OnClick="OnTablePresentation" Icon="@Icons.Material.Filled.TableRows" Color="isTableMode ? Color.Primary : Color.Tertiary"></MudIconButton>
+        <MudIconButton OnClick="OnChartPresentation" Icon="@Icons.Material.Filled.InsertChart" Color="isTableMode ? Color.Tertiary : Color.Primary"></MudIconButton>
     </MudStack>
-      
        
-    @foreach (var surveyResponsesGroupByQuestion in SurveyResponsesGroupByQuestions)
+   @if(isTableMode)
     {
-        if (surveyResponsesGroupByQuestion is SurveyRatingResponsesGroupedByQuestion ratingResponses)
-        {
-            <SurveyRatingResponses RatingResponseGroup="ratingResponses"  Selector="selector"/>
-        }
-        else if (surveyResponsesGroupByQuestion is SurveyBoleanResponsesGroupedByQuestion boleanResponses)
-        {
-            <SurveyBoleanReponses BoleanResponseGroup="boleanResponses" Selector="selector" />
-        }
-        else if(surveyResponsesGroupByQuestion is SurveyButtonGroupResponsesGroupedByQuestion buttonResponses)
-        {
-            <SurveyButtonGroupResponses ButtonResponseGroup="buttonResponses" Selector="selector" />
-        }
-        else if(surveyResponsesGroupByQuestion is SurveyTextResponsesGroupedByQuestion textResponses)
-        {
-            <SurveyTextResponses TextResponseGroup="textResponses" />
-        }
+        <ActivityResultTable SurveyResponsesGroupByQuestions="SurveyResponsesGroupByQuestions"></ActivityResultTable>
     }
+    else
+    {
+        <ActivityResultChart SurveyResponsesGroupByQuestions="SurveyResponsesGroupByQuestions"></ActivityResultChart>
+    }    
 </MudStack>
 
 

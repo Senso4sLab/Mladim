@@ -1,0 +1,41 @@
+﻿@using Mladim.Client.ViewModels.Survey;
+@using Mladim.Domain.Enums;
+@using Mladim.Domain.Extensions;
+@using Mladim.Client.Components.Anketa;
+
+<MudStack Spacing="4" >  
+       <MudStack>       
+         <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+             <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">Prikaz rezultatov</MudText>
+             <MudIconButton Icon="@Icons.Material.Filled.FileDownload" OnClick="@OnClickCsvExportFile">Prenesi rezultate</MudIconButton>
+         </MudStack>
+         <MudSwitch Color="Color.Tertiary" @bind-Checked="selector" LabelPosition="LabelPosition.End" Converter="@customSelectorToBoolConverter">
+             <MudText Color="Color.Tertiary" Typo="Typo.h2">
+                 @selector.Name
+             </MudText>
+         </MudSwitch>
+     </MudStack>
+      
+       
+    @foreach (var surveyResponsesGroupByQuestion in SurveyResponsesGroupByQuestions)
+    {
+        if (surveyResponsesGroupByQuestion is SurveyRatingResponsesGroupedByQuestion ratingResponses)
+        {
+            <SurveyRatingResponses RatingResponseGroup="ratingResponses"  Selector="selector"/>
+        }
+        else if (surveyResponsesGroupByQuestion is SurveyBoleanResponsesGroupedByQuestion boleanResponses)
+        {
+            <SurveyBoleanReponses BoleanResponseGroup="boleanResponses" Selector="selector" />
+        }
+        else if(surveyResponsesGroupByQuestion is SurveyButtonGroupResponsesGroupedByQuestion buttonResponses)
+        {
+            <SurveyButtonGroupResponses ButtonResponseGroup="buttonResponses" Selector="selector" />
+        }
+        else if(surveyResponsesGroupByQuestion is SurveyTextResponsesGroupedByQuestion textResponses)
+        {
+            <SurveyTextResponses TextResponseGroup="textResponses" />
+        }
+    }
+</MudStack>
+
+

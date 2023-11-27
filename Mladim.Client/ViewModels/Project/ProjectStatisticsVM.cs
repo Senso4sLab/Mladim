@@ -54,7 +54,8 @@ public class ProjectStatisticsVM
     {
         Gender.Male => "#4da456",
         Gender.Female => "#ffc700",
-        _ => "#8ed974",
+        Gender.Undefined => "8ed974",
+        Gender.Other => "#394241",
     };
 
 
