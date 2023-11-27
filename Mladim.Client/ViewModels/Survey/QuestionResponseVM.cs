@@ -1,5 +1,6 @@
 ﻿using Mladim.Client.Validators.SurveyResponseValidators;
 using Mladim.Domain.Enums;
+using Mladim.Domain.Extensions;
 using System.ComponentModel.DataAnnotations;
 
 namespace Mladim.Client.ViewModels.Survey;
@@ -11,7 +12,7 @@ public abstract class QuestionResponseVM
     public QuestionResponseVM(int uniqueQuestionId)
     {
         this.UniqueQuestionId = uniqueQuestionId;   
-    }
+    }    
 }
 
 public class QuestionResponseVM<T> : QuestionResponseVM
@@ -26,6 +27,11 @@ public class QuestionResponseVM<T> : QuestionResponseVM
     {
         Response = response;
     }
+
+    public override string ToString()
+    {
+        return this.Response.ToString();
+    }
 }
 
 public class QuestionRatingResponseVM : QuestionResponseVM<SurveyRatingResponseType>
@@ -37,6 +43,10 @@ public class QuestionRatingResponseVM : QuestionResponseVM<SurveyRatingResponseT
     {
         
     }
+
+    public override string ToString() =>    
+        this.Response.GetDisplayAttribute();
+    
 }
 
 public class QuestionTextResponseVM : QuestionResponseVM<string>
@@ -45,6 +55,10 @@ public class QuestionTextResponseVM : QuestionResponseVM<string>
     {
         
     }
+
+    public override string ToString() => 
+        this.Response;
+    
 }
 
 
@@ -56,6 +70,10 @@ public class QuestionBooleanResponseVM : QuestionResponseVM<SurveyBooleanRespons
     {
 
     }
+
+    public override string ToString() =>
+        this.Response.GetDisplayAttribute();
+    
 }
 
 
@@ -66,17 +84,25 @@ public class QuestionButtonResponseVM : QuestionResponseVM<SurveryButtonResponse
     public QuestionButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
     {
     }
+
+    public override string ToString() => 
+        this.Response.ToString();
+    
 }
 
 
-public class QuestionMultiButtonResponseVM : QuestionResponseVM<List<QuestionButtonResponseVM>>
+public class QuestionMultiButtonResponseVM : QuestionResponseVM<List<SurveryButtonResponseVM>>
 {
     [ValidateComplexType]
-    public override List<QuestionButtonResponseVM> Response { get; set; } = new();
+    public override List<SurveryButtonResponseVM> Response { get; set; } = new();
     public QuestionMultiButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
     {       
 
     }
+
+    public override string ToString() =>   
+         string.Join(',', this.Response);
+    
 }
 
 
@@ -85,20 +111,31 @@ public record SurveryButtonResponseVM
 {
     [ButtonResponseValidator]
     public SurveyButtonResponseType ButtonType { get; set; }
+
+    public override string ToString() => 
+        this.ButtonType.GetDisplayAttribute();
+    
 }
 
-
-
-
-
-public class ParticipantQuestionResponseVM
+public abstract class ParticipantQuestionResponseVM
 {
     public AnonymousParticipantVM AnonymousParticipant { get; set; }
-
+    public int UniqueQuestionId { get; protected set; }
+    
     public ParticipantQuestionResponseVM(AnonymousParticipantVM anonymousParticipant)
     {
-        this.AnonymousParticipant = anonymousParticipant;
+        this.AnonymousParticipant = anonymousParticipant;       
     }
+
+    public static ParticipantQuestionResponseVM Create(AnonymousParticipantVM anonymousParticipant, QuestionResponseVM questionResponse) =>
+       questionResponse switch
+       {
+           QuestionRatingResponseVM questionRatingResponse => new ParticipantQuestionResponseVM<SurveyRatingResponseType>(anonymousParticipant, questionRatingResponse),
+           QuestionBooleanResponseVM questionBooleanResponse => new ParticipantQuestionResponseVM<SurveyBooleanResponseType>(anonymousParticipant, questionBooleanResponse),
+           QuestionTextResponseVM questionTextResponse => new ParticipantQuestionResponseVM<string>(anonymousParticipant, questionTextResponse),
+           QuestionMultiButtonResponseVM questionButtonResponse => new ParticipantQuestionResponseVM<List<SurveryButtonResponseVM>>(anonymousParticipant, questionButtonResponse),
+           _ => throw new NotImplementedException(),
+       };
 }
 
 public class ParticipantQuestionResponseVM<T> : ParticipantQuestionResponseVM
@@ -109,7 +146,7 @@ public class ParticipantQuestionResponseVM<T> : ParticipantQuestionResponseVM
     {
         this.AnonymousParticipant = anonymousParticipant;
         this.QuestionResponse = questionResponse;
+        this.UniqueQuestionId = questionResponse.UniqueQuestionId;
     }
-
-   
 }
+

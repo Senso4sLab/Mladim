@@ -7,7 +7,7 @@ public class BooleanResponseValidator : ValidationAttribute
 {
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
-        if (value is SurveyBooleanResponseType type)
+        if (value is SurveyBooleanResponseType type && Enum.IsDefined<SurveyBooleanResponseType>(type))
             return null;
         else
             return new ValidationResult("Odgovor je obvezen", new[] { validationContext.MemberName!});       

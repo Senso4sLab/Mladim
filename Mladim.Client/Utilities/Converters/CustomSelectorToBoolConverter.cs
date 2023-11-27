@@ -12,8 +12,8 @@ public class CustomSelectorToBoolConverter : BoolConverter<SurveyResponseSelecto
         GetFunc = OnGet;
     }
 
-    private SurveyResponseSelector Gender = new GenderSurveyResponseSelector();
-    private SurveyResponseSelector AgeGroup = new AgeGroupSurveyResponseSelector();
+    private SurveyResponseSelector Gender = SurveyResponseSelector.CreateGenderSelector();
+    private SurveyResponseSelector AgeGroup = SurveyResponseSelector.CreateAgeGroupSelector();
 
     private SurveyResponseSelector OnGet(bool? value)
     {
@@ -24,7 +24,7 @@ public class CustomSelectorToBoolConverter : BoolConverter<SurveyResponseSelecto
         catch (Exception e)
         {
             UpdateGetError("Conversion error: " + e.Message);
-            return new GenderSurveyResponseSelector();
+            return Gender;
         }
     }
 

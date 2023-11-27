@@ -5,7 +5,7 @@
 
 
 <MudPaper Class="p-2">
-    <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@ButtonResponseGroup.Question</MudText>
+    <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@ButtonResponseGroup.QuestionDescription</MudText>
 
     @foreach(var buttonResponse in ButtonResponseGroup.ButtonGroupResponses)
     {
@@ -45,15 +45,11 @@
     public SurveyButtonGroupResponsesGroupedByQuestion ButtonResponseGroup { get; set; } = default!;
 
     [Parameter]
-    public SurveyResponseSelector Selector { get; set; } = default!;   
-
-    protected override void OnInitialized()
-    {
-        
-    }
+    public SurveyResponseSelector Selector { get; set; } = default!;
+    
 
     private IEnumerable<SurveyParticipantRow> GetSurveyParticipantRows(SurveyButtonResponseGroupedByQuestion btg) =>
         this.Selector.ParticipantPredicatesByType
-            .Select(pp => btg.NumberOfParticipantsByCriterion(pp))
+            .SelectMany(pp => btg.NumberOfParticipantsByCriterion(pp.Predicate, pp.Name))
             .ToList();
 }

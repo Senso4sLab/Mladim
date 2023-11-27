@@ -3,7 +3,7 @@
 @using Mladim.Domain.Extensions;
 
 <MudPaper Class="p-2">
-    <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@BoleanResponseGroup.Question</MudText>
+    <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@BoleanResponseGroup.QuestionDescription</MudText>
 
     <table class="table">
         <thead>
@@ -44,14 +44,9 @@
 
     private IEnumerable<SurveyParticipantRow> surveyParticipantListRow = new List<SurveyParticipantRow>();
 
-    // protected override void OnInitialized()
-    // {
-    //     surveyParticipantListRow = GetSurveyParticipantRows();
-    // }
-
     private IEnumerable<SurveyParticipantRow> GetSurveyParticipantRows() =>
         this.Selector.ParticipantPredicatesByType
-            .Select(pp => BoleanResponseGroup.NumberOfParticipantsByCriterion(pp))
+            .SelectMany(pp => BoleanResponseGroup.NumberOfParticipantsByCriterion(pp.Predicate, pp.Name))
             .ToList();
 
 

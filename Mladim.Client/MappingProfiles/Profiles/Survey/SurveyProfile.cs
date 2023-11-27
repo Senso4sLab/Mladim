@@ -59,7 +59,7 @@ public class SurveyProfile : Profile
         {
             return new QuestionMultiButtonResponseVM(source.UniqueQuestionId)
             {
-                Response = source.Response.Select(r => new SurveryButtonResponseVM() { ButtonType = r}).ToList(),               
+                Response = source.Response.Select(r =>new SurveryButtonResponseVM() { ButtonType = r }).ToList(),               
             };
         }
     }

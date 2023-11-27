@@ -5,7 +5,7 @@
 
 
 <div>
-    <ValidationMessage style="margin-bottom:0.4rem;" For="@(() => buttonResponse.ButtonType)" />
+    <ValidationMessage style="margin-bottom:0.4rem;" For="@(() => surveryButtonResponseVM.ButtonType)" />
 
     <div class="row">
         <div class="btn-group col-sm-12 col-lg-7">
@@ -20,22 +20,26 @@
 
 @code 
 {
-    private SurveryButtonResponseVM buttonResponse;
+    private SurveryButtonResponseVM surveryButtonResponseVM;
 
     [Parameter]
-    public QuestionMultiButtonResponseVM SurveyResponse { get; set; }
+    public QuestionMultiButtonResponseVM SurveyResponse { get; set; } = default!;
 
     private List<GroupBtn> GroupButtons = new List<GroupBtn>();
 
     protected override void OnInitialized()
     {
-        buttonResponse = new SurveryButtonResponseVM();
-        SurveyResponse.Response.Add(buttonResponse);
-        GroupButtons = GetgroupButtons().ToList();
+        // questionButtonResponse = new QuestionButtonResponseVM(SurveyResponse.UniqueQuestionId)
+        // {
+        //     Response = new SurveryButtonResponseVM(),
+        // };
+        surveryButtonResponseVM = new SurveryButtonResponseVM();
+        SurveyResponse.Response.Add(surveryButtonResponseVM);
+        GroupButtons = GetButtonGroups().ToList();
     }
 
 
-    private IEnumerable<GroupBtn> GetgroupButtons()
+    private IEnumerable<GroupBtn> GetButtonGroups()
     {
         yield return new GroupBtn("NE DRŽI", SurveyButtonResponseType.Incorrect);
         yield return new GroupBtn("DELNO DRŽI", SurveyButtonResponseType.PartiallyCorrect);
@@ -53,8 +57,8 @@
             else
                 groupBtn.NoActive();
         }
-
-        buttonResponse.ButtonType = btnType;
+        surveryButtonResponseVM.ButtonType = btnType;
+       
 
         StateHasChanged();
     }

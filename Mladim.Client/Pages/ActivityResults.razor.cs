@@ -12,6 +12,8 @@ using Mladim.Client.Utilities.Converters;
 using Microsoft.JSInterop;
 using CsvHelper;
 using System.Globalization;
+using Mladim.Client.Utilities.CsvMapping;
+using System.IO;
 
 namespace Mladim.Client.Pages;
 
@@ -31,71 +33,72 @@ public partial class ActivityResults
     public IJSRuntime JS { get; set; }
 
     private IEnumerable<SurveyResponsesGroupedByQuestionVM> SurveyResponsesGroupByQuestions = new List<SurveyResponsesGroupedByQuestionVM>();
-    public SurveyResponseSelector selector { get; set; } = new GenderSurveyResponseSelector();   
+    public SurveyResponseSelector selector { get; set; } = SurveyResponseSelector.CreateGenderSelector();  
     private CustomSelectorToBoolConverter customSelectorToBoolConverter = new CustomSelectorToBoolConverter();
     protected async override Task OnInitializedAsync()
     {
-        if (ActivityId is null)
-            return;
-
-        SurveyResponsesGroupByQuestions = await GetSurveyResponsesGroupByQuestionAsync();
+        if (ActivityId is int activityId)
+            SurveyResponsesGroupByQuestions = await GetSurveyResponsesGroupByQuestionAsync(activityId);
     }
-    private async Task<IEnumerable<SurveyResponsesGroupedByQuestionVM>> GetSurveyResponsesGroupByQuestionAsync()
+    private async Task<IEnumerable<SurveyResponsesGroupedByQuestionVM>> GetSurveyResponsesGroupByQuestionAsync(int activityId)
     {
-        IEnumerable<SurveyQuestionVM> surveyQuestions = await SurveyService.GetSurveyQuestionnairyAsync(ActivityId!.Value, Gender.Female);
-        IEnumerable<AnonymousSurveyResponseVM> surveyResponses = await SurveyService.GetAnonymousSurveyResponsesAsync(ActivityId.Value);
+        IEnumerable<SurveyQuestionVM> surveyQuestions = await SurveyService.GetSurveyQuestionnairyAsync(activityId, Gender.Female);
+        IEnumerable<AnonymousSurveyResponseVM> surveyResponses = await SurveyService.GetAnonymousSurveyResponsesAsync(activityId);
+                    
+        return surveyResponses.SelectMany(sr => sr.Responses, (asr, response) => ParticipantQuestionResponseVM.Create(asr.AnonymousParticipant, response))
+            .GroupBy(pqr => pqr.UniqueQuestionId)
+            .Select(g => SurveyResponsesGroupedByQuestionVM.Create(surveyQuestions.FirstOrDefault(sq => sq.UniqueQuestionId == g.Key), g))
+            .ToList();       
+    }
 
-        return surveyResponses.SelectMany(sr => sr.Responses, (asr, response) => new
-            {
-                Participant = asr.AnonymousParticipant,
-                QuestionResponse = response,
-            })
-            .GroupBy(u => u.QuestionResponse.UniqueQuestionId)
-            .Select(g => SurveyResponsesGroupedByQuestionVM.Create(surveyQuestions.FirstOrDefault(sq => sq.UniqueQuestionId == g.Key), g.Select(a => ParticipantQuestionResponseVM.Create(a.Participant, a.QuestionResponse))))
-            .ToList();
-    }    
 
+    private IEnumerable<SurveyParticipantRow> GenerateRows(SurveyResponsesGroupedByQuestionVM surveyResponse)
+    {
+        return this.selector.ParticipantPredicatesByType.SelectMany(pp => surveyResponse.NumberOfParticipantsByCriterion(pp.Predicate, pp.Name));
+    }
 
     private async Task OnClickCsvExportFile()
     {
         var memoryStream = new MemoryStream();
-        var streamWriter = new StreamWriter(memoryStream);    
-        
+        var streamWriter = new StreamWriter(memoryStream);
 
-        
-
-        using (var csv = new CsvWriter(streamWriter, CultureInfo.InvariantCulture))
+        using (var csv = new CsvWriter(streamWriter, CultureInfo.InvariantCulture,true))
         {
-            foreach (var surveyResponses in SurveyResponsesGroupByQuestions) 
+            csv.Context.RegisterClassMap<ParticipantsPerTypeCsvMap>();
+
+            foreach (var surveyResponses in SurveyResponsesGroupByQuestions)
             {
-                csv.WriteComment(surveyResponses.Question);
-                csv.NextRecord();
-                
-                //surveyResponses.
-                //csv.NextRecord();
-            }
-            //foreach (var row in rows)
-            //{
-            //    csv.WriteComment(RatingResponses.Question);
-            //    csv.NextRecord();
-            //    csv.WriteRecords(row.ParticipantsPerType);
-            //    csv.NextRecord();
-            //}
-        }       
+                if (surveyResponses.QuestionDescription != null)
+                {
+                    csv.WriteField(surveyResponses.QuestionDescription);
+                    csv.NextRecord();
+                    csv.NextRecord();
+                }
 
-        string fileName = $"{selector.Name}_{ActivityId}";
-        if (streamWriter != null)
-        {
-            using var streamRef = new DotNetStreamReference(stream: streamWriter.BaseStream);
-            await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+                foreach(var group in GenerateRows(surveyResponses).GroupBy(row => row.Question))
+                {
+                    csv.WriteField(group.Key);
+                    csv.NextRecord();
+                    csv.NextRecord();
+
+                    foreach (var row in group)
+                    {
+                        csv.WriteField(row.Criterion);
+                        csv.NextRecord();
+                        csv.WriteHeader<ParticipantsPerType>();
+                        csv.NextRecord();
+                        csv.NextRecord();
+                        csv.WriteRecords(row.ParticipantsPerType);
+                        csv.NextRecord();
+                    }
+                }               
+            }           
         }
+
+        memoryStream.Position = 0;
+        
+        using var streamRef = new DotNetStreamReference(stream: memoryStream);
+        await JS.InvokeVoidAsync("downloadFileFromStream", $"{selector.Name}_{ActivityId}.csv", streamRef);
+        
     }
-
-
-
 }
-
-
-
-
-

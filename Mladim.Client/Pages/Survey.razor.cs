@@ -3,9 +3,6 @@ using Mladim.Client.ViewModels;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Domain.Enums;
 using Mladim.Client.ViewModels.Survey;
-using Mladim.Client.Validators;
-using Mladim.Client.ViewModels.Activity;
-using System.ComponentModel.DataAnnotations;
 
 namespace Mladim.Client.Pages;
 

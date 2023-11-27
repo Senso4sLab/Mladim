@@ -3,7 +3,7 @@
 @using Mladim.Domain.Extensions;
 
 <MudPaper Class="p-2">
-    <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@RatingResponseGroup.Question</MudText>   
+    <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@RatingResponseGroup.QuestionDescription</MudText>   
     
     <table class="table">
         <thead>
@@ -41,16 +41,11 @@
     [Parameter]
     public SurveyResponseSelector Selector { get; set; } = default!;
 
-    private IEnumerable<SurveyParticipantRow> surveyParticipantListRow = new List<SurveyParticipantRow>();
-
-    // protected override void OnInitialized()
-    // {
-    //     surveyParticipantListRow = GetSurveyParticipantRows();
-    // }
+    private IEnumerable<SurveyParticipantRow> surveyParticipantListRow = new List<SurveyParticipantRow>();    
 
     private IEnumerable<SurveyParticipantRow> GetSurveyParticipantRows() =>
         this.Selector.ParticipantPredicatesByType
-            .Select(pp => RatingResponseGroup.NumberOfParticipantsByCriterion(pp))
+            .SelectMany(pp => RatingResponseGroup.NumberOfParticipantsByCriterion(pp.Predicate, pp.Name))
             .ToList();
 
     protected override void OnParametersSet()
