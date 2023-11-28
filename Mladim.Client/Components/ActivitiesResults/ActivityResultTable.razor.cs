@@ -63,7 +63,7 @@ public partial class ActivityResultTable
                     {
                         csv.WriteField(row.Criterion);
                         csv.NextRecord();
-                        csv.WriteHeader<ParticipantsPerType>();
+                        csv.WriteHeader<ParticipantsPerExistingResponse>();
                         csv.NextRecord();
                         csv.NextRecord();
                         csv.WriteRecords(row.ParticipantsPerType);
