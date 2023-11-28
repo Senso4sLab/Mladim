@@ -42,9 +42,9 @@
     [Parameter]
     public SurveyResponseSelector Selector { get; set; } = default!;
 
-    private IEnumerable<SurveyParticipantRow> surveyParticipantListRow = new List<SurveyParticipantRow>();
+    private IEnumerable<ParticipantsPerResponseTypes> surveyParticipantListRow = new List<ParticipantsPerResponseTypes>();
 
-    private IEnumerable<SurveyParticipantRow> GetSurveyParticipantRows() =>
+    private IEnumerable<ParticipantsPerResponseTypes> GetSurveyParticipantRows() =>
         this.Selector.ParticipantPredicatesByType
             .SelectMany(pp => BoleanResponseGroup.NumberOfParticipantsByCriterion(pp.Predicate, pp.Name))
             .ToList();

@@ -30,9 +30,9 @@ public partial class ActivityResultTable
     private CustomSelectorToBoolConverter customSelectorToBoolConverter = new CustomSelectorToBoolConverter();   
 
 
-    private IEnumerable<SurveyParticipantRow> GenerateRows(SurveyResponsesGroupedByQuestionVM surveyResponse)
+    private IEnumerable<ParticipantsPerResponseTypes> GenerateRows(ISelectableReponseType ResponseType)
     {
-        return this.selector.ParticipantPredicatesByType.SelectMany(pp => surveyResponse.NumberOfParticipantsByCriterion(pp.Predicate, pp.Name));
+        return this.selector.ParticipantPredicatesByType.SelectMany(pp => ResponseType.NumberOfParticipantsByCriterion(pp.Predicate, pp.Name));
     }
 
     private async Task OnClickCsvExportFile()
@@ -53,23 +53,26 @@ public partial class ActivityResultTable
                     csv.NextRecord();
                 }
 
-                foreach (var group in GenerateRows(surveyResponses).GroupBy(row => row.Question))
+                if (surveyResponses is ISelectableReponseType selectableReponseType)
                 {
-                    csv.WriteField(group.Key);
-                    csv.NextRecord();
-                    csv.NextRecord();
-
-                    foreach (var row in group)
+                    foreach (var group in GenerateRows(selectableReponseType).GroupBy(row => row.Question))
                     {
-                        csv.WriteField(row.Criterion);
-                        csv.NextRecord();
-                        csv.WriteHeader<ParticipantsPerExistingResponse>();
+                        csv.WriteField(group.Key);
                         csv.NextRecord();
                         csv.NextRecord();
-                        csv.WriteRecords(row.ParticipantsPerType);
-                        csv.NextRecord();
+
+                        foreach (var row in group)
+                        {
+                            csv.WriteField(row.Criterion);
+                            csv.NextRecord();
+                            csv.WriteHeader<ParticipantsPerResponseType>();
+                            csv.NextRecord();
+                            csv.NextRecord();
+                            csv.WriteRecords(row.ParticipantsPerType);
+                            csv.NextRecord();
+                        }
                     }
-                }
+                }               
             }
         }
 

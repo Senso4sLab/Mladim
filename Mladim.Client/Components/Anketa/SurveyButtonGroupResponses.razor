@@ -48,7 +48,7 @@
     public SurveyResponseSelector Selector { get; set; } = default!;
     
 
-    private IEnumerable<SurveyParticipantRow> GetSurveyParticipantRows(SurveyButtonResponseGroupedByQuestion btg) =>
+    private IEnumerable<ParticipantsPerResponseTypes> GetSurveyParticipantRows(SurveyButtonResponseGroupedByQuestion btg) =>
         this.Selector.ParticipantPredicatesByType
             .SelectMany(pp => btg.NumberOfParticipantsByCriterion(pp.Predicate, pp.Name))
             .ToList();

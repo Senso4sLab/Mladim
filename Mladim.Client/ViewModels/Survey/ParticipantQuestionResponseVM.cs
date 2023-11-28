@@ -21,9 +21,10 @@ public abstract class ParticipantQuestionResponseVM
         {
             QuestionResponseVM<SurveyRatingResponseType> response => new ParticipantQuestionRatingResponseVM(anonymousParticipant, response),
             QuestionResponseVM<SurveyBooleanResponseType> response => new ParticipantQuestionBooleanResponseVM(anonymousParticipant, response),
-            QuestionResponseVM<SurveryButtonResponseVM> response => new ParticipantQuestionButtonResponseVM(anonymousParticipant, response),    
+            QuestionResponseVM<SurveryButtonResponseVM> response => new ParticipantQuestionButtonResponseVM(anonymousParticipant, response),
+            QuestionResponseVM<List<SurveryButtonResponseVM>> response => new ParticipantQuestionMultiButtonResponseVM(anonymousParticipant, response),
             QuestionResponseVM<string> response => new ParticipantQuestionTextResponseVM(anonymousParticipant, response),
-
+            _ => throw new NotImplementedException(),
         };
    
 }
@@ -41,9 +42,7 @@ public class ParticipantQuestionResponseVM<T> : ParticipantQuestionResponseVM
 
 
 public class ParticipantQuestionRatingResponseVM : ParticipantQuestionResponseVM<SurveyRatingResponseType>
-{
-    [RatingResponseValidator]
-    public override SurveyRatingResponseType Response { get; protected set; }
+{   
 
     public ParticipantQuestionRatingResponseVM(AnonymousParticipantVM anonymousParticipant, QuestionResponseVM<SurveyRatingResponseType> response) 
         : base(anonymousParticipant, response)
@@ -70,9 +69,7 @@ public class ParticipantQuestionTextResponseVM : ParticipantQuestionResponseVM<s
 
 
 public class ParticipantQuestionBooleanResponseVM : ParticipantQuestionResponseVM<SurveyBooleanResponseType>
-{
-    [BooleanResponseValidator]
-    public override SurveyBooleanResponseType Response { get; protected set; }
+{   
     public ParticipantQuestionBooleanResponseVM(AnonymousParticipantVM anonymousParticipant, QuestionResponseVM<SurveyBooleanResponseType> response) 
         : base(anonymousParticipant, response)
     {
@@ -86,9 +83,7 @@ public class ParticipantQuestionBooleanResponseVM : ParticipantQuestionResponseV
 
 
 public class ParticipantQuestionButtonResponseVM : ParticipantQuestionResponseVM<SurveryButtonResponseVM>
-{
-    [ValidateComplexType]
-    public override SurveryButtonResponseVM Response { get; protected set; }
+{   
     public ParticipantQuestionButtonResponseVM(AnonymousParticipantVM anonymousParticipant, QuestionResponseVM<SurveryButtonResponseVM> response)
         : base(anonymousParticipant, response)
     {
@@ -101,8 +96,7 @@ public class ParticipantQuestionButtonResponseVM : ParticipantQuestionResponseVM
 
 
 public class ParticipantQuestionMultiButtonResponseVM : ParticipantQuestionResponseVM<List<SurveryButtonResponseVM>>
-{
-    [ValidateComplexType]
+{   
     public override List<SurveryButtonResponseVM> Response { get; protected set; } = new();
     public ParticipantQuestionMultiButtonResponseVM(AnonymousParticipantVM anonymousParticipant, QuestionResponseVM<List<SurveryButtonResponseVM>> response)
         : base(anonymousParticipant, response)

@@ -35,76 +35,76 @@ public class QuestionResponseVM<T> : QuestionResponseVM
    
 }
 
-//public class QuestionRatingResponseVM : QuestionResponseVM<SurveyRatingResponseType>
-//{
-//    [RatingResponseValidator]
-//    public override SurveyRatingResponseType Response { get; set; }   
+public class QuestionRatingResponseVM : QuestionResponseVM<SurveyRatingResponseType>
+{
+    [RatingResponseValidator]
+    public override SurveyRatingResponseType Response { get; set; }
 
-//    public QuestionRatingResponseVM(int uniqueQuestionId) :base(uniqueQuestionId)
-//    {
-        
-//    }
+    public QuestionRatingResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
+    {
 
-//    public override string ToString() =>    
-//        this.Response.GetDisplayAttribute();
-    
-//}
+    }
 
-//public class QuestionTextResponseVM : QuestionResponseVM<string>
-//{   
-//    public QuestionTextResponseVM(int uniqueQuestionId):base(uniqueQuestionId)
-//    {
-        
-//    }
+    public override string ToString() =>
+        this.Response.GetDisplayAttribute();
 
-//    public override string ToString() => 
-//        this.Response;
-    
-//}
+}
 
+public class QuestionTextResponseVM : QuestionResponseVM<string>
+{
+    public QuestionTextResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
+    {
 
-//public class QuestionBooleanResponseVM : QuestionResponseVM<SurveyBooleanResponseType>
-//{
-//    [BooleanResponseValidator]
-//    public override SurveyBooleanResponseType Response { get; set; }
-//    public QuestionBooleanResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
-//    {
+    }
 
-//    }
+    public override string ToString() =>
+        this.Response;
 
-//    public override string ToString() =>
-//        this.Response.GetDisplayAttribute();
-    
-//}
+}
 
 
-//public class QuestionButtonResponseVM : QuestionResponseVM<SurveryButtonResponseVM>
-//{
-//    [ValidateComplexType]
-//    public override SurveryButtonResponseVM Response { get; set; }
-//    public QuestionButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
-//    {
-//    }
+public class QuestionBooleanResponseVM : QuestionResponseVM<SurveyBooleanResponseType>
+{
+    [BooleanResponseValidator]
+    public override SurveyBooleanResponseType Response { get; set; }
+    public QuestionBooleanResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
+    {
 
-//    public override string ToString() => 
-//        this.Response.ToString();
-    
-//}
+    }
+
+    public override string ToString() =>
+        this.Response.GetDisplayAttribute();
+
+}
 
 
-//public class QuestionMultiButtonResponseVM : QuestionResponseVM<List<SurveryButtonResponseVM>>
-//{
-//    [ValidateComplexType]
-//    public override List<SurveryButtonResponseVM> Response { get; set; } = new();
-//    public QuestionMultiButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
-//    {       
+public class QuestionButtonResponseVM : QuestionResponseVM<SurveryButtonResponseVM>
+{
+    [ValidateComplexType]
+    public override SurveryButtonResponseVM Response { get; set; }
+    public QuestionButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
+    {
+    }
 
-//    }
+    public override string ToString() =>
+        this.Response.ToString();
 
-//    public override string ToString() =>   
-//         string.Join(',', this.Response);
-    
-//}
+}
+
+
+public class QuestionMultiButtonResponseVM : QuestionResponseVM<List<SurveryButtonResponseVM>>
+{
+    [ValidateComplexType]
+    public override List<SurveryButtonResponseVM> Response { get; set; } = new();
+    public QuestionMultiButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
+    {
+
+    }
+
+    public override string ToString() =>
+         string.Join(',', this.Response);
+
+}
 
 
 
@@ -115,14 +115,14 @@ public class QuestionResponseVM<T> : QuestionResponseVM
 
 //    public override string ToString() => 
 //        this.ButtonType.GetDisplayAttribute();
-    
+
 //}
 
 //public abstract class ParticipantQuestionResponseVM
 //{
 //    public AnonymousParticipantVM AnonymousParticipant { get; set; }
 //    public int UniqueQuestionId { get; protected set; }
-    
+
 //    public ParticipantQuestionResponseVM(AnonymousParticipantVM anonymousParticipant)
 //    {
 //        this.AnonymousParticipant = anonymousParticipant;       

@@ -21,7 +21,7 @@
         var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true };
         DialogParameters surveyTextResponsesParameters = new DialogParameters();
         surveyTextResponsesParameters.Add("Question", TextResponseGroup.QuestionDescription);
-        surveyTextResponsesParameters.Add("AnonymousCommands", TextResponseGroup.GetAnonymousComments().ToList());
+        surveyTextResponsesParameters.Add("AnonymousCommands", TextResponseGroup.GetParticipantTextResponse());
         this.DialogService.Show<ShowTextQuestionCommands>("", surveyTextResponsesParameters, options);
     }
 }

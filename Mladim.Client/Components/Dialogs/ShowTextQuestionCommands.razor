@@ -18,7 +18,7 @@
                  <MudText Color="Color.Tertiary" Typo="Typo.h2" Class="py-1">@anonymousCommand.Participant.Gender.GetDisplayAttribute()</MudText>
                  <MudText Color="Color.Tertiary" Typo="Typo.h2" Class="py-1 mx-5">@anonymousCommand.Participant.AgeGroup.GetDisplayAttribute() </MudText>
              </MudStack>
-            <MudText Color="Color.Tertiary" Typo="Typo.h2" Class="py-1">@anonymousCommand.Comment </MudText>
+            <MudText Color="Color.Tertiary" Typo="Typo.h2" Class="py-1">@anonymousCommand.TextResponse </MudText>
             @if (anonymousCommandIndex < AnonymousCommands.Count - 1)
             {
                 <MudDivider  />
@@ -36,7 +36,7 @@
     public string Question{ get; set; }
 
     [Parameter]
-    public List<AnonymousCommand> AnonymousCommands { get; set; } = new();
+    public List<ParticipantTextResponse> AnonymousCommands { get; set; } = new();
 
   
 

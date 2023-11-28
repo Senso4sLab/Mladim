@@ -3,7 +3,7 @@ using Mladim.Client.ViewModels.Survey;
 
 namespace Mladim.Client.Utilities.CsvMapping;
 
-public class ParticipantsPerTypeCsvMap : ClassMap<ParticipantsPerExistingResponse>
+public class ParticipantsPerTypeCsvMap : ClassMap<ParticipantsPerResponseType>
 {
     public ParticipantsPerTypeCsvMap()
     {
