@@ -13,7 +13,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">@Selector.Name</th>
+                    <th scope="col">@ContingencyCalculator.SurveyResponseSelector.Name</th>
                     @foreach (var type in Enum.GetValues<SurveyButtonResponseType>())
                     {
                         <th class="text-center" scope="col">@type.GetDisplayAttribute()</th>
@@ -22,19 +22,18 @@
                 </tr>
             </thead>
             <tbody>
-
-                @foreach (var row in GetSurveyParticipantRows(buttonResponse))
+               @*  @foreach (var row in GetContingencyTable(buttonResponse).ParticipantsByCriteria)
                 {
                     <tr>
                         <th scope="row">@row.Criterion</th>
 
-                        @foreach (var participantsByType in row.ParticipantsPerType)
+                        @foreach (var participantsByResponseType in row.ParticipantsByReponseTypes)
                         {
-                            <td class="text-center">@participantsByType.NumOfParticipants</td>
+                            <td class="text-center">@participantsByResponseType.Unit</td>
                         }
-                        <td class="text-center">@row.ParticipantsPerType.Sum(pt => pt.NumOfParticipants)</td>
+                        <td class="text-center">@row.ParticipantsByReponseTypes.Sum(pr => pr.Unit)</td>
                     </tr>
-                }              
+                }   *@                 
             </tbody>
         </table>
     }
@@ -46,11 +45,18 @@
     public SurveyButtonGroupResponsesGroupedByQuestion ButtonResponseGroup { get; set; } = default!;
 
     [Parameter]
-    public SurveyResponseSelector Selector { get; set; } = default!;
-    
+    public ContingencyCalculator ContingencyCalculator { get; set; } = default!;
 
-    private IEnumerable<ParticipantsPerResponseTypes> GetSurveyParticipantRows(SurveyButtonResponseGroupedByQuestion btg) =>
-        this.Selector.ParticipantPredicatesByType
-            .SelectMany(pp => btg.NumberOfParticipantsByCriterion(pp.Predicate, pp.Name))
-            .ToList();
+
+    private IEnumerable<ContingencyTable> Tables = new List<ContingencyTable>();
+
+    protected override void OnParametersSet()
+    {
+        //Tables = ButtonResponseGroup.ButtonGroupResponses.Select(btn => GetContingencyTable(btn)).ToList();
+    }
+
+    private ContingencyTable GetContingencyTable(ISelectableReponseType reponseType) =>
+        this.ContingencyCalculator.GetContingencyTableFor(reponseType);
+
+       
 }

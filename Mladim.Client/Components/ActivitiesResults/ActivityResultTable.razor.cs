@@ -1,9 +1,7 @@
 using global::Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using MudBlazor;
 using Mladim.Client.ViewModels.Survey;
-using Mladim.Domain.Enums;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.Utilities.Converters;
 using CsvHelper;
@@ -25,14 +23,25 @@ public partial class ActivityResultTable
 
     [Inject]
     public IJSRuntime JS { get; set; }
-   
-    public SurveyResponseSelector selector { get; set; } = SurveyResponseSelector.CreateGenderSelector();
-    private CustomSelectorToBoolConverter customSelectorToBoolConverter = new CustomSelectorToBoolConverter();   
+
+    public SurveyResponseSelector responseSelector = SurveyResponseSelector.CreateGenderSelector();
+    private SurveyCriterionSelectorToBoolConverter surveyCriterionToBoolConverter = default!; // = new SurveyCriterionSelectorToBoolConverter();
 
 
-    private IEnumerable<ParticipantsPerResponseTypes> GenerateRows(ISelectableReponseType ResponseType)
+    private ContingencyCalculator contingencyCalculatorSelector = default!;
+    private ContingencyCalculatorSelectorToBoolConverter contingencyCalculatorSelectorToBoolConverter = default!;
+    protected override void OnInitialized()
     {
-        return this.selector.ParticipantPredicatesByType.SelectMany(pp => ResponseType.NumberOfParticipantsByCriterion(pp.Predicate, pp.Name));
+        //contingencyCalculatorSelector = new ContingencyTableParticipants(responseSelector.Name, responseSelector.ParticipantPredicatesByType);
+
+
+        surveyCriterionToBoolConverter = new SurveyCriterionSelectorToBoolConverter();
+        contingencyCalculatorSelectorToBoolConverter = new ContingencyCalculatorSelectorToBoolConverter(responseSelector);
+      
+    }
+    private IEnumerable<ParticipantsByResponseType> GenerateRows(ISelectableReponseType ResponseType)
+    {
+        return this.responseSelector.ParticipantPredicatesByType.SelectMany(pp => ResponseType.ParticipantsByResponseTypes(pp.Predicate));
     }
 
     private async Task OnClickCsvExportFile()
@@ -55,23 +64,23 @@ public partial class ActivityResultTable
 
                 if (surveyResponses is ISelectableReponseType selectableReponseType)
                 {
-                    foreach (var group in GenerateRows(selectableReponseType).GroupBy(row => row.Question))
-                    {
-                        csv.WriteField(group.Key);
-                        csv.NextRecord();
-                        csv.NextRecord();
+                    //foreach (var group in GenerateRows(selectableReponseType).GroupBy(row => row.Question))
+                    //{
+                    //    csv.WriteField(group.Key);
+                    //    csv.NextRecord();
+                    //    csv.NextRecord();
 
-                        foreach (var row in group)
-                        {
-                            csv.WriteField(row.Criterion);
-                            csv.NextRecord();
-                            csv.WriteHeader<ParticipantsByResponseType>();
-                            csv.NextRecord();
-                            csv.NextRecord();
-                            csv.WriteRecords(row.ParticipantsPerType);
-                            csv.NextRecord();
-                        }
-                    }
+                    //    foreach (var row in group)
+                    //    {
+                    //        csv.WriteField(row.Criterion);
+                    //        csv.NextRecord();
+                    //        csv.WriteHeader<ParticipantsByResponseType>();
+                    //        csv.NextRecord();
+                    //        csv.NextRecord();
+                    //        csv.WriteRecords(row.ParticipantsPerType);
+                    //        csv.NextRecord();
+                    //    }
+                    //}
                 }               
             }
         }
@@ -79,7 +88,7 @@ public partial class ActivityResultTable
         memoryStream.Position = 0;
 
         using var streamRef = new DotNetStreamReference(stream: memoryStream);
-        await JS.InvokeVoidAsync("downloadFileFromStream", $"{selector.Name}.csv", streamRef);
+        await JS.InvokeVoidAsync("downloadFileFromStream", $"{responseSelector.Name}.csv", streamRef);
 
     }
 }

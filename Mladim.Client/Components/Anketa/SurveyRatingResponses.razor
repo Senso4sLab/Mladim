@@ -8,7 +8,7 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">@Selector.Name</th>
+                <th scope="col">@Table.Name</th>
                 @for (int i = 0; i < numOfRatingTypes; i++)
                 {
                     <th class="text-center" scope="col">
@@ -22,18 +22,18 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var row in surveyParticipantListRow)
+            @foreach (var row in Table.ParticipantsByCriteria)
             {
                 <tr>
                     <th scope="row">@row.Criterion</th>
 
-                    @foreach (var participantsByType in row.ParticipantsPerType)
+                    @foreach (var participantsByResponseType in row.ParticipantsByReponseTypes)
                     {
-                        <td class="text-center">@participantsByType.NumOfParticipants</td>
+                        <td class="text-center">@participantsByResponseType.Unit</td>
                     }
-                    <td class="text-center">@row.ParticipantsPerType.Sum(pt => pt.NumOfParticipants)</td>
+                    <td class="text-center">@row.ParticipantsByReponseTypes.Sum(pr => pr.Unit)</td>
                 </tr>
-            }                 
+            }                       
         </tbody>
     </table>
 </MudPaper>
@@ -44,14 +44,15 @@
     public SurveyRatingResponsesGroupedByQuestion RatingResponseGroup { get; set; } = default!;
 
     [Parameter]
-    public SurveyResponseSelector Selector { get; set; } = default!;
+    public ContingencyCalculator ContingencyCalculator { get; set; } = default!;
 
-    private IEnumerable<ParticipantsPerResponseTypes> surveyParticipantListRow = new List<ParticipantsPerResponseTypes>();    
+    private ContingencyTable Table = default!;
 
-    private IEnumerable<ParticipantsPerResponseTypes> GetSurveyParticipantRows() =>
-        this.Selector.ParticipantPredicatesByType
-            .SelectMany(pp => RatingResponseGroup.NumberOfParticipantsByCriterion(pp.Predicate, pp.Name))
-            .ToList();
+    private ContingencyTable GetContingencyTable() =>
+        this.ContingencyCalculator.GetContingencyTableFor(RatingResponseGroup);
+
+    protected override void OnParametersSet() =>
+        this.Table = GetContingencyTable();
 
     private int numOfRatingTypes = 0;
 
@@ -61,8 +62,5 @@
     }
 
 
-    protected override void OnParametersSet()
-    {
-        surveyParticipantListRow = GetSurveyParticipantRows();
-    }
+   
 }

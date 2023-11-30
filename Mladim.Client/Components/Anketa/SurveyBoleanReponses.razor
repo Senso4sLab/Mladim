@@ -8,7 +8,8 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">@Selector.Name</th>               
+                <th scope="col">@Table.Name</th>
+                
                 <th scope="col" class="text-center">
                     <span style="color:#4da456;" class="oi oi-thumb-up thumb"></span>
                 </th>
@@ -20,16 +21,16 @@
         </thead>
         <tbody>
 
-            @foreach (var row in surveyParticipantListRow)
+            @foreach (var row in Table.ParticipantsByCriteria)
             {               
                     <tr>
                         <th scope="row">@row.Criterion</th>
 
-                        @foreach (var participantsByType in row.ParticipantsPerType)
+                        @foreach (var participantsByResponseType in row.ParticipantsByReponseTypes)
                         {
-                        <td class="text-center">@participantsByType.NumOfParticipants</td>
+                            <td class="text-center">@participantsByResponseType.Unit</td>
                         }
-                    <td class="text-center">@row.ParticipantsPerType.Sum(pt => pt.NumOfParticipants)</td>
+                        <td class="text-center">@row.ParticipantsByReponseTypes.Sum(pr => pr.Unit)</td>
                     </tr>                              
             }           
         </tbody>
@@ -41,22 +42,18 @@
     [Parameter]
     public SurveyBoleanResponsesGroupedByQuestion BoleanResponseGroup { get; set; } = default!;
 
+    // [Parameter]
+    // public SurveyResponseSelector Selector { get; set; } = default!;
+
     [Parameter]
-    public SurveyResponseSelector Selector { get; set; } = default!;
-
-    private IEnumerable<ParticipantsPerResponseTypes> surveyParticipantListRow = new List<ParticipantsPerResponseTypes>();
-
-    private IEnumerable<ParticipantsPerResponseTypes> GetSurveyParticipantRows() =>
-        this.Selector.ParticipantPredicatesByType
-            .SelectMany(pp => BoleanResponseGroup.NumberOfParticipantsByCriterion(pp.Predicate, pp.Name))
-            .ToList();   
+    public ContingencyCalculator ContingencyCalculator { get; set; } = default!;
 
 
-    protected override void OnParametersSet()
-    {
-        surveyParticipantListRow = GetSurveyParticipantRows();
-    }
+    private ContingencyTable Table = default!;
 
+    private ContingencyTable GetContingencyTable() =>
+        this.ContingencyCalculator.GetContingencyTableFor(BoleanResponseGroup);
 
-
+    protected override void OnParametersSet() =>    
+        this.Table = GetContingencyTable();
 }

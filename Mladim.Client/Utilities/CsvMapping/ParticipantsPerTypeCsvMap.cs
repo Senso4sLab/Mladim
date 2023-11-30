@@ -8,6 +8,6 @@ public class ParticipantsPerTypeCsvMap : ClassMap<ParticipantsByResponseType>
     public ParticipantsPerTypeCsvMap()
     {
         Map(ppt => ppt.ResponseType).Name("Vrsta odgovora");
-        Map(ppt => ppt.NumOfParticipants).Name("št. udeležencev");
+        Map(ppt => ppt.Unit).Name("št. udeležencev");
     }
 }

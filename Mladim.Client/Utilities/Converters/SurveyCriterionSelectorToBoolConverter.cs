@@ -3,10 +3,10 @@ using MudBlazor;
 
 namespace Mladim.Client.Utilities.Converters;
 
-public class CustomSelectorToBoolConverter : BoolConverter<SurveyResponseSelector>
+public class SurveyCriterionSelectorToBoolConverter : BoolConverter<SurveyResponseSelector>
 {
 
-    public CustomSelectorToBoolConverter()
+    public SurveyCriterionSelectorToBoolConverter()
     {
         SetFunc = OnSet;
         GetFunc = OnGet;
