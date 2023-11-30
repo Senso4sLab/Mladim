@@ -5,19 +5,20 @@
 
 
 <MudPaper Class="p-2">
-    <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@ButtonResponseGroup.QuestionDescription</MudText>
+    <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@ButtonResponseGroup.QuestionDescription</MudText>
 
     @foreach(var buttonResponse in ButtonResponseGroup.ButtonGroupResponses)
     {
+        <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@buttonResponse.Question</MudText>
         <table class="table">
             <thead>
                 <tr>
                     <th scope="col">@Selector.Name</th>
                     @foreach (var type in Enum.GetValues<SurveyButtonResponseType>())
                     {
-                        <th scope="col">@type.GetDisplayAttribute()</th>
+                        <th class="text-center" scope="col">@type.GetDisplayAttribute()</th>
                     }
-                    <th scope="col">Skupaj</th>
+                    <th class="text-center" scope="col">Skupaj</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,9 +30,9 @@
 
                         @foreach (var participantsByType in row.ParticipantsPerType)
                         {
-                            <td>@participantsByType.NumOfParticipants</td>
+                            <td class="text-center">@participantsByType.NumOfParticipants</td>
                         }
-                        <td>@row.ParticipantsPerType.Sum(pt => pt.NumOfParticipants)</td>
+                        <td class="text-center">@row.ParticipantsPerType.Sum(pt => pt.NumOfParticipants)</td>
                     </tr>
                 }              
             </tbody>

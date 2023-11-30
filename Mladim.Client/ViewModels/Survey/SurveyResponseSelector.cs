@@ -25,7 +25,7 @@ public class GenderSurveyResponseSelector : SurveyResponseSelector
     public GenderSurveyResponseSelector(): base("Spol") 
     {
         this.ParticipantPredicatesByType = ParticipantPredicate.Genders.ToList();
-        this.ParticipantPredicatesByType.Add(ParticipantPredicate.None);
+        //this.ParticipantPredicatesByType.Add(ParticipantPredicate.None);
     }
 }
 
@@ -34,7 +34,7 @@ public class AgeGroupSurveyResponseSelector : SurveyResponseSelector
     public AgeGroupSurveyResponseSelector() : base("Starostna skupina")
     {
         this.ParticipantPredicatesByType = ParticipantPredicate.AgeGroups.ToList();
-        this.ParticipantPredicatesByType.Add(ParticipantPredicate.None);     
+        //this.ParticipantPredicatesByType.Add(ParticipantPredicate.None);     
     }
 }
 

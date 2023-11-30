@@ -3,17 +3,22 @@
 @using Mladim.Domain.Extensions;
 
 <MudPaper Class="p-2">
-    <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@RatingResponseGroup.QuestionDescription</MudText>   
-    
+    <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@RatingResponseGroup.Question</MudText>
+
     <table class="table">
         <thead>
             <tr>
                 <th scope="col">@Selector.Name</th>
-                @foreach (var type in Enum.GetValues<SurveyRatingResponseType>())
+                @for (int i = 0; i < numOfRatingTypes; i++)
                 {
-                    <th scope="col">@type.GetDisplayAttribute()</th>
-                }
-                <th scope="col">Skupaj</th>
+                    <th class="text-center" scope="col">
+                        @for(int j = 0; j <= i; j++)
+                        {
+                            <i style="color:#4da456;" class="bi bi-emoji-smile px-1" />
+                        }                        
+                    </th>                    
+                }               
+                <th class="text-center"  scope="col">Skupaj</th>
             </tr>
         </thead>
         <tbody>
@@ -24,9 +29,9 @@
 
                     @foreach (var participantsByType in row.ParticipantsPerType)
                     {
-                        <td>@participantsByType.NumOfParticipants</td>
+                        <td class="text-center">@participantsByType.NumOfParticipants</td>
                     }
-                    <td>@row.ParticipantsPerType.Sum(pt => pt.NumOfParticipants)</td>
+                    <td class="text-center">@row.ParticipantsPerType.Sum(pt => pt.NumOfParticipants)</td>
                 </tr>
             }                 
         </tbody>
@@ -47,6 +52,14 @@
         this.Selector.ParticipantPredicatesByType
             .SelectMany(pp => RatingResponseGroup.NumberOfParticipantsByCriterion(pp.Predicate, pp.Name))
             .ToList();
+
+    private int numOfRatingTypes = 0;
+
+    protected override void OnInitialized()
+    {
+        numOfRatingTypes = Enum.GetValues<SurveyRatingResponseType>().Count();
+    }
+
 
     protected override void OnParametersSet()
     {

@@ -1,5 +1,9 @@
-﻿using Mladim.Domain.Enums;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Mladim.Client.Extensions;
+using Mladim.Domain.Enums;
 using Mladim.Domain.Extensions;
+using System.Linq;
+
 namespace Mladim.Client.ViewModels.Survey;
 
 
@@ -10,8 +14,9 @@ public interface ITextableReponseType
 
 public interface ISelectableReponseType
 {
-    IEnumerable<string> ExistingResponseTypes { get; }
-    IEnumerable<ParticipantsPerResponseTypes> NumberOfParticipantsByCriterion(Predicate<AnonymousParticipantVM> predicate, string name);
+    IEnumerable<ParticipantsByResponseType> NumOfParticipantsByResponseTypes(Predicate<AnonymousParticipantVM> predicate);
+    //IEnumerable<string> ExistingResponseTypes { get; }
+    //IEnumerable<ParticipantsPerResponseTypes> NumberOfParticipantsByCriterion(Predicate<AnonymousParticipantVM> predicate, string name);
 }
 
 
@@ -61,7 +66,7 @@ public class SurveyTextResponsesGroupedByQuestion : SurveyResponsesGroupedByQues
 }
 
 
-public abstract class SurveySelectableResponsesGroupedByQuestionVM<T> : SurveyResponsesGroupedByQuestionVM, ISelectableReponseType
+public abstract class SurveySelectableResponsesGroupedByQuestionVM<T> : SurveyResponsesGroupedByQuestionVM, ISelectableReponseType   
 {
 
     public List<ParticipantQuestionResponseVM<T>> ParticipantQuestionResponses = new();
@@ -70,21 +75,31 @@ public abstract class SurveySelectableResponsesGroupedByQuestionVM<T> : SurveyRe
         ParticipantQuestionResponses = participantQuestionResponses.OfType<ParticipantQuestionResponseVM<T>>().ToList();
     }
 
+    public IEnumerable<ParticipantsByResponseType> NumOfParticipantsByResponseTypes(Predicate<AnonymousParticipantVM> predicate) =>        
+            this.ParticipantQuestionResponses
+                .Where(pqr => predicate(pqr.AnonymousParticipant))
+                .GroupBy(pqr => pqr.ToString(), (key, sequence) => new ParticipantsByResponseType(key!, sequence.Count()))
+                .UnionBy(InitResponseTypes(), ppr => ppr.ResponseType)
+                .OrderBy(g => g.ResponseType)
+                .ToList();              
+    
+
+
     public virtual IEnumerable<ParticipantsPerResponseTypes> NumberOfParticipantsByCriterion(Predicate<AnonymousParticipantVM> predicate, string name) =>
         new List<ParticipantsPerResponseTypes>()
         {
              new ParticipantsPerResponseTypes(name, this.Question!, this.ParticipantQuestionResponses
                 .Where(pqr => predicate(pqr.AnonymousParticipant))
-                .GroupBy(pqr => pqr.ToString(), (key, sequence) => new ParticipantsPerResponseType(key!, sequence.Count()))
-                .UnionBy(InitialParticipantResponses(), ppr => ppr.ResponseType)
+                .GroupBy(pqr => pqr.ToString(), (key, sequence) => new ParticipantsByResponseType(key!, sequence.Count()))
+                .UnionBy(InitResponseTypes(), ppr => ppr.ResponseType)
                 .OrderBy(g => g.ResponseType)
                 .ToList()),
         };
 
-    public abstract IEnumerable<string> ExistingResponseTypes { get; }
-    private IEnumerable<ParticipantsPerResponseType> InitialParticipantResponses() =>
-        this.ExistingResponseTypes
-            .Select(type => new ParticipantsPerResponseType(type, 0))
+    public abstract IEnumerable<string> ResponseTypes { get; }
+    private IEnumerable<ParticipantsByResponseType> InitResponseTypes() =>
+        this.ResponseTypes
+            .Select(type => new ParticipantsByResponseType(type, 0))
             .ToList();
 }
 
@@ -101,7 +116,7 @@ public class SurveyRatingResponsesGroupedByQuestion : SurveySelectableResponsesG
         this.Question = questions.FirstOrDefault();
 
     }
-    public override IEnumerable<string> ExistingResponseTypes =>
+    public override IEnumerable<string> ResponseTypes =>
         Enum.GetValues<SurveyRatingResponseType>()
          .Select(type => type.GetDisplayAttribute())
          .ToList();
@@ -109,8 +124,41 @@ public class SurveyRatingResponsesGroupedByQuestion : SurveySelectableResponsesG
 
 
 
-public record ParticipantsPerResponseType(string ResponseType, int NumOfParticipants);
-public record ParticipantsPerResponseTypes(string Criterion, string Question, List<ParticipantsPerResponseType> ParticipantsPerType);
+public record ParticipantsByResponseType(string ResponseType, float Unit)
+{
+    public ParticipantsByResponseType ToPercent(float numOfParticipants) =>
+        new ParticipantsByResponseType(ResponseType, (float)Math.Round((this.Unit * 100 / numOfParticipants), 1));
+
+
+}
+
+public class ParticipantsByCriterion
+{
+   public string Criterion { get; }
+    public IEnumerable<ParticipantsByResponseType> ParticipantsByReponseTypes { get; } = new List<ParticipantsByResponseType>();
+    public ParticipantsByCriterion(string criterion, IEnumerable<ParticipantsByResponseType> participantsByReponseTypes)
+    {
+        this.Criterion = criterion;
+        this.ParticipantsByReponseTypes = participantsByReponseTypes.ToList();
+    }
+    public float Sum() => 
+        ParticipantsByReponseTypes.Sum(pbr => pbr.Unit);
+
+
+}
+public record ParticipantsPerResponseTypes(string Criterion, string Question, List<ParticipantsByResponseType> ParticipantsPerType);
+
+
+public class ContingencyTable
+{
+    public string Name { get; }
+    public IEnumerable<ParticipantsByCriterion> ParticipantsByCriteria { get; } = new List<ParticipantsByCriterion>();
+    public ContingencyTable(string name, IEnumerable<ParticipantsByCriterion> participantsByCriteria)
+    {
+        this.Name = name;
+        this.ParticipantsByCriteria = participantsByCriteria;
+    }
+}
 
 
 public class SurveyBoleanResponsesGroupedByQuestion : SurveySelectableResponsesGroupedByQuestionVM<SurveyBooleanResponseType>
@@ -122,7 +170,7 @@ public class SurveyBoleanResponsesGroupedByQuestion : SurveySelectableResponsesG
         this.Question = questions.FirstOrDefault();
     }
 
-    public override IEnumerable<string> ExistingResponseTypes =>
+    public override IEnumerable<string> ResponseTypes =>
          Enum.GetValues<SurveyBooleanResponseType>()
          .Select(type => type.GetDisplayAttribute())
          .ToList();
@@ -137,7 +185,7 @@ public class SurveyButtonResponseGroupedByQuestion : SurveySelectableResponsesGr
         this.QuestionDescription = null;
         this.Question = question; 
     }
-    public override IEnumerable<string> ExistingResponseTypes =>
+    public override IEnumerable<string> ResponseTypes =>
          Enum.GetValues<SurveyButtonResponseType>()
          .Select(type => type.GetDisplayAttribute()) 
          .ToList();
@@ -166,11 +214,77 @@ public class SurveyButtonGroupResponsesGroupedByQuestion : SurveySelectableRespo
     public override IEnumerable<ParticipantsPerResponseTypes> NumberOfParticipantsByCriterion(Predicate<AnonymousParticipantVM> predicate, string name) =>
         this.ButtonGroupResponses.SelectMany(bgr => bgr.NumberOfParticipantsByCriterion(predicate, name)).ToList();   
 
-    public override IEnumerable<string> ExistingResponseTypes =>
+    public override IEnumerable<string> ResponseTypes =>
          Enum.GetValues<SurveyButtonResponseType>()
          .Select(type => type.GetDisplayAttribute())
          .ToList();
 }
+
+
+
+public abstract class ContingencyCalculator
+{
+    protected string Name { get; }
+    protected List<ParticipantPredicate> ParticipantPredicatesByTypes { get; } = new();
+    public ContingencyCalculator(string name, IEnumerable<ParticipantPredicate> participantPredicatesByTypes)
+    {
+        this.Name = name;
+        this.ParticipantPredicatesByTypes = participantPredicatesByTypes.ToList();
+        this.ParticipantPredicatesByTypes.Add(ParticipantPredicate.None);
+    }
+
+    public abstract ContingencyTable GetContingencyTableFor(ISelectableReponseType responses);
+    public IEnumerable<ParticipantsByCriterion> GetParticipantsByResponseTypes(ISelectableReponseType responses, IEnumerable<ParticipantPredicate> participantPredicates) =>
+      participantPredicates.Select(pp => GetParticipantsByResponseTypes(responses, pp))
+          .ToList();
+
+
+    public ParticipantsByCriterion GetParticipantsByResponseTypes(ISelectableReponseType responses, ParticipantPredicate participantPredicates) =>    
+         new ParticipantsByCriterion(participantPredicates.Name, responses.NumOfParticipantsByResponseTypes(participantPredicates.Predicate)
+             .ToList());
+    
+
+
+}
+
+public class ContingencyTableParticipants : ContingencyCalculator
+{   
+    public ContingencyTableParticipants(string name, IEnumerable<ParticipantPredicate> participantPredicatesByTypes) 
+        : base(name, participantPredicatesByTypes)
+    {
+       
+    }
+    public override ContingencyTable GetContingencyTableFor(ISelectableReponseType responses) =>
+        new ContingencyTable(this.Name, GetParticipantsByResponseTypes(responses, this.ParticipantPredicatesByTypes));
+        
+}
+
+public class ContingencyTablePercentages : ContingencyCalculator
+{
+    public ContingencyTablePercentages(string name, IEnumerable<ParticipantPredicate> participantPredicatesByTypes)
+        : base(name, participantPredicatesByTypes)
+    {
+        
+    }
+    private float NumOfParticipants(ISelectableReponseType responses) =>
+        this.GetParticipantsByResponseTypes(responses, ParticipantPredicate.None)
+            .Sum();
+             
+
+    public override ContingencyTable GetContingencyTableFor(ISelectableReponseType responses)
+    {
+        var numOfParticipants = NumOfParticipants(responses);
+        var participantByCriteria = this.GetParticipantsByResponseTypes(responses, this.ParticipantPredicatesByTypes)
+            .Select(pc => new ParticipantsByCriterion(pc.Criterion, pc.ParticipantsByReponseTypes.Select(pt => pt.ToPercent(numOfParticipants))))
+            .ToList();
+            
+        return new ContingencyTable(this.Name, participantByCriteria);
+    }
+
+    
+}
+
+
 
 
 

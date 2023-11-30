@@ -3,17 +3,19 @@
 @using Mladim.Domain.Extensions;
 
 <MudPaper Class="p-2">
-    <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@BoleanResponseGroup.QuestionDescription</MudText>
+    <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@BoleanResponseGroup.Question</MudText>
 
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">@Selector.Name</th>
-                @foreach (var type in Enum.GetValues<SurveyBooleanResponseType>())
-                {
-                    <th scope="col">@type.GetDisplayAttribute()</th>
-                }
-                <th scope="col">Skupaj</th>
+                <th scope="col">@Selector.Name</th>               
+                <th scope="col" class="text-center">
+                    <span style="color:#4da456;" class="oi oi-thumb-up thumb"></span>
+                </th>
+                <th scope="col" class="text-center">
+                    <span style="color:#4da456;" class="oi oi-thumb-down thumb"></span>
+                </th>                
+                <th scope="col" class="text-center">Skupaj</th>
             </tr>
         </thead>
         <tbody>
@@ -25,9 +27,9 @@
 
                         @foreach (var participantsByType in row.ParticipantsPerType)
                         {
-                            <td>@participantsByType.NumOfParticipants</td>
+                        <td class="text-center">@participantsByType.NumOfParticipants</td>
                         }
-                        <td>@row.ParticipantsPerType.Sum(pt => pt.NumOfParticipants)</td>
+                    <td class="text-center">@row.ParticipantsPerType.Sum(pt => pt.NumOfParticipants)</td>
                     </tr>                              
             }           
         </tbody>
@@ -47,7 +49,7 @@
     private IEnumerable<ParticipantsPerResponseTypes> GetSurveyParticipantRows() =>
         this.Selector.ParticipantPredicatesByType
             .SelectMany(pp => BoleanResponseGroup.NumberOfParticipantsByCriterion(pp.Predicate, pp.Name))
-            .ToList();
+            .ToList();   
 
 
     protected override void OnParametersSet()
