@@ -22,27 +22,18 @@ public partial class ActivityResultTable
     public IEnumerable<SurveyResponsesGroupedByQuestionVM> SurveyResponsesGroupByQuestions { get; set; } = new List<SurveyResponsesGroupedByQuestionVM>();
 
     [Inject]
-    public IJSRuntime JS { get; set; }
+    public IJSRuntime JS { get; set; }    
 
-    public SurveyResponseSelector responseSelector = SurveyResponseSelector.CreateGenderSelector();
-    private SurveyCriterionSelectorToBoolConverter surveyCriterionToBoolConverter = default!; // = new SurveyCriterionSelectorToBoolConverter();
-
-
-    private ContingencyCalculator contingencyCalculatorSelector = default!;
-    private ContingencyCalculatorSelectorToBoolConverter contingencyCalculatorSelectorToBoolConverter = default!;
+    private UnitSelectorConverter unitConverter = default!;
+    private CriterionSelectorConverter criterionConverter = default!;
+    private CogntigencyTableContext cogntigencyTableContext { get; set; } = default!;
+    
     protected override void OnInitialized()
     {
-        //contingencyCalculatorSelector = new ContingencyTableParticipants(responseSelector.Name, responseSelector.ParticipantPredicatesByType);
-
-
-        surveyCriterionToBoolConverter = new SurveyCriterionSelectorToBoolConverter();
-        contingencyCalculatorSelectorToBoolConverter = new ContingencyCalculatorSelectorToBoolConverter(responseSelector);
-      
-    }
-    private IEnumerable<ParticipantsByResponseType> GenerateRows(ISelectableReponseType ResponseType)
-    {
-        return this.responseSelector.ParticipantPredicatesByType.SelectMany(pp => ResponseType.ParticipantsByResponseTypes(pp.Predicate));
-    }
+        unitConverter = new UnitSelectorConverter();
+        criterionConverter = new CriterionSelectorConverter();
+        cogntigencyTableContext = new CogntigencyTableContext();           
+    }   
 
     private async Task OnClickCsvExportFile()
     {
@@ -88,7 +79,7 @@ public partial class ActivityResultTable
         memoryStream.Position = 0;
 
         using var streamRef = new DotNetStreamReference(stream: memoryStream);
-        await JS.InvokeVoidAsync("downloadFileFromStream", $"{responseSelector.Name}.csv", streamRef);
+        //await JS.InvokeVoidAsync("downloadFileFromStream", $"{responseSelector.Name}.csv", streamRef);
 
     }
 }

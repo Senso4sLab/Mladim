@@ -9,15 +9,14 @@
              <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">Prikaz rezultatov</MudText>
              <MudIconButton Icon="@Icons.Material.Filled.FileDownload" OnClick="@OnClickCsvExportFile">Prenesi rezultate</MudIconButton>
          </MudStack>
-         <MudSwitch Color="Color.Tertiary" @bind-Checked="responseSelector" LabelPosition="LabelPosition.End" Converter="@surveyCriterionToBoolConverter">
+         <MudSwitch Color="Color.Tertiary" @bind-Checked="cogntigencyTableContext.CriterionSelector" LabelPosition="LabelPosition.End" Converter="@criterionConverter">
              <MudText Color="Color.Tertiary" Typo="Typo.h2">
-                 @responseSelector.Name
+                 @cogntigencyTableContext.CriterionSelector?.Name
              </MudText>
          </MudSwitch>
-
-         <MudSwitch Color="Color.Tertiary" @bind-Checked="contingencyCalculatorSelector" LabelPosition="LabelPosition.End" Converter="@contingencyCalculatorSelectorToBoolConverter">
+         <MudSwitch Color="Color.Tertiary" @bind-Checked="cogntigencyTableContext.UnitSelector" LabelPosition="LabelPosition.End" Converter="@unitConverter">
              <MudText Color="Color.Tertiary" Typo="Typo.h2">
-                 @contingencyCalculatorSelector.Type
+                 @cogntigencyTableContext.UnitSelector?.Type
              </MudText>
          </MudSwitch>
      </MudStack>
@@ -27,15 +26,15 @@
     {
         if (surveyResponsesGroupByQuestion is SurveyRatingResponsesGroupedByQuestion ratingResponses)
         {
-            <SurveyRatingResponses RatingResponseGroup="ratingResponses" ContingencyCalculator="contingencyCalculatorSelector" />
+            <SurveyRatingResponses RatingResponseGroup="ratingResponses" Context="cogntigencyTableContext" />
         }
         else if (surveyResponsesGroupByQuestion is SurveyBoleanResponsesGroupedByQuestion boleanResponses)
         {
-            <SurveyBoleanReponses BoleanResponseGroup="boleanResponses" ContingencyCalculator="contingencyCalculatorSelector" />
+            <SurveyBoleanReponses BoleanResponseGroup="boleanResponses" Context="cogntigencyTableContext" />
         }
         else if(surveyResponsesGroupByQuestion is SurveyButtonGroupResponsesGroupedByQuestion buttonResponses)
         {
-            <SurveyButtonGroupResponses ButtonResponseGroup="buttonResponses" ContingencyCalculator="contingencyCalculatorSelector" />
+            <SurveyButtonGroupResponses ButtonResponseGroup="buttonResponses" Context="cogntigencyTableContext" />
         }
         else if(surveyResponsesGroupByQuestion is SurveyTextResponsesGroupedByQuestion textResponses)
         {

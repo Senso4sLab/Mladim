@@ -13,7 +13,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">@ContingencyCalculator.SurveyResponseSelector.Name</th>
+                    <th scope="col">@Context.CriterionSelector.Name</th>
                     @foreach (var type in Enum.GetValues<SurveyButtonResponseType>())
                     {
                         <th class="text-center" scope="col">@type.GetDisplayAttribute()</th>
@@ -22,7 +22,7 @@
                 </tr>
             </thead>
             <tbody>
-               @*  @foreach (var row in GetContingencyTable(buttonResponse).ParticipantsByCriteria)
+                @foreach (var row in GetContingencyTable(buttonResponse).ParticipantsByCriteria)
                 {
                     <tr>
                         <th scope="row">@row.Criterion</th>
@@ -33,7 +33,7 @@
                         }
                         <td class="text-center">@row.ParticipantsByReponseTypes.Sum(pr => pr.Unit)</td>
                     </tr>
-                }   *@                 
+                }                   
             </tbody>
         </table>
     }
@@ -45,18 +45,9 @@
     public SurveyButtonGroupResponsesGroupedByQuestion ButtonResponseGroup { get; set; } = default!;
 
     [Parameter]
-    public ContingencyCalculator ContingencyCalculator { get; set; } = default!;
-
-
-    private IEnumerable<ContingencyTable> Tables = new List<ContingencyTable>();
-
-    protected override void OnParametersSet()
-    {
-        //Tables = ButtonResponseGroup.ButtonGroupResponses.Select(btn => GetContingencyTable(btn)).ToList();
-    }
+    public CogntigencyTableContext Context { get; set; } = default!;    
 
     private ContingencyTable GetContingencyTable(ISelectableReponseType reponseType) =>
-        this.ContingencyCalculator.GetContingencyTableFor(reponseType);
-
-       
+        this.Context.GetContingencyTableFor(reponseType);
+        
 }

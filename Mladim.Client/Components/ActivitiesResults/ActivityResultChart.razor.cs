@@ -1,7 +1,10 @@
 using global::Microsoft.AspNetCore.Components;
 using Mladim.Client.Models;
+using Mladim.Client.ViewModels;
 using Mladim.Client.ViewModels.Survey;
 using Mladim.Domain.Enums;
+using Mladim.Domain.Extensions;
+using static MudBlazor.Colors;
 
 namespace Mladim.Client.Components.ActivitiesResults;
 
@@ -9,11 +12,60 @@ public partial class ActivityResultChart
 {  
     [Parameter]
     public IEnumerable<SurveyResponsesGroupedByQuestionVM> SurveyResponsesGroupByQuestions { get; set; } = new List<SurveyResponsesGroupedByQuestionVM>();
-    
+
+
+    private IEnumerable<DoughnutPiece> ageDoughnut = new List<DoughnutPiece>();
+
+    private IEnumerable<DoughnutPiece> genderDoughnut = new List<DoughnutPiece>();
+
+    int total = 0;
     protected async override Task OnInitializedAsync()
     {
-       
+        var surveyResponseGroupByQuestions = this.SurveyResponsesGroupByQuestions.FirstOrDefault()
+            .AnonymousParticipant.ToList() ?? new List<AnonymousParticipantVM>();
+
+        total = surveyResponseGroupByQuestions.Count;
+
+        ageDoughnut = AgeGroupDoughnutPercantages(surveyResponseGroupByQuestions).ToList();
+        genderDoughnut = GenderDoughnutPercantages(surveyResponseGroupByQuestions).ToList();
+
+
+        Test();
     }
+
+    private IEnumerable<DoughnutPiece> GenderDoughnutPercantages(List<AnonymousParticipantVM> participants)
+    {        
+       return  participants.GroupBy(ap => ap.Gender)
+            .Select(g => (name: g.Key, value: Math.Round(g.Count() * 100.0 / total)))
+            .Select(tuple => DoughnutPiece.Create(tuple.name.GetDisplayAttribute(), (int)tuple.value,$"{tuple.value}%", GenderColor(tuple.name)))
+            .ToList();        
+    }
+
+    private IEnumerable<DoughnutPiece> AgeGroupDoughnutPercantages(List<AnonymousParticipantVM> participants)
+    {
+        return participants.GroupBy(ap => ap.AgeGroup)
+             .Select(g => (name: g.Key, value: Math.Round(g.Count() * 100.0 / participants.Count)))
+             .Select(tuple => DoughnutPiece.Create(tuple.name.GetDisplayAttribute(), (int)tuple.value, $"{tuple.value}%", AgeGroupColor(tuple.name)))
+             .ToList();
+    }
+
+    public List<SurveyBoleanResponsesGroupedByQuestion> BoleanResponses { get; set; } = new List<SurveyBoleanResponsesGroupedByQuestion>(); 
+    private void Test()
+    {
+        foreach(var responsesGroup in this.SurveyResponsesGroupByQuestions)
+        {
+            if(responsesGroup is SurveyBoleanResponsesGroupedByQuestion boleanResponse)
+            {
+                var selectable = boleanResponse as ISelectableReponseType;
+                var response = selectable.ParticipantsByResponseTypes(ParticipantPredicate.None.Predicate).Select(s => s.InPercent(total));
+                this.BoleanResponses.Add(boleanResponse);
+
+            }
+        }    
+    }
+
+
+
 
 
     private string GenderColor(Gender gender) => 
@@ -39,7 +91,6 @@ public partial class ActivityResultChart
 
 
 
-    private IEnumerable<DoughnutPiece> ageDoughnut = null!;
-    //public IEnumerable<DoughnutPiece> AgeDoughnut => ageDoughnut ??= AgeGroupsDoughnutPercantages();
+   
 
 }

@@ -44,12 +44,12 @@
     public SurveyRatingResponsesGroupedByQuestion RatingResponseGroup { get; set; } = default!;
 
     [Parameter]
-    public ContingencyCalculator ContingencyCalculator { get; set; } = default!;
+    public CogntigencyTableContext Context { get; set; } = default!;
 
     private ContingencyTable Table = default!;
 
     private ContingencyTable GetContingencyTable() =>
-        this.ContingencyCalculator.GetContingencyTableFor(RatingResponseGroup);
+        this.Context.GetContingencyTableFor(RatingResponseGroup);
 
     protected override void OnParametersSet() =>
         this.Table = GetContingencyTable();

@@ -3,34 +3,36 @@ using Mladim.Domain.Extensions;
 
 namespace Mladim.Client.ViewModels.Survey;
 
-public abstract class SurveyResponseSelector
+public abstract class SurveyCriterionSelector
 {
     public string Name { get;}
     public List<ParticipantPredicate> ParticipantPredicatesByType { get; set; } = new();
-    public SurveyResponseSelector(string name)
+    public SurveyCriterionSelector(string name)
     {
         this.Name = name;
     }
 
-    public static SurveyResponseSelector CreateGenderSelector() =>
-        new GenderSurveyResponseSelector();
+    public static SurveyCriterionSelector GenderSelector() =>
+        new GenderSelector();
+    public static SurveyCriterionSelector AgeGroupSelector() =>
+       new AgeGroupSelector();
 
-    public static SurveyResponseSelector CreateAgeGroupSelector() =>
-       new AgeGroupSurveyResponseSelector();
+    
+    
 }
 
-public class GenderSurveyResponseSelector : SurveyResponseSelector
+public class GenderSelector : SurveyCriterionSelector
 {    
-    public GenderSurveyResponseSelector(): base("Spol") 
+    public GenderSelector(): base("Spol") 
     {
         this.ParticipantPredicatesByType = ParticipantPredicate.Genders.ToList();
         this.ParticipantPredicatesByType.Add(ParticipantPredicate.None);
     }
 }
 
-public class AgeGroupSurveyResponseSelector : SurveyResponseSelector
+public class AgeGroupSelector : SurveyCriterionSelector
 {
-    public AgeGroupSurveyResponseSelector() : base("Starostna skupina")
+    public AgeGroupSelector() : base("Starostna skupina")
     {
         this.ParticipantPredicatesByType = ParticipantPredicate.AgeGroups.ToList();
         this.ParticipantPredicatesByType.Add(ParticipantPredicate.None);     

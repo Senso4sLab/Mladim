@@ -1,0 +1,84 @@
+﻿@using Mladim.Client.Models;
+@using Mladim.Client.ViewModels.Survey;
+@using Syncfusion.Blazor.Charts
+@using Mladim.Client.Services.SubjectServices.Contracts;
+@using Mladim.Domain.Enums;
+@using Mladim.Domain.Extensions;
+
+
+
+<SfChart Height="50">
+    <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category"/>   
+    <ChartPrimaryYAxis Visible="false"/>
+    <ChartArea>
+        <ChartAreaBorder Width="0"></ChartAreaBorder>
+    </ChartArea>   
+    <ChartSeriesCollection>      
+        <ChartSeries DataSource="@ChartData" XName="Name" YName="X" Type="ChartSeriesType.StackingBar100" >
+            <ChartCornerRadius BottomLeft="10"  TopLeft="10"/>            
+            <ChartMarker>
+                <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle" />
+            </ChartMarker>
+        </ChartSeries>
+        <ChartSeries DataSource="@ChartData" XName="Name" YName="Y" Type="ChartSeriesType.StackingBar100">
+            <ChartCornerRadius BottomRight="10" TopRight="10"/>          
+            <ChartMarker>
+                <ChartDataLabel  Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle" />
+            </ChartMarker>
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
+
+
+
+
+
+@code 
+{
+    [Parameter]
+    public SurveyBoleanResponsesGroupedByQuestion Response { get; set; }
+
+    public List<BoleanResponseChartData> ChartData = new List<BoleanResponseChartData>();
+
+    protected override void OnInitialized()
+    {
+        int total = this.Response.ParticipantQuestionResponses.Count;
+
+        if (Response is ISelectableReponseType selectable)
+        {
+            var response = selectable.ParticipantsByResponseTypes(ParticipantPredicate.None.Predicate).Select(s => s.InPercent(total));
+            this.ChartData.Add(new BoleanResponseChartData(response));
+        }
+    }
+
+
+
+
+    public class BoleanResponseChartData
+    {
+       
+        public ResponseChartData? ThumbsUp { get; }
+        public ResponseChartData? ThumbsDown{ get; }
+
+
+        public BoleanResponseChartData(IEnumerable<ParticipantsByResponseType> responses)
+        {
+            this.Name = "boleanResponse";
+            this.ThumbsUp = this.Find(data, SurveyBooleanResponseType.ThumpsUp);
+            this.ThumbsDown = this.Find(data, SurveyBooleanResponseType.ThumpsDown);
+        }
+
+        private ResponseChartData Create(SurveyBooleanResponseType type, string fill)
+        {
+            return new ResponseChartData()
+        }
+
+        private ResponseChartData? Find(IEnumerable<ParticipantsByResponseType> responses, SurveyBooleanResponseType type)
+        {
+            var response =  responses.FirstOrDefault(d => d.ResponseType == type.GetDisplayAttribute());
+        }
+    }
+
+   
+
+}
