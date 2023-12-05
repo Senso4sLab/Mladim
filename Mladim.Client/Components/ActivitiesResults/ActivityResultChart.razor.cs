@@ -18,19 +18,23 @@ public partial class ActivityResultChart
 
     private IEnumerable<DoughnutPiece> genderDoughnut = new List<DoughnutPiece>();
 
+
+    
+
+
     int total = 0;
     protected async override Task OnInitializedAsync()
     {
-        var surveyResponseGroupByQuestions = this.SurveyResponsesGroupByQuestions.FirstOrDefault()
+        var participants = this.SurveyResponsesGroupByQuestions.FirstOrDefault()
             .AnonymousParticipant.ToList() ?? new List<AnonymousParticipantVM>();
 
-        total = surveyResponseGroupByQuestions.Count;
+        total = participants.Count;
 
-        ageDoughnut = AgeGroupDoughnutPercantages(surveyResponseGroupByQuestions).ToList();
-        genderDoughnut = GenderDoughnutPercantages(surveyResponseGroupByQuestions).ToList();
+        ageDoughnut = AgeGroupDoughnutPercantages(participants).ToList();
+        genderDoughnut = GenderDoughnutPercantages(participants).ToList();
 
 
-        Test();
+        //Test();
     }
 
     private IEnumerable<DoughnutPiece> GenderDoughnutPercantages(List<AnonymousParticipantVM> participants)

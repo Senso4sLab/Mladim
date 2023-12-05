@@ -78,7 +78,7 @@ public partial class ActivityResultTable
 
         memoryStream.Position = 0;
 
-        using var streamRef = new DotNetStreamReference(stream: memoryStream);
+        //using var streamRef = new DotNetStreamReference(stream: memoryStream);
         //await JS.InvokeVoidAsync("downloadFileFromStream", $"{responseSelector.Name}.csv", streamRef);
 
     }

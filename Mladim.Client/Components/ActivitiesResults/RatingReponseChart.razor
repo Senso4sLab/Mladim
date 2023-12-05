@@ -1,5 +1,119 @@
-﻿<h3>RatingResponseResult</h3>
+﻿@using Mladim.Client.Models;
+@using Mladim.Client.ViewModels.Survey;
+@using Syncfusion.Blazor.Charts
+@using Mladim.Client.Services.SubjectServices.Contracts;
+@using Mladim.Domain.Enums;
+@using Mladim.Domain.Extensions;
 
-@code {
 
+
+<SfChart Height="90" Title="@Response.Question" @ref="chart" >
+    <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
+    <ChartPrimaryYAxis Visible="false" />
+    <ChartArea>
+        <ChartAreaBorder Width="0"></ChartAreaBorder>
+    </ChartArea>
+    <ChartSeriesCollection >
+        <ChartSeries DataSource="@ChartData" XName="Name" Fill="#7cc769" YName="OneSmileValue" Type="ChartSeriesType.StackingBar100">
+            <ChartCornerRadius/>
+            <ChartMarker>
+                <ChartDataLabel Visible="true" Name="OneSmileName" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
+                    <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
+                </ChartDataLabel>
+            </ChartMarker>
+        </ChartSeries>
+        <ChartSeries DataSource="@ChartData" XName="Name" Fill="#394241" YName="TwoSmileValue" Type="ChartSeriesType.StackingBar100">
+            <ChartCornerRadius />
+            <ChartMarker>
+                <ChartDataLabel Visible="true" Name="TwoSmileName" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
+                    <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
+                </ChartDataLabel>
+            </ChartMarker>
+        </ChartSeries>
+        <ChartSeries DataSource="@ChartData" XName="Name" Fill="#ffc700" YName="ThreeSmileValue" Type="ChartSeriesType.StackingBar100">
+            <ChartCornerRadius />
+            <ChartMarker>
+                <ChartDataLabel Visible="true" Name="ThreeSmileName" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
+                    <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
+                </ChartDataLabel>
+            </ChartMarker>
+        </ChartSeries>
+        <ChartSeries DataSource="@ChartData" XName="Name" Fill="#8ED974" YName="FourSmileValue" Type="ChartSeriesType.StackingBar100">
+            <ChartCornerRadius />
+            <ChartMarker>
+                <ChartDataLabel Visible="true" Name="FourSmileName" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
+                    <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
+                </ChartDataLabel>
+            </ChartMarker>
+        </ChartSeries>
+        <ChartSeries DataSource="@ChartData" XName="Name" Fill="#4DA456" YName="FiveSmileValue" Type="ChartSeriesType.StackingBar100">
+            <ChartCornerRadius/>
+            <ChartMarker>
+                <ChartDataLabel Visible="true" Name="FiveSmileName" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
+                    <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
+                </ChartDataLabel>
+            </ChartMarker>
+        </ChartSeries>
+    </ChartSeriesCollection>
+</SfChart>
+
+@code
+{
+    [Parameter]
+    public SurveyRatingResponsesGroupedByQuestion Response { get; set; }
+
+    public List<RatingResponseChartData> ChartData = new List<RatingResponseChartData>();
+
+    private SfChart chart;
+
+
+    protected override void OnInitialized()
+    {
+        int total = this.Response.ParticipantQuestionResponses.Count;
+
+        if (Response is ISelectableReponseType selectable)
+        {
+            var response = selectable.ParticipantsByResponseTypes(ParticipantPredicate.None.Predicate).Select(s => s.InPercent(total));
+            this.ChartData.Add(new RatingResponseChartData(response));
+        }
+    }
+
+    public class RatingResponseChartData
+    {
+        public string Name => "ratingType";
+
+        public string OneSmile => SurveyRatingResponseType.OneSmile.GetDisplayAttribute();
+        public string OneSmileName => $"{OneSmile} {OneSmileValue}%";
+        public double OneSmileValue { get; }
+
+        public string TwoSmile => SurveyRatingResponseType.TwoSmiles.GetDisplayAttribute();
+        public string TwoSmileName => $"{TwoSmile} {TwoSmileValue}%";
+        public double TwoSmileValue { get; }
+
+        public string ThreeSmile => SurveyRatingResponseType.ThreeSmiles.GetDisplayAttribute();
+        public string ThreeSmileName => $"{ThreeSmile} {ThreeSmileValue}%";
+        public double ThreeSmileValue { get; }
+
+
+        public string FourSmile => SurveyRatingResponseType.FourSmiles.GetDisplayAttribute();
+        public string FourSmileName => $"{FourSmile} {FourSmileValue}%";
+        public double FourSmileValue { get; }
+
+        public string FiveSmile => SurveyRatingResponseType.FiveSmiles.GetDisplayAttribute();
+        public string FiveSmileName => $"{FiveSmile} {FiveSmileValue}%";
+        public double FiveSmileValue { get; }
+
+        public RatingResponseChartData(IEnumerable<ParticipantsByResponseType> responseTypes)
+        {
+            this.OneSmileValue = FindUnit(responseTypes, this.OneSmile);
+            this.TwoSmileValue = FindUnit(responseTypes, this.TwoSmile);
+            this.ThreeSmileValue = FindUnit(responseTypes, this.ThreeSmile);
+            this.FourSmileValue = FindUnit(responseTypes, this.FourSmile);
+            this.FiveSmileValue = FindUnit(responseTypes, this.FiveSmile);
+        }
+
+        private double FindUnit(IEnumerable<ParticipantsByResponseType> responseTypes, string type) =>
+            responseTypes.FirstOrDefault(rt => rt.ResponseType == type)?.Unit ?? 0;
+    }
 }
+

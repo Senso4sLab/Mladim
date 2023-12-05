@@ -32,7 +32,15 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyHeader();
+        policy.AllowAnyOrigin();
+        policy.AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -53,6 +61,8 @@ app.UseHttpsRedirection();
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseCors();
+
 
 
 app.UseAuthentication();

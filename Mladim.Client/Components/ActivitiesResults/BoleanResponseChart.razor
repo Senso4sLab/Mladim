@@ -7,23 +7,27 @@
 
 
 
-<SfChart Height="50">
+<SfChart Height="90" Title="@Response.Question">    
     <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category"/>   
     <ChartPrimaryYAxis Visible="false"/>
     <ChartArea>
         <ChartAreaBorder Width="0"></ChartAreaBorder>
     </ChartArea>   
     <ChartSeriesCollection>      
-        <ChartSeries DataSource="@ChartData" XName="Name" YName="X" Type="ChartSeriesType.StackingBar100" >
+        <ChartSeries DataSource="@ChartData" XName="Name" Fill="#4DA456" YName="ThumbsUpValue" Type="ChartSeriesType.StackingBar100">
             <ChartCornerRadius BottomLeft="10"  TopLeft="10"/>            
             <ChartMarker>
-                <ChartDataLabel Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle" />
+                <ChartDataLabel Visible="true" Name="ThumbsUpName"  Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
+                    <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
+                    </ChartDataLabel>
             </ChartMarker>
         </ChartSeries>
-        <ChartSeries DataSource="@ChartData" XName="Name" YName="Y" Type="ChartSeriesType.StackingBar100">
+        <ChartSeries DataSource="@ChartData" XName="Name" Fill="#8ED974" YName="ThumbsDownValue" Type="ChartSeriesType.StackingBar100">
             <ChartCornerRadius BottomRight="10" TopRight="10"/>          
             <ChartMarker>
-                <ChartDataLabel  Visible="true" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle" />
+                <ChartDataLabel Visible="true" Name="ThumbsDownName"  Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
+                    <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
+                </ChartDataLabel>
             </ChartMarker>
         </ChartSeries>
     </ChartSeriesCollection>
@@ -47,38 +51,33 @@
         if (Response is ISelectableReponseType selectable)
         {
             var response = selectable.ParticipantsByResponseTypes(ParticipantPredicate.None.Predicate).Select(s => s.InPercent(total));
-            this.ChartData.Add(new BoleanResponseChartData(response));
+            this.ChartData.Add(new BoleanResponseChartData(response));           
         }
-    }
-
-
-
+    }   
 
     public class BoleanResponseChartData
     {
-       
-        public ResponseChartData? ThumbsUp { get; }
-        public ResponseChartData? ThumbsDown{ get; }
+        public string Name => "boleanType";
+
+        public string ThumbsUp => SurveyBooleanResponseType.ThumpsUp.GetDisplayAttribute();
+        public string ThumbsUpName => $"{ThumbsUp} {ThumbsUpValue}%";
+
+        public double ThumbsUpValue { get; }
+
+        public string ThumbsDown => SurveyBooleanResponseType.ThumpsDown.GetDisplayAttribute();
+
+        public string ThumbsDownName => $"{ThumbsDown} {ThumbsDownValue}%";
+
+        public double ThumbsDownValue { get; }
 
 
-        public BoleanResponseChartData(IEnumerable<ParticipantsByResponseType> responses)
+        public BoleanResponseChartData(IEnumerable<ParticipantsByResponseType> responseTypes)
         {
-            this.Name = "boleanResponse";
-            this.ThumbsUp = this.Find(data, SurveyBooleanResponseType.ThumpsUp);
-            this.ThumbsDown = this.Find(data, SurveyBooleanResponseType.ThumpsDown);
+            this.ThumbsUpValue   = FindUnit(responseTypes, this.ThumbsUp);
+            this.ThumbsDownValue = FindUnit(responseTypes, this.ThumbsDown);            
         }
 
-        private ResponseChartData Create(SurveyBooleanResponseType type, string fill)
-        {
-            return new ResponseChartData()
-        }
-
-        private ResponseChartData? Find(IEnumerable<ParticipantsByResponseType> responses, SurveyBooleanResponseType type)
-        {
-            var response =  responses.FirstOrDefault(d => d.ResponseType == type.GetDisplayAttribute());
-        }
+        private double FindUnit(IEnumerable<ParticipantsByResponseType> responseTypes, string type) =>
+            responseTypes.FirstOrDefault(rt => rt.ResponseType == type)?.Unit ?? 0;
     }
-
-   
-
 }
