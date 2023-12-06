@@ -50,7 +50,11 @@
         }
         else if (responsesGroup is SurveyButtonGroupResponsesGroupedByQuestion buttonResponse)
         {
-            
+            <ButtonGroupReponseChart Response="buttonResponse"/>
+        }
+        else if(responsesGroup is SurveyTextResponsesGroupedByQuestion textReponse)
+        {
+
         }
     }    
 

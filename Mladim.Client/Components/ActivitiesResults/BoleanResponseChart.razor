@@ -13,23 +13,18 @@
     <ChartArea>
         <ChartAreaBorder Width="0"></ChartAreaBorder>
     </ChartArea>   
-    <ChartSeriesCollection>      
-        <ChartSeries DataSource="@ChartData" XName="Name" Fill="#4DA456" YName="ThumbsUpValue" Type="ChartSeriesType.StackingBar100">
-            <ChartCornerRadius BottomLeft="10"  TopLeft="10"/>            
-            <ChartMarker>
-                <ChartDataLabel Visible="true" Name="ThumbsUpName"  Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
-                    <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
+    <ChartSeriesCollection>
+        @foreach (var seriesData in ResponseData)
+        {
+            <ChartSeries DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName" Type="ChartSeriesType.StackingBar100">
+                <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius" />
+                <ChartMarker>
+                    <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
+                        <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
                     </ChartDataLabel>
-            </ChartMarker>
-        </ChartSeries>
-        <ChartSeries DataSource="@ChartData" XName="Name" Fill="#8ED974" YName="ThumbsDownValue" Type="ChartSeriesType.StackingBar100">
-            <ChartCornerRadius BottomRight="10" TopRight="10"/>          
-            <ChartMarker>
-                <ChartDataLabel Visible="true" Name="ThumbsDownName"  Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
-                    <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
-                </ChartDataLabel>
-            </ChartMarker>
-        </ChartSeries>
+                </ChartMarker>
+            </ChartSeries>
+        }
     </ChartSeriesCollection>
 </SfChart>
 
@@ -42,7 +37,7 @@
     [Parameter]
     public SurveyBoleanResponsesGroupedByQuestion Response { get; set; }
 
-    public List<BoleanResponseChartData> ChartData = new List<BoleanResponseChartData>();
+    public List<ResponseBar> ResponseData = new List<ResponseBar>();
 
     protected override void OnInitialized()
     {
@@ -50,34 +45,27 @@
 
         if (Response is ISelectableReponseType selectable)
         {
-            var response = selectable.ParticipantsByResponseTypes(ParticipantPredicate.None.Predicate).Select(s => s.InPercent(total));
-            this.ChartData.Add(new BoleanResponseChartData(response));           
+            var responseBars = selectable.ParticipantsByResponseTypes(ParticipantPredicate.None.Predicate)
+                .Select(s => s.InPercent(total))
+                .Where(pr => pr.Unit > 0)
+                .Select(pr => (type: pr.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(pr.ResponseType, pr.Unit) })))
+                .Select(bv => ResponseBar.CreateResponseBar(Fill(bv.type), bv.barList))
+                .ToList();
+
+            responseBars.First().LeftRadius = 10;
+            responseBars.Last().RightRadius = 10;
+
+            this.ResponseData.AddRange(responseBars);
         }
     }   
 
-    public class BoleanResponseChartData
+    private string Fill(string responseType)
     {
-        public string Name => "boleanType";
-
-        public string ThumbsUp => SurveyBooleanResponseType.ThumpsUp.GetDisplayAttribute();
-        public string ThumbsUpName => $"{ThumbsUp} {ThumbsUpValue}%";
-
-        public double ThumbsUpValue { get; }
-
-        public string ThumbsDown => SurveyBooleanResponseType.ThumpsDown.GetDisplayAttribute();
-
-        public string ThumbsDownName => $"{ThumbsDown} {ThumbsDownValue}%";
-
-        public double ThumbsDownValue { get; }
-
-
-        public BoleanResponseChartData(IEnumerable<ParticipantsByResponseType> responseTypes)
-        {
-            this.ThumbsUpValue   = FindUnit(responseTypes, this.ThumbsUp);
-            this.ThumbsDownValue = FindUnit(responseTypes, this.ThumbsDown);            
-        }
-
-        private double FindUnit(IEnumerable<ParticipantsByResponseType> responseTypes, string type) =>
-            responseTypes.FirstOrDefault(rt => rt.ResponseType == type)?.Unit ?? 0;
-    }
+        if (responseType == SurveyBooleanResponseType.ThumpsUp.GetDisplayAttribute())
+            return "#4DA456";
+        else if (responseType == SurveyBooleanResponseType.ThumpsDown.GetDisplayAttribute())
+            return "#8ED974";
+       else
+            return "#000000";
+    }    
 }

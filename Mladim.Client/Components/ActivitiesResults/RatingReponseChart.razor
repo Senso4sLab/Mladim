@@ -18,7 +18,7 @@
         @foreach (var seriesData in ResponseData)
         {
             <ChartSeries DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName" Type="ChartSeriesType.StackingBar100">
-                <ChartCornerRadius  />
+                <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius"/>
                 <ChartMarker>
                     <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
                         <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
@@ -31,37 +31,28 @@
 
 @code
 {
-
-
-
-
     [Parameter]
-    public SurveyRatingResponsesGroupedByQuestion Response { get; set; }
-
-    //public List<RatingResponseChartData> ChartData = new List<RatingResponseChartData>();
+    public SurveyRatingResponsesGroupedByQuestion Response { get; set; } = default!; 
 
     public List<ResponseBar> ResponseData = new List<ResponseBar>();
 
-
     protected override void OnInitialized()
     {
-
-
-        int total = this.Response.ParticipantQuestionResponses.Count;    
+        int total = this.Response.ParticipantQuestionResponses.Count;       
 
         if (Response is ISelectableReponseType selectable)
         {
-            var responses = selectable.ParticipantsByResponseTypes(ParticipantPredicate.None.Predicate).Select(s => s.InPercent(total));
-           
-            foreach(var response in responses)
-            {
-                if(response.Unit > 0)
-                {
-                    var list = new List<BarValue>(new[] { BarValue.CreateRatingValue(response.ResponseType, response.Unit)});
+            var responseBars = selectable.ParticipantsByResponseTypes(ParticipantPredicate.None.Predicate)
+                .Select(s => s.InPercent(total))
+                .Where(pr => pr.Unit > 0)
+                .Select(pr => (type: pr.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(pr.ResponseType, pr.Unit) })))
+                .Select(bv => ResponseBar.CreateResponseBar(Fill(bv.type), bv.barList))
+                .ToList();
 
-                    ResponseData.Add(ResponseBar.CreateResponseBar(Fill(response.ResponseType), list));
-                }
-            }
+            responseBars.First().LeftRadius = 10;
+            responseBars.Last().RightRadius = 10;
+
+            this.ResponseData.AddRange(responseBars);           
         }
     }
 
@@ -69,71 +60,19 @@
     {
         if (responseType == SurveyRatingResponseType.OneSmile.GetDisplayAttribute())
             return "#7cc769";
-        else if (responseType == SurveyRatingResponseType.TwoSmiles.GetDisplayAttribute())
-        {
-            return "#394241";
-        }
-        else if (responseType == SurveyRatingResponseType.ThreeSmiles.GetDisplayAttribute())
-        {
-            return "#ffc700";
-        }
-        else if (responseType == SurveyRatingResponseType.FourSmiles.GetDisplayAttribute())
-        {
-            return "#8ED974";
-        }
-        else if (responseType == SurveyRatingResponseType.FiveSmiles.GetDisplayAttribute())
-        {
-            return "#4DA456";
-        }
-
-        return "#000000";
-
+        else if (responseType == SurveyRatingResponseType.TwoSmiles.GetDisplayAttribute())        
+            return "#394241";        
+        else if (responseType == SurveyRatingResponseType.ThreeSmiles.GetDisplayAttribute())        
+            return "#ffc700";        
+        else if (responseType == SurveyRatingResponseType.FourSmiles.GetDisplayAttribute())        
+            return "#8ED974";        
+        else if (responseType == SurveyRatingResponseType.FiveSmiles.GetDisplayAttribute())        
+            return "#4DA456";        
+        else
+            return "#000000";
     }
 
-    public class ResponseBar
-    {
-        public string XName { get; set; }
-        public string YName { get; set; }
-        public string Fill{ get; set; }
-
-        public double BottomLeft { get; set; }
-        public double BottomRight { get; set; }
-        public double TopLeft { get; set; }
-        public double TopRight { get; set; }
-
-        public IEnumerable<BarValue> Data { get; } = new List<BarValue>();
-
-        private ResponseBar(string xName, string yName, string fill, IEnumerable<BarValue> data)
-        {
-            this.XName = xName;
-            this.YName = yName;
-            this.Fill = fill;
-            this.Data = data.ToList();
-        }
-
-        public static ResponseBar CreateResponseBar(string fill, IEnumerable<BarValue> data) =>
-            new ResponseBar(nameof(BarValue.ChartName), nameof(BarValue.Value), fill, data);
-    }
-
-
-    public class BarValue
-    {
-        public string ChartName { get; }
-        public string Name { get; }
-        public double Value { get; }
-        public string Label => $"{this.Name} {this.Value}%";       
-
-        private BarValue(string chartName, string name, double value)
-        {
-            this.ChartName = chartName;
-            this.Name = name;
-            this.Value = value;           
-        }
-
-        public static BarValue CreateRatingValue(string name, double value) => 
-            new BarValue("ratingType", name, value);
-
-    }   
+    
 }
 
 
