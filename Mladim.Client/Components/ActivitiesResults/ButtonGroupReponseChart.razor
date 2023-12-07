@@ -8,11 +8,11 @@
 @if(Response != null)
 {
     <MudStack style="width:100%;">
-        <MudText Typo="Typo.h2" Align="Align.Center">@Response.QuestionDescription</MudText>
+        <MudText Typo="Typo.h2" Color="Color.Tertiary" Align="Align.Center">@Response.QuestionDescription</MudText>
         @foreach (var buttonResponse in Response.ButtonGroupResponses)
         {
             <SfChart Height="90" Title="@buttonResponse?.Question" >
-                <ChartTitleStyle Size="0.9rem" Color="black" FontFamily="Poppins" FontWeight="400"></ChartTitleStyle>
+                <ChartTitleStyle Size="0.9rem" Color="#43525d" FontFamily="Poppins" FontWeight="600"/>
                 <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
                 <ChartPrimaryYAxis Visible="false" />
                 <ChartArea>

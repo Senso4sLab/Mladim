@@ -1,9 +1,10 @@
 ﻿@using Mladim.Client.ViewModels.Survey;
-@using Syncfusion.Blazor.Charts
+@using Syncfusion.Blazor.Charts;
+@using Mladim.Client.Components.Anketa;
 
  
 <MudGrid>
-    <MudItem xl="4" sm="6">
+    <MudItem sm="6">
         <MudPaper Outlined="true">
             <SfAccumulationChart Title="Razporeditev udeležencev po letih" EnableAnimation="true" EnableSmartLabels="true" CustomClass="custom-row">
                 <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
@@ -20,7 +21,7 @@
             </SfAccumulationChart>
         </MudPaper>
     </MudItem>
-    <MudItem xl ="4" sm="6">
+    <MudItem sm="6">
         <MudPaper Outlined="true">
             <SfAccumulationChart Title="Razporeditev udeležencev po spolu" EnableAnimation="true" EnableSmartLabels="true">
                 <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191"/>
@@ -40,22 +41,26 @@
 
     @foreach(var responsesGroup in SurveyResponsesGroupByQuestions)
     {
-        @if(responsesGroup is SurveyBoleanResponsesGroupedByQuestion boleanResponse)
-        {
-            <BoleanResponseChart Response="boleanResponse"/>
-        }
-        else if (responsesGroup is SurveyRatingResponsesGroupedByQuestion ratingResponse)
-        {
-            <RatingReponseChart Response="ratingResponse"/>
-        }
-        else if (responsesGroup is SurveyButtonGroupResponsesGroupedByQuestion buttonResponse)
-        {
-            <ButtonGroupReponseChart Response="buttonResponse"/>
-        }
-        else if(responsesGroup is SurveyTextResponsesGroupedByQuestion textReponse)
-        {
-
-        }
+        <MudItem sm="12">
+            @if(responsesGroup is SurveyBoleanResponsesGroupedByQuestion boleanResponse)
+            {
+                <BoleanResponseChart Response="boleanResponse"/>
+            }
+            else if (responsesGroup is SurveyRatingResponsesGroupedByQuestion ratingResponse)
+            {
+                <RatingReponseChart Response="ratingResponse"/>
+            }
+            else if (responsesGroup is SurveyButtonGroupResponsesGroupedByQuestion buttonResponse)
+            {
+                <ButtonGroupReponseChart Response="buttonResponse"/>
+            }
+            else if(responsesGroup is SurveyTextResponsesGroupedByQuestion textReponse)
+            {
+                <MudStack Class="px-2">
+                    <SurveyTextResponses TextResponseGroup="textReponse" />
+                </MudStack>
+            }
+        </MudItem>
     }    
 
 </MudGrid>       

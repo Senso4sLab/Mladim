@@ -7,26 +7,30 @@
 
 
 
-<SfChart Height="90" Title="@Response.Question">    
-    <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category"/>   
-    <ChartPrimaryYAxis Visible="false"/>
-    <ChartArea>
-        <ChartAreaBorder Width="0"></ChartAreaBorder>
-    </ChartArea>   
-    <ChartSeriesCollection>
-        @foreach (var seriesData in ResponseData)
-        {
-            <ChartSeries DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName" Type="ChartSeriesType.StackingBar100">
-                <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius" />
-                <ChartMarker>
-                    <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
-                        <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
-                    </ChartDataLabel>
-                </ChartMarker>
-            </ChartSeries>
-        }
-    </ChartSeriesCollection>
-</SfChart>
+    <SfChart Height="90" Title="@Response.Question">
+        <ChartTitleStyle Size="1rem" Color="#43525d" FontFamily="Poppins" FontWeight="600" />
+        <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category"/>   
+        <ChartPrimaryYAxis Visible="false"/>
+        <ChartArea>
+            <ChartAreaBorder Width="0"></ChartAreaBorder>
+        </ChartArea>   
+        <ChartSeriesCollection>
+            @foreach (var seriesData in ResponseData)
+            {
+                <ChartSeries DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName" Type="ChartSeriesType.StackingBar100">
+                
+                    <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius" />
+                    <ChartMarker>
+                        <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
+                            <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
+                        </ChartDataLabel>
+                    </ChartMarker>
+                </ChartSeries>
+            }
+        </ChartSeriesCollection>
+    </SfChart>
+
+
 
 
 
