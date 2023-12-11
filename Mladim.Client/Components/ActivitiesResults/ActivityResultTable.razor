@@ -9,17 +9,21 @@
              <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">Prikaz rezultatov</MudText>
              <MudIconButton Icon="@Icons.Material.Filled.FileDownload" OnClick="@OnClickCsvExportFile">Prenesi rezultate</MudIconButton>
          </MudStack>
-         <MudSwitch Color="Color.Tertiary" @bind-Checked="cogntigencyTableContext.CriterionSelector" LabelPosition="LabelPosition.End" Converter="@criterionConverter">
-             <MudText Color="Color.Tertiary" Typo="Typo.h2">
-                 @cogntigencyTableContext.CriterionSelector?.Name
-             </MudText>
-         </MudSwitch>
-         <MudSwitch Color="Color.Tertiary" @bind-Checked="cogntigencyTableContext.UnitSelector" LabelPosition="LabelPosition.End" Converter="@unitConverter">
-             <MudText Color="Color.Tertiary" Typo="Typo.h2">
-                 @cogntigencyTableContext.UnitSelector?.Type
-             </MudText>
-         </MudSwitch>
-     </MudStack>
+         <MudStack Row>
+            <MudSelect @bind-Value="cogntigencyTableContext.CriterionSelector" T="SurveyCriterionSelector" Label="Vrsta prikaza" Variant="Variant.Outlined" Converter="@criterionConverter">
+                @foreach (var item in CriterionSelectors)
+                {
+                    <MudSelectItem Value="item">@item.Name</MudSelectItem>
+                }
+            </MudSelect>
+            <MudSelect @bind-Value="cogntigencyTableContext.UnitSelector" T=UnitSelector Label="Enota prikaza" Variant="Variant.Outlined" Converter="@unitConverter">
+                @foreach (var item in UnitSelectors)
+                {
+                    <MudSelectItem Value="item">@item.Type</MudSelectItem>
+                }
+            </MudSelect>
+         </MudStack>
+    </MudStack>
       
        
     @foreach (var surveyResponsesGroupByQuestion in SurveyResponsesGroupByQuestions)

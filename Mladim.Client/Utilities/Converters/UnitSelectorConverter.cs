@@ -3,6 +3,51 @@ using MudBlazor;
 
 namespace Mladim.Client.Utilities.Converters;
 
+public class UnitSelectorStringConverter : MudBlazor.Converter<UnitSelector, string>
+{
+    public UnitSelectorStringConverter()
+    {
+        SetFunc = OnSet;
+        GetFunc = OnGet;
+    }
+
+    private string? OnSet(UnitSelector? arg)
+    {
+        try
+        {
+            if (arg.GetType() == typeof(PercantagesUnit) || arg.GetType() == typeof(NumOfParticipantsUnit))
+                return arg.Type;
+            else
+                return string.Empty;
+        }
+        catch (FormatException e)
+        {
+            UpdateSetError("Conversion error: " + e.Message);
+            return string.Empty;
+        }
+    }
+
+    private UnitSelector? OnGet(string? arg)
+    {
+        try
+        {
+            if (arg == "Procent")
+                return new PercantagesUnit();
+            else if (arg == "Absolutna frekvenca")
+                return new NumOfParticipantsUnit();
+            else
+                return null;
+        }
+        catch (Exception e)
+        {
+            UpdateGetError("Conversion error: " + e.Message);
+            return null;
+        }
+    }   
+}
+
+
+
 public class UnitSelectorConverter : BoolConverter<UnitSelector>
 {
     
@@ -10,9 +55,7 @@ public class UnitSelectorConverter : BoolConverter<UnitSelector>
     {  
 
         SetFunc = OnSet;
-        GetFunc = OnGet;
-
-        
+        GetFunc = OnGet;        
     }   
 
 

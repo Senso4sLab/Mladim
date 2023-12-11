@@ -258,7 +258,7 @@ public abstract class UnitSelector
 public class NumOfParticipantsUnit : UnitSelector
 {   
     public NumOfParticipantsUnit() 
-        : base("Št. udeležencev")
+        : base("Absolutna frekvenca")
     {
        
     }
@@ -272,7 +272,7 @@ public class NumOfParticipantsUnit : UnitSelector
 public class PercantagesUnit : UnitSelector
 {
     public PercantagesUnit()
-        :base("Procenti")
+        :base("Procent")
     {
         
     }

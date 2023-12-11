@@ -22,7 +22,15 @@
                     <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius" />
                     <ChartMarker>
                         <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
-                            <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
+                           @*  <Template>
+                            @{
+                                var data = context as ChartDataPointInfo;
+                                <table>
+                                    <tr><td align="center"> @data.Y</td></tr>
+                                </table>
+                            }
+                            </Template> *@
+                            <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>                                            
                         </ChartDataLabel>
                     </ChartMarker>
                 </ChartSeries>

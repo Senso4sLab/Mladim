@@ -10,20 +10,20 @@
         </MudStack>
     </TitleContent>
     <DialogContent>
-        <MudStack Spacing="0" Justify="Justify.FlexStart" Style="max-height: 500px; overflow-y: scroll">
-        @for (int anonymousCommandIndex = 0; anonymousCommandIndex < AnonymousCommands.Count; anonymousCommandIndex++)
-        {
-            var anonymousCommand = AnonymousCommands[anonymousCommandIndex];
-            <MudStack Row Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
-                 <MudText Color="Color.Tertiary" Typo="Typo.h2" Class="py-1">@anonymousCommand.Participant.Gender.GetDisplayAttribute()</MudText>
-                 <MudText Color="Color.Tertiary" Typo="Typo.h2" Class="py-1 mx-5">@anonymousCommand.Participant.AgeGroup.GetDisplayAttribute() </MudText>
-             </MudStack>
-            <MudText Color="Color.Tertiary" Typo="Typo.h2" Class="py-1">@anonymousCommand.TextResponse </MudText>
-            @if (anonymousCommandIndex < AnonymousCommands.Count - 1)
+         <MudStack Spacing="0" Justify="Justify.FlexStart" Style="max-height: 500px; overflow-y: scroll">
+            @for (int anonymousCommandIndex = 0; anonymousCommandIndex < AnonymousCommands.Count; anonymousCommandIndex++)
             {
-                <MudDivider  />
+                var anonymousCommand = AnonymousCommands[anonymousCommandIndex];
+                <MudStack Row Justify="Justify.FlexStart" AlignItems="AlignItems.Center">
+                     <MudText Color="Color.Tertiary" Typo="Typo.h2" Class="py-1">@anonymousCommand.Participant.Gender.GetDisplayAttribute()</MudText>
+                     <MudText Color="Color.Tertiary" Typo="Typo.h2" Class="py-1 mx-5">@anonymousCommand.Participant.AgeGroup.GetDisplayAttribute() </MudText>
+                 </MudStack>
+                <MudText Color="Color.Tertiary" Typo="Typo.h2" Class="py-1">@anonymousCommand.TextResponse </MudText>
+                @if (anonymousCommandIndex < AnonymousCommands.Count - 1)
+                {
+                    <MudDivider Light="true"/>
+                }
             }
-        }
          </MudStack>
     </DialogContent>    
 </MudDialog>

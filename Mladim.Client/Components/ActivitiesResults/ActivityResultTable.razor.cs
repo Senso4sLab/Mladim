@@ -7,6 +7,8 @@ using Mladim.Client.Utilities.Converters;
 using CsvHelper;
 using Mladim.Client.Utilities.CsvMapping;
 using System.Globalization;
+using System.Reflection;
+using Mladim.Domain.Enums;
 
 namespace Mladim.Client.Components.ActivitiesResults;
 
@@ -24,14 +26,26 @@ public partial class ActivityResultTable
     [Inject]
     public IJSRuntime JS { get; set; }    
 
-    private UnitSelectorConverter unitConverter = default!;
-    private CriterionSelectorConverter criterionConverter = default!;
+    //private UnitSelectorConverter unitConverter = default!;
+    //private CriterionSelectorConverter criterionConverter = default!;
+
+    private UnitSelectorStringConverter unitConverter = new UnitSelectorStringConverter();
+    private CriterionSelectorStringConverter criterionConverter = new CriterionSelectorStringConverter();
     private CogntigencyTableContext cogntigencyTableContext { get; set; } = default!;
-    
+
+    private IEnumerable<SurveyCriterionSelector> CriterionSelectors = new List<SurveyCriterionSelector>() { new GenderSelector(), new AgeGroupSelector() };
+    private IEnumerable<UnitSelector> UnitSelectors = new List<UnitSelector>() { new PercantagesUnit(), new NumOfParticipantsUnit() };
+    //private string CurrentCriterion { get; set; } 
+    //private string CurrentUnit { get; set; }    
+
+
     protected override void OnInitialized()
     {
-        unitConverter = new UnitSelectorConverter();
-        criterionConverter = new CriterionSelectorConverter();
+        //this.CurrentUnit = this.UnitSelector.First();
+        //this.CurrentCriterion = this.CriterionSelector.First();
+
+
+       
         cogntigencyTableContext = new CogntigencyTableContext();           
     }   
 

@@ -16,21 +16,20 @@
                 <th scope="col" class="text-center">
                     <span style="color:#4da456;" class="oi oi-thumb-down thumb"></span>
                 </th>                
-                <th scope="col" class="text-center">Skupaj</th>
+                <th scope="col" style="font-weight:bold;" class="text-center;">Skupaj</th>
             </tr>
         </thead>
-        <tbody>
-
-            @foreach (var row in Table.ParticipantsByCriteria)
+        <tbody>          
+            @foreach (var row in Table.ParticipantsByCriteria.ToList())
             {               
                     <tr>
-                        <th scope="row">@row.Criterion</th>
-
+                        <th scope="row">@row.Criterion</th>                        
+                      
                         @foreach (var participantsByResponseType in row.ParticipantsByReponseTypes)
-                        {
+                        {                           
                             <td class="text-center">@participantsByResponseType.Unit</td>
-                        }
-                        <td class="text-center">@row.ParticipantsByReponseTypes.Sum(pr => pr.Unit)</td>
+                        }                        
+                        <td style="font-weight:bold;" class="text-center;">@row.ParticipantsByReponseTypes.Sum(pr => pr.Unit)</td>
                     </tr>                              
             }           
         </tbody>
