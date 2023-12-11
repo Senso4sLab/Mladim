@@ -55,10 +55,8 @@
                 <ButtonGroupReponseChart Response="buttonResponse"/>
             }
             else if(responsesGroup is SurveyTextResponsesGroupedByQuestion textReponse)
-            {
-                <MudStack Class="px-2">
-                    <SurveyTextResponses TextResponseGroup="textReponse" />
-                </MudStack>
+            {               
+               <SurveyTextResponses TextResponseGroup="textReponse" />               
             }
         </MudItem>
     }    

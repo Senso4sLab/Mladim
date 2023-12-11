@@ -6,9 +6,9 @@
 @using Mladim.Domain.Extensions;
 
 
-
-    <SfChart Height="90" Title="@Response.Question">
-        <ChartTitleStyle Size="1rem" Color="#43525d" FontFamily="Poppins" FontWeight="600" />
+    <MudText  Color="Color.Tertiary" Typo="Typo.h2">@Response.Question</MudText>
+    <SfChart Height="30">
+        <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
         <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category"/>   
         <ChartPrimaryYAxis Visible="false"/>
         <ChartArea>

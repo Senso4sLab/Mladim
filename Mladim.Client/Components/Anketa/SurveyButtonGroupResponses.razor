@@ -3,6 +3,16 @@
 @using Mladim.Domain.Extensions;
 
 
+<style>
+    .bold_font {
+        font-weight: bold;
+    }
+
+    td {
+        text-align: center;
+    }
+</style>
+
 
 <MudPaper Class="p-2">
     <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@ButtonResponseGroup.QuestionDescription</MudText>
@@ -29,9 +39,9 @@
 
                         @foreach (var participantsByResponseType in row.ParticipantsByReponseTypes)
                         {
-                            <td class="text-center">@participantsByResponseType.Unit</td>
+                            <td class="@(row.Criterion == "Skupaj" ? "bold_font": "")">@participantsByResponseType.Unit</td>
                         }
-                        <td class="text-center">@row.ParticipantsByReponseTypes.Sum(pr => pr.Unit)</td>
+                        <td class="bold_font">@row.ParticipantsByReponseTypes.Sum(pr => pr.Unit)</td>
                     </tr>
                 }                   
             </tbody>

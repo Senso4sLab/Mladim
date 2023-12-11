@@ -5,14 +5,15 @@
 @using Syncfusion.Blazor.Charts;
 
 
-@if(Response != null)
+@if (Response != null)
 {
-    <MudStack style="width:100%;">
-        <MudText Typo="Typo.h2" Color="Color.Tertiary" Align="Align.Center">@Response.QuestionDescription</MudText>
-        @foreach (var buttonResponse in Response.ButtonGroupResponses)
-        {
-            <SfChart Height="90" Title="@buttonResponse?.Question" >
-                <ChartTitleStyle Size="0.9rem" Color="#43525d" FontFamily="Poppins" FontWeight="600"/>
+    <MudText  Typo="Typo.h2" Color="Color.Tertiary">@Response.QuestionDescription</MudText>       
+    @foreach (var buttonResponse in Response.ButtonGroupResponses)
+    {
+        <MudStack Spacing="1">       
+            <MudText  Typo="Typo.h2" Color="Color.Tertiary">@buttonResponse?.Question</MudText>
+            <SfChart Height="30">
+                <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>                
                 <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
                 <ChartPrimaryYAxis Visible="false" />
                 <ChartArea>
@@ -32,9 +33,10 @@
                     }       
                 </ChartSeriesCollection>
             </SfChart>
-        }
-    </MudStack>
-}
+         </MudStack>
+    }
+
+} 
 
 
 
