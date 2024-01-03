@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Mladim.Client.ViewModels;
 using Mladim.Domain.Enums;
+using Mladim.Domain.Models;
 
 namespace Mladim.Client.Validators;
 
@@ -43,3 +44,7 @@ public class ParticipantValidator : AbstractValidator<ParticipantVM>
         return result.Errors.Select(e => e.ErrorMessage);
     };
 }
+
+
+  
+

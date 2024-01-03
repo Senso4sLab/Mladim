@@ -10,7 +10,7 @@ public class DbSeeds
         var surveyQuestionId = "QuestionsId";
         var surveyQuestionnairyId = "SurveyQuestionnairiesId";
 
-        foreach (var index in Enumerable.Range(1, 30))
+        foreach (var index in Enumerable.Range(1, 32))
         {
             modelBuilder.Entity(surveyQuestionQuestionnairyTable).HasData(
                 new Dictionary<string, object>

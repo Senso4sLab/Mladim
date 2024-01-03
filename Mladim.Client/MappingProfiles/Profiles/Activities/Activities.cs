@@ -39,13 +39,15 @@ public class Activities : Profile
             .ForMember(dest => dest.EndTime, m => m.MapFrom(src => src.TimeRange.EndTime));
 
         CreateMap<ActivityWithProjectNameQueryDto, ActivityWithProjectNameVM>();
-             
+
 
         CreateMap<ActivityAttributesVM, ActivityAttributesCommandDto>()
              .ForMember(db => db.ActivityTypes, dto => dto.MapFrom(field => (ActivityTypes)(field.ActivityTypes.Sum(x => (int)x))));
+             //.ForMember(db => db.RepetitiveInterval, dto => dto.MapFrom(field => (field.ActivityRepetitiveInterval.ToTimeSpan())));
 
         CreateMap<ActivityAttributesQueryDto, ActivityAttributesVM>()
              .ForMember(dto => dto.ActivityTypes, dt => dt.MapFrom(field => field.ActivityTypes.ToEnums()));
+            
     }
 }
 

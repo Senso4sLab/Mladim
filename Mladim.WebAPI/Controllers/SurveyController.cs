@@ -45,7 +45,7 @@ namespace Mladim.WebAPI.Controllers
         [HttpGet("responses/{activityId}")]
         public async Task<ActionResult<IEnumerable<AnonymousSurveyResponseDto>>> GetSurveyResponses(int activityId)
         {
-            var surveyQuestionnairy = await this.Mediator.Send(new GetSurveyResponsesQuery() { ActivityId = activityId});
+            var surveyQuestionnairy = await this.Mediator.Send(new GetSurveyStatisticsQuery() { ActivityId = activityId});
 
             return Ok(surveyQuestionnairy);
 

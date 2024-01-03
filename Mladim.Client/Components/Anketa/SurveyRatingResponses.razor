@@ -9,40 +9,52 @@
 
     td {
         text-align: center;
+        color:#777A98;
+    }
+    th{
+        color: #777A98;
+    }
+
+    .normal_font{
+        font-weight:normal;
     }
 </style>
 
 
-<MudPaper Class="p-2">
+<MudPaper Class="p-2" Elevation="3">
     <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@RatingResponseGroup.Question</MudText>
 
     <table class="table">
         <thead>
-            <tr>
-                <th scope="col">@Table.Name</th>
+            <tr class="d-flex">
+                <th scope="col" class="col-3">@Table.Name</th>
                 @for (int i = 0; i < numOfRatingTypes; i++)
                 {
-                    <th class="text-center" scope="col">
+                    <th class="text-center col-1" scope="col">
                         @for(int j = 0; j <= i; j++)
                         {
-                            <i style="color:#4da456;" class="bi bi-emoji-smile px-1" />
+                            <i style="color:#4da456;" class="bi bi-emoji-smile" />
                         }                        
                     </th>                    
                 }               
-                <th scope="col" class="text-center">Skupaj</th>
+                <th scope="col" class="text-center bold_font col-1">Skupaj</th>
+                <th scope="col" class=" col-3"></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var row in Table.ParticipantsByCriteria)
             {
-                <tr>
-                    <th scope="row">@row.Criterion</th>
+                <tr class="d-flex">
+                    <th scope="row" class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-3">@row.Criterion</th>                  
 
-                    @foreach (var participantsByResponseType in row.ParticipantsByReponseTypes)
+                    @foreach (var column in GetColumnNames().ToList())
                     {
-                        <td class="@(row.Criterion == "Skupaj" ? "bold_font": "")">@participantsByResponseType.Unit</td>
+                        <td class="@(row.Criterion == "Skupaj" ? "bold_font": "normal_font") col-1">@row.ParticipantsByReponseTypes.FirstOrDefault(rt => rt.ResponseType == column)?.Unit</td>
                     }
-                    <td class="bold_font">@row.ParticipantsByReponseTypes.Sum(pr => pr.Unit)</td>
+
+                    <td class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-1">@row.ParticipantsByReponseTypes.Sum(pr => pr.Unit)</td>
+
+                    <th scope="col" class=" col-3"></th>
                 </tr>
             }                       
         </tbody>
@@ -72,6 +84,9 @@
         numOfRatingTypes = Enum.GetValues<SurveyRatingResponseType>().Count();
     }
 
-
+    private IEnumerable<string> GetColumnNames()
+    {
+        return Enum.GetValues<SurveyRatingResponseType>().Select(srb => srb.GetDisplayAttribute());
+    }
    
 }

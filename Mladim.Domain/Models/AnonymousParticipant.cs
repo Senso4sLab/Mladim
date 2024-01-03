@@ -1,4 +1,5 @@
 ﻿using Mladim.Domain.Enums;
+using Mladim.Domain.Extensions;
 using Mladim.Domain.Models.Survey.Responses;
 
 namespace Mladim.Domain.Models;
@@ -29,6 +30,11 @@ public class AnonymousParticipant
         anonymousParticipant.Gender == this.Gender;
 
     public override int GetHashCode() =>
-        HashCode.Combine(this.Gender, this.AgeGroup);    
+        HashCode.Combine(this.Gender, this.AgeGroup);
+
+
+    public override string ToString() =>
+        $"{this.Gender.GetDisplayAttribute()}-{this.AgeGroup.GetDisplayAttribute()}";
+   
 
 }

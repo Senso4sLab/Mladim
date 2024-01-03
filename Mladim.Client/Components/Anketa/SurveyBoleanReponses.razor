@@ -6,47 +6,60 @@
     .bold_font
     {
         font-weight:bold;       
-    }
+    }   
 
     td
     {
         text-align: center;
+        color: #777A98;
+    }
+
+    th {
+        color: #777A98;
+    }
+
+    .normal_font {
+        font-weight: normal;
     }
 </style>
 
 
-<MudPaper Class="p-2">
+<MudPaper Class="p-2" Elevation="3">
     <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@BoleanResponseGroup.Question</MudText>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">@Table.Name</th>
+   
+        <table class="table">
+            <thead>
+                <tr class="d-flex">
+                    <th scope="col" class="col-3">@Table.Name</th>
                 
-                <th scope="col" class="text-center">
-                    <span style="color:#4da456;" class="oi oi-thumb-up thumb"></span>
-                </th>
-                <th scope="col" class="text-center">
-                    <span style="color:#4da456;" class="oi oi-thumb-down thumb"></span>
-                </th>                
-                <th scope="col" class="text-center">Skupaj</th>
-            </tr>
-        </thead>
-        <tbody>          
-            @foreach (var row in Table.ParticipantsByCriteria.ToList())
-            {               
-                    <tr>
-                        <th scope="row">@row.Criterion</th>                        
-                      
-                        @foreach (var participantsByResponseType in row.ParticipantsByReponseTypes)
-                        {
-                            <td class="@(row.Criterion == "Skupaj" ? "bold_font": "")">@participantsByResponseType.Unit</td>
-                        }                        
-                        <td class="bold_font">@row.ParticipantsByReponseTypes.Sum(pr => pr.Unit)</td>
-                    </tr>                              
-            }           
-        </tbody>
-    </table>
+                    <th scope="col" class="col-1 text-center">
+                        <span style="color:#4da456;" class="oi oi-thumb-up thumb"></span>
+                    </th>
+                    <th scope="col" class="col-1 text-center">
+                        <span style="color:#4da456;" class="oi oi-thumb-down thumb"></span>
+                    </th>                
+                    <th scope="col" class="bold_font col-1 text-center">Skupaj</th>
+                    <th scope="col" class="col-6"></th>
+                </tr>
+            </thead>
+            <tbody>          
+                @foreach (var row in Table.ParticipantsByCriteria.ToList())
+                {               
+                        <tr class="d-flex">
+                            <th scope="row" class="@(row.Criterion == "Skupaj" ? "bold_font": "normal_font") col-3">@row.Criterion</th>
+
+                            @foreach (var column in GetColumnNames().ToList())
+                            {
+                                <td class="@(row.Criterion == "Skupaj" ? "bold_font": "normal_font") col-1">@row.ParticipantsByReponseTypes.FirstOrDefault(rt => rt.ResponseType == column)?.Unit</td>
+                            }
+                            
+                            <td class="@(row.Criterion == "Skupaj" ? "bold_font": "normal_font") col-1">@row.ParticipantsByReponseTypes.Sum(pr => pr.Unit)</td>
+                            <td class="col-6"> </td>
+                        </tr>                              
+                }           
+            </tbody>
+        </table>
+    
 </MudPaper>
 
 @code
@@ -68,4 +81,10 @@
 
     protected override void OnParametersSet() =>    
         this.Table = GetContingencyTable();
+
+
+    private IEnumerable<string> GetColumnNames()
+    {
+        return Enum.GetValues<SurveyBooleanResponseType>().Select(srb => srb.GetDisplayAttribute());
+    }
 }

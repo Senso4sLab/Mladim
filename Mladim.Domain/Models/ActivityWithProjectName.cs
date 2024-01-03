@@ -3,13 +3,6 @@ using System.Runtime.CompilerServices;
 
 namespace Mladim.Domain.Models;
 
-
-
-
-
-
-
-
 public class ActivityWithProjectName : Activity
 {  
 

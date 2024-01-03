@@ -2,6 +2,7 @@
 using Mladim.Client.ViewModels;
 using Mladim.Client.ViewModels.Members.Participants;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.Members.Participants;
 using Mladim.Domain.Dtos.Project;
 
 namespace Mladim.Client.MappingProfiles.Profiles.Participants;

@@ -1,4 +1,6 @@
-﻿namespace Mladim.Domain.Models;
+﻿using Mladim.Domain.Enums;
+
+namespace Mladim.Domain.Models;
 
 public class DateTimeRange : IEquatable<DateTimeRange>
 {
@@ -13,6 +15,34 @@ public class DateTimeRange : IEquatable<DateTimeRange>
 
     public static DateTimeRange Create(DateTime start, DateTime end, int startHour = 0, int endHour = 0) => 
         new DateTimeRange(start, end, TimeSpan.FromHours(startHour), TimeSpan.FromHours(endHour));
+       
+    public void OffsetDateTimeForRepetitiveInterval(ActivityRepetitiveInterval repetitiveInterval)
+    {
+        switch (repetitiveInterval)
+        {
+            case ActivityRepetitiveInterval.Daily:
+                StartDate = StartDate.AddDays(1);
+                EndDate = EndDate.AddDays(1);
+                break;
+            case ActivityRepetitiveInterval.Monthly:
+                StartDate = StartDate.AddMonths(1);
+                EndDate = EndDate.AddMonths(1);                
+                break;
+            case ActivityRepetitiveInterval.Weekly:                
+                StartDate = StartDate.AddDays(7);
+                EndDate = EndDate.AddDays(7);                
+                break;
+            default:
+                throw new NotImplementedException();
+        }
+    }
+
+
+    public DateTimeRange Clone()
+    {
+        return (DateTimeRange)this.MemberwiseClone();
+    }
+
 
 
     public bool IsDateTimeInRange(DateTime dateTime) => 
@@ -20,10 +50,6 @@ public class DateTimeRange : IEquatable<DateTimeRange>
 
     public bool IsSameYearAs(int year) =>
         StartDate.Year == EndDate.Year && StartDate.Year == year;
-
-   
-
-
     public override bool Equals(object? obj) =>
         obj is DateTimeRange && Equals((DateTimeRange)obj);
     public bool Equals(DateTimeRange? other) =>

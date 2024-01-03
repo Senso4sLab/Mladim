@@ -15,8 +15,15 @@ public class SurveyQuestionVM
         SurveyQuestionType.Text => new QuestionTextResponseVM(UniqueQuestionId),
         SurveyQuestionType.Rating => new QuestionRatingResponseVM(UniqueQuestionId),
         SurveyQuestionType.Multiple => new QuestionMultiButtonResponseVM(UniqueQuestionId),
+        SurveyQuestionType.MultipleRepetitive => new QuestionMultiRepetitiveButtonResponseVM(UniqueQuestionId),
         _ => throw new NotImplementedException(),
     };
+
+
+    public IEnumerable<string> QuestionTexts =>
+        Texts.Count > 1 ? Texts.Skip(1)
+                       .Select(text => $"{Texts.First()} {text}")
+                       .ToList() : Texts;   
     
 }
 

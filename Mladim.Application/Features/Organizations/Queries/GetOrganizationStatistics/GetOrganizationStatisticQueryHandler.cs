@@ -5,6 +5,7 @@ using Mladim.Application.Contracts.Persistence;
 using Mladim.Application.Features.Organizations.Queries.GetOrganizations;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Dtos.Members;
+using Mladim.Domain.Dtos.Members.Participants;
 using Mladim.Domain.Dtos.Organization;
 using Mladim.Domain.Models;
 using System;
@@ -75,11 +76,50 @@ public class GetOrganizationStatisticQueryHandler : IRequestHandler<GetOrganizat
 
             individualParticipants += activities.Sum(a => a.Groups.Sum(g => g.Members.Count));
 
-            return OrganizationStatisticQueryDto.Create(activeProjects, pastProjects, activeActivities, pastActivites, individualParticipants, anonymousParticipants);
+            //  participant by gender and age group           
+
+            // št. participantov v groupah
+            var participantsInGroups = activities.SelectMany(a => a.Groups.SelectMany(g => g.Members.Select(m => m as Participant))).ToList();
+
+            return OrganizationStatisticQueryDto.Create(activeProjects, pastProjects, activeActivities, pastActivites, individualParticipants,
+                anonymousParticipants, ParticipantByGender(activities, participantsInGroups), ParticipantsByAgeGroup(activities, participantsInGroups));
         }
         catch(Exception ex)
         {
             return null;
         }
+    }
+
+
+    private IEnumerable<ParticipantsGenderDto> ParticipantByGender(IEnumerable<Activity> activities, IEnumerable<Participant> participants)
+    {
+        List<ParticipantsGenderDto> participantGenderDtos = new List<ParticipantsGenderDto>();
+
+        var participantsGenders = activities.SelectMany(a => a.AnonymousParticipantGroups.Select(spg => ParticipantsGenderDto.Create(spg.AnonymousParticipant.Gender, spg.Number))).ToList();
+        participantGenderDtos.AddRange(participantsGenders);
+
+        participantsGenders = activities.SelectMany(a => a.Participants.Select(p => ParticipantsGenderDto.Create(p.Gender))).ToList();
+        participantGenderDtos.AddRange(participantsGenders);
+
+        participantsGenders = participants.Select(p => ParticipantsGenderDto.Create(p.Gender)).ToList();
+        participantGenderDtos.AddRange(participantsGenders);
+
+        return participantGenderDtos;
+    }
+
+    private IEnumerable<ParticipantsAgeGroupDto> ParticipantsByAgeGroup(IEnumerable<Activity> activities, IEnumerable<Participant> participants)
+    {
+        List<ParticipantsAgeGroupDto> participantAgeGroupDtos = new List<ParticipantsAgeGroupDto>();
+
+        var participantsGenders = activities.SelectMany(a => a.AnonymousParticipantGroups.Select(spg => ParticipantsAgeGroupDto.Create(spg.AnonymousParticipant.AgeGroup, spg.Number))).ToList();
+        participantAgeGroupDtos.AddRange(participantsGenders);
+
+        participantsGenders = activities.SelectMany(a => a.Participants.Select(p => ParticipantsAgeGroupDto.Create(p.AgeGroup))).ToList();
+        participantAgeGroupDtos.AddRange(participantsGenders);
+
+        participantsGenders = participants.Select(p => ParticipantsAgeGroupDto.Create(p.AgeGroup)).ToList();
+        participantAgeGroupDtos.AddRange(participantsGenders);
+
+        return participantAgeGroupDtos;
     }
 }

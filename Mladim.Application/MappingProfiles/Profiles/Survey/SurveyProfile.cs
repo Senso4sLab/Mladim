@@ -37,13 +37,16 @@ public class SurveyProfile : Profile
         CreateMap<QuestionTextResponseDto, QuestionTextResponse>().ReverseMap();
         CreateMap<QuestionBooleanResponseDto, QuestionBooleanResponse>().ReverseMap();
         CreateMap<QuestionMultiButtonResponseDto, QuestionMultiButtonResponse>().ReverseMap();
+        CreateMap<QuestionMultiRepetitiveButtonResponseDto, QuestionMultiRepetitiveButtonResponse>().ReverseMap();
 
 
         CreateMap<QuestionResponseDto, QuestionResponse>()
             .Include<QuestionRatingResponseDto, QuestionRatingResponse>()
             .Include<QuestionTextResponseDto, QuestionTextResponse>()
             .Include<QuestionBooleanResponseDto, QuestionBooleanResponse>()
-            .Include<QuestionMultiButtonResponseDto, QuestionMultiButtonResponse>().ReverseMap();
+            .Include<QuestionMultiButtonResponseDto, QuestionMultiButtonResponse>()
+            .Include<QuestionMultiRepetitiveButtonResponseDto, QuestionMultiRepetitiveButtonResponse>()
+            .ReverseMap();
 
 
 

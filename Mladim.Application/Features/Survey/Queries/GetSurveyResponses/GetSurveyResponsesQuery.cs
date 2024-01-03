@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Survey.Queries.GetSurveyResponses;
 
-public class GetSurveyResponsesQuery : IRequest<IEnumerable<AnonymousSurveyResponseDto>>
+public class GetSurveyResponseQuery : IRequest<IEnumerable<AnonymousSurveyResponseDto>>
 {
     public int ActivityId { get; set; }
 }

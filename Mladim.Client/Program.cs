@@ -79,7 +79,7 @@ builder.Services.AddScoped<IPopupService, PopupService>();
 }
 
 
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MjYyNTA2MUAzMjMyMmUzMDJlMzBUR2hXd25DT1U1N1lkM0xpMEozSS9Ta2N6d0YrRUJYbHpvR0JPKysyUnJnPQ==");
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NAaF5cWWBCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWH1dcXVRRGleVUdyX0A=");
 
 
 

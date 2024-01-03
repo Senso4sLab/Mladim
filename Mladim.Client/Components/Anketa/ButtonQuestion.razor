@@ -29,10 +29,6 @@
 
     protected override void OnInitialized()
     {
-        // questionButtonResponse = new QuestionButtonResponseVM(SurveyResponse.UniqueQuestionId)
-        // {
-        //     Response = new SurveryButtonResponseVM(),
-        // };
         surveryButtonResponseVM = new SurveryButtonResponseVM();
         SurveyResponse.Response.Add(surveryButtonResponseVM);
         GroupButtons = GetButtonGroups().ToList();

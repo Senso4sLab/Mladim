@@ -1,0 +1,82 @@
+﻿@using Mladim.Client.ViewModels.Survey;
+@using Mladim.Domain.Enums;
+@using Mladim.Domain.Extensions;
+
+
+<style>
+    .bold_font {
+        font-weight: bold;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    th {
+        color: #777A98;
+    }
+
+    .normal_font {
+        font-weight: normal;
+    }
+</style>
+
+
+<MudPaper Class="p-2" Elevation="3">
+    <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@ButtonResponseGroup.QuestionDescription</MudText>
+
+    @foreach(var buttonResponse in ButtonResponseGroup.ButtonGroupResponses)
+    {
+        <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@buttonResponse.Question</MudText>
+        <table class="table">
+            <thead>
+                <tr class="d-flex">
+                    <th scope="col" class="col-3">@Context.CriterionSelector.Name</th>
+                    @foreach (var type in GetColumnNames().ToList())
+                    {
+                        <th class="text-center col-1" scope="col">@type</th>
+                    }
+                    <th class="text-center bold_font col-1" scope="col">Skupaj</th>
+                    <th class="col-4" scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in GetContingencyTable(buttonResponse).ParticipantsByCriteria)
+                {
+                    <tr class="d-flex">
+                        <th scope="row" class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-3">@row.Criterion</th>
+
+
+                        @foreach(var column in GetColumnNames().ToList())
+                        {
+                            <td class="@(row.Criterion == "Skupaj" ? "bold_font": "normal_font") col-1">@row.ParticipantsByReponseTypes.FirstOrDefault(rt => rt.ResponseType == column)?.Unit</td>
+                        }
+
+                        <td class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-1">@row.ParticipantsByReponseTypes.Sum(pr => pr.Unit)</td>
+
+                        <th scope="col" class=" col-4"></th>
+                    </tr>
+                }                   
+            </tbody>
+        </table>
+    }
+</MudPaper>
+
+@code
+{
+    [Parameter]
+    public SurveyRepetitiveButtonGroupResponsesGroupedByQuestion ButtonResponseGroup { get; set; } = default!;
+
+    [Parameter]
+    public CogntigencyTableContext Context { get; set; } = default!;    
+
+    private ContingencyTable GetContingencyTable(ISelectableReponseType reponseType) =>
+        this.Context.GetContingencyTableFor(reponseType);
+
+
+    private IEnumerable<string> GetColumnNames()
+    {
+        return Enum.GetValues<SurveyRepetitiveButtonResponseType>().Select(srb => srb.GetDisplayAttribute());
+    }
+        
+}

@@ -23,8 +23,10 @@ public abstract class ParticipantQuestionResponseVM
             QuestionResponseVM<SurveyBooleanResponseType> response => new ParticipantQuestionBooleanResponseVM(anonymousParticipant, response),
             QuestionResponseVM<SurveryButtonResponseVM> response => new ParticipantQuestionButtonResponseVM(anonymousParticipant, response),
             QuestionResponseVM<List<SurveryButtonResponseVM>> response => new ParticipantQuestionMultiButtonResponseVM(anonymousParticipant, response),
+            QuestionResponseVM<SurveyRepetitiveButtonResponseVM> response => new ParticipantQuestionRepetitiveButtonResponseVM(anonymousParticipant, response),
+            QuestionResponseVM<List<SurveyRepetitiveButtonResponseVM>> response => new ParticipantQuestionMultiRepetitiveButtonResponseVM(anonymousParticipant, response),            
             QuestionResponseVM<string> response => new ParticipantQuestionTextResponseVM(anonymousParticipant, response),
-            _ => throw new NotImplementedException(),
+            _ => throw new NotImplementedException("Ni implementirana metoda"),
         };
    
 }
@@ -110,13 +112,47 @@ public class ParticipantQuestionMultiButtonResponseVM : ParticipantQuestionRespo
 }
 
 
-
 public record SurveryButtonResponseVM
 {
     [ButtonResponseValidator]
     public SurveyButtonResponseType ButtonType { get; set; }
-
     public override string ToString() =>
         this.ButtonType.GetDisplayAttribute();
 
+}
+
+public class ParticipantQuestionRepetitiveButtonResponseVM : ParticipantQuestionResponseVM<SurveyRepetitiveButtonResponseVM>
+{
+    public ParticipantQuestionRepetitiveButtonResponseVM(AnonymousParticipantVM anonymousParticipant, QuestionResponseVM<SurveyRepetitiveButtonResponseVM> response)
+        : base(anonymousParticipant, response)
+    {
+    }
+
+    public override string ToString() =>
+        this.Response.ToString();
+
+}
+
+
+public class ParticipantQuestionMultiRepetitiveButtonResponseVM : ParticipantQuestionResponseVM<List<SurveyRepetitiveButtonResponseVM>>
+{
+    public override List<SurveyRepetitiveButtonResponseVM> Response { get; protected set; } = new();
+    public ParticipantQuestionMultiRepetitiveButtonResponseVM(AnonymousParticipantVM anonymousParticipant, QuestionResponseVM<List<SurveyRepetitiveButtonResponseVM>> response)
+        : base(anonymousParticipant, response)
+    {
+
+    }
+
+    public override string ToString() =>
+         string.Join(',', this.Response);
+
+}
+
+public record SurveyRepetitiveButtonResponseVM
+{
+    [RepetitiveButtonResponseValidator]
+    public SurveyRepetitiveButtonResponseType ButtonType { get; set; }
+
+    public override string ToString() =>
+        this.ButtonType.GetDisplayAttribute();
 }

@@ -59,6 +59,18 @@ public class SurveyFemaleQuestionConfiguration : IEntityTypeConfiguration<Female
         builder.HasData(SurveyQuestion.CreateFemaleQuestion(15, 15, SurveyQuestionType.Rating, SurveyQuestionCategory.Group)
             .AddText("V skupini smo poleg vsebinskih aktivnosti izvajali tudi aktivnosti, ki so krepile skupino (npr. teambuilding ipd.)"));
 
+        builder.HasData(SurveyQuestion.CreateFemaleQuestion(31, 16, SurveyQuestionType.MultipleRepetitive, SurveyQuestionCategory.Repetitive)
+            .AddText("V kolikšni meri si zaradi udeležbe okrepila naslednje sposobnosti:")
+            .AddText("Sposobna sem se uspešno sporazumevati in povezovati z drugimi.")
+            .AddText("Sposobna sem ustrezno uporabljati različne jezike za sporazumevanje z drugimi.")
+            .AddText("Sposobna sem uporabljati matematično znanje za reševanje vsakodnevnih izzivov.")
+            .AddText("Sposobna sem kompetentno uporabljati digitalna orodja pri delu, učenju in stikih z drugimi.")
+            .AddText("Sposobna sem ohranjati dobro psihično in fizično počutje ter dobre stike z drugimi.")
+            .AddText("Sposobna sem oceniti svoje šibke točke ter tudi pridobiti novo znanje, s katerim jih nadomestim.")
+            .AddText("Sposobna sem delovati kot odgovoren državljan in se polno udeleževati v družbeno in politično življenje.")
+            .AddText("Sposobna sem delovati podjetno in izkoristiti priložnosti, ki se mi ponujajo.")
+            .AddText("Odprta sem do različnih kultur in njihovih običajev ter jih tudi spoštujem."));
+
     }
 }
 

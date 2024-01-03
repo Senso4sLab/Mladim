@@ -6,10 +6,12 @@ namespace Mladim.Client.ViewModels.Survey;
 public abstract class SurveyCriterionSelector
 {
     public string Name { get;}
+    public string SurveyTitle { get;  }
     public List<ParticipantPredicate> ParticipantPredicatesByType { get; set; } = new();
-    public SurveyCriterionSelector(string name)
+    public SurveyCriterionSelector(string name, string surveyTitle)
     {
         this.Name = name;
+        this.SurveyTitle = surveyTitle;
     }
 
     public static SurveyCriterionSelector GenderSelector() =>
@@ -23,7 +25,7 @@ public abstract class SurveyCriterionSelector
 
 public class GenderSelector : SurveyCriterionSelector
 {    
-    public GenderSelector(): base("Spol") 
+    public GenderSelector(): base("Spol", "Prikaz rezultatov po spolu") 
     {
         this.ParticipantPredicatesByType = ParticipantPredicate.Genders.ToList();
         this.ParticipantPredicatesByType.Add(ParticipantPredicate.None);
@@ -32,7 +34,7 @@ public class GenderSelector : SurveyCriterionSelector
 
 public class AgeGroupSelector : SurveyCriterionSelector
 {
-    public AgeGroupSelector() : base("Starostna skupina")
+    public AgeGroupSelector() : base("Starostna skupina", "Prikaz rezultatov po starostni skupini")
     {
         this.ParticipantPredicatesByType = ParticipantPredicate.AgeGroups.ToList();
         this.ParticipantPredicatesByType.Add(ParticipantPredicate.None);     

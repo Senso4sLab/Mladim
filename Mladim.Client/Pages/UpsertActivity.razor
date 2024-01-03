@@ -1,162 +1,176 @@
 ﻿
 @using Mladim.Domain.Enums;
 @using Syncfusion.Blazor.BarcodeGenerator
-
-<MudStack Class="pt-5 pb-8" Spacing="4">
-    <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-        <MudText Typo="Typo.h2" Color="Color.Tertiary">@(editable ? "Vnesi podatke o aktivnosti" : "Podatki o aktivnosti")</MudText>
+@using Mladim.Domain.Extensions
 
 
-         <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-             <MudToggleIconButton Toggled="@editable" ToggledChanged="OnActivityEditableChanged" Size="Size.Small"
-                                  Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" Title="Edit"
-                                  ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary" ToggledTitle="Save" />
+<MudForm @ref="@activityForm" Model="@activity" Validation="@(activityValidator.ValidateValue)">
+    <MudStack Class="pt-5 pb-8" Spacing="4">   
+            <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                <MudText Typo="Typo.h2" Color="Color.Tertiary">@(editable ? "Vnesi podatke o aktivnosti" : "Podatki o aktivnosti")</MudText>
 
-             @if (!editable)
+                 <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                     <MudToggleIconButton  Toggled="@editable" ToggledChanged="OnActivityEditableChanged" Size="Size.Small"
+                                          Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" Title="Edit"
+                                          ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary" ToggledTitle="Save" />
+
+                    @if (!editable)
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error" OnClick="@(() => DeleteActivityAsync())" />
+                    }
+
+                    <MudIconButton Color="Color.Secondary" Size="Size.Small" Icon="@Icons.Material.Filled.Cancel" OnClick="CancelActivityAsync"/>
+                </MudButtonGroup>
+             </MudStack>
+
+            <MudTextField ReadOnly="!editable" @bind-Value="activity.Attributes.Name" Variant="Variant.Outlined" For="@(() => activity.Attributes.Name)" Label="Ime aktivnosti">@activity.Attributes.Name</MudTextField>
+             <MudDateRangePicker ReadOnly="!editable" Variant="Variant.Outlined" Label="Trajanje aktivnosti" @bind-DateRange="activity.DateRange" />
+             @if (activity.DateRange.End?.Day == activity.DateRange.Start?.Day && activity.DateRange != default)
             {
-                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error" OnClick="@(() => DeleteActivityAsync())" />
-            }
-
-            <MudIconButton Color="Color.Secondary" Size="Size.Small" Icon="@Icons.Material.Filled.Cancel" OnClick="CancelActivityAsync" />
-
-        </MudButtonGroup>
-     </MudStack>
-
-    
-
-     <MudTextField ReadOnly="!editable" @bind-Value="activity.Attributes.Name" Variant="Variant.Outlined" Label="Ime aktivnosti">@activity.Attributes.Name</MudTextField>
-     <MudDateRangePicker ReadOnly="!editable" Variant="Variant.Outlined" Label="Trajanje aktivnosti" @bind-DateRange="activity.DateRange" />
-     @if (activity.DateRange.End?.Day == activity.DateRange.Start?.Day && activity.DateRange != default)
-    {
-        <MudGrid>
-            <MudItem xs="6">
-                <MudText Typo="Typo.h4" Color="Color.Tertiary">Začetek aktivnosti</MudText>
-                <MudTimePicker ReadOnly="!editable" @bind-Time="activity.StartTime" PickerVariant="PickerVariant.Dialog" Label="24 urni prikaz" TimeEditMode="TimeEditMode.OnlyHours" />
-            </MudItem>
-            <MudItem xs="6">
-                <MudText Typo="Typo.h4" Color="Color.Tertiary">Konec aktivnosti</MudText>
-                <MudTimePicker ReadOnly="!editable" @bind-Time="activity.EndTime" PickerVariant="PickerVariant.Dialog" Label="24 urni prikaz" TimeEditMode="TimeEditMode.OnlyHours" />
-            </MudItem>
-        </MudGrid>     
+                <MudGrid>
+                    <MudItem xs="6">
+                        <MudText Typo="Typo.h4" Color="Color.Tertiary">Začetek aktivnosti</MudText>
+                        <MudTimePicker ReadOnly="!editable" @bind-Time="activity.StartTime" PickerVariant="PickerVariant.Dialog" For="@(() => activity.StartTime)" Label="24 urni prikaz" TimeEditMode="TimeEditMode.OnlyHours" />
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudText Typo="Typo.h4" Color="Color.Tertiary">Konec aktivnosti</MudText>
+                        <MudTimePicker ReadOnly="!editable" @bind-Time="activity.EndTime" PickerVariant="PickerVariant.Dialog" For="@(() => activity.EndTime)" Label="24 urni prikaz" TimeEditMode="TimeEditMode.OnlyHours" />
+                    </MudItem>
+                </MudGrid>     
         
-    }
-
-    <MudCheckBox  @bind-Checked="@activity.Attributes.IsGroup" ReadOnly=!editable Label="Skupinska aktivnost" Color="Color.Primary"></MudCheckBox>
-
-    <div>       
-       <SfRichTextEditor Readonly="!editable" @bind-Value="@activity.Attributes.Description" Placeholder="Nekaj o aktivnosti" />          
-    </div>
-
-    <MultiSelect ReadOnly="!editable" ToolTip= "editable" TItem="ActivityTypes" @bind-EnumValues="activity.Attributes.ActivityTypes" Label="Tip aktivnosti" />
-
-    <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Staff" Variant="Variant.Outlined" Label="Vodje aktivnosti" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
-         @foreach (var staffMember in staff)
-        {
-            <MudSelectItem Value="staffMember">@staffMember.FullName</MudSelectItem>
-        }
-    </MudSelect>
-
-    <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Administration" Variant="Variant.Outlined" Label="Drugi sodelujoči" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
-        @foreach (var staffMember in staff)
-        {
-            <MudSelectItem Value="staffMember">@staffMember.FullName</MudSelectItem>
-        }
-    </MudSelect>
-
-    <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((group)=> group.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Groups" Variant="Variant.Outlined" Label="Skupine udeležencev" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
-        @foreach (var participantGroup in participantGroups)
-        {
-            <MudSelectItem Value="participantGroup">@participantGroup.FullName</MudSelectItem>
-        }
-    </MudSelect>
-
-    <MudStack  Row Spacing="5" AlignItems="AlignItems.Center">
-         <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((partner)=> partner.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Partners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
-             @foreach (var partner in partners)
-            {
-                <MudSelectItem Value="partner">@partner.FullName</MudSelectItem>
             }
-        </MudSelect>
-        <MudIconButton Disabled="!editable" Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="AddPartnerAsync" />
-       
-    </MudStack>
+            <MudStack Row Justify="Justify.FlexStart" Spacing="10">
+                <MudCheckBox @bind-Checked="@activity.Attributes.IsGroup" ReadOnly=UpdateState Label="Skupinska aktivnost" Color="Color.Primary"></MudCheckBox>
+                <MudCheckBox @bind-Checked="@activity.Attributes.IsRepetitive" ReadOnly=UpdateState Label="Ponavljajoča aktivnost" Color="Color.Primary"></MudCheckBox>       
+            </MudStack>   
 
-    <MudStack Row Spacing="5" AlignItems="AlignItems.Center">
-         <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((participant)=> participant.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Participants" Variant="Variant.Outlined" Label="Udeleženci" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
-             @foreach (var participant in participants)
+            @if(activity.Attributes.IsRepetitive)
             {
-                <MudSelectItem Value="participant">@participant.FullName</MudSelectItem>
-            }
-        </MudSelect>
-        <MudIconButton Disabled="!editable" Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="AddParticipantAsync" />
-       
-    </MudStack>
-
-    <MudStack Row Spacing="5" AlignItems="AlignItems.Baseline" Justify="Justify.SpaceBetween">
-        <MudText Typo="Typo.h4" Color="Color.Tertiary" Align="Align.Center">Drugi udeleženci (starostna skupina in spol) - skupaj: @TotalAnonymousParticipants.</MudText>
-        <MudIconButton Disabled="!editable" Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="AddAnonymousParticipantAsync" />
-            
-    </MudStack>    
-
-    @if (activity.Files.Count > 0)
-    {
-        <MudText Typo="Typo.h2" Color="Color.Tertiary">Dokumenti</MudText>
-
-        <MudPaper Class="d-flex align-content-start flex-wrap flex-grow-1 gap-4" Elevation="0">
-            @foreach (var file in activity.Files)
-            {
-
-                <MudPaper Class="pa-3" Elevation="3">
-                    <MudStack Spacing="2" AlignItems="AlignItems.Center" Justify="Justify.Center">
-                        <MudText Typo="Typo.h1" Color="Color.Tertiary">@file.FileName</MudText>
-                        @if (editable)
+                <MudStack Row Justify="Justify.SpaceBetween">
+                    <MudSelect ReadOnly=UpdateState @bind-Value="@activity.Attributes.RepetitiveInterval"   Variant="Variant.Outlined" Label="Časovni interval ponovitve" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
+                        @foreach (var ari in ActivityRepetitiveIntervals)
                         {
-                            <MudButton Class="cursor-pointer" Color=Color.Error EndIcon="@Icons.Material.Filled.Delete" OnClick="()=>DeleteAttachedFileAsync(file)">Izbriši</MudButton>
+                            <MudSelectItem Value="ari">@ari.GetDisplayAttribute()</MudSelectItem>
                         }
-                        else
-                        {
-                            <MudButton Class="cursor-pointer" Color=Color.Primary EndIcon="@Icons.Material.Filled.FileDownload" OnClick="() => SelectedFileAsync(file)">Prenesi</MudButton>
-                        }
-                    </MudStack>
-                </MudPaper>      
+                    </MudSelect>
+                    <MudNumericField ReadOnly=UpdateState @bind-Value="@activity.Attributes.NumOfRepetitions" For="@(() => activity.Attributes.NumOfRepetitions)" Label="Število ponovitev" Variant="Variant.Outlined" Min="2" Max="45" />
+                </MudStack>
             }
-        </MudPaper>
-    }
+          
+            <div>
+                <SfRichTextEditor Readonly="!editable" @bind-Value="@activity.Attributes.Description" Placeholder="Nekaj o aktivnosti" />
+            </div>
+               
 
-    @if (UpdateState && editable)
-    {
-        <MudFileUpload T="IReadOnlyList<IBrowserFile>" Multiple MaximumFileCount=5 FilesChanged="UploadFilesToProject">
-            <ButtonTemplate>
-                <MudButton HtmlTag="label"
-                           Variant="Variant.Filled"
-                           Color="Color.Primary"
-                           StartIcon="@Icons.Material.Filled.CloudUpload"
-                           for="@context">
-                    Naloži datoteke
-                </MudButton>
-            </ButtonTemplate>
-        </MudFileUpload>
-    }
+            <MultiSelect ReadOnly="!editable" ToolTip= "editable" TItem="ActivityTypes" @bind-EnumValues="activity.Attributes.ActivityTypes" Label="Tip aktivnosti" />
 
-    @if(QrUrl != null && UpdateState)
-    {
-        <MudText Typo="Typo.h2" Color="Color.Tertiary">Prenesi QR kodo</MudText>
-        
-        <div class="d-flex justify-content-start">
-            <MudStack>
-                <MudPaper Elevation="3" >
-                     <MudStack AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="0">
-                        <SfQRCodeGenerator @ref="@qrCode" Width="200px" Height="200px" Value="@QrUrl">
-                            <QRCodeGeneratorDisplayText  Visibility="false" Size="0" Position="TextPosition.Top">                                                     
-                            </QRCodeGeneratorDisplayText>                                             
-                        </SfQRCodeGenerator>                  
-                        <MudButton Class="cursor-pointer" Color=Color.Primary EndIcon="@Icons.Material.Filled.FileDownload" OnClick="ExportQRCode">Prenesi</MudButton>
-                    </MudStack> 
-                </MudPaper>
-                <MudLink Href="@QrUrl" Typo="Typo.h2" Color="Color.Tertiary">Povezava do ankete</MudLink>              
+            <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Staff" Variant="Variant.Outlined" Label="Vodje aktivnosti" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
+                 @foreach (var staffMember in staff)
+                {
+                    <MudSelectItem Value="staffMember">@staffMember.FullName</MudSelectItem>
+                }
+            </MudSelect>
+
+            <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Administration" Variant="Variant.Outlined" Label="Drugi sodelujoči" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
+                @foreach (var staffMember in staff)
+                {
+                    <MudSelectItem Value="staffMember">@staffMember.FullName</MudSelectItem>
+                }
+            </MudSelect>
+
+            <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((group)=> group.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Groups" Variant="Variant.Outlined" Label="Skupine udeležencev" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
+                @foreach (var participantGroup in participantGroups)
+                {
+                    <MudSelectItem Value="participantGroup">@participantGroup.FullName</MudSelectItem>
+                }
+            </MudSelect>
+
+            <MudStack  Row Spacing="5" AlignItems="AlignItems.Center">
+                 <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((partner)=> partner.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Partners" Variant="Variant.Outlined" Label="Partnerji" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
+                     @foreach (var partner in partners)
+                    {
+                        <MudSelectItem Value="partner">@partner.FullName</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudIconButton Disabled="!editable" Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="AddPartnerAsync" />
+       
             </MudStack>
-        </div>
-    }
 
- </MudStack>
+            <MudStack Row Spacing="5" AlignItems="AlignItems.Center">
+                 <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((participant)=> participant.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Participants" Variant="Variant.Outlined" Label="Udeleženci" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
+                     @foreach (var participant in participants)
+                    {
+                        <MudSelectItem Value="participant">@participant.FullName</MudSelectItem>
+                    }
+                </MudSelect>
+                <MudIconButton Disabled="!editable" Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="AddParticipantAsync" />
+       
+            </MudStack>
 
+            <MudStack Row Spacing="5" AlignItems="AlignItems.Baseline" Justify="Justify.SpaceBetween">
+                <MudText Typo="Typo.h4" Color="Color.Tertiary" Align="Align.Center">Drugi udeleženci (starostna skupina in spol) - skupaj: @TotalAnonymousParticipants.</MudText>
+                <MudIconButton Disabled="!editable" Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="AddAnonymousParticipantAsync" />
+            
+            </MudStack>    
+
+            @if (activity.Files.Count > 0)
+            {
+                <MudText Typo="Typo.h2" Color="Color.Tertiary">Dokumenti</MudText>
+
+                <MudPaper Class="d-flex align-content-start flex-wrap flex-grow-1 gap-4" Elevation="0">
+                    @foreach (var file in activity.Files)
+                    {
+
+                        <MudPaper Class="pa-3" Elevation="3">
+                            <MudStack Spacing="2" AlignItems="AlignItems.Center" Justify="Justify.Center">
+                                <MudText Typo="Typo.h1" Color="Color.Tertiary">@file.FileName</MudText>
+                                @if (editable)
+                                {
+                                    <MudButton Class="cursor-pointer" Color=Color.Error EndIcon="@Icons.Material.Filled.Delete" OnClick="()=>DeleteAttachedFileAsync(file)">Izbriši</MudButton>
+                                }
+                                else
+                                {
+                                    <MudButton Class="cursor-pointer" Color=Color.Primary EndIcon="@Icons.Material.Filled.FileDownload" OnClick="() => SelectedFileAsync(file)">Prenesi</MudButton>
+                                }
+                            </MudStack>
+                        </MudPaper>      
+                    }
+                </MudPaper>
+            }
+
+            @if (UpdateState && editable)
+            {
+                <MudFileUpload T="IReadOnlyList<IBrowserFile>" Multiple MaximumFileCount=5 FilesChanged="UploadFilesToProject">
+                    <ButtonTemplate>
+                        <MudButton HtmlTag="label"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Filled.CloudUpload"
+                                   for="@context">
+                            Naloži datoteke
+                        </MudButton>
+                    </ButtonTemplate>
+                </MudFileUpload>
+            }
+
+            @if(QrUrl != null && UpdateState)
+            {
+                <MudText Typo="Typo.h2" Color="Color.Tertiary">Prenesi QR kodo</MudText>
+        
+                <div class="d-flex justify-content-start">
+                    <MudStack>
+                        <MudPaper Elevation="3" >
+                             <MudStack AlignItems="AlignItems.Center" Justify="Justify.FlexStart" Spacing="0">
+                                <SfQRCodeGenerator @ref="@qrCode" Width="200px" Height="200px" Value="@QrUrl">
+                                    <QRCodeGeneratorDisplayText  Visibility="false" Size="0" Position="TextPosition.Top">                                                     
+                                    </QRCodeGeneratorDisplayText>                                             
+                                </SfQRCodeGenerator>                  
+                                <MudButton Class="cursor-pointer" Color=Color.Primary EndIcon="@Icons.Material.Filled.FileDownload" OnClick="ExportQRCode">Prenesi</MudButton>
+                            </MudStack> 
+                        </MudPaper>
+                        <MudLink Href="@QrUrl" Typo="Typo.h2" Color="Color.Tertiary">Povezava do ankete</MudLink>              
+                    </MudStack>
+                </div>
+            }   
+     </MudStack>
+</MudForm>

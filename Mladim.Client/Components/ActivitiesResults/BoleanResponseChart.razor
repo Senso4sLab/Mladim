@@ -21,16 +21,22 @@
                 
                     <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius" />
                     <ChartMarker>
-                        <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
+                        <ChartDataLabel Visible="true" Name="ClassIcon" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
                            @*  <Template>
                             @{
-                                var data = context as ChartDataPointInfo;
-                                <table>
-                                    <tr><td align="center"> @data.Y</td></tr>
-                                </table>
+                                var data = (context as ChartDataPointInfo);
+                               
+                                    <table>
+                                        <tr>
+                                        <td align="center">
+                                            <span style="color:white;" class="@data.Text mb-1"></span>
+                                        </td>
+                                        <td align="center" style="color:white;">@($" {data.Y}%")</td>
+                                    </tr>
+                                </table>                                
                             }
-                            </Template> *@
-                            <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>                                            
+                            </Template>    *@
+                            <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
                         </ChartDataLabel>
                     </ChartMarker>
                 </ChartSeries>
@@ -60,7 +66,7 @@
             var responseBars = selectable.ParticipantsByResponseTypes(ParticipantPredicate.None.Predicate)
                 .Select(s => s.InPercent(total))
                 .Where(pr => pr.Unit > 0)
-                .Select(pr => (type: pr.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(pr.ResponseType, pr.Unit) })))
+                .Select(pr => (type: pr.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(pr.ResponseType, pr.Unit, CssIconClass(pr.ResponseType)) })))
                 .Select(bv => ResponseBar.CreateResponseBar(Fill(bv.type), bv.barList))
                 .ToList();
 
@@ -80,4 +86,14 @@
        else
             return "#000000";
     }    
+
+    private string CssIconClass(string responseType)
+    {
+        if (responseType == SurveyBooleanResponseType.ThumpsUp.GetDisplayAttribute())
+            return "oi oi-thumb-up thumb";
+        else if (responseType == SurveyBooleanResponseType.ThumpsDown.GetDisplayAttribute())
+            return "oi oi-thumb-down thumb";
+        else
+            return string.Empty;
+    }
 }

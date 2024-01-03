@@ -27,6 +27,24 @@ public class Activity : BaseEntity<int>
     public void Add(ActivityGroup group) =>
        this.Groups.Add(group);
 
+    public void ChangeName(string name)
+    {
+        var attributes = this.Attributes.Clone();
+        attributes.ChangeName(name);
+        this.Attributes = attributes;        
+    }
+
+    public void OffsetDateTimeRangeForRepetitiveInterval()
+    {
+        var datetimeRange = this.TimeRange.Clone();
+        datetimeRange.OffsetDateTimeForRepetitiveInterval(Attributes.RepetitiveInterval);       
+        this.TimeRange = datetimeRange; 
+    }
+
+   
+
+
+
     public List<AnonymousParticipantGroup> AnonymousParticipantGroups { get; set; } = new();
 
     public void Add(AnonymousParticipantGroup apg)
@@ -37,6 +55,11 @@ public class Activity : BaseEntity<int>
             anonymousParticipant.Number += apg.Number;
         else
             this.AnonymousParticipantGroups.Add(apg);
+    }
+
+    public Activity Clone()
+    {
+        return this.MemberwiseClone() as Activity;
     }
 
     public int? SurveyQuestionnairyId { get;set; }

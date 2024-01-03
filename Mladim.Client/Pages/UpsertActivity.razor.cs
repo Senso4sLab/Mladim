@@ -9,6 +9,11 @@ using Mladim.Client.Models;
 using Mladim.Client.Services.FileService;
 using Mladim.Client.ViewModels.AttachedFile;
 using Syncfusion.Blazor.BarcodeGenerator;
+using Syncfusion.Licensing;
+using MudBlazor;
+using Mladim.Client.Validators;
+using Mladim.Domain.Models;
+using Mladim.Client.Extensions;
 
 namespace Mladim.Client.Pages;
 
@@ -65,6 +70,12 @@ public partial class UpsertActivity
     private List<NamedEntityVM> participants = new List<NamedEntityVM>();
     private List<NamedEntityVM> participantGroups = new List<NamedEntityVM>();
 
+    private MudForm? activityForm;
+    private ActivityValidator activityValidator = new ActivityValidator();
+    IEnumerable<ActivityRepetitiveInterval> ActivityRepetitiveIntervals => 
+        Enum.GetValues<ActivityRepetitiveInterval>().ToList();
+
+
     public bool editable = true;
 
     private long maxFileSize = 1024 * 1024 * 3;
@@ -96,6 +107,12 @@ public partial class UpsertActivity
     }
 
 
+    private Converter<TimeSpan> activityIntervalConverter = new Converter<TimeSpan>
+    {
+        SetFunc = value => value == TimeSpan.FromDays(1) ? ActivityRepetitiveInterval.Daily.GetDescription() : value == TimeSpan.FromDays(7) ? ActivityRepetitiveInterval.Weekly.GetDescription(): ActivityRepetitiveInterval.Monthly.GetDescription(),
+        GetFunc = text => Enum.Parse<ActivityRepetitiveInterval>(text).ToTimeSpan(),
+    };
+
 
     private string GetQrUrl(int activityId)
     {
@@ -108,13 +125,17 @@ public partial class UpsertActivity
     }
 
 
-
-
-
     public async Task OnActivityEditableChanged(bool toggled)
     {
         if (editable)
+        {
+            await activityForm.Validate();
+
+            if (!activityForm.IsValid)
+                return;
+
             await SaveActivityAsync();
+        }
 
         editable = toggled;
     }
@@ -122,7 +143,8 @@ public partial class UpsertActivity
 
 
     public async Task SaveActivityAsync()
-    {        
+    {      
+
         if (UpdateState)
         {           
             var httpResponse = await ActivityService.UpdateAsync(activity);

@@ -5,6 +5,9 @@ using System.Text.Json.Serialization;
 
 namespace Mladim.Domain.Dtos.Survey.Responses;
 
+
+
+
 public class AnonymousSurveyResponseDto
 {
     public List<QuestionResponseDto> Responses { get; set; } = new();
@@ -19,16 +22,12 @@ public class AnonymousSurveyResponseDto
 }
 
 
-//[JsonDerivedType(typeof(QuestionRatingResponseDto))]
-//[JsonDerivedType(typeof(QuestionTextResponseDto))]
-//[JsonDerivedType(typeof(QuestionBooleanResponseDto))]
-//[JsonDerivedType(typeof(QuestionMultiButtonResponseDto))]
-
 [JsonDerivedType(typeof(QuestionResponseDto), typeDiscriminator: "baseQuestion")]
 [JsonDerivedType(typeof(QuestionRatingResponseDto), typeDiscriminator: "ratingQuestion")]
 [JsonDerivedType(typeof(QuestionTextResponseDto), typeDiscriminator: "textQuestion")]
 [JsonDerivedType(typeof(QuestionBooleanResponseDto), typeDiscriminator: "booleanQuestion")]
 [JsonDerivedType(typeof(QuestionMultiButtonResponseDto), typeDiscriminator: "multipleButtonQuestion")]
+[JsonDerivedType(typeof(QuestionMultiRepetitiveButtonResponseDto), typeDiscriminator: "multipleRepetitiveButtonQuestion")]
 public class QuestionResponseDto
 {   
 
@@ -78,5 +77,13 @@ public class QuestionMultiButtonResponseDto : QuestionResponseDto<List<SurveyBut
     public QuestionMultiButtonResponseDto():base()
     {
         
+    }
+}
+
+public class QuestionMultiRepetitiveButtonResponseDto : QuestionResponseDto<List<SurveyRepetitiveButtonResponseType>>
+{
+    public QuestionMultiRepetitiveButtonResponseDto() : base()
+    {
+
     }
 }

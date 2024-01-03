@@ -1,0 +1,86 @@
+﻿@using Mladim.Client.ViewModels.Survey;
+@using Mladim.Domain.Enums;
+@using Syncfusion.Blazor.SplitButtons
+
+
+
+<div>
+    <ValidationMessage style="margin-bottom:0.4rem;" For="@(() => surveryButtonResponseVM.ButtonType)" />
+
+    <div class="row">
+        <div class="btn-group col-sm-12 col-lg-7">
+            @foreach (var groupBtn in GroupButtons)
+            {
+                <button type="button" @onclick="(() => OnButtonClick(groupBtn.Value))" class="@groupBtn.CssClass">@groupBtn.Text</button>
+            }
+        </div>
+    </div>
+</div>
+
+
+@code 
+{
+    private SurveyRepetitiveButtonResponseVM surveryButtonResponseVM;
+
+    [Parameter]    
+    public QuestionMultiRepetitiveButtonResponseVM SurveyResponse { get; set; } = default!;
+
+    private List<GroupRepetitiveBtn> GroupButtons = new List<GroupRepetitiveBtn>();
+
+    protected override void OnInitialized()
+    {
+        surveryButtonResponseVM = new SurveyRepetitiveButtonResponseVM();
+        SurveyResponse.Response.Add(surveryButtonResponseVM);
+        GroupButtons = GetButtonGroups().ToList();
+    }
+
+
+    private IEnumerable<GroupRepetitiveBtn> GetButtonGroups()
+    {
+        yield return new GroupRepetitiveBtn("NIČ ALI ZELO MALO", SurveyRepetitiveButtonResponseType.None);
+        yield return new GroupRepetitiveBtn("MALO", SurveyRepetitiveButtonResponseType.Little);
+        yield return new GroupRepetitiveBtn("PRECEJ", SurveyRepetitiveButtonResponseType.Quite);
+        yield return new GroupRepetitiveBtn("MOČNO", SurveyRepetitiveButtonResponseType.Greatly);
+
+    }
+
+    private void OnButtonClick(SurveyRepetitiveButtonResponseType btnType)
+    {
+        foreach (var groupBtn in GroupButtons)
+        {
+            if (groupBtn.Value == btnType)
+                groupBtn.Active();
+            else
+                groupBtn.NoActive();
+        }
+        surveryButtonResponseVM.ButtonType = btnType;
+       
+
+        StateHasChanged();
+    }
+
+
+    public class GroupRepetitiveBtn
+    {
+        public string CssClass { get; set; } = string.Empty;
+        public SurveyRepetitiveButtonResponseType Value { get; }
+        public string Text { get; }
+     
+        private string NotActiveSmile => "btn btn-primary shadow-none";
+        private string ActiveSmile => $"{NotActiveSmile} group-btn-active";
+
+
+        public GroupRepetitiveBtn(string text, SurveyRepetitiveButtonResponseType value)
+        {
+            this.Text = text;
+            this.Value = value;
+            this.CssClass = NotActiveSmile;
+        }
+
+        public void Active() =>
+            this.CssClass = ActiveSmile;
+
+        public void NoActive() =>
+            this.CssClass = NotActiveSmile;
+    }
+}

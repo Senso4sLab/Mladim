@@ -13,7 +13,7 @@
        
    @if(isTableMode)
     {
-        <ActivityResultTable SurveyResponsesGroupByQuestions="SurveyResponsesGroupByQuestions"></ActivityResultTable>
+        <ActivityResultTable CsvExportCallback="@OnClickCsvExportFile" SurveyResponsesGroupByQuestions="SurveyResponsesGroupByQuestions"></ActivityResultTable>
     }
     else
     {

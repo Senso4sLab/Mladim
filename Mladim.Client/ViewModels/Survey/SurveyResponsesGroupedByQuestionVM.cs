@@ -24,7 +24,7 @@ public abstract class SurveyResponsesGroupedByQuestionVM
 {
     public string? QuestionDescription { get; set; } = null;
     public string? Question { get; set; } = null;
-    public abstract IEnumerable<AnonymousParticipantVM> AnonymousParticipant { get; }
+    public abstract IEnumerable<AnonymousParticipantVM> AnonymousParticipants { get; }
 
     public SurveyResponsesGroupedByQuestionVM() {}   
 
@@ -36,6 +36,7 @@ public abstract class SurveyResponsesGroupedByQuestionVM
             SurveyQuestionType.Rating => new SurveyRatingResponsesGroupedByQuestion(surveyQuestion.Texts, participantQuestionResponses),
             SurveyQuestionType.Boolean => new SurveyBoleanResponsesGroupedByQuestion(surveyQuestion.Texts, participantQuestionResponses),
             SurveyQuestionType.Multiple => new SurveyButtonGroupResponsesGroupedByQuestion(surveyQuestion.Texts, participantQuestionResponses),
+            SurveyQuestionType.MultipleRepetitive => new SurveyRepetitiveButtonGroupResponsesGroupedByQuestion(surveyQuestion.Texts, participantQuestionResponses),    
             _ => throw new NotImplementedException()
         };
     }   
@@ -46,7 +47,7 @@ public abstract class SurveyResponsesGroupedByQuestionVM<T> : SurveyResponsesGro
 
     public List<ParticipantQuestionResponseVM<T>> ParticipantQuestionResponses = new();
 
-    public override IEnumerable<AnonymousParticipantVM> AnonymousParticipant =>
+    public override IEnumerable<AnonymousParticipantVM> AnonymousParticipants =>
         ParticipantQuestionResponses.Select(pqr => pqr.AnonymousParticipant)
         .ToList();
     public SurveyResponsesGroupedByQuestionVM(IEnumerable<ParticipantQuestionResponseVM> participantQuestionResponses) 
@@ -81,12 +82,18 @@ public abstract class SurveySelectableResponsesGroupedByQuestionVM<T> : SurveyRe
        // ParticipantQuestionResponses = participantQuestionResponses.OfType<ParticipantQuestionResponseVM<T>>().ToList();
     }
 
+
+    //public IEnumerable<ParticipantsByResponseType> ParticipantResponseType()
+    //{
+    //    this.ParticipantQuestionResponses
+    //       .GroupBy(pqr => pqr., (key, sequence) => new ParticipantsByResponseType(key!, sequence.Count()))
+    //}
+
     public virtual IEnumerable<ParticipantsByResponseType> ParticipantsByResponseTypes(Predicate<AnonymousParticipantVM> predicate) =>        
             this.ParticipantQuestionResponses
                 .Where(pqr => predicate(pqr.AnonymousParticipant))
                 .GroupBy(pqr => pqr.ToString(), (key, sequence) => new ParticipantsByResponseType(key!, sequence.Count()))
-                .UnionBy(ResponseTypes, ppr => ppr.ResponseType)
-                .OrderBy(g => g.ResponseType)
+                .UnionBy(ResponseTypes, ppr => ppr.ResponseType)               
                 .ToList();   
 
     public abstract IEnumerable<ParticipantsByResponseType> ResponseTypes { get; }
@@ -125,10 +132,10 @@ public record ParticipantsByResponseType(string ResponseType, float Unit)
 
 }
 
-public class ParticipantsByCriterion
+public class ParticipantsByCriterion //ena vrstica
 {
    public string Criterion { get; }
-    public IEnumerable<ParticipantsByResponseType> ParticipantsByReponseTypes { get; } = new List<ParticipantsByResponseType>();
+    public IEnumerable<ParticipantsByResponseType> ParticipantsByReponseTypes { get; } = new List<ParticipantsByResponseType>(); // vse colone
     public ParticipantsByCriterion(string criterion, IEnumerable<ParticipantsByResponseType> participantsByReponseTypes)
     {
         this.Criterion = criterion;
@@ -185,9 +192,6 @@ public class SurveyButtonResponseGroupedByQuestion : SurveySelectableResponsesGr
          .ToList();
 
 }
-
-
-
 public class SurveyButtonGroupResponsesGroupedByQuestion : SurveySelectableResponsesGroupedByQuestionVM<List<SurveryButtonResponseVM>>
 {
     public List<SurveyButtonResponseGroupedByQuestion> ButtonGroupResponses { get; set; } = new();
@@ -212,6 +216,53 @@ public class SurveyButtonGroupResponsesGroupedByQuestion : SurveySelectableRespo
        .Select(type => ParticipantsByResponseType.Default(type.GetDisplayAttribute()))
        .ToList();
 }
+
+
+public class SurveyRepetitiveButtonResponseGroupedByQuestion : SurveySelectableResponsesGroupedByQuestionVM<SurveyRepetitiveButtonResponseVM>
+{
+    public SurveyRepetitiveButtonResponseGroupedByQuestion(string question, IEnumerable<ParticipantQuestionResponseVM> participantQuestionResponses)
+        : base(participantQuestionResponses)
+    {
+        this.QuestionDescription = null;
+        this.Question = question;
+    }
+
+    public override IEnumerable<ParticipantsByResponseType> ResponseTypes =>
+        Enum.GetValues<SurveyRepetitiveButtonResponseType>()
+         .Select(type => ParticipantsByResponseType.Default(type.GetDisplayAttribute()))
+         .ToList();
+
+}
+
+
+public class SurveyRepetitiveButtonGroupResponsesGroupedByQuestion : SurveySelectableResponsesGroupedByQuestionVM<List<SurveyRepetitiveButtonResponseVM>>
+{
+    public List<SurveyRepetitiveButtonResponseGroupedByQuestion> ButtonGroupResponses { get; set; } = new();
+    public SurveyRepetitiveButtonGroupResponsesGroupedByQuestion(IEnumerable<string> questions, IEnumerable<ParticipantQuestionResponseVM> participantQuestionResponses)
+        : base(participantQuestionResponses)
+    {
+        this.QuestionDescription = questions.FirstOrDefault();
+        this.Question = null;
+
+        var response = questions.Skip(1)
+            .Select((q, index) => new SurveyRepetitiveButtonResponseGroupedByQuestion(q, ParticipantQuestionResponses
+                .Select(pqr => ParticipantQuestionResponseVM.Create(pqr.AnonymousParticipant,
+                    QuestionResponseVM.Create(pqr.UniqueQuestionId, pqr.Response[index])))));
+
+        this.ButtonGroupResponses.AddRange(response);
+    }
+    public override IEnumerable<ParticipantsByResponseType> ParticipantsByResponseTypes(Predicate<AnonymousParticipantVM> predicate) =>
+        this.ButtonGroupResponses.SelectMany(bgr => bgr.ParticipantsByResponseTypes(predicate)).ToList();
+
+    public override IEnumerable<ParticipantsByResponseType> ResponseTypes =>
+      Enum.GetValues<SurveyRepetitiveButtonResponseType>()
+       .Select(type => ParticipantsByResponseType.Default(type.GetDisplayAttribute()))
+       .ToList();
+}
+
+
+
+
 
 
 
@@ -258,7 +309,7 @@ public abstract class UnitSelector
 public class NumOfParticipantsUnit : UnitSelector
 {   
     public NumOfParticipantsUnit() 
-        : base("Absolutna frekvenca")
+        : base("Frekvenca/število")
     {
        
     }
@@ -272,7 +323,7 @@ public class NumOfParticipantsUnit : UnitSelector
 public class PercantagesUnit : UnitSelector
 {
     public PercantagesUnit()
-        :base("Procent")
+        :base("Odstotki")
     {
         
     }

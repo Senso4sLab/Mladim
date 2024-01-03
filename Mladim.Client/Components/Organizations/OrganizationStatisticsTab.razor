@@ -1,4 +1,5 @@
 ﻿@using Mladim.Client.ViewModels.Activity;
+@using Syncfusion.Blazor.Charts
 @using Syncfusion.Blazor.Grids;
 
 
@@ -41,46 +42,76 @@
     {
         <MudGrid>
             <MudItem sm="4">
-                <MudPaper Outlined="true" Class="pa-4">
-                    <MudStack Row AlignItems="AlignItems.Center">
-                         <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Size="Size.Large">
-                             <MudIcon Style="color:#FFFFFF;" Icon="@Icons.Material.Filled.Person" Size="Size.Large" />
-                         </MudAvatar>
-                         <MudStack Spacing="1">
-                             <MudText Typo="Typo.h2" Color="Color.Tertiary">@(organizationStatistics.IndividualParticipants + organizationStatistics.AnonymousParticipants)</MudText>
-                             <MudText Typo="Typo.h2" Color="Color.Tertiary">Udeleženci</MudText>
-                         </MudStack>
-                     </MudStack>
-                 </MudPaper>
-             </MudItem>
-             <MudItem sm="4">
-                 <MudPaper Outlined="true" Class="pa-4">
-                     <MudStack Row
-                               AlignItems="AlignItems.Center">
-                         <MudAvatar Style="background-color:#FCCA46" Variant="Variant.Filled" Size="Size.Large">
-                             <MudIcon Style="color:#FFFFFF;" Icon="@CustomIcons.Activities" Size="Size.Large" />
-                         </MudAvatar>
-                         <MudStack Spacing="1">
-                             <MudText Typo="Typo.h2" Color="Color.Tertiary">@(organizationStatistics.ActiveActivities.Count + organizationStatistics.PastActivities.Count)</MudText>
-                             <MudText Typo="Typo.h2" Color="Color.Tertiary">Aktivnosti</MudText>
-                         </MudStack>
-                     </MudStack>
-                 </MudPaper>
-             </MudItem>
-             <MudItem sm="4">
-                 <MudPaper Outlined="true" Class="pa-4">
-                     <MudStack Row
-                               AlignItems="AlignItems.Center">
-                         <MudAvatar Style="background-color:#8ED974; color:white" Variant="Variant.Filled" Size="Size.Large">
-                             <MudIcon Icon="@CustomIcons.Projects" Size="Size.Large" />
-                         </MudAvatar>
-                         <MudStack Spacing="1">
-                             <MudText Typo="Typo.h2" Color="Color.Tertiary">@organizationStatistics.ActiveProjects.Count</MudText>
-                             <MudText Typo="Typo.h2" Color="Color.Tertiary">Aktivni projekti</MudText>
-                         </MudStack>
-                     </MudStack>
-                 </MudPaper>
-             </MudItem>
+                 <MudPaper Outlined="true">
+                    <SfAccumulationChart Title="Razporeditev udeležencev po letih" EnableAnimation="true" EnableSmartLabels="true" CustomClass="custom-row">
+                        <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
+                        <AccumulationChartSeriesCollection>
+                            <AccumulationChartSeries DataSource="@organizationStatistics.AgeDoughnut" PointColorMapping="Fill" XName="Name" YName="Value" InnerRadius="80%">
+                                <AccumulationDataLabelSettings Visible="true" Name="Text" Position="AccumulationLabelPosition.Outside" >
+                                    <AccumulationChartDataLabelFont FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
+                                </AccumulationDataLabelSettings>
+                            </AccumulationChartSeries>
+                        </AccumulationChartSeriesCollection>
+                        <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Near" Position="LegendPosition.Right">
+                            <AccumulationChartLegendFont FontFamily="Poppins" FontWeight="400" Size="0.8rem" Color="#6e7191" />
+                        </AccumulationChartLegendSettings>
+                    </SfAccumulationChart>
+                </MudPaper>
+            </MudItem>
+            <MudItem sm="4">
+                <MudPaper Outlined="true">
+                    <SfAccumulationChart Title="Razporeditev udeležencev po spolu" EnableAnimation="true" EnableSmartLabels="true">
+                        <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
+                        <AccumulationChartSeriesCollection>
+                            <AccumulationChartSeries DataSource="@organizationStatistics.GenderDoughnut" PointColorMapping="Fill" XName="Name" YName="Value" InnerRadius="80%">
+                                <AccumulationDataLabelSettings Visible="true" Name="Text" Position="AccumulationLabelPosition.Outside">
+                                    <AccumulationChartDataLabelFont FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
+                                </AccumulationDataLabelSettings>
+                            </AccumulationChartSeries>
+                        </AccumulationChartSeriesCollection>
+                        <AccumulationChartLegendSettings Visible="true" Alignment="Alignment.Near" Position="LegendPosition.Right">
+                            <AccumulationChartLegendFont FontFamily="Poppins" FontWeight="400" Size="0.8rem" Color="#6e7191" />
+                        </AccumulationChartLegendSettings>
+                    </SfAccumulationChart>
+                </MudPaper>
+            </MudItem>
+            <MudItem sm="4">
+                <MudStack Spacing="3">
+                        <MudPaper Outlined="true" Class="pa-4">
+                            <MudStack Row AlignItems="AlignItems.Center">
+                                 <MudAvatar Color="Color.Primary" Variant="Variant.Filled" Size="MudBlazor.Size.Large">
+                                 <MudIcon Style="color:#FFFFFF;" Icon="@Icons.Material.Filled.Person" Size="MudBlazor.Size.Large" />
+                                 </MudAvatar>
+                                 <MudStack Spacing="1">
+                                     <MudText Typo="Typo.h2" Color="Color.Tertiary">@(organizationStatistics.IndividualParticipants + organizationStatistics.AnonymousParticipants)</MudText>
+                                        <MudText Typo="Typo.h2" Color="Color.Tertiary">Udeleženci</MudText>
+                                    </MudStack>
+                                </MudStack>
+                        </MudPaper>
+                        <MudPaper Outlined="true" Class="pa-4">
+                            <MudStack Row AlignItems="AlignItems.Center">
+                             <MudAvatar Style="background-color:#FCCA46" Variant="Variant.Filled" Size="MudBlazor.Size.Large">
+                                 <MudIcon Style="color:#FFFFFF;" Icon="@CustomIcons.Activities" Size="MudBlazor.Size.Large" />
+                                 </MudAvatar>
+                                 <MudStack Spacing="1">
+                                     <MudText Typo="Typo.h2" Color="Color.Tertiary">@(organizationStatistics.ActiveActivities.Count + organizationStatistics.PastActivities.Count)</MudText>
+                                        <MudText Typo="Typo.h2" Color="Color.Tertiary">Aktivnosti</MudText>
+                                 </MudStack>
+                            </MudStack>
+                        </MudPaper>
+                        <MudPaper Outlined="true" Class="pa-4">
+                            <MudStack Row AlignItems="AlignItems.Center">
+                                <MudAvatar Style="background-color:#8ED974; color:white" Variant="Variant.Filled" Size="MudBlazor.Size.Large">
+                                     <MudIcon Icon="@CustomIcons.Projects" Size="MudBlazor.Size.Large" />
+                                </MudAvatar>
+                                <MudStack Spacing="1">
+                                     <MudText Typo="Typo.h2" Color="Color.Tertiary">@organizationStatistics.ActiveProjects.Count</MudText>
+                                     <MudText Typo="Typo.h2" Color="Color.Tertiary">Aktivni projekti</MudText>
+                                </MudStack>
+                            </MudStack>
+                        </MudPaper>
+                </MudStack>              
+             </MudItem>             
          </MudGrid>
     }
 

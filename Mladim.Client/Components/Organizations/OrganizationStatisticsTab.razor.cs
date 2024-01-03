@@ -42,10 +42,10 @@ public partial class OrganizationStatisticsTab
 
     public async Task<List<ActivityForGantt>> UpcommingActivitiesAsync(int numOfUpcommingActivities)
     {
+        // If upcomming activities is equal ti null all activities will be fetched!
         var upcommingActivities = await this.ActivityService.GetByOrganizationIdAsync(SelectedOrganization!.Id, numOfUpcommingActivities);
 
-        return upcommingActivities.Select((a, i) => ActivityForGantt.Create(i + 1, a.Id, a.Attributes.Name, a.Project, a.TimeRange))
-         .ToList();
+        return upcommingActivities.Select((a, i) => ActivityForGantt.Create(i + 1, a.Id, a.Attributes.Name, a.Project, a.TimeRange)).ToList();
     }
 
     private IEnumerable<int> AvailableYears()

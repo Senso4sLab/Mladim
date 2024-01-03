@@ -201,6 +201,18 @@ public enum ActivityTypes
 
 
 [Flags]
+public enum ActivityRepetitiveInterval
+{
+    [Display(Name = "Dnevno")]
+    Daily = 0,
+    [Display(Name = "Tedensko")]
+    Weekly = 1,
+    [Display(Name = "Mesečno")]
+    Monthly = 2,
+}
+
+
+[Flags]
 public enum YouthSectors
 {
     [Display(Name = "Avtonomija mladih")]
@@ -281,6 +293,7 @@ public enum SurveyQuestionType
     Rating = 2,
     Multiple = 3,
     Text = 4,   
+    MultipleRepetitive = 5,
 }
 
 
@@ -322,6 +335,20 @@ public enum SurveyButtonResponseType
     Correct = 3,
     [Display(Name = "Zelo drži")]
     VeryCorrect = 4,
+}
+
+
+public enum SurveyRepetitiveButtonResponseType
+{
+
+    [Display(Name = "Nič ali zelo malo")]
+    None = 1,
+    [Display(Name = "Malo")]
+    Little = 2,
+    [Display(Name = "Precej")]
+    Quite = 3,
+    [Display(Name = "Močno")]
+    Greatly = 4,
 }
 
 

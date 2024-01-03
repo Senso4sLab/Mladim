@@ -28,7 +28,7 @@ public class ActivityRepository : GenericRepository<Activity>, IActivityReposito
 
         return tracking ? await activity.AsTracking().FirstOrDefaultAsync(a => a.Id == activityId)
             : await activity.AsNoTracking().FirstOrDefaultAsync(a => a.Id == activityId);
-    }
+    }   
 
 
     public async Task<IEnumerable<Activity>> GetActivitiesWithParticipantsAsync(Expression<Func<Activity, bool>> predicate)

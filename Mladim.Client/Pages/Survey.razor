@@ -53,8 +53,16 @@
                             {
                                 <MudText Color="Color.Tertiary" Typo="Typo.h1" Class="py-3">@subQuestion</MudText>
                                 <ButtonQuestion SurveyResponse="multiButtonResponse" />
-                            }                           
-                        }                   
+                            }
+                        }                    
+                        else if (response is QuestionMultiRepetitiveButtonResponseVM multiRepetitiveButtonResponse)
+                        {
+                            @foreach (var subQuestion in question.Texts.Take(1..))
+                            {
+                                <MudText Color="Color.Tertiary" Typo="Typo.h1" Class="py-3">@subQuestion</MudText>
+                                <RepetitiveButtonQuestion SurveyResponse="multiRepetitiveButtonResponse" />
+                            }
+                        }                 
                     }                   
                     <button  class="btn btn-primary my-4" type="submit">POŠLJI</button>
                 </EditForm>

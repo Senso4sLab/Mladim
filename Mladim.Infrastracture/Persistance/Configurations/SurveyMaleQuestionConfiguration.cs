@@ -67,6 +67,18 @@ public class SurveyMaleQuestionConfiguration : IEntityTypeConfiguration<MaleSurv
         builder.HasData(SurveyQuestion.CreateMaleQuestion(30, 15, SurveyQuestionType.Rating, SurveyQuestionCategory.Group)
             .AddText("V skupini smo poleg vsebinskih aktivnosti izvajali tudi aktivnosti, ki so krepile skupino (npr. teambuilding ipd.)"));
 
+        builder.HasData(SurveyQuestion.CreateMaleQuestion(32, 16, SurveyQuestionType.MultipleRepetitive, SurveyQuestionCategory.Repetitive)
+           .AddText("V kolikšni meri si zaradi udeležbe okrepil naslednje sposobnosti:")
+           .AddText("Sposoben sem se uspešno sporazumevati in povezovati z drugimi.")
+           .AddText("Sposoben sem ustrezno uporabljati različne jezike za sporazumevanje z drugimi.")
+           .AddText("Sposoben sem uporabljati matematično znanje za reševanje vsakodnevnih izzivov.")
+           .AddText("Sposoben sem kompetentno uporabljati digitalna orodja pri delu, učenju in stikih z drugimi.")
+           .AddText("Sposoben sem ohranjati dobro psihično in fizično počutje ter dobre stike z drugimi.")
+           .AddText("Sposoben sem oceniti svoje šibke točke ter tudi pridobiti novo znanje, s katerim jih nadomestim.")
+           .AddText("Sposoben sem delovati kot odgovoren državljan in se polno udeleževati v družbeno in politično življenje.")
+           .AddText("Sposoben sem delovati podjetno in izkoristiti priložnosti, ki se mi ponujajo.")
+           .AddText("Odprt sem do različnih kultur in njihovih običajev ter jih tudi spoštujem."));
+
     }
 }
 

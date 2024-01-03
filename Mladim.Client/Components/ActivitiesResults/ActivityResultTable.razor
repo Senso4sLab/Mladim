@@ -6,11 +6,11 @@
 <MudStack Spacing="4" >  
        <MudStack>       
          <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-             <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">Prikaz rezultatov</MudText>
-             <MudIconButton Icon="@Icons.Material.Filled.FileDownload" OnClick="@OnClickCsvExportFile">Prenesi rezultate</MudIconButton>
+             <MudText Color="Color.Tertiary" Class="py-3" Typo="Typo.h2">@cogntigencyTableContext.CriterionSelector.SurveyTitle</MudText>
+             <MudIconButton Icon="@Icons.Material.Filled.FileDownload" OnClick="@CsvExportCallback">Prenesi rezultate</MudIconButton>
          </MudStack>
          <MudStack Row>
-            <MudSelect @bind-Value="cogntigencyTableContext.CriterionSelector" T="SurveyCriterionSelector" Label="Vrsta prikaza" Variant="Variant.Outlined" Converter="@criterionConverter">
+            <MudSelect @bind-Value="cogntigencyTableContext.CriterionSelector" T="SurveyCriterionSelector" Label="Spremenljivka" Variant="Variant.Outlined" Converter="@criterionConverter">
                 @foreach (var item in CriterionSelectors)
                 {
                     <MudSelectItem Value="item">@item.Name</MudSelectItem>
@@ -43,6 +43,10 @@
         else if(surveyResponsesGroupByQuestion is SurveyTextResponsesGroupedByQuestion textResponses)
         {
             <SurveyTextResponses TextResponseGroup="textResponses" />
+        }
+        else if (surveyResponsesGroupByQuestion is SurveyRepetitiveButtonGroupResponsesGroupedByQuestion repetitiveButtonResponses)
+        {
+            <SurveyRepetitiveButtonGroupResponses ButtonResponseGroup="repetitiveButtonResponses" Context="cogntigencyTableContext" />
         }
     }
 </MudStack>

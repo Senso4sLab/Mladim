@@ -26,7 +26,7 @@ public partial class ActivityResultChart
     protected async override Task OnInitializedAsync()
     {
         var participants = this.SurveyResponsesGroupByQuestions.FirstOrDefault()
-            .AnonymousParticipant.ToList() ?? new List<AnonymousParticipantVM>();
+            .AnonymousParticipants.ToList() ?? new List<AnonymousParticipantVM>();
 
         total = participants.Count;
 

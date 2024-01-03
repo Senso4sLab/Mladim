@@ -784,6 +784,16 @@ namespace Mladim.Infrastracture.Migrations
                         {
                             QuestionsId = 30,
                             SurveyQuestionnairiesId = 1
+                        },
+                        new
+                        {
+                            QuestionsId = 31,
+                            SurveyQuestionnairiesId = 1
+                        },
+                        new
+                        {
+                            QuestionsId = 32,
+                            SurveyQuestionnairiesId = 1
                         });
                 });
 
@@ -957,6 +967,14 @@ namespace Mladim.Infrastracture.Migrations
                             Texts = "[\"V skupini smo poleg vsebinskih aktivnosti izvajali tudi aktivnosti, ki so krepile skupino (npr. teambuilding ipd.)\"]",
                             Type = 2,
                             UniqueQuestionId = 15
+                        },
+                        new
+                        {
+                            Id = 31,
+                            Category = 4,
+                            Texts = "[\"V kolik\\u0161ni meri si zaradi udele\\u017Ebe okrepila naslednje sposobnosti:\",\"Sposobna sem se uspe\\u0161no sporazumevati in povezovati z drugimi.\",\"Sposobna sem ustrezno uporabljati razli\\u010Dne jezike za sporazumevanje z drugimi.\",\"Sposobna sem uporabljati matemati\\u010Dno znanje za re\\u0161evanje vsakodnevnih izzivov.\",\"Sposobna sem kompetentno uporabljati digitalna orodja pri delu, u\\u010Denju in stikih z drugimi.\",\"Sposobna sem ohranjati dobro psihi\\u010Dno in fizi\\u010Dno po\\u010Dutje ter dobre stike z drugimi.\",\"Sposobna sem oceniti svoje \\u0161ibke to\\u010Dke ter tudi pridobiti novo znanje, s katerim jih nadomestim.\",\"Sposobna sem delovati kot odgovoren dr\\u017Eavljan in se polno udele\\u017Eevati v dru\\u017Ebeno in politi\\u010Dno \\u017Eivljenje.\",\"Sposobna sem delovati podjetno in izkoristiti prilo\\u017Enosti, ki se mi ponujajo.\",\"Odprta sem do razli\\u010Dnih kultur in njihovih obi\\u010Dajev ter jih tudi spo\\u0161tujem.\"]",
+                            Type = 5,
+                            UniqueQuestionId = 16
                         });
                 });
 
@@ -1086,6 +1104,14 @@ namespace Mladim.Infrastracture.Migrations
                             Texts = "[\"V skupini smo poleg vsebinskih aktivnosti izvajali tudi aktivnosti, ki so krepile skupino (npr. teambuilding ipd.)\"]",
                             Type = 2,
                             UniqueQuestionId = 15
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Category = 4,
+                            Texts = "[\"V kolik\\u0161ni meri si zaradi udele\\u017Ebe okrepil naslednje sposobnosti:\",\"Sposoben sem se uspe\\u0161no sporazumevati in povezovati z drugimi.\",\"Sposoben sem ustrezno uporabljati razli\\u010Dne jezike za sporazumevanje z drugimi.\",\"Sposoben sem uporabljati matemati\\u010Dno znanje za re\\u0161evanje vsakodnevnih izzivov.\",\"Sposoben sem kompetentno uporabljati digitalna orodja pri delu, u\\u010Denju in stikih z drugimi.\",\"Sposoben sem ohranjati dobro psihi\\u010Dno in fizi\\u010Dno po\\u010Dutje ter dobre stike z drugimi.\",\"Sposoben sem oceniti svoje \\u0161ibke to\\u010Dke ter tudi pridobiti novo znanje, s katerim jih nadomestim.\",\"Sposoben sem delovati kot odgovoren dr\\u017Eavljan in se polno udele\\u017Eevati v dru\\u017Ebeno in politi\\u010Dno \\u017Eivljenje.\",\"Sposoben sem delovati podjetno in izkoristiti prilo\\u017Enosti, ki se mi ponujajo.\",\"Odprt sem do razli\\u010Dnih kultur in njihovih obi\\u010Dajev ter jih tudi spo\\u0161tujem.\"]",
+                            Type = 5,
+                            UniqueQuestionId = 16
                         });
                 });
 
@@ -1302,9 +1328,18 @@ namespace Mladim.Infrastracture.Migrations
                             b1.Property<bool>("IsGroup")
                                 .HasColumnType("bit");
 
+                            b1.Property<bool>("IsRepetitive")
+                                .HasColumnType("bit");
+
                             b1.Property<string>("Name")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
+
+                            b1.Property<int>("NumOfRepetitions")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("RepetitiveInterval")
+                                .HasColumnType("int");
 
                             b1.HasKey("ActivityId");
 

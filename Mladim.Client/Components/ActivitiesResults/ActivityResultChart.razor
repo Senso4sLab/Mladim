@@ -54,6 +54,10 @@
             {
                 <ButtonGroupReponseChart Response="buttonResponse"/>
             }
+            else if (responsesGroup is SurveyRepetitiveButtonGroupResponsesGroupedByQuestion repetitiveButtonResponse)
+            {
+                <RepetitiveButtonGroupReponseChart Response="repetitiveButtonResponse" />
+            }
             else if(responsesGroup is SurveyTextResponsesGroupedByQuestion textReponse)
             {               
                <SurveyTextResponses TextResponseGroup="textReponse" />               

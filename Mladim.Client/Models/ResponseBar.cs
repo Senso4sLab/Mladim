@@ -28,15 +28,17 @@ public class BarValue
     public string Name { get; }
     public double Value { get; }
     public string Label => $"{this.Name} {this.Value}%";
+    public string ClassIcon { get; }
 
-    private BarValue(string chartName, string name, double value)
+    private BarValue(string chartName, string name, double value, string classIcon)
     {
         this.ChartName = chartName;
         this.Name = name;
         this.Value = value;
+        this.ClassIcon = classIcon;
     }
 
-    public static BarValue CreateBarValue(string name, double value) =>
-        new BarValue("barValue", name, value);
+    public static BarValue CreateBarValue(string name, double value, string classicon = "") =>
+        new BarValue("barValue", name, value, classicon);
 
 }

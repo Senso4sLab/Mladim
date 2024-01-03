@@ -3,6 +3,7 @@ using MediatR;
 using Mladim.Application.Contracts.Persistence;
 
 using Mladim.Domain.Dtos.DateTimeRange;
+using Mladim.Domain.Dtos.Members.Participants;
 using Mladim.Domain.Dtos.Project;
 using Mladim.Domain.Models;
 using System;

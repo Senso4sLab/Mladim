@@ -21,9 +21,11 @@ public class AnonymousSurveyResponse
 [JsonDerivedType(typeof(QuestionTextResponse), typeDiscriminator: "textQuestion")]
 [JsonDerivedType(typeof(QuestionBooleanResponse), typeDiscriminator: "booleanQuestion")]
 [JsonDerivedType(typeof(QuestionMultiButtonResponse), typeDiscriminator: "multipleButtonQuestion")]
+[JsonDerivedType(typeof(QuestionMultiRepetitiveButtonResponse), typeDiscriminator: "multipleRepetitiveButtonQuestion")]
 public class QuestionResponse
 {   
-    public int UniqueQuestionId { get; set; }   
+    public int UniqueQuestionId { get; set; }
+   
 }
 
 public abstract class QuestionResponse<T> : QuestionResponse
@@ -50,4 +52,9 @@ public class QuestionBooleanResponse : QuestionResponse<SurveyBooleanResponseTyp
 public class QuestionMultiButtonResponse : QuestionResponse<List<SurveyButtonResponseType>>
 {
    
+}
+
+public class QuestionMultiRepetitiveButtonResponse : QuestionResponse<List<SurveyRepetitiveButtonResponseType>>
+{
+
 }

@@ -1,6 +1,7 @@
 ﻿using Mladim.Client.Validators.SurveyResponseValidators;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Extensions;
+using Mladim.Domain.Models.Survey.Responses;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection.Metadata.Ecma335;
 
@@ -13,16 +14,20 @@ public abstract class QuestionResponseVM
     public QuestionResponseVM(int uniqueQuestionId)
     {
         this.UniqueQuestionId = uniqueQuestionId;   
-    }
+    }    
 
     public static QuestionResponseVM<T> Create<T>(int uniqueQuestionId, T response) =>
        new QuestionResponseVM<T>(uniqueQuestionId, response);
+
+    public abstract IEnumerable<string> QuestionResponses { get; }
 }
 
 public class QuestionResponseVM<T> : QuestionResponseVM
 {
     public virtual T Response { get; set; }
-    
+
+    public override IEnumerable<string> QuestionResponses => new[] { Response.ToString() };
+
     public QuestionResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
     {
     }
@@ -32,13 +37,17 @@ public class QuestionResponseVM<T> : QuestionResponseVM
         Response = response;
     }
 
-   
+    
 }
 
-public class QuestionRatingResponseVM : QuestionResponseVM<SurveyRatingResponseType>
+
+
+public class QuestionRatingResponseVM : QuestionResponseVM<SurveyRatingResponseType> // QuestionRatingResponse
 {
     [RatingResponseValidator]
     public override SurveyRatingResponseType Response { get; set; }
+
+    public override IEnumerable<string> QuestionResponses => new[] { Response.GetDisplayAttribute() };
 
     public QuestionRatingResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
     {
@@ -50,7 +59,7 @@ public class QuestionRatingResponseVM : QuestionResponseVM<SurveyRatingResponseT
 
 }
 
-public class QuestionTextResponseVM : QuestionResponseVM<string>
+public class QuestionTextResponseVM : QuestionResponseVM<string> // QuestionTextResponse
 {
     public QuestionTextResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
     {
@@ -63,10 +72,11 @@ public class QuestionTextResponseVM : QuestionResponseVM<string>
 }
 
 
-public class QuestionBooleanResponseVM : QuestionResponseVM<SurveyBooleanResponseType>
-{
+public class QuestionBooleanResponseVM : QuestionResponseVM<SurveyBooleanResponseType> // QuestionBooleanReponse
+{ 
     [BooleanResponseValidator]
     public override SurveyBooleanResponseType Response { get; set; }
+    public override IEnumerable<string> QuestionResponses => new[] { Response.GetDisplayAttribute() };
     public QuestionBooleanResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
     {
 
@@ -78,7 +88,7 @@ public class QuestionBooleanResponseVM : QuestionResponseVM<SurveyBooleanRespons
 }
 
 
-public class QuestionButtonResponseVM : QuestionResponseVM<SurveryButtonResponseVM>
+public class QuestionButtonResponseVM : QuestionResponseVM<SurveryButtonResponseVM>  // QuestionButtonReponse
 {
     [ValidateComplexType]
     public override SurveryButtonResponseVM Response { get; set; }
@@ -89,10 +99,12 @@ public class QuestionButtonResponseVM : QuestionResponseVM<SurveryButtonResponse
     public override string ToString() =>
         this.Response.ToString();
 
+   
+
 }
 
 
-public class QuestionMultiButtonResponseVM : QuestionResponseVM<List<SurveryButtonResponseVM>>
+public class QuestionMultiButtonResponseVM : QuestionResponseVM<List<SurveryButtonResponseVM>> // QuestionMultipleButtonReponse
 {
     [ValidateComplexType]
     public override List<SurveryButtonResponseVM> Response { get; set; } = new();
@@ -104,50 +116,27 @@ public class QuestionMultiButtonResponseVM : QuestionResponseVM<List<SurveryButt
     public override string ToString() =>
          string.Join(',', this.Response);
 
+    public override IEnumerable<string> QuestionResponses => this.Response.Select(br => br.ToString()).ToList();
+
 }
 
 
 
-//public record SurveryButtonResponseVM
-//{
-//    [ButtonResponseValidator]
-//    public SurveyButtonResponseType ButtonType { get; set; }
+public class QuestionMultiRepetitiveButtonResponseVM : QuestionResponseVM<List<SurveyRepetitiveButtonResponseVM>> // QuestionMultipleButtonReponse
+{
+    [ValidateComplexType]
+    public override List<SurveyRepetitiveButtonResponseVM> Response { get; set; } = new();
+    public QuestionMultiRepetitiveButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
+    {
 
-//    public override string ToString() => 
-//        this.ButtonType.GetDisplayAttribute();
+    }
 
-//}
+    public override string ToString() =>
+         string.Join(',', this.Response);
 
-//public abstract class ParticipantQuestionResponseVM
-//{
-//    public AnonymousParticipantVM AnonymousParticipant { get; set; }
-//    public int UniqueQuestionId { get; protected set; }
+    public override IEnumerable<string> QuestionResponses => this.Response.Select(br => br.ToString()).ToList();
 
-//    public ParticipantQuestionResponseVM(AnonymousParticipantVM anonymousParticipant)
-//    {
-//        this.AnonymousParticipant = anonymousParticipant;       
-//    }
+}
 
-//    public static ParticipantQuestionResponseVM Create(AnonymousParticipantVM anonymousParticipant, QuestionResponseVM questionResponse) =>
-//       questionResponse switch
-//       {
-//           QuestionRatingResponseVM questionRatingResponse => new ParticipantQuestionResponseVM<SurveyRatingResponseType>(anonymousParticipant, questionRatingResponse),
-//           QuestionBooleanResponseVM questionBooleanResponse => new ParticipantQuestionResponseVM<SurveyBooleanResponseType>(anonymousParticipant, questionBooleanResponse),
-//           QuestionTextResponseVM questionTextResponse => new ParticipantQuestionResponseVM<string>(anonymousParticipant, questionTextResponse),
-//           QuestionMultiButtonResponseVM questionButtonResponse => new ParticipantQuestionResponseVM<List<SurveryButtonResponseVM>>(anonymousParticipant, questionButtonResponse),
-//           _ => throw new NotImplementedException(),
-//       };
-//}
 
-//public class ParticipantQuestionResponseVM<T> : ParticipantQuestionResponseVM
-//{
-//    public QuestionResponseVM<T> QuestionResponse { get; set; }
-
-//    public ParticipantQuestionResponseVM(AnonymousParticipantVM anonymousParticipant, QuestionResponseVM<T> questionResponse) : base(anonymousParticipant)
-//    {
-//        this.AnonymousParticipant = anonymousParticipant;
-//        this.QuestionResponse = questionResponse;
-//        this.UniqueQuestionId = questionResponse.UniqueQuestionId;
-//    }
-//}
 

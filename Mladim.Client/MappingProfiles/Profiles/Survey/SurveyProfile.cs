@@ -30,14 +30,20 @@ public class SurveyProfile : Profile
         CreateMap<QuestionMultiButtonResponseDto, QuestionMultiButtonResponseVM>()
            .ConvertUsing<SurveryButtonResponseTypeDtoConverter>();
 
-        
+        CreateMap<QuestionMultiRepetitiveButtonResponseVM, QuestionMultiRepetitiveButtonResponseDto>()
+           .ConvertUsing<SurveryRepetitiveButtonResponseTypeConverter>();
+
+        CreateMap<QuestionMultiRepetitiveButtonResponseDto, QuestionMultiRepetitiveButtonResponseVM>()
+           .ConvertUsing<SurveryRepetitiveButtonResponseTypeDtoConverter>();
 
 
         CreateMap<QuestionResponseVM, QuestionResponseDto>()
             .Include<QuestionRatingResponseVM, QuestionRatingResponseDto>()
             .Include<QuestionTextResponseVM, QuestionTextResponseDto>()
             .Include<QuestionBooleanResponseVM, QuestionBooleanResponseDto>()
-            .Include<QuestionMultiButtonResponseVM, QuestionMultiButtonResponseDto>().ReverseMap();
+            .Include<QuestionMultiButtonResponseVM, QuestionMultiButtonResponseDto>()
+            .Include<QuestionMultiRepetitiveButtonResponseVM, QuestionMultiRepetitiveButtonResponseDto>()
+            .ReverseMap();
 
     }
 
@@ -60,6 +66,30 @@ public class SurveyProfile : Profile
             return new QuestionMultiButtonResponseVM(source.UniqueQuestionId)
             {
                 Response = source.Response.Select(r =>new SurveryButtonResponseVM() { ButtonType = r }).ToList(),               
+            };
+        }
+    }
+
+
+    public class SurveryRepetitiveButtonResponseTypeConverter : ITypeConverter<QuestionMultiRepetitiveButtonResponseVM, QuestionMultiRepetitiveButtonResponseDto>
+    {
+        public QuestionMultiRepetitiveButtonResponseDto Convert(QuestionMultiRepetitiveButtonResponseVM source, QuestionMultiRepetitiveButtonResponseDto destination, ResolutionContext context)
+        {
+            return new QuestionMultiRepetitiveButtonResponseDto()
+            {
+                Response = source.Response.Select(r => r.ButtonType).ToList(),
+                UniqueQuestionId = source.UniqueQuestionId,
+            };
+        }
+    }
+
+    public class SurveryRepetitiveButtonResponseTypeDtoConverter : ITypeConverter<QuestionMultiRepetitiveButtonResponseDto, QuestionMultiRepetitiveButtonResponseVM>
+    {
+        public QuestionMultiRepetitiveButtonResponseVM Convert(QuestionMultiRepetitiveButtonResponseDto source, QuestionMultiRepetitiveButtonResponseVM destination, ResolutionContext context)
+        {
+            return new QuestionMultiRepetitiveButtonResponseVM(source.UniqueQuestionId)
+            {
+                Response = source.Response.Select(r => new SurveyRepetitiveButtonResponseVM() { ButtonType = r }).ToList(),
             };
         }
     }

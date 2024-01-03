@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Mladim.Application.Contracts.File;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Application.Extensions;
+using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
 
 namespace Mladim.Application.Features.Activities.Commands.AddActivity;
@@ -21,7 +22,6 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, boo
     {
         try
         {
-
             var project = await this.UnitOfWork.ProjectRepository
                 .FirstOrDefaultAsync(p => p.Id == request.ProjectId);
 
@@ -41,9 +41,15 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, boo
             {
                 string trustedFileName = await FileApiService.AddFileAsync(file.Data.ToArray(), "Activities", file.FileName);
                 activity.Files.Add(AttachedFile.Create(file.FileName, trustedFileName, file.ContentType, "Activities"));
-            }           
-
-            project.Activities.Add(activity);
+            }
+            
+            if(request.Attributes.IsRepetitive)
+            {
+                List<Activity> repetitiveActivities = RepetitiveActivities(activity).ToList();
+                project.Activities.AddRange(repetitiveActivities);
+            }
+            else
+                project.Activities.Add(activity);
 
 
             return await this.UnitOfWork.SaveChangesAsync() > 0;
@@ -53,4 +59,26 @@ public class AddActivityCommandHandler : IRequestHandler<AddActivityCommand, boo
             return false;
         }
     }
+
+
+    private IEnumerable<Activity> RepetitiveActivities(Activity activity)
+    {        
+        int numOfRepetitions = activity.Attributes.NumOfRepetitions;
+
+        var repetitiveActivity = activity.Clone();
+
+        for (int i = 0; i < numOfRepetitions; i++)
+        {            
+            repetitiveActivity.ChangeName($"{activity.Attributes.Name} ({i+1}/{numOfRepetitions})");            
+
+            if (i > 0)
+            {
+                repetitiveActivity.OffsetDateTimeRangeForRepetitiveInterval();
+                repetitiveActivity.Files = new List<AttachedFile>();
+            }            
+
+            yield return repetitiveActivity;
+            repetitiveActivity = repetitiveActivity.Clone();
+        }
+    }   
 }

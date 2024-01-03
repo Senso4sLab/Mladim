@@ -1,5 +1,6 @@
 ﻿using Mladim.Domain.Dtos.DateTimeRange;
 using Mladim.Domain.Dtos.Members;
+using Mladim.Domain.Dtos.Members.Participants;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
 using System;
@@ -65,63 +66,7 @@ public class ProjectStatisticsQueryDto
 
 }
 
-public class ParticipantsGenderDto
-{
-    public Gender Gender { get; set; }
-    public int Number { get; set; }
 
-
-    public ParticipantsGenderDto()
-    {
-        
-    }
-
-    public override bool Equals(object? obj) =>
-        obj is ParticipantsGenderDto participantGenderDto && this.Equals(participantGenderDto);  
-
-    private bool Equals(ParticipantsGenderDto participantGenderDto) =>
-        participantGenderDto.Gender == this.Gender;
-
-    public override int GetHashCode() =>
-        HashCode.Combine(this.Gender);
-
-    public static ParticipantsGenderDto Create(Gender gender, int number = 1) =>
-        new ParticipantsGenderDto
-        {
-            Gender = gender,
-            Number = number,
-        };
-
-}
-
-public class ParticipantsAgeGroupDto
-{
-    public AgeGroups AgeGroup { get; set; }
-    public int Number { get; set; }
-
-    public ParticipantsAgeGroupDto()
-    {
-        
-    }
-
-    public override bool Equals(object? obj) =>
-       obj is ParticipantsAgeGroupDto participantsAgeGroup && this.Equals(participantsAgeGroup);
-
-    private bool Equals(ParticipantsAgeGroupDto participantsAgeGroup) =>
-        participantsAgeGroup.AgeGroup == this.AgeGroup;
-
-    public override int GetHashCode() =>
-        HashCode.Combine(this.AgeGroup);
-
-
-    public static ParticipantsAgeGroupDto Create(AgeGroups ageGroup, int number = 1) =>
-       new ParticipantsAgeGroupDto
-       {
-           AgeGroup = ageGroup,
-           Number = number,
-       };
-
-}
 
 
 

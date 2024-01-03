@@ -1,0 +1,85 @@
+﻿@using Mladim.Client.Models;
+@using Mladim.Client.ViewModels.Survey;
+@using Mladim.Domain.Enums;
+@using Mladim.Domain.Extensions;
+@using Syncfusion.Blazor.Charts;
+
+
+@if (Response != null)
+{
+    <MudText  Typo="Typo.h2" Color="Color.Tertiary">@Response.QuestionDescription</MudText>       
+    @foreach (var buttonResponse in Response.ButtonGroupResponses)
+    {
+        <MudStack Spacing="1">       
+            <MudText  Typo="Typo.h2" Color="Color.Tertiary">@buttonResponse?.Question</MudText>
+            <SfChart Height="30">
+                <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>                
+                <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
+                <ChartPrimaryYAxis Visible="false" />
+                <ChartArea>
+                    <ChartAreaBorder Width="0"></ChartAreaBorder>
+                </ChartArea>
+                <ChartSeriesCollection>
+                    @foreach (var seriesData in GetResponseBars(buttonResponse))
+                    {
+                        <ChartSeries DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName" Type="ChartSeriesType.StackingBar100">
+                            <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius"/>
+                            <ChartMarker>
+                                <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
+                                    <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
+                                </ChartDataLabel>
+                            </ChartMarker>
+                        </ChartSeries>
+                    }       
+                </ChartSeriesCollection>
+            </SfChart>
+         </MudStack>
+    }
+
+} 
+
+
+
+
+@code 
+{
+    [Parameter]
+    public SurveyRepetitiveButtonGroupResponsesGroupedByQuestion Response { get; set; } = default!;  
+
+
+    private IEnumerable<ResponseBar> GetResponseBars(SurveyRepetitiveButtonResponseGroupedByQuestion ButtonResponse)
+    {
+        int total = ButtonResponse.ParticipantQuestionResponses.Count;
+
+        if (ButtonResponse is ISelectableReponseType selectable)
+        {
+            var responseBars = selectable.ParticipantsByResponseTypes(ParticipantPredicate.None.Predicate)
+                .Select(s => s.InPercent(total))
+                .Where(pr => pr.Unit > 0)
+                .Select(pr => (type: pr.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(pr.ResponseType, pr.Unit) })))
+                .Select(bv => ResponseBar.CreateResponseBar(Fill(bv.type), bv.barList))
+                .ToList();
+
+            responseBars.First().LeftRadius = 10;
+            responseBars.Last().RightRadius = 10;
+
+            return responseBars;
+        }
+
+        return Enumerable.Empty<ResponseBar>();
+    }
+
+    private string Fill(string responseType)
+    {
+        if (responseType == SurveyRepetitiveButtonResponseType.Greatly.GetDisplayAttribute())
+            return "#4DA456";
+        else if (responseType == SurveyRepetitiveButtonResponseType.Quite.GetDisplayAttribute())
+            return "#394241";
+        else if (responseType == SurveyRepetitiveButtonResponseType.Little.GetDisplayAttribute())
+            return "#ffc700";
+        else if (responseType == SurveyRepetitiveButtonResponseType.None.GetDisplayAttribute())
+            return "#8ED974";
+        else
+            return "#000000";       
+    }
+}
