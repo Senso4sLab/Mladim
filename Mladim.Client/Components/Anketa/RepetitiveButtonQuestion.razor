@@ -5,7 +5,7 @@
 
 
 <div>
-    <ValidationMessage style="margin-bottom:0.4rem;" For="@(() => surveryButtonResponseVM.ButtonType)" />
+    <ValidationMessage style="margin-bottom:0.4rem;" For="@(() => surveryButtonResponseVM.Response.ButtonType)" />
 
     <div class="row">
         <div class="btn-group col-sm-12 col-lg-7">
@@ -20,7 +20,7 @@
 
 @code 
 {
-    private SurveyRepetitiveButtonResponseVM surveryButtonResponseVM;
+    private QuestionRepetitiveButtonResponseVM surveryButtonResponseVM;
 
     [Parameter]    
     public QuestionMultiRepetitiveButtonResponseVM SurveyResponse { get; set; } = default!;
@@ -29,8 +29,8 @@
 
     protected override void OnInitialized()
     {
-        surveryButtonResponseVM = new SurveyRepetitiveButtonResponseVM();
-        SurveyResponse.Response.Add(surveryButtonResponseVM);
+        surveryButtonResponseVM = this.SurveyResponse.AddButtonResponse();
+
         GroupButtons = GetButtonGroups().ToList();
     }
 
@@ -53,8 +53,7 @@
             else
                 groupBtn.NoActive();
         }
-        surveryButtonResponseVM.ButtonType = btnType;
-       
+        surveryButtonResponseVM.Response.ButtonType = btnType;      
 
         StateHasChanged();
     }

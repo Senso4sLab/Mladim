@@ -9,8 +9,10 @@ using Mladim.Domain.Dtos;
 using Mladim.Domain.Dtos.Members.AnonymousParticipants;
 using Mladim.Domain.Dtos.Survey.Questions;
 using Mladim.Domain.Dtos.Survey.Responses;
+using Mladim.Domain.Dtos.Survey.Statistics;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Models.Survey.Questions;
+using Syncfusion.Blazor.Schedule.Internal;
 
 namespace Mladim.Client.Services.SubjectServices.Implementations;
 
@@ -49,5 +51,19 @@ public class SurveyService : ISurveyService
         string url = string.Format(MladimApiUrls.GetSurveyResponses, activityId);
         var responses = await HttpClient.GetAsync<IEnumerable<AnonymousSurveyResponseDto>>(url);
         return this.Mapper.Map<IEnumerable<AnonymousSurveyResponseVM>>(responses);       
+    }
+
+    public async Task<IEnumerable<QuestionResponseStatisticsVM>> GetStatisticsByOrganizationIdAsync(int organizationId, int year)
+    {
+        string url = string.Format(MladimApiUrls.GetSurveyStatisticsByOrganization, organizationId, year);
+        var responses = await HttpClient.GetAsync<IEnumerable<QuestionResponseStatisticsDto>>(url);
+        return this.Mapper.Map<IEnumerable<QuestionResponseStatisticsVM>>(responses);
+    }
+
+    public async Task<IEnumerable<QuestionResponseStatisticsVM>> GetStatisticsByProjectIdIdAsync(int projectId)
+    {
+        string url = string.Format(MladimApiUrls.GetSurveyStatisticsByProject, projectId);
+        var responses = await HttpClient.GetAsync<IEnumerable<QuestionResponseStatisticsDto>>(url);
+        return this.Mapper.Map<IEnumerable<QuestionResponseStatisticsVM>>(responses);
     }
 }

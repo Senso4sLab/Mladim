@@ -55,11 +55,7 @@ public partial class ActivityResults
         var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = ";", LeaveOpen = true, };
 
         using (var csv = new CsvWriter(streamWriter, csvConfiguration))
-        {
-            //csv.Context.Configuration.Delimiter = ";";
-
-            //csv.Context.Configuration.Mode = CsvMode.Escape;
-            //csv.Context.Configuration.Escape = '\\';
+        {   
 
             csv.WriteField("Spol");
             csv.WriteField("Starostna skupina");
@@ -80,10 +76,20 @@ public partial class ActivityResults
                 csv.WriteField(surveyResponse.AnonymousParticipant.Gender.GetDisplayAttribute());
                 csv.WriteField(surveyResponse.AnonymousParticipant.AgeGroup.GetDisplayAttribute());
 
-                foreach (var response in surveyResponse.Responses)
+                foreach (var qResponse in surveyResponse.Responses)
                 {
-                    foreach (var responseText in response.QuestionResponses)
-                        csv.WriteField(responseText);
+                    if(qResponse is ISelectableResponse selectable)
+                    {                       
+                       csv.WriteField(selectable.ResponseEnum.GetDisplayAttribute());
+                    }
+                    else if (qResponse is IMultiSelectableResponse multiSelectable)
+                    {                        
+                        foreach (var mSelectable in multiSelectable.ResponseEnum)
+                            csv.WriteField(mSelectable.ResponseEnum.GetDisplayAttribute());
+                    }
+                    else if(qResponse is ITextResponse textable)                    
+                        csv.WriteField(textable.Response);                    
+                    
                 }
                 csv.NextRecord();
             }
@@ -93,9 +99,6 @@ public partial class ActivityResults
         using var streamRef = new DotNetStreamReference(stream: memoryStream);
         await JS.InvokeVoidAsync("downloadFileFromStream", $"file_{ActivityId}.csv", streamRef);        
     }
-
-
-
 
 
     private void OnTablePresentation()

@@ -5,7 +5,7 @@
 
 <MudPaper Class="p-2" Elevation="3">
     <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-         <MudText Color="Color.Tertiary" Class="px-2" Typo="Typo.h2">@TextResponseGroup.Question</MudText>
+         <MudText Color="Color.Tertiary" Class="px-2" Typo="Typo.h2">@TextResponseGroup.SubContent</MudText>
          <MudButton OnClick="@OnClickTextsResponseCommands" Color="Color.Info" Variant="Variant.Filled">Prikaz odgovorov</MudButton>
      </MudStack>
  </MudPaper>
@@ -20,7 +20,7 @@
     {
         var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true };
         DialogParameters surveyTextResponsesParameters = new DialogParameters();
-        surveyTextResponsesParameters.Add("Question", TextResponseGroup.Question);
+        surveyTextResponsesParameters.Add("Question", TextResponseGroup.SubContent);
         surveyTextResponsesParameters.Add("AnonymousCommands", TextResponseGroup.GetParticipantTextResponse());
         this.DialogService.Show<ShowTextQuestionCommands>("", surveyTextResponsesParameters, options);
     }

@@ -1,6 +1,7 @@
 ﻿@using Mladim.Client.ViewModels.Survey;
 @using Mladim.Domain.Enums;
 @using Mladim.Domain.Extensions;
+@using Mladim.Domain.Models.Survey.ParticipantResponseTypes;
 
 
 <style>
@@ -23,18 +24,18 @@
 
 
 <MudPaper Class="p-2" Elevation="3">
-    <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@ButtonResponseGroup.QuestionDescription</MudText>
+    <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@ButtonResponseGroup.Content</MudText>
 
-    @foreach(var buttonResponse in ButtonResponseGroup.ButtonGroupResponses)
+    @foreach(var buttonResponse in ButtonResponseGroup.GroupedByQuestionResponses)
     {
-        <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@buttonResponse.Question</MudText>
+        <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@buttonResponse.SubContent</MudText>
         <table class="table">
             <thead>
                 <tr class="d-flex">
                     <th scope="col" class="col-3">@Context.CriterionSelector.Name</th>
-                    @foreach (var type in GetColumnNames().ToList())
+                    @foreach (var type in buttonResponse.AvailableResponseTypes.ToList())
                     {
-                        <th class="text-center col-1" scope="col">@type</th>
+                        <th class="text-center col-1" scope="col">@type.GetDisplayAttribute()</th>
                     }
                     <th class="text-center bold_font col-1" scope="col">Skupaj</th>
                     <th class="col-4" scope="col"></th>
@@ -44,14 +45,14 @@
                 @foreach (var row in GetContingencyTable(buttonResponse).ParticipantsByCriteria)
                 {
                     <tr class="d-flex">
-                        <th scope="row" class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-3">@row.Criterion</th>                    
+                        <th scope="row" class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-3">@row.Criterion</th>
 
-                        @foreach (var column in GetColumnNames().ToList())
+                        @foreach (var column in buttonResponse.AvailableResponseTypes.ToList())
                         {
-                            <td class="@(row.Criterion == "Skupaj" ? "bold_font": "normal_font") col-1">@row.ParticipantsByReponseTypes.FirstOrDefault(rt => rt.ResponseType == column)?.Unit</td>
+                            <td class="@(row.Criterion == "Skupaj" ? "bold_font": "normal_font") col-1">@row.ReponseTypesPerCriterion.FirstOrDefault(rt => rt.ResponseType.ToString() == column.ToString())?.Value</td>
                         }
 
-                        <td class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-1">@row.ParticipantsByReponseTypes.Sum(pr => pr.Unit)</td>
+                        <td class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-1">@row.ReponseTypesPerCriterion.Sum(pr => pr.Value)</td>
 
                         <th scope="col" class=" col-4"></th>
                     </tr>
@@ -64,18 +65,15 @@
 @code
 {
     [Parameter]
-    public SurveyButtonGroupResponsesGroupedByQuestion ButtonResponseGroup { get; set; } = default!;
+    public SurveyButtonResponsesGroupedByQuestion ButtonResponseGroup { get; set; } = default!;
 
     [Parameter]
     public CogntigencyTableContext Context { get; set; } = default!;    
 
-    private ContingencyTable GetContingencyTable(ISelectableReponseType reponseType) =>
+    private ContingencyTable GetContingencyTable(ISelectableQuestionReponseCalculator reponseType) =>
         this.Context.GetContingencyTableFor(reponseType);
 
 
-    private IEnumerable<string> GetColumnNames()
-    {
-        return Enum.GetValues<SurveyButtonResponseType>().Select(srb => srb.GetDisplayAttribute());
-    }
+   
         
 }

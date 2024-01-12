@@ -73,6 +73,11 @@ public class MladimApiUrls
     public string AnonymousSurveyCommand { get; set; } = string.Empty;
 
 
+    public string GetSurveyStatisticsByOrganization { get; set; } = string.Empty;
+
+    public string GetSurveyStatisticsByProject { get; set; } = string.Empty;
+
+
 
 
 }

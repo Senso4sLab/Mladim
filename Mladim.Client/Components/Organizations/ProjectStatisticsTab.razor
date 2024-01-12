@@ -1,4 +1,6 @@
-﻿@using Mladim.Client.ViewModels.Activity;
+﻿@using Mladim.Client.Components.Anketa
+@using Mladim.Client.ViewModels.Activity;
+@using Mladim.Domain.Enums;
 @using Syncfusion.Blazor.Charts
 @using Syncfusion.Blazor.Grids;
 
@@ -115,6 +117,19 @@
             </MudItem>
         </MudGrid>       
     }
+
+
+    @foreach (var questionResponse in surveyStatistics)
+    {
+        @if (questionResponse.SurveyQuestion.Type != SurveyQuestionType.Multiple && questionResponse.SurveyQuestion.Type != SurveyQuestionType.MultipleRepetitive)
+        {
+            <MudItem sm="12">
+                <SurveyStatisticsChart QuestionResponseStatistics="@questionResponse"></SurveyStatisticsChart>
+            </MudItem>
+
+        }
+    }
+  
 
     @if (activities.Any())
     {

@@ -1,0 +1,90 @@
+﻿@using Mladim.Client.Models;
+@using Mladim.Client.ViewModels.Survey;
+@using Mladim.Domain.Enums;
+@using Syncfusion.Blazor.Charts
+@using Mladim.Domain.Extensions
+
+
+
+
+<MudText Color="Color.Tertiary" Typo="Typo.h2">@QuestionResponseStatistics.SurveyQuestion.Texts.FirstOrDefault()</MudText>
+
+@foreach (var subQuestionResponse in QuestionResponseStatistics.QuestionResponseTypes.SubQuestionResponseTypes)
+        {
+            <SfChart Height="30">
+                <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
+                <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category"/>   
+                <ChartPrimaryYAxis Visible="false"/>
+                <ChartArea>
+                    <ChartAreaBorder Width="0"></ChartAreaBorder>
+                </ChartArea>   
+                <ChartSeriesCollection>
+            @foreach (var seriesData in GetStackedBarData(QuestionResponseStatistics.SurveyQuestion.Type, subQuestionResponse).ToList())
+                    {
+                        <ChartSeries DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName" Type="ChartSeriesType.StackingBar100">
+
+                            <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius" />
+                            <ChartMarker>
+                                <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">                          
+                                    <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
+                                </ChartDataLabel>
+                            </ChartMarker>
+                        </ChartSeries>
+                    }
+                </ChartSeriesCollection>
+            </SfChart>
+        }
+    
+
+
+@code 
+{
+
+    [Parameter]
+    public QuestionResponseStatisticsVM QuestionResponseStatistics { get; set; }
+
+    private List<ResponseBar> GetStackedBarData(SurveyQuestionType type, SubQuestionResponseTypesVM questionResponseStatistics)
+    {
+        var result = questionResponseStatistics.ResponseTypes
+            .Select(rt => (type: rt.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(StackedBarName(type, rt.ResponseType).GetDisplayAttribute(), rt.Value) })))
+            .Select(bv => ResponseBar.CreateResponseBar(Fill(bv.type), bv.barList))
+            .ToList();
+
+        result.First().LeftRadius = 10;
+        result.Last().RightRadius = 10;
+
+        return result;
+    }
+
+    private Enum StackedBarName(SurveyQuestionType type, string name) =>
+     type switch
+     {
+         SurveyQuestionType.Boolean => Enum.Parse<SurveyBooleanResponseType>(name),
+         SurveyQuestionType.Rating => Enum.Parse<SurveyRatingResponseType>(name),
+         SurveyQuestionType.Multiple => Enum.Parse<SurveyButtonResponseType>(name),
+         SurveyQuestionType.MultipleRepetitive => Enum.Parse<SurveyRepetitiveButtonResponseType>(name),
+     };
+
+
+
+
+    private string Fill(string responseType) =>
+         responseType switch
+        {
+            nameof(SurveyBooleanResponseType.ThumpsUp)   => "#4DA456",
+            nameof(SurveyBooleanResponseType.ThumpsDown) => "#8ED974",
+            nameof(SurveyRatingResponseType.OneSmile)    => "#7cc769",
+            nameof(SurveyRatingResponseType.TwoSmiles)   => "#394241",
+            nameof(SurveyRatingResponseType.ThreeSmiles) => "#ffc700",
+            nameof(SurveyRatingResponseType.FourSmiles)  => "#8ED974",
+            nameof(SurveyRatingResponseType.FiveSmiles)  => "#4DA456",
+            nameof(SurveyButtonResponseType.VeryCorrect) => "4DA456",
+            nameof(SurveyButtonResponseType.PartiallyCorrect) => "394241",
+            nameof(SurveyButtonResponseType.Correct) => "ffc700",
+            nameof(SurveyButtonResponseType.Incorrect) => "8ED974",
+            nameof(SurveyRepetitiveButtonResponseType.Greatly) => "4DA456",
+            nameof(SurveyRepetitiveButtonResponseType.Quite) => "394241",
+            nameof(SurveyRepetitiveButtonResponseType.Little) => "ffc700",
+            nameof(SurveyRepetitiveButtonResponseType.None) => "8ED974",           
+        };
+}

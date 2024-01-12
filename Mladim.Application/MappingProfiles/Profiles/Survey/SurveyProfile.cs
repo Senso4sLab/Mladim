@@ -3,12 +3,16 @@ using Mladim.Application.Features.Members.Partners.Commands.AddPartner;
 using Mladim.Application.Features.Members.StaffMembers.Commands.UpdatePartner;
 using Mladim.Domain.Dtos.Survey.Questions;
 using Mladim.Domain.Dtos.Survey.Responses;
+using Mladim.Domain.Dtos.Survey.Statistics;
 using Mladim.Domain.Models;
+using Mladim.Domain.Models.Survey.ParticipantResponseTypes;
 using Mladim.Domain.Models.Survey.Questions;
 using Mladim.Domain.Models.Survey.Responses;
+using Mladim.Domain.Models.Survey.Statistics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,8 +52,14 @@ public class SurveyProfile : Profile
             .Include<QuestionMultiRepetitiveButtonResponseDto, QuestionMultiRepetitiveButtonResponse>()
             .ReverseMap();
 
+       
 
-
+        CreateMap<QuestionResponseStatistics, QuestionResponseStatisticsDto>();
+        CreateMap<QuestionResponseTypes, QuestionResponseTypesDto>();
+        CreateMap<SubQuestionResponseTypes, SubQuestionResponseTypesDto>();
+        CreateMap<ParticipantResponseType, ParticipantResponseTypeDto>()
+             .ForMember(dest => dest.ResponseType, m => m.MapFrom(src => src.ResponseType.ToString()));
+       
 
 
     }

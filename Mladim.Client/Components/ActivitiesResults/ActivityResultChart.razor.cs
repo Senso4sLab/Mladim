@@ -54,19 +54,19 @@ public partial class ActivityResultChart
     }
 
     public List<SurveyBoleanResponsesGroupedByQuestion> BoleanResponses { get; set; } = new List<SurveyBoleanResponsesGroupedByQuestion>(); 
-    private void Test()
-    {
-        foreach(var responsesGroup in this.SurveyResponsesGroupByQuestions)
-        {
-            if(responsesGroup is SurveyBoleanResponsesGroupedByQuestion boleanResponse)
-            {
-                var selectable = boleanResponse as ISelectableReponseType;
-                var response = selectable.ParticipantsByResponseTypes(ParticipantPredicate.None.Predicate).Select(s => s.InPercent(total));
-                this.BoleanResponses.Add(boleanResponse);
+    //private void Test()
+    //{
+    //    foreach(var responsesGroup in this.SurveyResponsesGroupByQuestions)
+    //    {
+    //        if(responsesGroup is SurveyBoleanResponsesGroupedByQuestion boleanResponse)
+    //        {
+    //            var selectable = boleanResponse as ISelectableQuestionReponseCalculator;
+    //            var response = selectable.ParticipantsByEnumTypes(ParticipantPredicate.None.Predicate).Select(s => s.InPercent(total));
+    //            this.BoleanResponses.Add(boleanResponse);
 
-            }
-        }    
-    }
+    //        }
+    //    }    
+    //}
 
 
 

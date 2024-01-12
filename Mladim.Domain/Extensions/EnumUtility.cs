@@ -25,4 +25,7 @@ public static class EnumUtility
         Enum.GetValues<T>()
             .Where(val => value.HasFlag(val))
             .ToList() ?? Enumerable.Empty<T>();
+
+
+
 }

@@ -6,6 +6,7 @@ using Mladim.Application.Features.Survey.Queries.GetSurvey;
 using Mladim.Application.Features.Survey.Queries.GetSurveyResponses;
 using Mladim.Domain.Dtos.Survey.Questions;
 using Mladim.Domain.Dtos.Survey.Responses;
+using Mladim.Domain.Dtos.Survey.Statistics;
 
 namespace Mladim.WebAPI.Controllers
 {
@@ -50,5 +51,19 @@ namespace Mladim.WebAPI.Controllers
             return Ok(surveyQuestionnairy);
 
         }
+
+
+        [Authorize]
+        [HttpGet("statistics")]
+        public async Task<ActionResult<IEnumerable<QuestionResponseStatisticsDto>>> GetStatistics([FromQuery] GetSurveyStatisticsQuery statisticsQuery)
+        {
+            var surveyQuestionnairy = await this.Mediator.Send(statisticsQuery);
+
+            return Ok(surveyQuestionnairy);
+
+        }
+
+
+
     }
 }

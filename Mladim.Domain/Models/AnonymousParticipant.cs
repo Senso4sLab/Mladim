@@ -8,8 +8,7 @@ public class AnonymousParticipant
 {
     public int Id { get; set; } 
     public Gender Gender { get; set; }
-    public AgeGroups AgeGroup { get; set; }
-    //public List<SurveyQuestionnairyResponse> SurveyQuestionnairyResponse { get; set; } = new();
+    public AgeGroups AgeGroup { get; set; }    
 
     private AnonymousParticipant()
     {
@@ -32,9 +31,7 @@ public class AnonymousParticipant
     public override int GetHashCode() =>
         HashCode.Combine(this.Gender, this.AgeGroup);
 
-
     public override string ToString() =>
-        $"{this.Gender.GetDisplayAttribute()}-{this.AgeGroup.GetDisplayAttribute()}";
-   
+        $"{this.Gender.GetDisplayAttribute()}-{this.AgeGroup.GetDisplayAttribute()}";   
 
 }

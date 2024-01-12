@@ -1,6 +1,7 @@
 ﻿@using Mladim.Client.ViewModels.Survey;
 @using Mladim.Domain.Enums;
 @using Mladim.Domain.Extensions;
+@using Mladim.Domain.Models.Survey.ParticipantResponseTypes;
 
 <style>
     .bold_font {
@@ -22,13 +23,13 @@
 
 
 <MudPaper Class="p-2" Elevation="3">
-    <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@RatingResponseGroup.Question</MudText>
+    <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@RatingResponseGroup.SubContent</MudText>
 
     <table class="table">
         <thead>
             <tr class="d-flex">
                 <th scope="col" class="col-3">@Table.Name</th>
-                @for (int i = 0; i < numOfRatingTypes; i++)
+                @for (int i = 0; i < RatingResponseGroup.AvailableResponseTypes.Count(); i++)
                 {
                     <th class="text-center col-1" scope="col">
                         @for(int j = 0; j <= i; j++)
@@ -45,14 +46,14 @@
             @foreach (var row in Table.ParticipantsByCriteria)
             {
                 <tr class="d-flex">
-                    <th scope="row" class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-3">@row.Criterion</th>                  
+                    <th scope="row" class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-3">@row.Criterion</th>
 
-                    @foreach (var column in GetColumnNames().ToList())
+                    @foreach (var column in RatingResponseGroup.AvailableResponseTypes.ToList())
                     {
-                        <td class="@(row.Criterion == "Skupaj" ? "bold_font": "normal_font") col-1">@row.ParticipantsByReponseTypes.FirstOrDefault(rt => rt.ResponseType == column)?.Unit</td>
+                        <td class="@(row.Criterion == "Skupaj" ? "bold_font": "normal_font") col-1">@row.ReponseTypesPerCriterion.FirstOrDefault(rt => rt.ResponseType.ToString() == column.ToString())?.Value</td>
                     }
 
-                    <td class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-1">@row.ParticipantsByReponseTypes.Sum(pr => pr.Unit)</td>
+                    <td class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-1">@row.ReponseTypesPerCriterion.Sum(pr => pr.Value)</td>
 
                     <th scope="col" class=" col-3"></th>
                 </tr>
@@ -75,18 +76,6 @@
         this.Context.GetContingencyTableFor(RatingResponseGroup);
 
     protected override void OnParametersSet() =>
-        this.Table = GetContingencyTable();
-
-    private int numOfRatingTypes = 0;
-
-    protected override void OnInitialized()
-    {
-        numOfRatingTypes = Enum.GetValues<SurveyRatingResponseType>().Count();
-    }
-
-    private IEnumerable<string> GetColumnNames()
-    {
-        return Enum.GetValues<SurveyRatingResponseType>().Select(srb => srb.GetDisplayAttribute());
-    }
+        this.Table = GetContingencyTable();   
    
 }

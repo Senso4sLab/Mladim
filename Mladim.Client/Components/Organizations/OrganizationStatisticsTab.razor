@@ -1,4 +1,6 @@
-﻿@using Mladim.Client.ViewModels.Activity;
+﻿@using Mladim.Client.Components.Anketa
+@using Mladim.Client.ViewModels.Activity;
+@using Mladim.Domain.Enums;
 @using Syncfusion.Blazor.Charts
 @using Syncfusion.Blazor.Grids;
 
@@ -38,8 +40,7 @@
         </MudSelect>
     </div>
 
-    @if (organizationStatistics != null)
-    {
+   
         <MudGrid>
             <MudItem sm="4">
                  <MudPaper Outlined="true">
@@ -111,12 +112,25 @@
                             </MudStack>
                         </MudPaper>
                 </MudStack>              
-             </MudItem>             
-         </MudGrid>
-    }
+             </MudItem>     
 
-    @if (activities.Any())
+
+            @foreach(var questionResponse in SurveyStatistics)
+            {
+                @if (questionResponse.SurveyQuestion.Type != SurveyQuestionType.Multiple && questionResponse.SurveyQuestion.Type != SurveyQuestionType.MultipleRepetitive)
+                {
+                    <MudItem sm="12">
+                         <SurveyStatisticsChart QuestionResponseStatistics="@questionResponse"></SurveyStatisticsChart>
+                    </MudItem>           
+                }
+            }
+        </MudGrid>
+
+
+
+    @if (activities.Count > 0)
     {
+
         <MudText Typo="Typo.h2" Color="Color.Tertiary">Seznam prihajajočih aktivnosti</MudText>
 
         <SfGantt class="pt-5" DataSource="@activities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true>

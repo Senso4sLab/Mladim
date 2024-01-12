@@ -4,6 +4,7 @@ using Mladim.Client.ViewModels.Activity;
 using Syncfusion.Blazor.Grids;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.ViewModels.Project;
+using Mladim.Client.ViewModels.Survey;
 
 namespace Mladim.Client.Components.Organizations;
 
@@ -14,6 +15,9 @@ public partial class ProjectStatisticsTab
 
     [Inject]
     public IProjectService ProjectService { get; set; } = default!;
+
+    [Inject]
+    public ISurveyService SurveyService { get; set; } = default!;
 
     [Inject]
     public NavigationManager Navigation { get; set; } = default!;    
@@ -31,6 +35,9 @@ public partial class ProjectStatisticsTab
     private ProjectVM? selectedProject;
 
     private ProjectStatisticsVM? projectStatistics;
+
+
+    private IEnumerable<QuestionResponseStatisticsVM> surveyStatistics = new List<QuestionResponseStatisticsVM>();  
 
     //private List<DoughnutPiece> GenderDoughnut = new List<DoughnutPiece>();
     //private List<DoughnutPiece> AgeDoughnut = new List<DoughnutPiece>();
@@ -53,6 +60,7 @@ public partial class ProjectStatisticsTab
     {
         projectStatistics = await ProjectStatisticsAsync(projectId);
         activities = await ActivitiesAsync(projectId);
+        surveyStatistics = await SurveyService.GetStatisticsByProjectIdIdAsync(projectId);
     }
 
 

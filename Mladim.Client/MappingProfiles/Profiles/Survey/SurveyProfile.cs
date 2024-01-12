@@ -6,6 +6,8 @@ using Mladim.Domain.Dtos.Survey.Questions;
 using Mladim.Client.ViewModels.Survey;
 using Mladim.Domain.Dtos.Survey.Responses;
 using Mladim.Domain.Enums;
+using Mladim.Domain.Dtos.Survey.Statistics;
+using Mladim.Domain.Models.Survey.Statistics;
 
 namespace Mladim.Client.MappingProfiles.Profiles.Survey;
 
@@ -45,6 +47,11 @@ public class SurveyProfile : Profile
             .Include<QuestionMultiRepetitiveButtonResponseVM, QuestionMultiRepetitiveButtonResponseDto>()
             .ReverseMap();
 
+
+        CreateMap<QuestionResponseStatisticsDto, QuestionResponseStatisticsVM>();       
+        CreateMap<QuestionResponseTypesDto, QuestionResponseTypesVM>();
+        CreateMap<SubQuestionResponseTypesDto, SubQuestionResponseTypesVM>();
+        CreateMap<ParticipantResponseTypeDto, ParticipantResponseTypeVM>();
     }
 
     public class SurveryButtonResponseTypeConverter : ITypeConverter<QuestionMultiButtonResponseVM, QuestionMultiButtonResponseDto>
@@ -53,7 +60,7 @@ public class SurveyProfile : Profile
         {
             return new QuestionMultiButtonResponseDto()
             {
-                Response = source.Response.Select(r => r.ButtonType).ToList(),
+                Response = source.Response.Select(r => r.Response.ButtonType).ToList(),
                 UniqueQuestionId = source.UniqueQuestionId,
             };
         }
@@ -65,7 +72,7 @@ public class SurveyProfile : Profile
         {
             return new QuestionMultiButtonResponseVM(source.UniqueQuestionId)
             {
-                Response = source.Response.Select(r =>new SurveryButtonResponseVM() { ButtonType = r }).ToList(),               
+                Response = source.Response.Select(r =>new QuestionButtonResponseVM(source.UniqueQuestionId, new SurveryButtonResponseVM() {ButtonType = r })).ToList(),               
             };
         }
     }
@@ -77,7 +84,7 @@ public class SurveyProfile : Profile
         {
             return new QuestionMultiRepetitiveButtonResponseDto()
             {
-                Response = source.Response.Select(r => r.ButtonType).ToList(),
+                Response = source.Response.Select(r => r.Response.ButtonType).ToList(),
                 UniqueQuestionId = source.UniqueQuestionId,
             };
         }
@@ -89,7 +96,7 @@ public class SurveyProfile : Profile
         {
             return new QuestionMultiRepetitiveButtonResponseVM(source.UniqueQuestionId)
             {
-                Response = source.Response.Select(r => new SurveyRepetitiveButtonResponseVM() { ButtonType = r }).ToList(),
+                Response = source.Response.Select(r => new QuestionRepetitiveButtonResponseVM(source.UniqueQuestionId, new SurveyRepetitiveButtonResponseVM() { ButtonType = r })).ToList(),
             };
         }
     }

@@ -7,7 +7,7 @@
 @using System.Collections.ObjectModel;
 
 
-<MudText Color="Color.Tertiary" Typo="Typo.h2">@Response.Question</MudText>
+<MudText Color="Color.Tertiary" Typo="Typo.h2">@Response.SubContent</MudText>
 <SfChart Height="30" >
     <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
     <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
@@ -22,7 +22,7 @@
                 <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius"/>
                 <ChartMarker>
                     <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
-                        <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
+                        <ChartDataLabelFont Color="#ffffff"/>                   
                     </ChartDataLabel>
                 </ChartMarker>
             </ChartSeries>
@@ -41,12 +41,13 @@
     {
         int total = this.Response.ParticipantQuestionResponses.Count;       
 
-        if (Response is ISelectableReponseType selectable)
+        if (Response is ISelectableQuestionReponseCalculator selectable)
         {
-            var responseBars = selectable.ParticipantsByResponseTypes(ParticipantPredicate.None.Predicate)
-                .Select(s => s.InPercent(total))
-                .Where(pr => pr.Unit > 0)
-                .Select(pr => (type: pr.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(pr.ResponseType, pr.Unit) })))
+            var responseBars = selectable.ParticipantsResponseTypeForCriterion(ParticipantPredicate.None.Name, ParticipantPredicate.None.Predicate)
+                .ReponseTypesPerCriterion
+                .Select(rt => rt.ToPercent(total))
+                .Where(rt => rt.Value > 0)
+                .Select(rt => (type: rt.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(rt.ResponseType.GetDisplayAttribute(), rt.Value) })))
                 .Select(bv => ResponseBar.CreateResponseBar(Fill(bv.type), bv.barList))
                 .ToList();
 
@@ -57,17 +58,20 @@
         }
     }
 
-    private string Fill(string responseType) 
+    
+
+
+    private string Fill(Enum responseType) 
     {
-        if (responseType == SurveyRatingResponseType.OneSmile.GetDisplayAttribute())
+        if (responseType is SurveyRatingResponseType.OneSmile)
             return "#7cc769";
-        else if (responseType == SurveyRatingResponseType.TwoSmiles.GetDisplayAttribute())        
+        else if (responseType is SurveyRatingResponseType.TwoSmiles)        
             return "#394241";        
-        else if (responseType == SurveyRatingResponseType.ThreeSmiles.GetDisplayAttribute())        
+        else if (responseType is SurveyRatingResponseType.ThreeSmiles)        
             return "#ffc700";        
-        else if (responseType == SurveyRatingResponseType.FourSmiles.GetDisplayAttribute())        
+        else if (responseType is SurveyRatingResponseType.FourSmiles)        
             return "#8ED974";        
-        else if (responseType == SurveyRatingResponseType.FiveSmiles.GetDisplayAttribute())        
+        else if (responseType is SurveyRatingResponseType.FiveSmiles)        
             return "#4DA456";        
         else
             return "#000000";

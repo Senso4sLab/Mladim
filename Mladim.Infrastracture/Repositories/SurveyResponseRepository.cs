@@ -12,20 +12,21 @@ public class SurveyResponseRepository : GenericRepository<AnonymousSurveyRespons
     }
 
 
-    public async Task<List<AnonymousSurveyResponse>> GetSurveyResponseByOrganizationIdAsync(int organizationId)
+    public async Task<List<AnonymousSurveyResponse>> GetSurveyResponsesByQuestionIdsAndOrganizationAsync(int organizationId, int? year)
     {
-        var responses = this.DbSet
-          .Include(r => r.Responses)
+        var responses = this.DbSet         
           .Where(r => r.Activity.Project.OrganizationId == organizationId);
+
+        if (year is int activityYear)
+            responses.Where(r => r.Activity.TimeRange.StartDate.Year == year);
 
         return await responses.AsNoTracking().ToListAsync();
     }
 
-    public async Task<List<AnonymousSurveyResponse>> GetSurveyResponseByProjectIdAsync(int projectId)
+    public async Task<List<AnonymousSurveyResponse>> GetSurveyResponsesByQuestionIdsAndProjectAsync(int projectId)
     {
         var responses = this.DbSet
-           .Include(r => r.Responses)
-           .Where(r => r.Activity.ProjectId == projectId);
+           .Where(r => r.Activity.ProjectId == projectId);         
 
         return await responses.AsNoTracking().ToListAsync();           
     }

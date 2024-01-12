@@ -6,7 +6,7 @@
 @using Mladim.Domain.Extensions;
 
 
-    <MudText  Color="Color.Tertiary" Typo="Typo.h2">@Response.Question</MudText>
+    <MudText  Color="Color.Tertiary" Typo="Typo.h2">@Response.SubContent</MudText>
     <SfChart Height="30">
         <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
         <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category"/>   
@@ -21,7 +21,7 @@
                 
                     <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius" />
                     <ChartMarker>
-                        <ChartDataLabel Visible="true" Name="ClassIcon" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
+                        <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
                            @*  <Template>
                             @{
                                 var data = (context as ChartDataPointInfo);
@@ -61,14 +61,15 @@
     {
         int total = this.Response.ParticipantQuestionResponses.Count;
 
-        if (Response is ISelectableReponseType selectable)
+        if (Response is ISelectableQuestionReponseCalculator selectable)
         {
-            var responseBars = selectable.ParticipantsByResponseTypes(ParticipantPredicate.None.Predicate)
-                .Select(s => s.InPercent(total))
-                .Where(pr => pr.Unit > 0)
-                .Select(pr => (type: pr.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(pr.ResponseType, pr.Unit, CssIconClass(pr.ResponseType)) })))
+            var responseBars = selectable.ParticipantsResponseTypeForCriterion(ParticipantPredicate.None.Name, ParticipantPredicate.None.Predicate)
+                .ReponseTypesPerCriterion
+                .Select(rt => rt.ToPercent(total))
+                .Where(rt => rt.Value > 0)
+                .Select(rt => (type: rt.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(rt.ResponseType.GetDisplayAttribute(), rt.Value) })))
                 .Select(bv => ResponseBar.CreateResponseBar(Fill(bv.type), bv.barList))
-                .ToList();
+                .ToList();          
 
             responseBars.First().LeftRadius = 10;
             responseBars.Last().RightRadius = 10;
@@ -77,23 +78,23 @@
         }
     }   
 
-    private string Fill(string responseType)
+    private string Fill(Enum responseType)
     {
-        if (responseType == SurveyBooleanResponseType.ThumpsUp.GetDisplayAttribute())
+        if (responseType is SurveyBooleanResponseType.ThumpsUp)
             return "#4DA456";
-        else if (responseType == SurveyBooleanResponseType.ThumpsDown.GetDisplayAttribute())
+        else if (responseType is SurveyBooleanResponseType.ThumpsDown)
             return "#8ED974";
        else
             return "#000000";
     }    
 
-    private string CssIconClass(string responseType)
-    {
-        if (responseType == SurveyBooleanResponseType.ThumpsUp.GetDisplayAttribute())
-            return "oi oi-thumb-up thumb";
-        else if (responseType == SurveyBooleanResponseType.ThumpsDown.GetDisplayAttribute())
-            return "oi oi-thumb-down thumb";
-        else
-            return string.Empty;
-    }
+    // private string CssIconClass(string responseType)
+    // {
+    //     if (responseType == SurveyBooleanResponseType.ThumpsUp.GetDisplayAttribute())
+    //         return "oi oi-thumb-up thumb";
+    //     else if (responseType == SurveyBooleanResponseType.ThumpsDown.GetDisplayAttribute())
+    //         return "oi oi-thumb-down thumb";
+    //     else
+    //         return string.Empty;
+    // }
 }

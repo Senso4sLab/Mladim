@@ -29,7 +29,7 @@ public partial class Dashboard
     private IEnumerable<ProjectVM> activeProjects = new List<ProjectVM>();
     private IEnumerable<ProjectVM> pastProjects = new List<ProjectVM>();
 
-    private bool IsOrganizationStatisticsVisible { get; set; } = true;
+    private bool IsOrganizationStatisticsVisible  = true;
 
     protected async override Task OnInitializedAsync()
     {

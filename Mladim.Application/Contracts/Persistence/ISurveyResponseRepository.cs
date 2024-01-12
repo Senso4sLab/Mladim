@@ -4,6 +4,6 @@ namespace Mladim.Application.Contracts.Persistence;
 
 public interface ISurveyResponseRepository : IGenericRepository<AnonymousSurveyResponse>
 {
-    Task<List<AnonymousSurveyResponse>> GetSurveyResponseByOrganizationIdAsync(int organizationId);
-    Task<List<AnonymousSurveyResponse>> GetSurveyResponseByProjectIdAsync(int projectId);
+    Task<List<AnonymousSurveyResponse>> GetSurveyResponsesByQuestionIdsAndOrganizationAsync(int organizationId, int? year);
+    Task<List<AnonymousSurveyResponse>> GetSurveyResponsesByQuestionIdsAndProjectAsync(int projectId);
 }

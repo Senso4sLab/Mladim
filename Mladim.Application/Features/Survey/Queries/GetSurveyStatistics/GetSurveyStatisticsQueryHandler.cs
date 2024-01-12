@@ -1,12 +1,19 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore.Internal;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos.Survey.Responses;
+using Mladim.Domain.Dtos.Survey.Statistics;
+using Mladim.Domain.Enums;
+using Mladim.Domain.Models.Survey.ParticipantResponseTypes;
+using Mladim.Domain.Models.Survey.Questions;
 using Mladim.Domain.Models.Survey.Responses;
+using Mladim.Domain.Models.Survey.Statistics;
+using System.Linq;
 
 namespace Mladim.Application.Features.Survey.Queries.GetSurveyResponses;
 
-public class GetSurveyStatisticsQueryHandler : IRequestHandler<GetSurveyStatisticsQuery, IEnumerable<SurveyStatisticsQueryDto>>
+public class GetSurveyStatisticsQueryHandler : IRequestHandler<GetSurveyStatisticsQuery, IEnumerable<QuestionResponseStatisticsDto>>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -16,44 +23,37 @@ public class GetSurveyStatisticsQueryHandler : IRequestHandler<GetSurveyStatisti
         Mapper = mapper;
         UnitOfWork = unitOfWork;
     }
-    public async Task<IEnumerable<SurveyStatisticsQueryDto>> Handle(GetSurveyStatisticsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<QuestionResponseStatisticsDto>> Handle(GetSurveyStatisticsQuery request, CancellationToken cancellationToken)
     {
-        
-        
+
+        if (request.ProjectId is null && request.OrganizationId is null)
+            return Enumerable.Empty<QuestionResponseStatisticsDto>();
+
+
+        var surveyResponses = request.ProjectId is int projectId ? 
+                await UnitOfWork.SurveyResponseRepository.GetSurveyResponsesByQuestionIdsAndProjectAsync(projectId) : 
+                request.OrganizationId is int organizationId ?
+                await UnitOfWork.SurveyResponseRepository.GetSurveyResponsesByQuestionIdsAndOrganizationAsync(organizationId, request.Year) :
+                Enumerable.Empty<AnonymousSurveyResponse>().ToList();
+
+
+        var questionResponseTypes = surveyResponses.SelectMany(sr => sr.Responses, (sr, qr) => (sr.ActivityId, qr))
+           .GroupBy(tuple => tuple.qr.UniqueQuestionId, (questionId, tuples) => (questionId, tuples.Select(tuple => new ActivityQuestionResponse(tuple.ActivityId, tuple.qr))))
+           .Select(gtuple => new QuestionResponseTypeSelector(gtuple.questionId, gtuple.Item2))
+           .Select(qrts => qrts.AverageQuestionResponseTypes())
+           .ToList();
+
+        var surveyQuestions = await UnitOfWork.SurveyQuestionRepository
+            .GetSurveyQuestionnairy(1, Gender.Female, SurveyQuestionCategory.General | SurveyQuestionCategory.Group | SurveyQuestionCategory.Repetitive);
+
+        var questionsResponseStatistics = questionResponseTypes.Join(surveyQuestions, qrt => qrt.QuestionId, sq => sq.UniqueQuestionId, (qrt, sq) =>new QuestionResponseStatistics(sq, qrt))
+            .Where(qrs => qrs.QuestionResponseTypes.SubQuestionResponseTypes.Count() > 0)            
+            .ToList();
        
-        var surveyStatisticsQuery = new List<SurveyStatisticsQueryDto>();
-        
-        if(request.OrganizationId is int organizationId)
-        {           
-            var surveyresponses = await UnitOfWork.SurveyResponseRepository.GetSurveyResponseByOrganizationIdAsync(organizationId);
-        }
-        else if(request.ProjectId is int projectId)
-        {           
-            var surveyResponses = await UnitOfWork.SurveyResponseRepository.GetSurveyResponseByProjectIdAsync(projectId);
-
-            var groupedResponses = surveyResponses.SelectMany(sr => sr.Responses)
-                .Where(r => request.QuestionIds.Any(qId => qId == r.UniqueQuestionId))
-                .GroupBy(r => r.UniqueQuestionId)                
-                .ToList();
-         
-           
+        return this.Mapper.Map<IEnumerable<QuestionResponseStatisticsDto>>(questionsResponseStatistics);
                 
-        }
-
-        return surveyStatisticsQuery;
-        
-        
-        //var responses = await this.UnitOfWork.SurveyResponseRepository.GetAllAsync(sr => sr.ActivityId == request.ActivityId);
-
-        //return this.Mapper.Map<IEnumerable<AnonymousSurveyResponseDto>>(responses);
     }
 
 
-    private void CalculateAverage(IEnumerable<QuestionResponse> responses)
-    {
-
-    }
-
-
-
+    
 }
