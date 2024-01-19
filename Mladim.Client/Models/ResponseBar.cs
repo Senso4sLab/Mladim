@@ -26,11 +26,11 @@ public class BarValue
 {
     public string ChartName { get; }
     public string Name { get; }
-    public double Value { get; }
+    public float Value { get; }
     public string Label => $"{this.Name} {this.Value}%";
     public string ClassIcon { get; }
 
-    private BarValue(string chartName, string name, double value, string classIcon)
+    private BarValue(string chartName, string name, float value, string classIcon)
     {
         this.ChartName = chartName;
         this.Name = name;
@@ -38,7 +38,7 @@ public class BarValue
         this.ClassIcon = classIcon;
     }
 
-    public static BarValue CreateBarValue(string name, double value, string classicon = "") =>
+    public static BarValue CreateBarValue(string name, float value, string classicon = "") =>
         new BarValue("barValue", name, value, classicon);
 
 }

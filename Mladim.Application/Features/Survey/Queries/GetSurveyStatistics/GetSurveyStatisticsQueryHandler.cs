@@ -26,6 +26,8 @@ public class GetSurveyStatisticsQueryHandler : IRequestHandler<GetSurveyStatisti
     public async Task<IEnumerable<QuestionResponseStatisticsDto>> Handle(GetSurveyStatisticsQuery request, CancellationToken cancellationToken)
     {
 
+        IEnumerable<int> questionIds = new List<int>() {1,2,3,4,5,11 };
+
         if (request.ProjectId is null && request.OrganizationId is null)
             return Enumerable.Empty<QuestionResponseStatisticsDto>();
 
@@ -34,10 +36,11 @@ public class GetSurveyStatisticsQueryHandler : IRequestHandler<GetSurveyStatisti
                 await UnitOfWork.SurveyResponseRepository.GetSurveyResponsesByQuestionIdsAndProjectAsync(projectId) : 
                 request.OrganizationId is int organizationId ?
                 await UnitOfWork.SurveyResponseRepository.GetSurveyResponsesByQuestionIdsAndOrganizationAsync(organizationId, request.Year) :
-                Enumerable.Empty<AnonymousSurveyResponse>().ToList();
+                Enumerable.Empty<AnonymousSurveyResponse>().ToList();      
 
 
         var questionResponseTypes = surveyResponses.SelectMany(sr => sr.Responses, (sr, qr) => (sr.ActivityId, qr))
+           .Where(tuple => questionIds.Any(id => id == tuple.qr.UniqueQuestionId))
            .GroupBy(tuple => tuple.qr.UniqueQuestionId, (questionId, tuples) => (questionId, tuples.Select(tuple => new ActivityQuestionResponse(tuple.ActivityId, tuple.qr))))
            .Select(gtuple => new QuestionResponseTypeSelector(gtuple.questionId, gtuple.Item2))
            .Select(qrts => qrts.AverageQuestionResponseTypes())

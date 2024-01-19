@@ -29,15 +29,23 @@
         <thead>
             <tr class="d-flex">
                 <th scope="col" class="col-3">@Table.Name</th>
-                @for (int i = 0; i < RatingResponseGroup.AvailableResponseTypes.Count(); i++)
-                {
+               
                     <th class="text-center col-1" scope="col">
-                        @for(int j = 0; j <= i; j++)
-                        {
-                            <i style="color:#4da456;" class="bi bi-emoji-smile" />
-                        }                        
-                    </th>                    
-                }               
+                        <MudIcon Icon="@CustomIcons.RatingOneSmilesIcon"/>                                                
+                    </th> 
+                      <th class="text-center col-1" scope="col">
+                        <MudIcon Icon="@CustomIcons.RatingTwoSmilesIcon"/>                                                
+                    </th>     
+                      <th class="text-center col-1" scope="col">
+                        <MudIcon Icon="@CustomIcons.RatingThreeSmilesIcon"/>                                                
+                    </th>     
+                      <th class="text-center col-1" scope="col">
+                        <MudIcon Icon="@CustomIcons.RatingFourSmilesIcon"/>                                                
+                    </th>
+                <th class="text-center col-1" scope="col">
+                    <MudIcon Icon="@CustomIcons.RatingFiveSmilesIcon" />
+                </th>
+
                 <th scope="col" class="text-center bold_font col-1">Skupaj</th>
                 <th scope="col" class=" col-3"></th>
             </tr>
@@ -53,7 +61,7 @@
                         <td class="@(row.Criterion == "Skupaj" ? "bold_font": "normal_font") col-1">@row.ReponseTypesPerCriterion.FirstOrDefault(rt => rt.ResponseType.ToString() == column.ToString())?.Value</td>
                     }
 
-                    <td class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-1">@row.ReponseTypesPerCriterion.Sum(pr => pr.Value)</td>
+                    <td class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-1">@Math.Round(row.ReponseTypesPerCriterion.Sum(pr => pr.Value), 0)</td>
 
                     <th scope="col" class=" col-3"></th>
                 </tr>

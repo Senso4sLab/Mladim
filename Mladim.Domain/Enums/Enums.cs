@@ -311,15 +311,15 @@ public enum SurveyBooleanResponseType
 public enum SurveyRatingResponseType
 {
     
-    [Display(Name = "1 smeško")]
+    [Display(Name = "(1)")]
     OneSmile = 1,
-    [Display(Name = "2 smeška")]
+    [Display(Name = "(2)")]
     TwoSmiles = 2,
-    [Display(Name = "3 smeški")]
+    [Display(Name = "(3)")]
     ThreeSmiles = 3,
-    [Display(Name = "4 smeški")]
+    [Display(Name = "(4)")]
     FourSmiles = 4,
-    [Display(Name = "5 smeškov")]
+    [Display(Name = "(5)")]
     FiveSmiles = 5,
 }
 

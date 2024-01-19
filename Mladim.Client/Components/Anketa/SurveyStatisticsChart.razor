@@ -46,8 +46,10 @@
     private List<ResponseBar> GetStackedBarData(SurveyQuestionType type, SubQuestionResponseTypesVM questionResponseStatistics)
     {
         var result = questionResponseStatistics.ResponseTypes
-            .Select(rt => (type: rt.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(StackedBarName(type, rt.ResponseType).GetDisplayAttribute(), rt.Value) })))
-            .Select(bv => ResponseBar.CreateResponseBar(Fill(bv.type), bv.barList))
+            .Select(rt => (enumType: StackedBarName(type, rt.ResponseType), value: rt.Value))
+            .OrderBy(rt => rt.enumType)
+            .Select(rt => (fill: Fill(rt.enumType), barList: new List<BarValue>(new[] { BarValue.CreateBarValue(rt.enumType.GetDisplayAttribute(), rt.value) })))
+            .Select(bv => ResponseBar.CreateResponseBar(bv.fill, bv.barList))
             .ToList();
 
         result.First().LeftRadius = 10;
@@ -68,23 +70,23 @@
 
 
 
-    private string Fill(string responseType) =>
+    private string Fill(Enum responseType) =>
          responseType switch
         {
-            nameof(SurveyBooleanResponseType.ThumpsUp)   => "#4DA456",
-            nameof(SurveyBooleanResponseType.ThumpsDown) => "#8ED974",
-            nameof(SurveyRatingResponseType.OneSmile)    => "#7cc769",
-            nameof(SurveyRatingResponseType.TwoSmiles)   => "#394241",
-            nameof(SurveyRatingResponseType.ThreeSmiles) => "#ffc700",
-            nameof(SurveyRatingResponseType.FourSmiles)  => "#8ED974",
-            nameof(SurveyRatingResponseType.FiveSmiles)  => "#4DA456",
-            nameof(SurveyButtonResponseType.VeryCorrect) => "4DA456",
-            nameof(SurveyButtonResponseType.PartiallyCorrect) => "394241",
-            nameof(SurveyButtonResponseType.Correct) => "ffc700",
-            nameof(SurveyButtonResponseType.Incorrect) => "8ED974",
-            nameof(SurveyRepetitiveButtonResponseType.Greatly) => "4DA456",
-            nameof(SurveyRepetitiveButtonResponseType.Quite) => "394241",
-            nameof(SurveyRepetitiveButtonResponseType.Little) => "ffc700",
-            nameof(SurveyRepetitiveButtonResponseType.None) => "8ED974",           
+            SurveyBooleanResponseType.ThumpsUp   => "#4DA456",
+            SurveyBooleanResponseType.ThumpsDown => "#8ED974",
+            SurveyRatingResponseType.OneSmile    => "#7cc769",
+            SurveyRatingResponseType.TwoSmiles   => "#394241",
+            SurveyRatingResponseType.ThreeSmiles => "#ffc700",
+            SurveyRatingResponseType.FourSmiles  => "#8ED974",
+            SurveyRatingResponseType.FiveSmiles  => "#4DA456",
+            SurveyButtonResponseType.VeryCorrect => "4DA456",
+            SurveyButtonResponseType.PartiallyCorrect => "394241",
+            SurveyButtonResponseType.Correct => "ffc700",
+            SurveyButtonResponseType.Incorrect => "8ED974",
+            SurveyRepetitiveButtonResponseType.Greatly => "4DA456",
+            SurveyRepetitiveButtonResponseType.Quite => "394241",
+            SurveyRepetitiveButtonResponseType.Little => "ffc700",
+            SurveyRepetitiveButtonResponseType.None => "8ED974",           
         };
 }

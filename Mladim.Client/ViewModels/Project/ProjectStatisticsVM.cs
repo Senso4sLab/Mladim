@@ -1,8 +1,4 @@
-﻿
-
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Mladim.Client.Extensions;
-using Mladim.Client.Models;
+﻿using Mladim.Client.Models;
 using Mladim.Client.ViewModels.Members.Participants;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Extensions;
@@ -43,9 +39,10 @@ public class ProjectStatisticsVM
         int total = this.TotalParticipants;
 
         return total == 0 ? Enumerable.Empty<DoughnutPiece>() :
-             ParticipantsByGenders.Select(pg => (percentage: Math.Round(pg.Number * 100.0 / total), pg: pg))
-             .Select(tuple => DoughnutPiece.Create(tuple.pg.Gender.GetDisplayAttribute(), (int)tuple.percentage, $"{tuple.percentage}%", GenderColor(tuple.pg.Gender)))  //    pg.Gender.GetDisplayAttribute(), pg.Number, $"{Math.Round(pg.Number * 100.0 / total)}%"))
-             .ToList();
+            this.ParticipantsByGenders.Select(pg => (percentage: Math.Round(pg.Number * 100.0 / total), pg: pg))
+                .OrderBy(tuple => tuple.pg.Gender)
+                .Select(tuple => DoughnutPiece.Create(tuple.pg.Gender.GetDisplayAttribute(), (int)tuple.percentage, $"{tuple.percentage}%", GenderColor(tuple.pg.Gender)))  //    pg.Gender.GetDisplayAttribute(), pg.Number, $"{Math.Round(pg.Number * 100.0 / total)}%"))
+                .ToList();
     }
 
 
@@ -82,9 +79,10 @@ public class ProjectStatisticsVM
         int total = this.TotalParticipants;
 
         return total == 0 ? Enumerable.Empty<DoughnutPiece>() :
-              ParticipantsByAgeGroups.Select(pg => (percentage: Math.Round(pg.Number * 100.0 / total), pg: pg))
-             .Select(tuple => DoughnutPiece.Create(tuple.pg.AgeGroup.GetDisplayAttribute(), (int)tuple.percentage, $"{tuple.percentage}%", AgeGroupColor(tuple.pg.AgeGroup)))  // pg.Gender.GetDisplayAttribute(), pg.Number, $"{Math.Round(pg.Number * 100.0 / total)}%"))
-             .ToList();
+            this.ParticipantsByAgeGroups.Select(pg => (percentage: Math.Round(pg.Number * 100.0 / total), pg: pg))
+                .OrderBy(tuple => tuple.pg.AgeGroup)
+                .Select(tuple => DoughnutPiece.Create(tuple.pg.AgeGroup.GetDisplayAttribute(), (int)tuple.percentage, $"{tuple.percentage}%", AgeGroupColor(tuple.pg.AgeGroup)))  // pg.Gender.GetDisplayAttribute(), pg.Number, $"{Math.Round(pg.Number * 100.0 / total)}%"))
+                .ToList();
     }    
 
 }

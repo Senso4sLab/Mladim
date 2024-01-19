@@ -33,9 +33,9 @@ public partial class OrganizationStatisticsTab
     //[Parameter]
     public DefaultOrganization? SelectedOrganization { get; set; }
 
-    private OrganizationStatisticVM organizationStatistics { get; set; } = new OrganizationStatisticVM();
+    private OrganizationStatisticVM organizationStatistics { get; set; }
 
-    private IEnumerable<int> availableYears = new List<int>();
+    private IEnumerable<int> availableYears = new List<int>();  
     private int selectedYear = DateTime.UtcNow.Year;
 
     private List<ActivityForGantt> activities = new List<ActivityForGantt>();
@@ -48,18 +48,17 @@ public partial class OrganizationStatisticsTab
         SelectedOrganization = await this.OrganizationService.DefaultOrganizationAsync();
     }
 
+    bool isAnyParticipant = false;
+
     protected override async Task OnParametersSetAsync()
     {
-        if (SelectedOrganization != null && !availableYears.Any()) 
-        {
-            this.availableYears = this.AvailableYears();
-            this.organizationStatistics = await OrganizationStatisticsAsync(selectedYear);
-            this.activities = await UpcommingActivitiesAsync(5);
-            this.SurveyStatistics = await this.SurveyService.GetStatisticsByOrganizationIdAsync(SelectedOrganization.Id, selectedYear);
+        if (SelectedOrganization != null && !availableYears.Any())
+        {   
+            availableYears =  this.AvailableYears().ToList();
+            await OnOrganizationYearChanged(selectedYear);
         }
-    }   
-
-
+        
+    }
 
     public async Task<List<ActivityForGantt>> UpcommingActivitiesAsync(int numOfUpcommingActivities)
     {
@@ -81,12 +80,20 @@ public partial class OrganizationStatisticsTab
 
     private async Task OnYearChangedAsync(int selectedYear)
     {
-        if (this.selectedYear != selectedYear)
-        {
-            this.selectedYear = selectedYear;
-            this.organizationStatistics = await OrganizationStatisticsAsync(selectedYear);
-        }
+        if (this.selectedYear == selectedYear)
+            return;
 
+        await OnOrganizationYearChanged(selectedYear);
+
+    }
+
+    private async Task OnOrganizationYearChanged(int selectedYear)
+    {
+        this.selectedYear = selectedYear;
+        this.organizationStatistics = await OrganizationStatisticsAsync(selectedYear);
+        this.isAnyParticipant = organizationStatistics?.AgeDoughnut.Count() > 0 && organizationStatistics?.GenderDoughnut.Count() > 0;
+        this.activities = await UpcommingActivitiesAsync(5);
+        this.SurveyStatistics = await this.SurveyService.GetStatisticsByOrganizationIdAsync(SelectedOrganization.Id, selectedYear);
     }
 
     public async Task<OrganizationStatisticVM?> OrganizationStatisticsAsync(int year)

@@ -15,6 +15,5 @@ public class GetSurveyStatisticsQuery : IRequest<IEnumerable<QuestionResponseSta
 {
     public int? OrganizationId { get; set; }
     public int? ProjectId { get; set; }
-    public int? Year { get; set; }
-    public IEnumerable<int> QuestionIds { get; set; } = new List<int>();
+    public int? Year { get; set; }   
 }

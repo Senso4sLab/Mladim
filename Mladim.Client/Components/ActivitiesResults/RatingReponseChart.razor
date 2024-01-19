@@ -48,6 +48,7 @@
                 .Select(rt => rt.ToPercent(total))
                 .Where(rt => rt.Value > 0)
                 .Select(rt => (type: rt.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(rt.ResponseType.GetDisplayAttribute(), rt.Value) })))
+                .OrderBy(rt => rt.type)
                 .Select(bv => ResponseBar.CreateResponseBar(Fill(bv.type), bv.barList))
                 .ToList();
 

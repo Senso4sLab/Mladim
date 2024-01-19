@@ -38,7 +38,8 @@ public class OrganizationStatisticVM
         int total = this.TotalParticipants;
 
         return total == 0 ? Enumerable.Empty<DoughnutPiece>() :
-             ParticipantsByGenders.Select(pg => (percentage: Math.Round(pg.Number * 100.0 / total), pg: pg))
+         this.ParticipantsByGenders.Select(pg => (percentage: Math.Round(pg.Number * 100.0 / total), pg: pg))
+             .OrderBy(tuple => tuple.pg.Gender)
              .Select(tuple => DoughnutPiece.Create(tuple.pg.Gender.GetDisplayAttribute(), (int)tuple.percentage, $"{tuple.percentage}%", GenderColor(tuple.pg.Gender)))  //    pg.Gender.GetDisplayAttribute(), pg.Number, $"{Math.Round(pg.Number * 100.0 / total)}%"))
              .ToList();
     }
@@ -77,7 +78,8 @@ public class OrganizationStatisticVM
         int total = this.TotalParticipants;
 
         return total == 0 ? Enumerable.Empty<DoughnutPiece>() :
-              ParticipantsByAgeGroups.Select(pg => (percentage: Math.Round(pg.Number * 100.0 / total), pg: pg))
+         this.ParticipantsByAgeGroups.Select(pg => (percentage: Math.Round(pg.Number * 100.0 / total), pg: pg))
+             .OrderBy(tuple => tuple.pg.AgeGroup)
              .Select(tuple => DoughnutPiece.Create(tuple.pg.AgeGroup.GetDisplayAttribute(), (int)tuple.percentage, $"{tuple.percentage}%", AgeGroupColor(tuple.pg.AgeGroup)))  // pg.Gender.GetDisplayAttribute(), pg.Number, $"{Math.Round(pg.Number * 100.0 / total)}%"))
              .ToList();
     }
