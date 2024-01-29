@@ -8,11 +8,6 @@ namespace Mladim.Domain.Models.Survey.Responses;
 
 
 
-
-
-
-
-
 public class AnonymousSurveyResponse
 {
     public int Id { get; set; }
