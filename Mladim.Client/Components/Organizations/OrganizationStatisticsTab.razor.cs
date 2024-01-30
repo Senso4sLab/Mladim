@@ -1,13 +1,11 @@
 using global::Microsoft.AspNetCore.Components;
-using Mladim.Client.ViewModels;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.ViewModels.Activity;
 using Syncfusion.Blazor.Grids;
 using Mladim.Client.ViewModels.Organization;
 using Mladim.Client.ViewModels.Survey;
-using System.Runtime.CompilerServices;
-using Syncfusion.Blazor.Schedule.Internal;
 using Mladim.Client.Models;
+using Microsoft.JSInterop;
 
 namespace Mladim.Client.Components.Organizations;
 
@@ -26,10 +24,14 @@ public partial class OrganizationStatisticsTab
     [Inject]
     public NavigationManager Navigation { get; set; } = default!;
 
+    [Inject]
+    public IJSRuntime JS { get; set; }
+
+
     //[CascadingParameter]
     //public OrganizationVM? SelectedOrganization { get; set; }
 
-    
+
     //[Parameter]
     public DefaultOrganization? SelectedOrganization { get; set; }
 
@@ -58,6 +60,11 @@ public partial class OrganizationStatisticsTab
             await OnOrganizationYearChanged(selectedYear);
         }
         
+    }
+
+    private async Task GeneratePdf()
+    {       
+        await JS.InvokeVoidAsync("extractHtmlAndPrint", "org_statistic_id");        
     }
 
     public async Task<List<ActivityForGantt>> UpcommingActivitiesAsync(int numOfUpcommingActivities)
