@@ -9,7 +9,6 @@
 <MudDialogProvider CloseOnEscapeKey="true" DisableBackdropClick="true" />
 <MudSnackbarProvider />
 
-
 <MudLayout >
     <MudAppBar Elevation="0">      
         <MudSpacer />
@@ -50,8 +49,11 @@
                 }
             </div>
         </div>
-    </MudDrawer>
-    <MudMainContent>
+    </MudDrawer> 
+
+
+
+    <MudMainContent >
         <MudContainer MaxWidth="MaxWidth.ExtraLarge">
             <CascadingValue Value="@OnSelectedOrganizationChanged">          
                 <CascadingValue Value="@SelectedOrganization">
@@ -60,7 +62,6 @@
             </CascadingValue>
         </MudContainer>
     </MudMainContent>
-
 </MudLayout>
   
 
@@ -94,8 +95,7 @@
                 Info = new MudColor("777A98"),
                 AppbarBackground = new MudColor("#4da456"),               
                 DrawerText = new MudColor("#000000"), 
-                Success = new MudColor("#4da456"),
-                
+                Success = new MudColor("#4da456"),                
             },
 
             Typography = new Typography()
@@ -190,6 +190,8 @@
         }       
         await this.GetSelectedOrganizationAsync(defaultOrganization.Id);
     }
+
+   
 
     private async Task<OrganizationVM?> FirstOrganizationAsSelectedOneAsync(string userId)
     {

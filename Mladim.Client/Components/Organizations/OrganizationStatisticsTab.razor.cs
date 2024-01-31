@@ -7,6 +7,7 @@ using Mladim.Client.ViewModels.Survey;
 using Mladim.Client.Models;
 using Microsoft.JSInterop;
 
+
 namespace Mladim.Client.Components.Organizations;
 
 public partial class OrganizationStatisticsTab
@@ -58,13 +59,12 @@ public partial class OrganizationStatisticsTab
         {   
             availableYears =  this.AvailableYears().ToList();
             await OnOrganizationYearChanged(selectedYear);
-        }
-        
+        }        
     }
 
     private async Task GeneratePdf()
-    {       
-        await JS.InvokeVoidAsync("extractHtmlAndPrint", "org_statistic_id");        
+    {      
+       await JS.InvokeVoidAsync("extractHtmlAndPrint", "org_statistic_id");                 
     }
 
     public async Task<List<ActivityForGantt>> UpcommingActivitiesAsync(int numOfUpcommingActivities)

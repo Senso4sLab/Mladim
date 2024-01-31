@@ -19,6 +19,7 @@ using Mladim.Client.Services.FileService;
 using Syncfusion.Blazor;
 using Microsoft.AspNetCore.Authorization;
 using Mladim.Client.Authorization;
+using Microsoft.Extensions.Options;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -33,8 +34,9 @@ builder.Services.AddMudServices(config =>
     config.SnackbarConfiguration.VisibleStateDuration = 6000;
     config.SnackbarConfiguration.HideTransitionDuration = 500;
     config.SnackbarConfiguration.ShowTransitionDuration = 500;
-    config.SnackbarConfiguration.SnackbarVariant = Variant.Filled; 
-    
+    config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
+    config.PopoverOptions.ThrowOnDuplicateProvider = false;
+
 });
 
 builder.Services.AddBlazoredLocalStorage();
