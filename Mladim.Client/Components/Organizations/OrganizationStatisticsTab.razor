@@ -88,9 +88,7 @@
                 }
 
                 <MudItem  sm="@(isAnyParticipant ? 4 : 12)">
-                        <MudStack Spacing="3">
-
-                     
+                        <MudStack Spacing="3">                     
                             <MudPaper Outlined="true" Class="pa-2">
                              
                                      <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
@@ -101,12 +99,9 @@
                                             <MudText Typo="Typo.h2" Color="Color.Tertiary">@(organizationStatistics?.IndividualParticipants + organizationStatistics?.AnonymousParticipants)</MudText>
                                             <MudText Typo="Typo.h2" Color="Color.Tertiary">Udeleženci</MudText>
                                         </MudStack>        
-                                    </MudStack>
-                            
+                                    </MudStack>                            
                                 </MudPaper>
-                        
-
-                                <MudPaper Outlined="true" Class="pa-4">
+                            <MudPaper Outlined="true" Class="pa-4">
                                 <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
                                          <MudAvatar Style="background-color:#FCCA46" Variant="Variant.Filled" Size="MudBlazor.Size.Large">
                                             <MudImage Class="pa-3" Src="/activities.png" />
@@ -117,7 +112,7 @@
                                          </MudStack>
                                     </MudStack>
                                 </MudPaper>
-                                <MudPaper Outlined="true" Class="pa-4">
+                            <MudPaper Outlined="true" Class="pa-4">
                                 <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
                                         <MudAvatar Style="background-color:#8ED974; color:white" Variant="Variant.Filled" Size="MudBlazor.Size.Large">
                                             <MudImage Class="pa-2" Src="/projects.png" />

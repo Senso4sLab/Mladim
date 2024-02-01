@@ -77,7 +77,7 @@
 
 
 
-        let bootstrapCss = '<link href="css/bootstrap/bootstrap.min.css" rel="stylesheet"/>';
+        let bootstrapCss = '<link href="css/bootstrap/bootstrap.min.css" rel="stylesheet"/>';       
         let appCss = '<link href="css/app.css" rel="stylesheet"/>';
         let mladimClientCss = '<link href="Mladim.Client.styles.css" rel="stylesheet"/>';
         let mudBlazorCss = '<link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet"/>';
@@ -88,22 +88,24 @@
             //return '<html>'.concat('<head>', bootstrapCss, appCss, mladimClientCss, mudBlazorCss, '<\/head>',
             //    '<body>', '<div class="pa-4">', document.getElementById(divName).innerHTML , '<\/div>', '<\/body>', '<\/html>');
 
-            var a = window.open('', '', 'height=700,width=500');
+            var a = window.open('', '', 'height=700,width=480');
             a.document.write('<html>');
             a.document.write('<head>');
-            a.document.write('<link href="css/bootstrap/bootstrap.min.css" rel="stylesheet"/>');
+      /*      a.document.write('<link href="css/bootstrap/bootstrap.min.css" rel="stylesheet"/>');*/
             a.document.write('<link href="css/app.css" rel="stylesheet"/>');
             a.document.write('<link href="Mladim.Client.styles.css" rel="stylesheet"/>');
             //a.document.write('<link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">');
             //a.document.write('<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>');
+            a.document.write('<link href="_content/Syncfusion.Blazor/styles/bootstrap5.css" rel="stylesheet"/>');
             a.document.write('<link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet"/>');
-
-
+         
+            
+            
 
 
             a.document.write('<\/head>');
             a.document.write('<body>');
-            a.document.write('<div class="pa-4">');
+            a.document.write('<div class="pa-4"');
 
 
             a.document.write(document.getElementById(divName).innerHTML);

@@ -5,13 +5,13 @@
 @using Mladim.Domain.Extensions
 
 
-
+<MudStack>
 
 <MudText Color="Color.Tertiary" Typo="Typo.h2">@QuestionResponseStatistics.SurveyQuestion.Texts.FirstOrDefault()</MudText>
 
 @foreach (var subQuestionResponse in QuestionResponseStatistics.QuestionResponseTypes.SubQuestionResponseTypes)
         {
-            <SfChart Height="30">
+            <SfChart Height="30" Width="100%">
                 <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
                 <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category"/>   
                 <ChartPrimaryYAxis Visible="false"/>
@@ -34,6 +34,8 @@
                 </ChartSeriesCollection>
             </SfChart>
         }
+
+</MudStack>
     
 
 
