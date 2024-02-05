@@ -30,21 +30,24 @@
 </style>
 
 <MudStack Spacing="4" Class="py-5" >   
-    <MudIconButton Icon="@Icons.Material.Filled.Download" OnClick="GeneratePdf"></MudIconButton>
+   
         <div id="org_statistic_id">
             <MudThemeProvider Theme="MainLayout.MyCustomTheme" />
-            <div style="width:200px;">
-                <MudSelect T="int" Label="Izberi leto" Value=selectedYear ValueChanged="OnYearChangedAsync" OpenIcon="@Icons.Material.Filled.CalendarMonth" Adornment="Adornment.Start" Variant=Variant.Outlined AdornmentColor="Color.Primary">
-                    @foreach (int year in availableYears)
-                    {
-                        <MudSelectItem Value="@year">@year</MudSelectItem>
-                    }
-                </MudSelect>
-            </div>       
+            <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                <div style="width:200px;">
+                    <MudSelect T="int" Label="Izberi leto" Value=selectedYear ValueChanged="OnYearChangedAsync" OpenIcon="@Icons.Material.Filled.CalendarMonth" Adornment="Adornment.Start" Variant=Variant.Outlined AdornmentColor="Color.Primary">
+                        @foreach (int year in availableYears)
+                        {
+                            <MudSelectItem Value="@year">@year</MudSelectItem>
+                        }
+                    </MudSelect>
+                </div>
+            <MudIconButton Variant="Variant.Outlined" Size ="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.PictureAsPdf" OnClick="GeneratePdf"></MudIconButton>
+            </MudStack>
            <MudGrid Class="py-2">
                 @if (isAnyParticipant)
                 {
-                        <MudItem sm="4">
+                    <MudItem sm="4">
                             <MudPaper Outlined="true">
                                 <SfAccumulationChart Title="Razporeditev udeležencev po starostni skupini" EnableAnimation="true" EnableSmartLabels="true" CustomClass="custom-row">
                                     <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
@@ -61,7 +64,7 @@
                                 </SfAccumulationChart>
                             </MudPaper>
                         </MudItem>
-                        <MudItem sm="4">
+                    <MudItem sm="4">
                             <MudPaper Outlined="true">
                                 <SfAccumulationChart Title="Razporeditev udeležencev po spolu" EnableAnimation="true" EnableSmartLabels="true">
                                     <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
@@ -83,8 +86,7 @@
                 {
                     <MudItem sm="12"> 
                          <MudText Typo="Typo.h2" Color="Color.Tertiary">V izbranem letu ni zabeleženih udeležencev</MudText>
-                    </MudItem>
-           
+                    </MudItem>          
                 }
 
                 <MudItem  sm="@(isAnyParticipant ? 4 : 12)">
@@ -131,7 +133,7 @@
                     @if (questionResponse.SurveyQuestion.Type != SurveyQuestionType.Multiple && questionResponse.SurveyQuestion.Type != SurveyQuestionType.MultipleRepetitive)
                     {
                         <MudItem sm="12">
-                            <SurveyStatisticsChart QuestionResponseStatistics="@questionResponse"/>
+                            <SurveyStatisticsChart Width="@chartWidth" QuestionResponseStatistics="@questionResponse"/>
                         </MudItem>           
                     }
                 }

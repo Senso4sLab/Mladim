@@ -1,8 +1,68 @@
 ﻿@page "/login"
-@layout AuthLayout
-
+@layout LoginLayout
 <PageTitle>Prijava</PageTitle>
 
 
+@* <MudGrid>
+    <MudItem xs="12">       
+        <MudImage Src="logo.png" Height="40"/>              
+    </MudItem>
+    <MudItem xs="12">
+        <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
+            <lottie-player src="MladimLogo.json" background="transparent" speed="1" style="height: 200px;" loop autoplay></lottie-player>
+            <MudStack Row >
+                <MudButton Variant="Variant.Filled" Color="Color.Primary">O NAS</MudButton>
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary">VPIS</MudButton>
+            </MudStack>
+        </MudStack>
+    </MudItem>
+    <MudItem xs="12">
+       
+    </MudItem>
 
-<Login></Login>
+</MudGrid> *@
+
+    <div class="scroll-container">
+        <div class="carousel-primary">
+            @foreach (var youthOrganization in YouthOrganizations)
+            {
+                <img src="@youthOrganization.ImgUrl" />
+            }
+        </div>
+        <div class="carousel-primary carousel-secondary">
+            @foreach (var youthOrganization in YouthOrganizations)
+            {
+                <img src="@youthOrganization.ImgUrl" />
+            }
+        </div>
+    </div>
+
+
+@code
+ {
+    private IEnumerable<YouthOrganization> YouthOrganizations = new List<YouthOrganization>();
+
+    protected override void OnInitialized()
+    {
+        YouthOrganizations = GetYouthOrganizations().ToList();       
+    }
+
+    private IEnumerable<YouthOrganization> GetYouthOrganizations()
+    {
+        yield return new YouthOrganization("youth/youth1.jpeg");
+        yield return new YouthOrganization("youth/youth2.png");
+        yield return new YouthOrganization("youth/youth3.jpeg");
+        yield return new YouthOrganization("youth/youth4.jpg");
+       @*  yield return new YouthOrganization("youth/youth5.jpeg");
+        yield return new YouthOrganization("youth/youth6.jpg"); *@
+
+        
+    }
+
+
+
+    public record YouthOrganization(string ImgUrl);
+
+
+}
+

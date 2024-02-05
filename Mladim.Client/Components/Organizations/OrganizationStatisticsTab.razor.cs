@@ -6,6 +6,7 @@ using Mladim.Client.ViewModels.Organization;
 using Mladim.Client.ViewModels.Survey;
 using Mladim.Client.Models;
 using Microsoft.JSInterop;
+using System.Timers;
 
 
 namespace Mladim.Client.Components.Organizations;
@@ -43,7 +44,7 @@ public partial class OrganizationStatisticsTab
 
     private List<ActivityForGantt> activities = new List<ActivityForGantt>();
 
-
+    private string chartWidth = "100%";
     private IEnumerable<QuestionResponseStatisticsVM> SurveyStatistics { get; set; } = new List<QuestionResponseStatisticsVM>();
 
     protected override async Task  OnInitializedAsync()
@@ -62,9 +63,19 @@ public partial class OrganizationStatisticsTab
         }        
     }
 
+   
     private async Task GeneratePdf()
-    {      
-       await JS.InvokeVoidAsync("extractHtmlAndPrint", "org_statistic_id");                 
+    {
+        chartWidth = "680px";     
+
+        Task.Delay(1000).ContinueWith(async x =>
+        {
+            await JS.InvokeVoidAsync("extractHtmlAndPrint", "org_statistic_id");
+            chartWidth = "100%";
+            StateHasChanged();
+        });
+
+        
     }
 
     public async Task<List<ActivityForGantt>> UpcommingActivitiesAsync(int numOfUpcommingActivities)

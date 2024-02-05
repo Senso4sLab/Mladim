@@ -11,7 +11,7 @@
 
 @foreach (var subQuestionResponse in QuestionResponseStatistics.QuestionResponseTypes.SubQuestionResponseTypes)
         {
-            <SfChart Height="30" Width="100%">
+            <SfChart Height="30" Width="@Width">
                 <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
                 <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category"/>   
                 <ChartPrimaryYAxis Visible="false"/>
@@ -44,6 +44,9 @@
 
     [Parameter]
     public QuestionResponseStatisticsVM QuestionResponseStatistics { get; set; }
+    
+    [Parameter]
+    public string Width { get; set; } = "100%";
 
     private List<ResponseBar> GetStackedBarData(SurveyQuestionType type, SubQuestionResponseTypesVM questionResponseStatistics)
     {
