@@ -19,4 +19,9 @@ public interface IPopupService
     Task<bool> ShowPartnerDialog(string title, PartnerVM partner);
     Task<IEnumerable<AnonymousParticipantGroupVM>> ShowAnonymousParticipantGroupsDialog(string title, IEnumerable<AnonymousParticipantGroupVM> anonymousParticipantGroups);
     Task<bool> ShowGroupDialog(string title, GroupVM group, GroupType groupType, int organizationId);
+    Task<bool> ShowYouthOrganizationDialog(string title, YouthOrganization youthOrganization);
+
+    Task<bool> ShowAboutUsDialog(string title);
+
+    Task<bool> ShowLoginDialog(string title);
 }

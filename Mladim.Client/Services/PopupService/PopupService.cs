@@ -16,7 +16,7 @@ namespace Mladim.Client.Services.PopupService
         private DialogOptions DialogOptions =>
             new DialogOptions()
             {
-                CloseOnEscapeKey = true
+                CloseOnEscapeKey = true,
             };
 
 
@@ -108,6 +108,40 @@ namespace Mladim.Client.Services.PopupService
 
             return !result.Canceled;
         }
+
+        public async Task<bool> ShowYouthOrganizationDialog(string title, YouthOrganization youthOrganization)
+        {
+            var parameters = new DialogParameters();
+
+            parameters.Add("YouthOrganization", youthOrganization);
+
+            var dialog = await DialogService.ShowAsync<YouthOrganizationInfo>(title, parameters, DialogOptions);
+
+            var result = await dialog.Result;
+
+            return !result.Canceled;
+        }
+
+        public async Task<bool> ShowAboutUsDialog(string title)
+        {
+            var dialog = await DialogService.ShowAsync<ShowAboutUsDialog>(title, DialogOptions);
+
+            var result = await dialog.Result;
+
+            return !result.Canceled;
+        }
+
+        public async Task<bool> ShowLoginDialog(string title)
+        {
+            var dialog = await DialogService.ShowAsync<ShowLoginDialog>(title,DialogOptions);
+
+            var result = await dialog.Result;
+
+            return !result.Canceled;
+        }
+
+
+
 
         public async Task<IEnumerable<AnonymousParticipantGroupVM>> ShowAnonymousParticipantGroupsDialog(string title, IEnumerable<AnonymousParticipantGroupVM> participantInActivity)
         {

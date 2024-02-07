@@ -1,14 +1,15 @@
-﻿@using MudBlazor.Utilities;
+﻿@using Mladim.Client.Services.PopupService
+@using MudBlazor.Utilities;
 @inherits LayoutComponentBase
 
+
 <MudThemeProvider Theme="MyCustomTheme" />
-<MudDialogProvider />
-<MudSnackbarProvider />
+<MudDialogProvider CloseButton="true" Position="DialogPosition.Center" />
+<MudSnackbarProvider/>
 
-
-
+<MudLayout>
     @Body
-
+</MudLayout>
 
 
 @code
@@ -24,7 +25,6 @@
                 DrawerText = new MudColor("#000000"),
                 Success = new MudColor("#4da456"),
             },
-
 
             Typography = new Typography()
             {

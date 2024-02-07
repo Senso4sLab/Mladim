@@ -1,47 +1,49 @@
 ﻿@page "/login"
+@using Mladim.Client.Services.PopupService
 @layout LoginLayout
+@inject IPopupService popupService
+
+
 <PageTitle>Prijava</PageTitle>
 
 
-@* <MudGrid>
-    <MudItem xs="12">       
-        <MudImage Src="logo.png" Height="40"/>              
-    </MudItem>
-    <MudItem xs="12">
-        <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
-            <lottie-player src="MladimLogo.json" background="transparent" speed="1" style="height: 200px;" loop autoplay></lottie-player>
-            <MudStack Row >
-                <MudButton Variant="Variant.Filled" Color="Color.Primary">O NAS</MudButton>
-                <MudButton Variant="Variant.Filled" Color="Color.Secondary">VPIS</MudButton>
-            </MudStack>
-        </MudStack>
-    </MudItem>
-    <MudItem xs="12">
-       
-    </MudItem>
 
-</MudGrid> *@
 
-    <div class="scroll-container">
-        <div class="carousel-primary">
-            @foreach (var youthOrganization in YouthOrganizations)
-            {
-                <img src="@youthOrganization.ImgUrl" />
-            }
-        </div>
-        <div class="carousel-primary carousel-secondary">
-            @foreach (var youthOrganization in YouthOrganizations)
-            {
-                <img src="@youthOrganization.ImgUrl" />
-            }
+<div class="d-flex flex-column justify-content-around" style="height:100vh;">
+    <div style="padding-left:30px;">
+        <img src="logo.png" height="40"/>
+    </div>
+    <div class="text-center">
+        <lottie-player src="MladimLogo.json" background="transparent" speed="1" style="height: 210px;" loop autoplay></lottie-player>
+        <div class="text-center">
+            <button onclick="@(() =>OnAboutUsClicked())" type="button" class="btn btn-primary px-12 mx-1">O NAS</button>
+            <button onclick="@(() => OnLoginClicked())" type="button" class="btn btn-secondary px-12 mx-1">VPIS</button>
         </div>
     </div>
 
+    <div class="scroll-container" style="height:300px;">
+        <div class="carousel-primary @(stopAnimation ? "stop-animation" : "")">
+            @foreach (var youthOrganization in YouthOrganizations)
+            {
+                <img onclick="@(() => OnYouthOrganizationClicked(youthOrganization))" src="@youthOrganization.ImgUrl" />
+            }
+        </div>
+        <div class="carousel-primary carousel-secondary @(stopAnimation ? "stop-animation" : "")">
+            @foreach (var youthOrganization in YouthOrganizations)
+            {
+                <img onclick="@(() => OnYouthOrganizationClicked(youthOrganization))" src="@youthOrganization.ImgUrl" />
+            }
+        </div>
+    </div>
+</div>
+
 
 @code
- {
+{
     private IEnumerable<YouthOrganization> YouthOrganizations = new List<YouthOrganization>();
 
+
+    bool stopAnimation = false;
     protected override void OnInitialized()
     {
         YouthOrganizations = GetYouthOrganizations().ToList();       
@@ -53,16 +55,37 @@
         yield return new YouthOrganization("youth/youth2.png");
         yield return new YouthOrganization("youth/youth3.jpeg");
         yield return new YouthOrganization("youth/youth4.jpg");
-       @*  yield return new YouthOrganization("youth/youth5.jpeg");
-        yield return new YouthOrganization("youth/youth6.jpg"); *@
+    }
 
-        
+    private async Task OnYouthOrganizationClicked(YouthOrganization youthOrganization)
+    {
+        stopAnimation = true;
+        StateHasChanged();
+        var result = await popupService.ShowYouthOrganizationDialog("test", youthOrganization);
+        stopAnimation = false;
+        StateHasChanged();
+    }
+
+    private async Task OnAboutUsClicked()
+    {
+        stopAnimation = true;
+        StateHasChanged();
+        var result = await popupService.ShowAboutUsDialog("");
+        stopAnimation = false;
+        StateHasChanged();
+    }
+
+    private async Task OnLoginClicked()
+    {
+        stopAnimation = true;
+        StateHasChanged();
+        var result = await popupService.ShowLoginDialog("");
+        stopAnimation = false;
+        StateHasChanged();
     }
 
 
 
-    public record YouthOrganization(string ImgUrl);
-
-
+   
 }
 
