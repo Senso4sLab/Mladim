@@ -66,7 +66,7 @@ public partial class ActivityResults
 
             foreach (var question in surveyQuestions)
             {
-                foreach (var questionText in question.QuestionTexts)
+                foreach (var questionText in question.Texts) // TODO preveri
                     csv.WriteField(questionText);
             }
 

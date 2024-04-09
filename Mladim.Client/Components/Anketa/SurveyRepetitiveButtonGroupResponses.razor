@@ -24,9 +24,9 @@
 
 
 <MudPaper Class="p-2" Elevation="3">
-    <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@ButtonResponseGroup.Content</MudText>
+    <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@Response.SurveyQuestion.Header</MudText>
 
-    @foreach(var buttonResponse in ButtonResponseGroup.GroupedByQuestionResponses)
+    @foreach(var buttonResponse in Response.GroupedByQuestionResponses)
     {
         <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@buttonResponse.SubContent</MudText>
         <table class="table">
@@ -66,7 +66,7 @@
 @code
 {
     [Parameter]
-    public SurveyRepetitiveButtonGroupResponsesGroupedByQuestion ButtonResponseGroup { get; set; } = default!;
+    public SurveyResponsesGroupedByMultipleSelectableQuestionVM Response { get; set; } = default!;
 
     [Parameter]
     public CogntigencyTableContext Context { get; set; } = default!;    

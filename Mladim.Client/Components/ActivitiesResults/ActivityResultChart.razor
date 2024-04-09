@@ -1,4 +1,5 @@
 ﻿@using Mladim.Client.ViewModels.Survey;
+@using Mladim.Domain.Enums
 @using Syncfusion.Blazor.Charts;
 @using Mladim.Client.Components.Anketa;
 
@@ -39,29 +40,29 @@
         </MudPaper>
     </MudItem>
 
-    @foreach(var responsesGroup in SurveyResponsesGroupByQuestions)
+    @foreach(var responseGroup in SurveyResponsesGroupByQuestions)
     {
         <MudItem sm="12">
-            @if(responsesGroup is SurveyBoleanResponsesGroupedByQuestion boleanResponse)
+            @switch(responseGroup.SurveyQuestion.Type)
             {
-                <BoleanResponseChart Response="boleanResponse"/>
-            }
-            else if (responsesGroup is SurveyRatingResponsesGroupedByQuestion ratingResponse)
-            {
-                <RatingReponseChart Response="ratingResponse"/>
-            }
-            else if (responsesGroup is SurveyButtonResponsesGroupedByQuestion buttonResponse)
-            {
-                <ButtonGroupReponseChart Response="buttonResponse"/>
-            }
-            else if (responsesGroup is SurveyRepetitiveButtonGroupResponsesGroupedByQuestion repetitiveButtonResponse)
-            {
-                <RepetitiveButtonGroupReponseChart Response="repetitiveButtonResponse" />
-            }
-            else if(responsesGroup is SurveyTextResponsesGroupedByQuestion textReponse)
-            {               
-               <SurveyTextResponses TextResponseGroup="textReponse" />               
-            }
+                case SurveyQuestionType.Boolean:
+                    <BoleanResponseChart Response="responseGroup as SurveyResponsesGroupedBySelectableQuestionVM" />
+                    break;
+                 case SurveyQuestionType.Rating:
+                    <RatingReponseChart Response="responseGroup as SurveyResponsesGroupedBySelectableQuestionVM" />
+                    break;
+                case SurveyQuestionType.Text:
+                    <SurveyTextResponses Response="responseGroup as SurveyTextResponsesGroupedByQuestion" />
+                    break;
+                case SurveyQuestionType.Multiple:
+                    <ButtonGroupReponseChart Response="responseGroup as SurveyResponsesGroupedByMultipleSelectableQuestionVM" />
+                    break;
+                case SurveyQuestionType.MultipleRepetitive:
+                    <RepetitiveButtonGroupReponseChart Response="responseGroup as SurveyResponsesGroupedByMultipleSelectableQuestionVM" />
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }           
         </MudItem>
     }    
 

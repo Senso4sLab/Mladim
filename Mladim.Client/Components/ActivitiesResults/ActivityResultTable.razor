@@ -26,46 +26,28 @@
     </MudStack>
       
        
-    @foreach (var responseGroup in SurveyResponsesGroupByQuestions)
+    @foreach (var response in SurveyResponsesGroupByQuestions)
     {
-
-        switch (responseGroup.SurveyQuestionVM.Type)
+        switch (response.SurveyQuestion.Type)
         {
-            case SurveyQuestionType.Boolean :
+            case SurveyQuestionType.Boolean:
+                <SurveyBoleanReponses Response="response as SurveyResponsesGroupedBySelectableQuestionVM" Context="cogntigencyTableContext" />
                 break;
             case SurveyQuestionType.Rating:
+                <SurveyRatingResponses Response="response as SurveyResponsesGroupedBySelectableQuestionVM" Context="cogntigencyTableContext" />
                 break;
             case SurveyQuestionType.Multiple:
+                <SurveyButtonGroupResponses Response="response as SurveyResponsesGroupedByMultipleSelectableQuestionVM" Context="cogntigencyTableContext" />
                 break;
             case SurveyQuestionType.MultipleRepetitive:
+                <SurveyRepetitiveButtonGroupResponses Response="response as SurveyResponsesGroupedByMultipleSelectableQuestionVM" Context="cogntigencyTableContext" />
                 break;
             case SurveyQuestionType.Text:
+                <SurveyTextResponses TextResponseGroup="response as SurveyResponsesGroupedByTextQuestionVM" />
                 break;
             default:
                 throw new NotImplementedException();
-        }
-
-
-       @*  if (surveyResponsesGroupByQuestion is SurveyRatingResponsesGroupedByQuestion ratingResponses)
-        {
-            <SurveyRatingResponses RatingResponseGroup="ratingResponses" Context="cogntigencyTableContext" />
-        }
-        else if (surveyResponsesGroupByQuestion is SurveyBoleanResponsesGroupedByQuestion boleanResponses)
-        {
-            <SurveyBoleanReponses BoleanResponseGroup="boleanResponses" Context="cogntigencyTableContext" />
-        }
-        else if(surveyResponsesGroupByQuestion is SurveyButtonResponsesGroupedByQuestion buttonResponses)
-        {
-            <SurveyButtonGroupResponses ButtonResponseGroup="buttonResponses" Context="cogntigencyTableContext" />
-        }
-        else if(surveyResponsesGroupByQuestion is SurveyTextResponsesGroupedByQuestion textResponses)
-        {
-            <SurveyTextResponses TextResponseGroup="textResponses" />
-        }
-        else if (surveyResponsesGroupByQuestion is SurveyRepetitiveButtonGroupResponsesGroupedByQuestion repetitiveButtonResponses)
-        {
-            <SurveyRepetitiveButtonGroupResponses ButtonResponseGroup="repetitiveButtonResponses" Context="cogntigencyTableContext" />
-        } *@
+        }      
     }
 </MudStack>
 

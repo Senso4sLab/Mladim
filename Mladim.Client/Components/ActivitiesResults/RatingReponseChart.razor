@@ -1,4 +1,5 @@
 ﻿@using Mladim.Client.Models;
+@using Mladim.Domain.Models.Survey.ParticipantResponseTypes;
 @using Mladim.Client.ViewModels.Survey;
 @using Syncfusion.Blazor.Charts;
 @using Mladim.Client.Services.SubjectServices.Contracts;
@@ -7,7 +8,7 @@
 @using System.Collections.ObjectModel;
 
 
-<MudText Color="Color.Tertiary" Typo="Typo.h2">@Response.SubContent</MudText>
+<MudText Color="Color.Tertiary" Typo="Typo.h2">@Response.SurveyQuestion.Texts.FirstOrDefault()</MudText>
 <SfChart Height="30" >
     <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
     <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
@@ -16,10 +17,10 @@
         <ChartAreaBorder Width="0"></ChartAreaBorder>
     </ChartArea>
     <ChartSeriesCollection>
-        @foreach (var seriesData in ResponseData)
+        @foreach (var bar in StackBars)
         {
-            <ChartSeries DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName" Type="ChartSeriesType.StackingBar100">
-                <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius"/>
+            <ChartSeries DataSource="@bar.Data" Fill="@bar.Fill" XName="@bar.XName" YName="@bar.YName" Type="ChartSeriesType.StackingBar100">
+                <ChartCornerRadius BottomLeft="@bar.LeftRadius" TopLeft="@bar.LeftRadius" BottomRight="@bar.RightRadius" TopRight="@bar.RightRadius"/>
                 <ChartMarker>
                     <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
                         <ChartDataLabelFont Color="#ffffff"/>                   
@@ -32,53 +33,42 @@
 
 @code
 {
-    [Parameter]
-    public SurveyRatingResponsesGroupedByQuestion Response { get; set; } = default!; 
+    [Parameter] 
+    public SurveyResponsesGroupedBySelectableQuestionVM Response { get; set; } = default!;
 
-    public List<ResponseBar> ResponseData = new List<ResponseBar>();
+    public List<ResponseBar> StackBars = new List<ResponseBar>();
+
+    PercantagesUnit percantageResponseType = new PercantagesUnit();
 
     protected override void OnInitialized()
-    {
-        int total = this.Response.ParticipantQuestionResponses.Count;       
+    {        
+        var stackBars = percantageResponseType.ResponseTypeByCriteria(Response, new []{ ParticipantPredicate.None })
+            .FirstOrDefault()?
+            .ReponseTypesPerCriterion
+            .Where(rt => rt.Value > 0)
+            .Select(rt => (type: rt.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(rt.ResponseType.GetDisplayAttribute(), rt.Value) })))
+            .OrderBy(rt => rt.type)
+            .Select(bv => ResponseBar.CreateResponseBar(Fill(bv.type), bv.barList))
+            .ToList();
 
-        if (Response is ISelectableQuestionReponseCalculator selectable)
-        {
-            var responseBars = selectable.ResponseTypeByCriterion(ParticipantPredicate.None.Name, ParticipantPredicate.None.Predicate)
-                .ReponseTypesPerCriterion
-                .Select(rt => rt.ToPercent(total))
-                .Where(rt => rt.Value > 0)
-                .Select(rt => (type: rt.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(rt.ResponseType.GetDisplayAttribute(), rt.Value) })))
-                .OrderBy(rt => rt.type)
-                .Select(bv => ResponseBar.CreateResponseBar(Fill(bv.type), bv.barList))
-                .ToList();
+        if (stackBars is null)
+            return;            
 
-            responseBars.First().LeftRadius = 10;
-            responseBars.Last().RightRadius = 10;
+        stackBars.First().LeftRadius = 10;
+        stackBars.Last().RightRadius = 10;
 
-            this.ResponseData.AddRange(responseBars);           
-        }
+        this.StackBars.AddRange(stackBars);
     }
 
-    
-
-
-    private string Fill(Enum responseType) 
+    private string Fill(Enum responseType) => responseType switch
     {
-        if (responseType is SurveyRatingResponseType.OneSmile)
-            return "#7cc769";
-        else if (responseType is SurveyRatingResponseType.TwoSmiles)        
-            return "#394241";        
-        else if (responseType is SurveyRatingResponseType.ThreeSmiles)        
-            return "#ffc700";        
-        else if (responseType is SurveyRatingResponseType.FourSmiles)        
-            return "#8ED974";        
-        else if (responseType is SurveyRatingResponseType.FiveSmiles)        
-            return "#4DA456";        
-        else
-            return "#000000";
-    }
-
-    
+        SurveyRatingResponseType.OneSmile =>    "#7cc769",
+        SurveyRatingResponseType.TwoSmiles =>   "#394241",
+        SurveyRatingResponseType.ThreeSmiles => "#ffc700",
+        SurveyRatingResponseType.FourSmiles =>  "#8ED974",
+        SurveyRatingResponseType.FiveSmiles =>  "#4DA456",
+        _ => throw new NotImplementedException(),
+    };    
 }
 
 

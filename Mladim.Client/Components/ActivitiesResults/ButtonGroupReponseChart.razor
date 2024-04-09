@@ -7,11 +7,11 @@
 
 @if (Response != null)
 {
-    <MudText  Typo="Typo.h2" Color="Color.Tertiary">@Response.Content</MudText>       
-    @foreach (var buttonResponse in Response.GroupedByQuestionResponses)
+    <MudText  Typo="Typo.h2" Color="Color.Tertiary">@Response.SurveyQuestion.Header</MudText>       
+    @foreach (var response in Response.SelectableResponseGroups)
     {
         <MudStack Spacing="1">       
-            <MudText  Typo="Typo.h2" Color="Color.Tertiary">@buttonResponse?.SubContent</MudText>
+            <MudText  Typo="Typo.h2" Color="Color.Tertiary">@response.SurveyQuestion.Texts.FirstOrDefault()</MudText>
             <SfChart Height="30">
                 <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>                
                 <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
@@ -20,7 +20,7 @@
                     <ChartAreaBorder Width="0"></ChartAreaBorder>
                 </ChartArea>
                 <ChartSeriesCollection>
-                    @foreach (var seriesData in GetResponseBars(buttonResponse))
+                        @foreach (var seriesData in GetStackBars(response))
                     {
                         <ChartSeries DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName" Type="ChartSeriesType.StackingBar100">
                             <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius"/>
@@ -35,54 +35,43 @@
             </SfChart>
          </MudStack>
     }
-
 } 
-
-
 
 
 @code 
 {
     [Parameter]
-    public SurveyButtonResponsesGroupedByQuestion Response { get; set; } = default!;  
+    public SurveyResponsesGroupedByMultipleSelectableQuestionVM Response { get; set; } = default!;
 
-                                                     
-    private IEnumerable<ResponseBar> GetResponseBars(SurveyResponsesGroupedBySelectableQuestionVM ButtonResponse)
+    PercantagesUnit percantageResponseType = new PercantagesUnit();
+
+
+    private IEnumerable<ResponseBar> GetStackBars(SurveyResponsesGroupedBySelectableQuestionVM selectableResponse)
     {
-        int total = ButtonResponse.ParticipantQuestionResponses.Count;
+        var stackBars = percantageResponseType.ResponseTypeByCriteria(selectableResponse, new[] { ParticipantPredicate.None })
+            .FirstOrDefault()?
+            .ReponseTypesPerCriterion
+            .Where(rt => rt.Value > 0)
+            .Select(rt => (type: rt.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(rt.ResponseType.GetDisplayAttribute(), rt.Value) })))
+            .OrderBy(rt => rt.type)
+            .Select(bv => ResponseBar.CreateResponseBar(Fill(bv.type), bv.barList))
+            .ToList();
 
-        if (ButtonResponse is ISelectableQuestionReponseCalculator selectable)
-        {
-            var responseBars = selectable.ResponseTypeByCriterion(ParticipantPredicate.None.Name, ParticipantPredicate.None.Predicate)
-                  .ReponseTypesPerCriterion
-                  .Select(rt => rt.ToPercent(total))
-                  .Where(rt => rt.Value > 0)
-                  .Select(rt => (type: rt.ResponseType, barList: new List<BarValue>(new[] { BarValue.CreateBarValue(rt.ResponseType.GetDisplayAttribute(), rt.Value) })))
-                  .OrderBy(rt => rt.type)
-                  .Select(bv => ResponseBar.CreateResponseBar(Fill(bv.type), bv.barList))
-                  .ToList();
+        if (stackBars is null)
+            return Enumerable.Empty<ResponseBar>(); 
 
+        stackBars.First().LeftRadius = 10;
+        stackBars.Last().RightRadius = 10;
 
-            responseBars.First().LeftRadius = 10;
-            responseBars.Last().RightRadius = 10;
-
-            return responseBars;
-        }
-
-        return Enumerable.Empty<ResponseBar>();
+        return stackBars;       
     }
 
-    private string Fill(Enum responseType)
+    private string Fill(Enum responseType) => responseType switch
     {
-        if (responseType is SurveyButtonResponseType.VeryCorrect)
-            return "#4DA456";
-        else if (responseType is SurveyButtonResponseType.PartiallyCorrect)
-            return "#394241";
-        else if (responseType is SurveyButtonResponseType.Correct)
-            return "#ffc700";
-        else if (responseType is SurveyButtonResponseType.Incorrect)
-            return "#8ED974";      
-        else
-            return "#000000";
-    }
+        SurveyButtonResponseType.VeryCorrect => "#4DA456",
+        SurveyButtonResponseType.PartiallyCorrect => "#394241",
+        SurveyButtonResponseType.Correct => "#ffc700",
+        SurveyButtonResponseType.Incorrect => "#8ED974",
+        _ => throw new NotImplementedException(),
+    };    
 }

@@ -30,10 +30,10 @@
 
 @code {
     [CascadingParameter]
-    public MudDialogInstance MudDialog { get; set; }
+    public MudDialogInstance MudDialog { get; set; } = default!;
 
     [Parameter]
-    public string Question{ get; set; }
+    public string Question { get; set; } = default!;
 
     [Parameter]
     public List<ParticipantTextResponse> AnonymousCommands { get; set; } = new();

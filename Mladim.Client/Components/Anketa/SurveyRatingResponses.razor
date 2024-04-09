@@ -23,7 +23,7 @@
 
 
 <MudPaper Class="p-2" Elevation="3">
-    <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@RatingResponseGroup.SubContent</MudText>
+    <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@Response.SurveyQuestion.Texts.FirstOrDefault()</MudText>
 
     <table class="table">
         <thead>
@@ -56,7 +56,7 @@
                 <tr class="d-flex">
                     <th scope="row" class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-3">@row.Criterion</th>
 
-                    @foreach (var column in RatingResponseGroup.AvailableResponseTypes.ToList())
+                    @foreach (var column in Response.AvailableResponseTypes.ToList())
                     {
                         <td class="@(row.Criterion == "Skupaj" ? "bold_font": "normal_font") col-1">@row.ReponseTypesPerCriterion.FirstOrDefault(rt => rt.ResponseType.ToString() == column.ToString())?.Value</td>
                     }
@@ -73,7 +73,7 @@
 @code 
 {
     [Parameter]
-    public SurveyRatingResponsesGroupedByQuestion RatingResponseGroup { get; set; } = default!;
+    public SurveyResponsesGroupedBySelectableQuestionVM Response { get; set; } = default!;
 
     [Parameter]
     public CogntigencyTableContext Context { get; set; } = default!;
@@ -81,7 +81,7 @@
     private ContingencyTable Table = default!;
 
     private ContingencyTable GetContingencyTable() =>
-        this.Context.GetContingencyTableFor(RatingResponseGroup);
+        this.Context.GetContingencyTableFor(Response);
 
     protected override void OnParametersSet() =>
         this.Table = GetContingencyTable();   
