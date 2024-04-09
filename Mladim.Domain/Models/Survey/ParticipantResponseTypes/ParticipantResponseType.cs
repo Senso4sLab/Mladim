@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Models.Survey.ParticipantResponseTypes;
 
+
+
 public record ParticipantResponseType(Enum ResponseType, float Value)
 {
     public static ParticipantResponseType Zero(Enum responseType) =>
@@ -13,11 +15,7 @@ public record ParticipantResponseType(Enum ResponseType, float Value)
 
     public static ParticipantResponseType Create(Enum responseType, float value) =>
          new ParticipantResponseType(responseType, value);
-
-
-    public ParticipantResponseType ToPercent(float numOfParticipants) =>
-        new ParticipantResponseType(ResponseType, (float)Math.Round((this.Value * 100 / numOfParticipants), 1));
-
+    
 }
 
 public class ParticipantResponseTypeByCriterion //ena vrstica
@@ -30,8 +28,8 @@ public class ParticipantResponseTypeByCriterion //ena vrstica
         this.ReponseTypesPerCriterion = reponseTypesPerCriterion.ToList();
     }    
 
-    public ParticipantResponseTypeByCriterion ToPercent(float numOfParticipants) =>
-       new ParticipantResponseTypeByCriterion(this.Criterion, ReponseTypesPerCriterion.Select(rt => rt.ToPercent(numOfParticipants)).ToList());
+    //public ParticipantResponseTypeByCriterion ToPercent(float numOfParticipants) =>
+    //   new ParticipantResponseTypeByCriterion(this.Criterion, ReponseTypesPerCriterion.Select(rt => rt.ToPercent(numOfParticipants)).ToList());
 
 }
 public class ContingencyTable

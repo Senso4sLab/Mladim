@@ -100,7 +100,7 @@ public class SurveyProfile : Profile
             var questionMultiButtonResponse = new QuestionMultiButtonResponseVM(source.UniqueQuestionId);
 
             foreach(var reponseType in source.Response)
-                questionMultiButtonResponse.AddQuestionResponse(new QuestionButtonResponseVM(source.UniqueQuestionId) { Response = reponseType });
+                questionMultiButtonResponse.AddResponse(new QuestionButtonResponseVM(source.UniqueQuestionId) { Response = reponseType });
 
             return questionMultiButtonResponse;
         }
@@ -127,7 +127,7 @@ public class SurveyProfile : Profile
             var questionMultiRepetitiveButtonResponse = new QuestionMultiRepetitiveButtonResponseVM(source.UniqueQuestionId);
 
             foreach (var reponseType in source.Response)
-                questionMultiRepetitiveButtonResponse.AddQuestionResponse(new QuestionRepetitiveButtonResponseVM(source.UniqueQuestionId) { Response = reponseType });
+                questionMultiRepetitiveButtonResponse.AddResponse(new QuestionRepetitiveButtonResponseVM(source.UniqueQuestionId) { Response = reponseType });
 
             return questionMultiRepetitiveButtonResponse;           
         }

@@ -25,9 +25,9 @@ public partial class ActivityResults
     [Inject]
     public IJSRuntime JS { get; set; }
 
-
     private IEnumerable<SurveyQuestionVM> surveyQuestions = new List<SurveyQuestionVM>();
-    private IEnumerable<AnonymousSurveyResponseVM> surveyResponses = new List<AnonymousSurveyResponseVM>(); // AnonymousSurveyResponseVM one anonymous with multiple question responses
+    // AnonymousSurveyResponseVM one anonymous with multiple question responses
+    private IEnumerable<AnonymousSurveyResponseVM> surveyResponses = new List<AnonymousSurveyResponseVM>(); 
     private IEnumerable<SurveyResponsesGroupedByQuestionVM> SurveyResponsesGroupByQuestions = new List<SurveyResponsesGroupedByQuestionVM>();
     protected async override Task OnInitializedAsync()
     {
@@ -40,12 +40,13 @@ public partial class ActivityResults
     }
 
     private IEnumerable<SurveyResponsesGroupedByQuestionVM> GetSurveyResponsesGroupByQuestion(int activityId) =>
-        surveyResponses.SelectMany(sr => sr.Responses, (asr, response) => ParticipantQuestionResponseVM.Create(asr.AnonymousParticipant, response))
-            .GroupBy(pqr => pqr.QuestionResponse.UniqueQuestionId)
-            .Select(g => SurveyResponsesGroupedByQuestionVM.Create(surveyQuestions.FirstOrDefault(sq => sq.UniqueQuestionId == g.Key), g))
+        surveyResponses.SelectMany(sr => sr.Responses, (asr, response) => (response.UniqueQuestionId, ParticipantResponse: ParticipantQuestionResponseVM.Create(asr.AnonymousParticipant, response)))
+            .GroupBy(pqr => pqr.UniqueQuestionId, pqr => pqr.ParticipantResponse)
+            .Select(g => SurveyResponsesGroupedByQuestionVM.Create(GetSurveyQuestionById(g.Key), g))
             .ToList();
 
-
+    private SurveyQuestionVM? GetSurveyQuestionById(int id) =>
+        surveyQuestions.FirstOrDefault(sq => sq.UniqueQuestionId == id);
 
     private async Task OnClickCsvExportFile()
     {

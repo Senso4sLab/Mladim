@@ -51,7 +51,7 @@
 
         if (ButtonResponse is ISelectableQuestionReponseCalculator selectable)
         {
-            var responseBars = selectable.ParticipantsResponseTypeForCriterion(ParticipantPredicate.None.Name, ParticipantPredicate.None.Predicate)
+            var responseBars = selectable.ResponseTypeByCriterion(ParticipantPredicate.None.Name, ParticipantPredicate.None.Predicate)
               .ReponseTypesPerCriterion
               .Select(rt => rt.ToPercent(total))
               .Where(rt => rt.Value > 0)

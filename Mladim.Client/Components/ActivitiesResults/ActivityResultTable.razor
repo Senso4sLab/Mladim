@@ -26,8 +26,26 @@
     </MudStack>
       
        
-    @foreach (var surveyResponsesGroupByQuestion in SurveyResponsesGroupByQuestions)
+    @foreach (var responseGroup in SurveyResponsesGroupByQuestions)
     {
+
+        switch (responseGroup.SurveyQuestionVM.Type)
+        {
+            case SurveyQuestionType.Boolean :
+                break;
+            case SurveyQuestionType.Rating:
+                break;
+            case SurveyQuestionType.Multiple:
+                break;
+            case SurveyQuestionType.MultipleRepetitive:
+                break;
+            case SurveyQuestionType.Text:
+                break;
+            default:
+                throw new NotImplementedException();
+        }
+
+
        @*  if (surveyResponsesGroupByQuestion is SurveyRatingResponsesGroupedByQuestion ratingResponses)
         {
             <SurveyRatingResponses RatingResponseGroup="ratingResponses" Context="cogntigencyTableContext" />
