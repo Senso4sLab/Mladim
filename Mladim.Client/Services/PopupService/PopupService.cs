@@ -38,10 +38,6 @@ namespace Mladim.Client.Services.PopupService
             return !result.Canceled;
         }
 
-       
-
-
-
         public void ShowSnackbarError(string content = "Prišlo je do napake, poskusite ponovno")
         {           
             this.SnackBar.Add(content, Severity.Error);
@@ -113,9 +109,10 @@ namespace Mladim.Client.Services.PopupService
         {
             var parameters = new DialogParameters();
 
+
             parameters.Add("YouthOrganization", youthOrganization);
 
-            var dialog = await DialogService.ShowAsync<YouthOrganizationInfo>(title, parameters, DialogOptions);
+            var dialog = await DialogService.ShowAsync<YouthOrganizationInfo>(title, parameters, new DialogOptions() { CloseButton = false, NoHeader = true, FullWidth = true });
 
             var result = await dialog.Result;
 

@@ -1,10 +1,11 @@
 ﻿
+
 <MudForm @ref="@loginForm" Model="@loginUser" Validation="@(loginUserValidator.ValidateValue)" OnValidSubmit="OnValidSubmit">
-    <MudStack Justify="Justify.Center" Spacing="2" style="width:500px;margin: 0px auto;">
+    <MudStack Justify="Justify.Center" Spacing="2">
 
       @*   <MudText Typo="Typo.h5" style="margin: 10px auto;">Dobrodošel na vstopni strani</MudText> *@
 
-        <MudImage Src="logo.png" style="width:250px; margin: 40px auto;"></MudImage>
+        <MudImage Src="logo.png" Height="50" style="margin: 40px auto;"></MudImage>
 
         @if (!string.IsNullOrWhiteSpace(_errorMessage))
         {

@@ -29,40 +29,27 @@
             @if (showSurvey)
             {
                 <EditForm Model="@SurveyResponse" OnValidSubmit="@SurveyValidSubmit">
-                    <ObjectGraphDataAnnotationsValidator />
-                    
-                    @foreach (var (question, response) in SurveyResponse)
-                    {
-                        <MudText Typo="Typo.h2" Color="Color.Tertiary" Class="py-3">@question.Texts.FirstOrDefault()</MudText>
-
-                        if (response is QuestionTextResponseVM textResponse)
-                        {                           
-                            <TextQuestion SurveryResponse="textResponse" />
-                        }
-                        else if (response is QuestionRatingResponseVM ratingResponse)
-                        {                            
-                            <RatingQuestion SurveryResponse="ratingResponse"/>
-                        }
-                        else if (response is QuestionBooleanResponseVM boleanResponse)
+                    <ObjectGraphDataAnnotationsValidator />                    
+                    @foreach (var surveyResponse in SurveyResponse)
+                    {  
+                        switch(surveyResponse.Response)
                         {
-                            <BooleanQuestion SurveryResponse="boleanResponse"></BooleanQuestion>
+                            case QuestionTextResponseVM response:
+                                <TextQuestion SurveyQuestion="@surveyResponse.Questions" SurveryResponse="response" />
+                                break;
+                            case QuestionRatingResponseVM response:
+                                <RatingQuestion SurveyQuestion="@surveyResponse.Questions" SurveryResponse="response" />
+                                break;
+                            case QuestionBooleanResponseVM response:
+                                <BooleanQuestion SurveyQuestion="@surveyResponse.Questions" SurveryResponse="response" />
+                                break;
+                            case QuestionMultiButtonResponseVM response:
+                                <MultipleButtonQuestion SurveyQuestion="@surveyResponse.Questions" SurveryResponse="response" />
+                                break;
+                            case QuestionMultiRepetitiveButtonResponseVM response:
+                                <MultiRepetitiveButtonQuestion SurveyQuestion="@surveyResponse.Questions" SurveryResponse="response" />
+                                break;
                         }
-                        else if (response is QuestionMultiButtonResponseVM multiButtonResponse)
-                        {
-                            @foreach(var subQuestion in question.Texts.Take(1 ..))
-                            {
-                                <MudText Color="Color.Tertiary" Typo="Typo.h1" Class="py-3">@subQuestion</MudText>
-                                <ButtonQuestion SurveyResponse="multiButtonResponse" />
-                            }
-                        }                    
-                        else if (response is QuestionMultiRepetitiveButtonResponseVM multiRepetitiveButtonResponse)
-                        {
-                            @foreach (var subQuestion in question.Texts.Take(1..))
-                            {
-                                <MudText Color="Color.Tertiary" Typo="Typo.h1" Class="py-3">@subQuestion</MudText>
-                                <RepetitiveButtonQuestion SurveyResponse="multiRepetitiveButtonResponse" />
-                            }
-                        }                 
                     }                   
                     <button  class="btn btn-primary my-4" type="submit">POŠLJI</button>
                 </EditForm>

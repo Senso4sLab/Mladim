@@ -13,8 +13,8 @@ public class DateTimeRange : IEquatable<DateTimeRange>
     private DateTimeRange(DateTime startDate, DateTime endDate, TimeSpan startTime, TimeSpan endTime) =>
         (StartDate, EndDate, StartTime, EndTime) = (startDate, endDate, startTime, endTime);   
 
-    public static DateTimeRange Create(DateTime start, DateTime end, int startHour = 0, int endHour = 0) => 
-        new DateTimeRange(start, end, TimeSpan.FromHours(startHour), TimeSpan.FromHours(endHour));
+    public static DateTimeRange Create(DateTime start, DateTime end) => 
+        new DateTimeRange(start, end, TimeSpan.Zero, TimeSpan.Zero);
        
     public void OffsetDateTimeForRepetitiveInterval(ActivityRepetitiveInterval repetitiveInterval)
     {
@@ -46,10 +46,10 @@ public class DateTimeRange : IEquatable<DateTimeRange>
 
 
     public bool IsDateTimeInRange(DateTime dateTime) => 
-        StartDate < dateTime && EndDate > dateTime;
+        StartDate <= dateTime && EndDate >= dateTime;
 
-    public bool IsSameYearAs(int year) =>
-        StartDate.Year == EndDate.Year && StartDate.Year == year;
+    public bool OverlapWith(DateTimeRange range) =>
+       range.StartDate <= this.StartDate && range.EndDate >= this.EndDate;
     public override bool Equals(object? obj) =>
         obj is DateTimeRange && Equals((DateTimeRange)obj);
     public bool Equals(DateTimeRange? other) =>

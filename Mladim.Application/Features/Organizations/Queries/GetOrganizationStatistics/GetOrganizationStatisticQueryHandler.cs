@@ -32,7 +32,7 @@ public class GetOrganizationStatisticQueryHandler : IRequestHandler<GetOrganizat
        
         ArgumentNullException.ThrowIfNull(organization);
 
-        if (organization.Attributes.CreatedStamp.Year > request.Year)
+        if (organization.Attributes.CreatedStamp > request.DateTimeRange.EndDate)
             return OrganizationStatisticQueryDto.Empty;
 
         var currentDate = DateTime.UtcNow;
@@ -42,8 +42,8 @@ public class GetOrganizationStatisticQueryHandler : IRequestHandler<GetOrganizat
 
             var projects = await this.UnitOfWork.ProjectRepository
                 .GetAllAsync(p => p.OrganizationId == request.OrganizationId);
-               
-            projects = projects.Where(p => p.TimeRange.IsSameYearAs(request.Year)).ToList();    
+
+            projects = projects.Where(p => p.TimeRange.OverlapWith(request.DateTimeRange));  
 
             var activeProjects = projects.Where(p => p.TimeRange.IsDateTimeInRange(currentDate))
                 .Select(p => NamedEntityDto.Create(p.Id, p.Attributes.Name))
@@ -58,7 +58,7 @@ public class GetOrganizationStatisticQueryHandler : IRequestHandler<GetOrganizat
             var activities = await this.UnitOfWork.ActivityRepository
               .GetActivitiesWithParticipantsAsync(a => a.Project.OrganizationId == request.OrganizationId);
 
-            activities = activities.Where(a => a.TimeRange.IsSameYearAs(request.Year)).ToList();
+            activities = activities.Where(a => a.TimeRange.OverlapWith(request.DateTimeRange));
 
             var activeActivities = activities.Where(a => a.TimeRange.IsDateTimeInRange(currentDate))
                 .Select(a => NamedEntityDto.Create(a.Id, a.Attributes.Name))

@@ -6,6 +6,7 @@
 
 
 <div>
+    <MudText Typo="Typo.h2" Color="Color.Tertiary" Class="py-3">@SurveyQuestion.Texts.FirstOrDefault()</MudText>
     <ValidationMessage style="margin-bottom:0.4rem;" For="@(() => SurveryResponse.Response)" />
     <div class="row">   
         <div class="col-12">
@@ -22,11 +23,14 @@
 
 
 
-@code {
-
+@code 
+{
+    [Parameter]
+    public SurveyQuestionVM SurveyQuestion { get; set; } = default!;
 
     [Parameter]
-    public QuestionRatingResponseVM SurveryResponse { get; set; }
+    public QuestionRatingResponseVM SurveryResponse { get; set; } = default!; 
+
 
     private List<SmileRate> SmileRates = new List<SmileRate>();   
 

@@ -67,7 +67,7 @@ body
     }
 }
 
-.carousel-primary:hover,
+/*.carousel-primary:hover,
 .carousel-primary:hover~.carousel-secondary {
     -webkit-animation-play-state: paused;
     -moz-animation-play-state: paused;
@@ -88,7 +88,11 @@ body
     -moz-animation-play-state: paused;
     -o-animation-play-state: paused;
     animation-play-state: paused;
-}
+}*/
+
+
+
+
 
 .stop-animation {
     -webkit-animation-play-state: paused !important;

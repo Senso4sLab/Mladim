@@ -7,7 +7,8 @@
 
 
 
-<div class="row">   
+<div class="row">
+    <MudText Typo="Typo.h2" Color="Color.Tertiary" Class="py-3">@SurveyQuestion.Texts.FirstOrDefault()</MudText>
     <ValidationMessage For="@(() => SurveryResponse.Response)"></ValidationMessage>
     <div class="col-12">
         <div class="btn-group" role="group">
@@ -25,16 +26,16 @@
 </div>
 
 @code
-{
+    {
     private string randomThumbUpId   = Guid.NewGuid().ToString();
     private string randomThumbDownId = Guid.NewGuid().ToString();
     private string name = Guid.NewGuid().ToString();
 
     [Parameter]
-    public SurveyQuestionVM Question { get; set; }
+    public SurveyQuestionVM SurveyQuestion { get; set; } = default!;
 
     [Parameter]
-    public QuestionBooleanResponseVM SurveryResponse { get; set; }
+    public QuestionBooleanResponseVM SurveryResponse { get; set; } = default!;
 
     private void OnThumbClick(SurveyBooleanResponseType response)
     {

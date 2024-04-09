@@ -10,17 +10,33 @@
         line-height: 1.0;
         letter-spacing: -0.024rem;
         color: #6e7191;
+    }  
+
+    .mud-dialog-content
+    {
+        padding: 0px !important;
+       
     }
+
+
 </style>
 
-<MudDialog Style="min-width:600px; padding-bottom:10px;">
+<MudDialog style="min-width:600px; min-height:300px; overflow:hidden;">
     <DialogContent>
-     <MudText>Test 1</MudText>
-    </DialogContent>
-   @*  <DialogActions>
-        <MudButton Class="px-5" Variant="Variant.Filled" Color="Color.Secondary" OnClick="Cancel">Prekliči</MudButton>
-        <MudButton Class="px-5 mr-5" Variant="Variant.Filled" OnClick="Submit" Color="Color.Primary">Shrani</MudButton>
-    </DialogActions> *@
+        <MudStack Row>
+            <MudStack  Class="pa-5">
+                <MudStack Spacing="0">
+                    <MudText Typo="Typo.h2">Fakulteta za socialno delo</MudText>
+                    <MudText Typo="Typo.h2">Pilot Program 2023</MudText>
+                </MudStack>
+
+                <MudText Color="Color.Primary" Typo="Typo.h2">About this organization</MudText>
+                <MudText Typo="Typo.h2">The University of Social Work plays a vital role in society by equipping individuals with the knowledge and skills necessary to address social issues, promote equality, and foster positive change in communities.</MudText>
+
+            </MudStack>
+            <MudImage Width="300" ObjectFit="ObjectFit.Cover" Src="youth/youth6.jpg"></MudImage>
+        </MudStack>       
+    </DialogContent>   
 </MudDialog>
 
 @code

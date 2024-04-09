@@ -27,8 +27,7 @@ public class GenderSelector : SurveyCriterionSelector
 {    
     public GenderSelector(): base("Spol", "Prikaz rezultatov po spolu") 
     {
-        this.ParticipantPredicatesByType = ParticipantPredicate.Genders.ToList();
-        this.ParticipantPredicatesByType.Add(ParticipantPredicate.None);
+        this.ParticipantPredicatesByType = ParticipantPredicate.Genders.Concat(new[] { ParticipantPredicate.None }).ToList();        
     }
 }
 
@@ -36,8 +35,7 @@ public class AgeGroupSelector : SurveyCriterionSelector
 {
     public AgeGroupSelector() : base("Starostna skupina", "Prikaz rezultatov po starostni skupini")
     {
-        this.ParticipantPredicatesByType = ParticipantPredicate.AgeGroups.ToList();
-        this.ParticipantPredicatesByType.Add(ParticipantPredicate.None);     
+        this.ParticipantPredicatesByType = ParticipantPredicate.AgeGroups.Concat(new[] { ParticipantPredicate.None }).ToList();           
     }
 }
 

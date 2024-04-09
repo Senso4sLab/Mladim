@@ -4,44 +4,45 @@
 
 
 
-<div>
-    <ValidationMessage style="margin-bottom:0.4rem;" For="@(() => surveryButtonResponseVM.Response.ButtonType)" />
 
-    <div class="row">
-        <div class="btn-group col-sm-12 col-lg-7">
-            @foreach (var groupBtn in GroupButtons)
-            {
-                <button type="button" @onclick="(() => OnButtonClick(groupBtn.Value))" class="@groupBtn.CssClass">@groupBtn.Text</button>
-            }
-        </div>
+<MudText Color="Color.Tertiary" Typo="Typo.h1" Class="py-3">@SurveyQuestion</MudText>
+<ValidationMessage style="margin-bottom:0.4rem;" For="@(() => SurveyResponse.Response)"/>
+ <div class="row">
+    <div class="btn-group col-sm-12 col-lg-7">
+        @foreach (var groupBtn in GroupButtons)
+        {
+            <button type="button" @onclick="(() => OnButtonClick(groupBtn.Value))" class="@groupBtn.CssClass">@groupBtn.Text</button>
+        }
     </div>
-</div>
+ </div>
+
 
 
 @code 
 {
-    private QuestionButtonResponseVM surveryButtonResponseVM;
 
     [Parameter]
-    public QuestionMultiButtonResponseVM SurveyResponse { get; set; } = default!;
+    public string SurveyQuestion { get; set; } = default!;    
 
-    private List<GroupBtn> GroupButtons = new List<GroupBtn>();
+    [Parameter]
+    public QuestionButtonResponseVM SurveyResponse { get; set; } = default!;
 
-    protected override void OnInitialized()
+    private List<GroupBtn> GroupButtons = new List<GroupBtn>
     {
-        surveryButtonResponseVM = this.SurveyResponse.AddButtonResponse();
-        GroupButtons = GetButtonGroups().ToList();
-    }
+        new GroupBtn("NE DRŽI", SurveyButtonResponseType.Incorrect),
+        new GroupBtn("DELNO DRŽI", SurveyButtonResponseType.PartiallyCorrect),
+        new GroupBtn("DRŽI", SurveyButtonResponseType.Correct),
+        new GroupBtn("ZELO DRŽI", SurveyButtonResponseType.VeryCorrect),
+    };
+
+    // protected override void OnInitialized()
+    // {
+    //     //surveryButtonResponseVM = this.SurveyResponse.AddButtonResponse();
+    //     //GroupButtons = GetButtonTypes().ToList();
+    // }
 
 
-    private IEnumerable<GroupBtn> GetButtonGroups()
-    {
-        yield return new GroupBtn("NE DRŽI", SurveyButtonResponseType.Incorrect);
-        yield return new GroupBtn("DELNO DRŽI", SurveyButtonResponseType.PartiallyCorrect);
-        yield return new GroupBtn("DRŽI", SurveyButtonResponseType.Correct);
-        yield return new GroupBtn("ZELO DRŽI", SurveyButtonResponseType.VeryCorrect);
-
-    }
+    
 
     private void OnButtonClick(SurveyButtonResponseType btnType)
     {
@@ -52,9 +53,7 @@
             else
                 groupBtn.NoActive();
         }
-        surveryButtonResponseVM.Response.ButtonType = btnType;
-       
-
+        SurveyResponse.Response = btnType;
         StateHasChanged();
     }
 

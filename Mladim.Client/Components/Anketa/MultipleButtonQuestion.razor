@@ -1,0 +1,33 @@
+﻿@using Mladim.Client.ViewModels.Survey;
+@using Mladim.Domain.Enums;
+@using Syncfusion.Blazor.SplitButtons
+
+
+
+<div>
+    <MudText Typo="Typo.h2" Color="Color.Tertiary" Class="py-3">@SurveyQuestion.Header</MudText>
+
+    @for (int i = 0; i < SurveyQuestion.Texts.Count; i++)
+    {
+        <ButtonQuestion SurveyQuestion="@SurveyQuestion.Texts[i]" SurveyResponse="@SurveyResponse.Response[i]" />
+    }    
+</div>
+
+@code 
+{
+    [Parameter]
+    public SurveyQuestionVM SurveyQuestion { get; set; } = default!;
+
+    [Parameter]
+    public QuestionMultiButtonResponseVM SurveyResponse { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        for (int i = 0; i < SurveyQuestion.Texts.Count; i++)
+        {
+            var response = new QuestionButtonResponseVM(SurveyQuestion.UniqueQuestionId);
+            SurveyResponse.AddQuestionResponse(response);
+        }
+    }
+
+}

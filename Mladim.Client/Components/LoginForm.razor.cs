@@ -7,7 +7,7 @@ using Mladim.Domain.Models;
 
 namespace Mladim.Client.Components;
 
-public partial class Login
+public partial class LoginForm
 {
     [Inject]
     public IAuthService AuthService { get; set; } = default!;

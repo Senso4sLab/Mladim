@@ -27,7 +27,7 @@ public partial class ActivityResults
 
 
     private IEnumerable<SurveyQuestionVM> surveyQuestions = new List<SurveyQuestionVM>();
-    private IEnumerable<AnonymousSurveyResponseVM> surveyResponses = new List<AnonymousSurveyResponseVM>();
+    private IEnumerable<AnonymousSurveyResponseVM> surveyResponses = new List<AnonymousSurveyResponseVM>(); // AnonymousSurveyResponseVM one anonymous with multiple question responses
     private IEnumerable<SurveyResponsesGroupedByQuestionVM> SurveyResponsesGroupByQuestions = new List<SurveyResponsesGroupedByQuestionVM>();
     protected async override Task OnInitializedAsync()
     {
@@ -41,7 +41,7 @@ public partial class ActivityResults
 
     private IEnumerable<SurveyResponsesGroupedByQuestionVM> GetSurveyResponsesGroupByQuestion(int activityId) =>
         surveyResponses.SelectMany(sr => sr.Responses, (asr, response) => ParticipantQuestionResponseVM.Create(asr.AnonymousParticipant, response))
-            .GroupBy(pqr => pqr.UniqueQuestionId)
+            .GroupBy(pqr => pqr.QuestionResponse.UniqueQuestionId)
             .Select(g => SurveyResponsesGroupedByQuestionVM.Create(surveyQuestions.FirstOrDefault(sq => sq.UniqueQuestionId == g.Key), g))
             .ToList();
 

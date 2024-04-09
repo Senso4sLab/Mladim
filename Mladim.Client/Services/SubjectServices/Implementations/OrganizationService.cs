@@ -61,9 +61,10 @@ public class OrganizationService : IOrganizationService
         return this.Mapper.Map<OrganizationVM>(organizations);
     }
 
-    public async Task<OrganizationStatisticVM?> GetStatisticsByYearAsync(int organizationId, int year)
+    public async Task<OrganizationStatisticVM?> GetStatisticsByDateRangeAsync(int organizationId, DateTime start, DateTime end)
     {
-        string url = string.Format(MladimApiUrls.GetOrganizationStatistics, organizationId, year);
+        string url = string.Format(MladimApiUrls.GetOrganizationStatistics, organizationId, start.ToString(), end.ToString());      
+
         var organizations = await HttpClient.GetAsync<OrganizationStatisticQueryDto>(url);
         return this.Mapper.Map<OrganizationStatisticVM>(organizations);
     }

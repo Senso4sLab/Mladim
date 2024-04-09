@@ -14,7 +14,6 @@ public abstract class QuestionResponseVM
     }
 }
 
-
 public interface ISelectableResponse
 {
     int UniqueQuestionId { get; set; }
@@ -26,142 +25,70 @@ public interface IMultiSelectableResponse
     List<ISelectableResponse> ResponseEnum { get; }
 }
 
-public abstract class SelectableQuestionResponseVM<T> : QuestionResponseVM, ISelectableResponse
+public abstract class SelectableQuestionResponseVM<T> : QuestionResponseVM, ISelectableResponse where T: Enum
 {
     public virtual T Response { get; set; } = default!;
-    public abstract Enum ResponseEnum { get; }
-   
-
-    public SelectableQuestionResponseVM(int uniqueQuestionId) :base(uniqueQuestionId)
-    {  
-        
-    }
+    public virtual Enum ResponseEnum => this.Response;
+    public SelectableQuestionResponseVM(int uniqueQuestionId) :base(uniqueQuestionId) { }
 }
 
-public class QuestionRatingResponseVM : SelectableQuestionResponseVM<SurveyRatingResponseType> // QuestionRatingResponse
+public class QuestionRatingResponseVM : SelectableQuestionResponseVM<SurveyRatingResponseType> 
 {
     [RatingResponseValidator]
     public override SurveyRatingResponseType Response { get; set; }
-    public override Enum ResponseEnum => this.Response ;
-
-    public QuestionRatingResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
-    {
-
-    }
+    public QuestionRatingResponseVM(int uniqueQuestionId) : base(uniqueQuestionId) {}
 }
 
 public class QuestionBooleanResponseVM : SelectableQuestionResponseVM<SurveyBooleanResponseType> 
 {
     [BooleanResponseValidator]
-    public override SurveyBooleanResponseType Response { get; set; }
-    public override Enum ResponseEnum => this.Response;
-    public QuestionBooleanResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
-    {
-
-    }
+    public override SurveyBooleanResponseType Response { get; set; }   
+    public QuestionBooleanResponseVM(int uniqueQuestionId) : base(uniqueQuestionId) {}
 }
 
-
-public record SurveryButtonResponseVM
+public class QuestionButtonResponseVM : SelectableQuestionResponseVM<SurveyButtonResponseType>
 {
     [ButtonResponseValidator]
-    public SurveyButtonResponseType ButtonType { get; set; }   
-
+    public override SurveyButtonResponseType Response { get; set; }   
+    public QuestionButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId) {}    
 }
 
-public class QuestionButtonResponseVM : SelectableQuestionResponseVM<SurveryButtonResponseVM>
+
+public abstract class MultiSelectableQuestionResponseVM<T> : QuestionResponseVM, IMultiSelectableResponse where T : ISelectableResponse
+{
+    public virtual List<T> Response { get; set; } = new List<T>();
+    public virtual List<ISelectableResponse> ResponseEnum => 
+        Response.OfType<ISelectableResponse>().ToList();
+    public MultiSelectableQuestionResponseVM(int uniqueQuestionId) : base(uniqueQuestionId) { }
+
+    public void AddQuestionResponse(T response)
+    {      
+        this.Response.Add(response);
+    }
+}
+
+public class QuestionMultiButtonResponseVM : MultiSelectableQuestionResponseVM<QuestionButtonResponseVM>
 {
     [ValidateComplexType]
-    public override SurveryButtonResponseVM Response { get; set; } = new();
-    public override Enum ResponseEnum => this.Response.ButtonType;
-    public QuestionButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
-    {
-
-    }
-    public QuestionButtonResponseVM(int uniqueQuestionId, SurveryButtonResponseVM response) : base(uniqueQuestionId)
-    {
-        this.Response = response;   
-    }
-}
-
-
-public abstract class MultiSelectableQuestionResponseVM : QuestionResponseVM, IMultiSelectableResponse
-{   
-    public abstract List<ISelectableResponse> ResponseEnum { get; }
-
-    public MultiSelectableQuestionResponseVM(int uniqueQuestionId) :base(uniqueQuestionId)
-    {
-
-    }
-}
-
-public class QuestionMultiButtonResponseVM : MultiSelectableQuestionResponseVM
-{
-    [ValidateComplexType]
-    public List<QuestionButtonResponseVM> Response { get; set; } = new();
-
-    public override List<ISelectableResponse> ResponseEnum => 
-        this.Response.OfType<ISelectableResponse>().ToList();
-    public QuestionMultiButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
-    {       
-        
-    }
-
-
-    public QuestionButtonResponseVM AddButtonResponse()
-    {
-        QuestionButtonResponseVM questionButtonResponseVM = new QuestionButtonResponseVM(this.UniqueQuestionId);
-        this.Response.Add(questionButtonResponseVM);
-        return questionButtonResponseVM;
-    }
-
-
+    public override List<QuestionButtonResponseVM> Response { get; set; } = new List<QuestionButtonResponseVM>();
+    public QuestionMultiButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId) {}
 }
 
 
 
-public record SurveyRepetitiveButtonResponseVM
+public class QuestionRepetitiveButtonResponseVM : SelectableQuestionResponseVM<SurveyRepetitiveButtonResponseType>
 {
     [RepetitiveButtonResponseValidator]
-    public SurveyRepetitiveButtonResponseType ButtonType { get; set; }    
+    public override SurveyRepetitiveButtonResponseType Response { get; set; } 
+    public QuestionRepetitiveButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId) { }
+   
 }
 
-public class QuestionRepetitiveButtonResponseVM : SelectableQuestionResponseVM<SurveyRepetitiveButtonResponseVM>
+public class QuestionMultiRepetitiveButtonResponseVM : MultiSelectableQuestionResponseVM<QuestionRepetitiveButtonResponseVM>
 {
     [ValidateComplexType]
-    public override SurveyRepetitiveButtonResponseVM Response { get; set; } = new();
-    public override Enum ResponseEnum =>
-        this.Response.ButtonType;
-    public QuestionRepetitiveButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
-    {
-
-    }
-
-    public QuestionRepetitiveButtonResponseVM(int uniqueQuestionId, SurveyRepetitiveButtonResponseVM response) : base(uniqueQuestionId)
-    {
-        this.Response = response;
-    }
-}
-
-
-public class QuestionMultiRepetitiveButtonResponseVM : MultiSelectableQuestionResponseVM
-{
-    [ValidateComplexType]
-    public List<QuestionRepetitiveButtonResponseVM> Response { get; set; } = new();
-
-    public override List<ISelectableResponse> ResponseEnum =>
-       this.Response.OfType<ISelectableResponse>().ToList();
-    public QuestionMultiRepetitiveButtonResponseVM(int uniqueQuestionId) :base(uniqueQuestionId)
-    {
-
-    }
-
-    public QuestionRepetitiveButtonResponseVM AddButtonResponse()
-    {
-        QuestionRepetitiveButtonResponseVM questionRepetitiveButtonResponseVM = new QuestionRepetitiveButtonResponseVM(this.UniqueQuestionId);       
-        this.Response.Add(questionRepetitiveButtonResponseVM);
-        return questionRepetitiveButtonResponseVM;
-    }
+    public override List<QuestionRepetitiveButtonResponseVM> Response { get; set; } = new List<QuestionRepetitiveButtonResponseVM>();   
+    public QuestionMultiRepetitiveButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId) { }  
 }
 
 public interface ITextResponse
@@ -179,70 +106,5 @@ public class QuestionTextResponseVM : QuestionResponseVM, ITextResponse
         this.UniqueQuestionId = uniqueQuestionId;
     }    
 }
-
-
-//public class QuestionTextResponseVM : QuestionResponseVM<string> // QuestionTextResponse
-//{
-//    public QuestionTextResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
-//    {
-
-//    }
-
-//    public override string ToString() =>
-//        this.Response;
-
-//}
-
-
-
-
-
-//public class QuestionButtonResponseVM : QuestionResponseVM<SurveryButtonResponseVM>  // QuestionButtonReponse
-//{
-//    [ValidateComplexType]
-//    public override SurveryButtonResponseVM Response { get; set; }
-//    public QuestionButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
-//    {
-//    }
-
-//    public override string ToString() =>
-//        this.Response.ToString();
-//}
-
-
-//public class QuestionMultiButtonResponseVM : QuestionResponseVM<List<SurveryButtonResponseVM>> // QuestionMultipleButtonReponse
-//{
-//    [ValidateComplexType]
-//    public override List<SurveryButtonResponseVM> Response { get; set; } = new();
-//    public QuestionMultiButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
-//    {
-
-//    }
-
-//    public override string ToString() =>
-//         string.Join(',', this.Response);
-
-//    public override IEnumerable<string> QuestionResponses => this.Response.Select(br => br.ToString()).ToList();
-
-//}
-
-
-
-//public class QuestionMultiRepetitiveButtonResponseVM : QuestionResponseVM<List<SurveyRepetitiveButtonResponseVM>> // QuestionMultipleButtonReponse
-//{
-//    [ValidateComplexType]
-//    public override List<SurveyRepetitiveButtonResponseVM> Response { get; set; } = new();
-//    public QuestionMultiRepetitiveButtonResponseVM(int uniqueQuestionId) : base(uniqueQuestionId)
-//    {
-
-//    }
-
-//    public override string ToString() =>
-//         string.Join(',', this.Response);
-
-//    public override IEnumerable<string> QuestionResponses => this.Response.Select(br => br.ToString()).ToList();
-
-//}
-
 
 

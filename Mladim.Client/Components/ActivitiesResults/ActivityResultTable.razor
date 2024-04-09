@@ -28,7 +28,7 @@
        
     @foreach (var surveyResponsesGroupByQuestion in SurveyResponsesGroupByQuestions)
     {
-        if (surveyResponsesGroupByQuestion is SurveyRatingResponsesGroupedByQuestion ratingResponses)
+       @*  if (surveyResponsesGroupByQuestion is SurveyRatingResponsesGroupedByQuestion ratingResponses)
         {
             <SurveyRatingResponses RatingResponseGroup="ratingResponses" Context="cogntigencyTableContext" />
         }
@@ -47,7 +47,7 @@
         else if (surveyResponsesGroupByQuestion is SurveyRepetitiveButtonGroupResponsesGroupedByQuestion repetitiveButtonResponses)
         {
             <SurveyRepetitiveButtonGroupResponses ButtonResponseGroup="repetitiveButtonResponses" Context="cogntigencyTableContext" />
-        }
+        } *@
     }
 </MudStack>
 

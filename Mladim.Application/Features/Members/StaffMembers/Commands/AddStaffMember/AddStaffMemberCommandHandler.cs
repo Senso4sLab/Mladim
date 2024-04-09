@@ -63,7 +63,7 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
             var emailToken = await this.AuthService.EmailTokenAsync(user);            
 
             var registrationUrl = $"{HttpContextAccessor?.HttpContext?.AppBaseUrl()}/registration?EmailId={emailToken}";
-            var emailContent = string.Format(this.EmailContent.ContentAddedNewUser, organization.Attributes.Name, registrationUrl);
+            var emailContent = string.Format(this.EmailContent.ContentAddedNewUser, registrationUrl);
             await SendEmailAsync(emailContent, request.Email);
         }
         else
@@ -79,7 +79,7 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
             if (Enum.TryParse(claim.Type, out ApplicationClaim appClaim))
             {
 
-                var emailContent = string.Format(this.EmailContent.ContentUserAddedNewOrganization, organization.Attributes.Name, appClaim.GetDisplayAttribute());
+                var emailContent = string.Format(this.EmailContent.ContentUserAddedNewOrganization, appClaim.GetDisplayAttribute());
                 await SendEmailAsync(emailContent, request.Email);
             }
             else

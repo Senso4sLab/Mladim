@@ -1,11 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Mladim.Client.ViewModels;
 using Mladim.Client.Services.SubjectServices.Contracts;
-using System.ComponentModel;
 using Mladim.Client.Services.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Components.Authorization;
 using Mladim.Client.Models;
 
 namespace Mladim.Client.Pages;

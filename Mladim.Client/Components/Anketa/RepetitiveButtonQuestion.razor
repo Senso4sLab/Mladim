@@ -5,7 +5,7 @@
 
 
 <div>
-    <ValidationMessage style="margin-bottom:0.4rem;" For="@(() => surveryButtonResponseVM.Response.ButtonType)" />
+    <ValidationMessage style="margin-bottom:0.4rem;" For="@(() => SurveyResponse.Response)" />
 
     <div class="row">
         <div class="btn-group col-sm-12 col-lg-7">
@@ -20,29 +20,24 @@
 
 @code 
 {
-    private QuestionRepetitiveButtonResponseVM surveryButtonResponseVM;
+    [Parameter]
+    public string SurveyQuestion { get; set; } = default!;    
 
     [Parameter]    
-    public QuestionMultiRepetitiveButtonResponseVM SurveyResponse { get; set; } = default!;
+    public QuestionRepetitiveButtonResponseVM SurveyResponse { get; set; } = default!;
 
-    private List<GroupRepetitiveBtn> GroupButtons = new List<GroupRepetitiveBtn>();
+    private List<GroupRepetitiveBtn> GroupButtons = new()
+    {
+        new ("NIČ ALI ZELO MALO", SurveyRepetitiveButtonResponseType.None),
+        new ("MALO", SurveyRepetitiveButtonResponseType.Little),
+        new ("PRECEJ", SurveyRepetitiveButtonResponseType.Quite),
+        new ("MOČNO", SurveyRepetitiveButtonResponseType.Greatly),
+    };
 
     protected override void OnInitialized()
     {
-        surveryButtonResponseVM = this.SurveyResponse.AddButtonResponse();
-
-        GroupButtons = GetButtonGroups().ToList();
-    }
-
-
-    private IEnumerable<GroupRepetitiveBtn> GetButtonGroups()
-    {
-        yield return new GroupRepetitiveBtn("NIČ ALI ZELO MALO", SurveyRepetitiveButtonResponseType.None);
-        yield return new GroupRepetitiveBtn("MALO", SurveyRepetitiveButtonResponseType.Little);
-        yield return new GroupRepetitiveBtn("PRECEJ", SurveyRepetitiveButtonResponseType.Quite);
-        yield return new GroupRepetitiveBtn("MOČNO", SurveyRepetitiveButtonResponseType.Greatly);
-
-    }
+        //surveryButtonResponseVM = this.SurveyResponse.AddButtonResponse();        
+    }  
 
     private void OnButtonClick(SurveyRepetitiveButtonResponseType btnType)
     {
@@ -53,7 +48,7 @@
             else
                 groupBtn.NoActive();
         }
-        surveryButtonResponseVM.Response.ButtonType = btnType;      
+        SurveyResponse.Response = btnType;
 
         StateHasChanged();
     }

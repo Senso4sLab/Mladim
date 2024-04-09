@@ -7,6 +7,8 @@ using Mladim.Client.ViewModels.Survey;
 using Mladim.Client.Models;
 using Microsoft.JSInterop;
 using System.Timers;
+using MudBlazor;
+using Syncfusion.Blazor.Charts;
 
 
 namespace Mladim.Client.Components.Organizations;
@@ -30,6 +32,12 @@ public partial class OrganizationStatisticsTab
     public IJSRuntime JS { get; set; }
 
 
+    
+
+    SfAccumulationChart accChart;
+
+     ElementReference Element;
+
     //[CascadingParameter]
     //public OrganizationVM? SelectedOrganization { get; set; }
 
@@ -39,43 +47,58 @@ public partial class OrganizationStatisticsTab
 
     private OrganizationStatisticVM organizationStatistics { get; set; }
 
-    private IEnumerable<int> availableYears = new List<int>();  
-    private int selectedYear = DateTime.UtcNow.Year;
+    //private IEnumerable<int> availableYears = new List<int>();  
+    //private int selectedYear = DateTime.UtcNow.Year;
+
+    private DateRange orgStatisticsDateRange = new DateRange();
+
+
+
+
 
     private List<ActivityForGantt> activities = new List<ActivityForGantt>();
 
     private string chartWidth = "100%";
     private IEnumerable<QuestionResponseStatisticsVM> SurveyStatistics { get; set; } = new List<QuestionResponseStatisticsVM>();
 
-    protected override async Task  OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         SelectedOrganization = await this.OrganizationService.DefaultOrganizationAsync();
+        SetDefaultOrgStatisticsDateRange(DateTime.UtcNow);
+        await OrgStatisticsDateTimePickerClosed();
     }
 
-    bool isAnyParticipant = false;
-
-    protected override async Task OnParametersSetAsync()
+    private async Task Export()
     {
-        if (SelectedOrganization != null && !availableYears.Any())
-        {   
-            availableYears =  this.AvailableYears().ToList();
-            await OnOrganizationYearChanged(selectedYear);
-        }        
+        
     }
+
+    
+
+
+    private void SetDefaultOrgStatisticsDateRange(DateTime now)
+    {
+        orgStatisticsDateRange = new DateRange(now.AddYears(-1), now);
+    }
+
+
+
+    bool isAnyParticipant = false;   
 
    
     private async Task GeneratePdf()
     {
-        chartWidth = "680px";     
+        chartWidth = "680px";
 
-        Task.Delay(1000).ContinueWith(async x =>
-        {
-            await JS.InvokeVoidAsync("extractHtmlAndPrint", "org_statistic_id");
-            chartWidth = "100%";
-            StateHasChanged();
-        });
+        //Task.Delay(1000).ContinueWith(async x =>
+        //{
+        //    await JS.InvokeVoidAsync("extractHtmlAndPrint", "org_statistic_id");
+        //    chartWidth = "100%";
+        //    StateHasChanged();
+        //});
 
-        
+        //await accChart.ExportAsync(Syncfusion.Blazor.Charts.ExportType.PNG, "test", null, false);
+        await accChart.PrintAsync(Element);
     }
 
     public async Task<List<ActivityForGantt>> UpcommingActivitiesAsync(int numOfUpcommingActivities)
@@ -86,37 +109,24 @@ public partial class OrganizationStatisticsTab
         return upcommingActivities.Select((a, i) => ActivityForGantt.Create(i + 1, a.Id, a.Attributes.Name, a.Project, a.TimeRange)).ToList();
     }
 
-    private IEnumerable<int> AvailableYears()
-    {
-        int createdYear = 2023;//SelectedOrganization!.Attributes.CreatedStamp.Year;
-        return Enumerable.Range(createdYear, DateTime.UtcNow.Year - createdYear + 1).ToList();
-    }
+    
 
     public void SelectedActivity(RowSelectEventArgs<ActivityForGantt> args) =>
        this.Navigation.NavigateTo($"/activity/{args.Data.ActivityId}");
 
 
-    private async Task OnYearChangedAsync(int selectedYear)
+    private async Task OrgStatisticsDateTimePickerClosed()
     {
-        if (this.selectedYear == selectedYear)
-            return;
-
-        await OnOrganizationYearChanged(selectedYear);
-
-    }
-
-    private async Task OnOrganizationYearChanged(int selectedYear)
-    {
-        this.selectedYear = selectedYear;
-        this.organizationStatistics = await OrganizationStatisticsAsync(selectedYear);
+        this.organizationStatistics = await OrganizationStatisticsAsync(orgStatisticsDateRange);
         this.isAnyParticipant = organizationStatistics?.AgeDoughnut.Count() > 0 && organizationStatistics?.GenderDoughnut.Count() > 0;
-        this.activities = await UpcommingActivitiesAsync(5);
-        this.SurveyStatistics = await this.SurveyService.GetStatisticsByOrganizationIdAsync(SelectedOrganization.Id, selectedYear);
-    }
 
-    public async Task<OrganizationStatisticVM?> OrganizationStatisticsAsync(int year)
+        this.activities = await UpcommingActivitiesAsync(5);
+
+        //this.SurveyStatistics = await this.SurveyService.GetStatisticsByOrganizationIdAsync(SelectedOrganization.Id, selectedYear);
+    }
+    public async Task<OrganizationStatisticVM?> OrganizationStatisticsAsync(DateRange range)
     {
-        return await this.OrganizationService.GetStatisticsByYearAsync(SelectedOrganization.Id, year);
+        return await this.OrganizationService.GetStatisticsByDateRangeAsync(SelectedOrganization!.Id, range.Start!.Value, range.End!.Value);
     }
 
     public void RowDataBound(RowDataBoundEventArgs<ActivityForGantt> args)

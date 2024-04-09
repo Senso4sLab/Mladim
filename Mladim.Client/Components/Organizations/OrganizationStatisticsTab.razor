@@ -8,7 +8,7 @@
 <style>
     .e-altrow, tr.e-chart-row:nth-child(odd) {
         background-color: #EFEFEF;
-    }
+    }  
 
 
     .custom-row {
@@ -29,27 +29,28 @@
 
 </style>
 
-<MudStack Spacing="4" Class="py-5" >   
-   
-        <div id="org_statistic_id">
-            <MudThemeProvider Theme="MainLayout.MyCustomTheme" />
-            <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-                <div style="width:200px;">
-                    <MudSelect T="int" Label="Izberi leto" Value=selectedYear ValueChanged="OnYearChangedAsync" OpenIcon="@Icons.Material.Filled.CalendarMonth" Adornment="Adornment.Start" Variant=Variant.Outlined AdornmentColor="Color.Primary">
-                        @foreach (int year in availableYears)
-                        {
-                            <MudSelectItem Value="@year">@year</MudSelectItem>
-                        }
-                    </MudSelect>
-                </div>
-            <MudIconButton Variant="Variant.Outlined" Size ="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.PictureAsPdf" OnClick="GeneratePdf"></MudIconButton>
-            </MudStack>
+<MudStack Spacing="4" Class="py-5" >
+        <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="py-3">
+             <MudStack Row Spacing="3">
+                 <MudDatePicker Color="Color.Primary" Label="Začetek" MaxDate="@orgStatisticsDateRange?.End" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@orgStatisticsDateRange.Start" OpenTo="OpenTo.Year" FixDay="1" />
+                 <MudDatePicker Color="Color.Primary" Label="Konec" MinDate="@orgStatisticsDateRange?.Start" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@orgStatisticsDateRange.End" OpenTo="OpenTo.Year" FixDay="1" />
+             </MudStack>
+             <MudIconButton Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.PictureAsPdf" OnClick="GeneratePdf"></MudIconButton>
+         </MudStack>
+       
+
+        <div id="org_statistic_id" @ref="Element">
+       @*  <MudThemeProvider Theme="MainLayout.MyCustomTheme" /> 
+        *@
+
+
+
            <MudGrid Class="py-2">
                 @if (isAnyParticipant)
                 {
-                    <MudItem sm="4">
+                    <MudItem md="6">
                             <MudPaper Outlined="true">
-                                <SfAccumulationChart Title="Razporeditev udeležencev po starostni skupini" EnableAnimation="true" EnableSmartLabels="true" CustomClass="custom-row">
+                                <SfAccumulationChart @ref="@accChart" Title="Razporeditev udeležencev po starostni skupini" EnableAnimation="true" EnableSmartLabels="true" CustomClass="custom-row">
                                     <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
                                     <AccumulationChartSeriesCollection>
                                         <AccumulationChartSeries DataSource="@organizationStatistics.AgeDoughnut" PointColorMapping="Fill" XName="Name" YName="Value" InnerRadius="80%">
@@ -64,7 +65,7 @@
                                 </SfAccumulationChart>
                             </MudPaper>
                         </MudItem>
-                    <MudItem sm="4">
+                    <MudItem md="6">
                             <MudPaper Outlined="true">
                                 <SfAccumulationChart Title="Razporeditev udeležencev po spolu" EnableAnimation="true" EnableSmartLabels="true">
                                     <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
@@ -80,7 +81,7 @@
                                     </AccumulationChartLegendSettings>
                                 </SfAccumulationChart>
                             </MudPaper>
-                        </MudItem>
+                        </MudItem>                      
                 }
                 else
                 {
@@ -89,10 +90,9 @@
                     </MudItem>          
                 }
 
-                <MudItem  sm="@(isAnyParticipant ? 4 : 12)">
-                        <MudStack Spacing="3">                     
-                            <MudPaper Outlined="true" Class="pa-2">
-                             
+                <MudItem xs="12" >
+                <MudStack Row Spacing="3" AlignItems="AlignItems.Stretch" >
+                     <MudPaper Outlined="true" Class="pa-4">                             
                                      <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
                                         <MudAvatar Style="background-color:#4da456" Variant="Variant.Filled" Size="MudBlazor.Size.Large">
                                             <MudImage Class="pa-3" Src="/participants.png" />

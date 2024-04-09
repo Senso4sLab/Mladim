@@ -67,7 +67,7 @@ public class UpdateStaffMemberCommandHandler : IRequestHandler<UpdateStaffMember
 
             if (Enum.TryParse(claim.Type, out ApplicationClaim appClaim) && organization != null)
             {
-                var emailContent = string.Format(this.EmailContent.ContentUserAddedNewClaim, organization!.Attributes.Name, appClaim.GetDisplayAttribute());
+                var emailContent = string.Format(this.EmailContent.ContentUserAddedNewClaim, appClaim.GetDisplayAttribute());
                 await SendEmailAsync(emailContent, request.Email);               
             }
             else

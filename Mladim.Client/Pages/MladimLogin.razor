@@ -1,4 +1,4 @@
-﻿@page "/login"
+﻿@* @page "/login" *@
 @using Mladim.Client.Services.PopupService
 @layout LoginLayout
 @inject IPopupService popupService
@@ -17,21 +17,21 @@
         <lottie-player src="MladimLogo.json" background="transparent" speed="1" style="height: 210px;" loop autoplay></lottie-player>
         <div class="text-center">
             <button onclick="@(() =>OnAboutUsClicked())" type="button" class="btn btn-primary px-12 mx-1">O NAS</button>
-            <button onclick="@(() => OnLoginClicked())" type="button" class="btn btn-secondary px-12 mx-1">VPIS</button>
+            <button onclick="@(() =>OnLoginClicked())" type="button" class="btn btn-secondary px-12 mx-1">VPIS</button>
         </div>
     </div>
 
     <div class="scroll-container" style="height:300px;">
-        <div class="carousel-primary @(stopAnimation ? "stop-animation" : "")">
+        <div class="carousel-primary @(IsMouseOnYouthOrganizationImg || popUpIsOpen ? "stop-animation" : "")">
             @foreach (var youthOrganization in YouthOrganizations)
             {
-                <img onclick="@(() => OnYouthOrganizationClicked(youthOrganization))" src="@youthOrganization.ImgUrl" />
+                <img @onmouseover="OnMouseOver" @onmouseleave="OnMouseLeave" onclick="@(() => OnYouthOrganizationClicked(youthOrganization))" src="@youthOrganization.ImgUrl" />
             }
         </div>
-        <div class="carousel-primary carousel-secondary @(stopAnimation ? "stop-animation" : "")">
+        <div class="carousel-primary carousel-secondary @(IsMouseOnYouthOrganizationImg || popUpIsOpen ? "stop-animation" : "")">
             @foreach (var youthOrganization in YouthOrganizations)
             {
-                <img onclick="@(() => OnYouthOrganizationClicked(youthOrganization))" src="@youthOrganization.ImgUrl" />
+                <img @onmouseover="OnMouseOver" @onmouseleave="OnMouseLeave" onclick="@(() => OnYouthOrganizationClicked(youthOrganization))" src="@youthOrganization.ImgUrl" />
             }
         </div>
     </div>
@@ -43,7 +43,8 @@
     private IEnumerable<YouthOrganization> YouthOrganizations = new List<YouthOrganization>();
 
 
-    bool stopAnimation = false;
+    bool IsMouseOnYouthOrganizationImg = false;
+    bool popUpIsOpen = false;
     protected override void OnInitialized()
     {
         YouthOrganizations = GetYouthOrganizations().ToList();       
@@ -57,30 +58,44 @@
         yield return new YouthOrganization("youth/youth4.jpg");
     }
 
+
+    private void OnMouseOver(MouseEventArgs mouseArg)
+    {
+        IsMouseOnYouthOrganizationImg = true;
+        StateHasChanged();
+    }
+
+    private void OnMouseLeave(MouseEventArgs mouseArg)
+    {
+        IsMouseOnYouthOrganizationImg = false;
+        StateHasChanged();
+    }
+
+
     private async Task OnYouthOrganizationClicked(YouthOrganization youthOrganization)
     {
-        stopAnimation = true;
+        popUpIsOpen = true;
         StateHasChanged();
-        var result = await popupService.ShowYouthOrganizationDialog("test", youthOrganization);
-        stopAnimation = false;
+        var result = await popupService.ShowYouthOrganizationDialog("", youthOrganization);
+        popUpIsOpen = false;
         StateHasChanged();
     }
 
     private async Task OnAboutUsClicked()
     {
-        stopAnimation = true;
+        popUpIsOpen = true;
         StateHasChanged();
         var result = await popupService.ShowAboutUsDialog("");
-        stopAnimation = false;
+        popUpIsOpen = false;
         StateHasChanged();
     }
 
     private async Task OnLoginClicked()
     {
-        stopAnimation = true;
+        popUpIsOpen = true;
         StateHasChanged();
         var result = await popupService.ShowLoginDialog("");
-        stopAnimation = false;
+        popUpIsOpen = false;
         StateHasChanged();
     }
 

@@ -28,12 +28,7 @@ public class ParticipantResponseTypeByCriterion //ena vrstica
     {
         this.Criterion = criterion;
         this.ReponseTypesPerCriterion = reponseTypesPerCriterion.ToList();
-    }
-
-    public static ParticipantResponseTypeByCriterion Create(string criterion, IEnumerable<ParticipantResponseType> reponseTypesPerCriterion)
-    {
-        return new ParticipantResponseTypeByCriterion(criterion, reponseTypesPerCriterion); 
-    }
+    }    
 
     public ParticipantResponseTypeByCriterion ToPercent(float numOfParticipants) =>
        new ParticipantResponseTypeByCriterion(this.Criterion, ReponseTypesPerCriterion.Select(rt => rt.ToPercent(numOfParticipants)).ToList());
