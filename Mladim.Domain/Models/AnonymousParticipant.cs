@@ -10,10 +10,7 @@ public class AnonymousParticipant
     public Gender Gender { get; set; }
     public AgeGroups AgeGroup { get; set; }    
 
-    private AnonymousParticipant()
-    {
-        
-    }
+    private AnonymousParticipant() {}
     private AnonymousParticipant(Gender gender, AgeGroups ageGroups) =>
         (Gender, AgeGroup) = (gender, ageGroups);    
 

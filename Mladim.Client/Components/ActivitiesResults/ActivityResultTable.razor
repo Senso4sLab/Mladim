@@ -43,7 +43,7 @@
                 <SurveyRepetitiveButtonGroupResponses Response="response as SurveyResponsesGroupedByMultipleSelectableQuestionVM" Context="cogntigencyTableContext" />
                 break;
             case SurveyQuestionType.Text:
-                <SurveyTextResponses TextResponseGroup="response as SurveyResponsesGroupedByTextQuestionVM" />
+                <SurveyTextResponses Response="response as SurveyTextResponsesGroupedByQuestion" />
                 break;
             default:
                 throw new NotImplementedException();

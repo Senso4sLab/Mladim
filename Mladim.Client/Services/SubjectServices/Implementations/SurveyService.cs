@@ -53,17 +53,17 @@ public class SurveyService : ISurveyService
         return this.Mapper.Map<IEnumerable<AnonymousSurveyResponseVM>>(responses);       
     }
 
-    public async Task<IEnumerable<QuestionResponseStatisticsVM>> GetStatisticsByOrganizationIdAsync(int organizationId, int year)
+    public async Task<IEnumerable<SurveyStatisticsVM>> GetStatisticsByOrganizationIdAsync(int organizationId, DateTime start, DateTime end)
     {
-        string url = string.Format(MladimApiUrls.GetSurveyStatisticsByOrganization, organizationId, year);
-        var responses = await HttpClient.GetAsync<IEnumerable<QuestionResponseStatisticsDto>>(url);
-        return this.Mapper.Map<IEnumerable<QuestionResponseStatisticsVM>>(responses);
+        string url = string.Format(MladimApiUrls.GetSurveyStatisticsByOrganization, organizationId, start, end);
+        var responses = await HttpClient.GetAsync<IEnumerable<SurveyStatisticsDto>>(url);
+        return this.Mapper.Map<IEnumerable<SurveyStatisticsVM>>(responses);
     }
 
-    public async Task<IEnumerable<QuestionResponseStatisticsVM>> GetStatisticsByProjectIdIdAsync(int projectId)
+    public async Task<IEnumerable<SurveyStatisticsVM>> GetStatisticsByProjectIdIdAsync(int projectId)
     {
         string url = string.Format(MladimApiUrls.GetSurveyStatisticsByProject, projectId);
-        var responses = await HttpClient.GetAsync<IEnumerable<QuestionResponseStatisticsDto>>(url);
-        return this.Mapper.Map<IEnumerable<QuestionResponseStatisticsVM>>(responses);
+        var responses = await HttpClient.GetAsync<IEnumerable<SurveyStatisticsDto>>(url);
+        return this.Mapper.Map<IEnumerable<SurveyStatisticsVM>>(responses);
     }
 }

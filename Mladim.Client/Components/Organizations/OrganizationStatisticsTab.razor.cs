@@ -59,7 +59,7 @@ public partial class OrganizationStatisticsTab
     private List<ActivityForGantt> activities = new List<ActivityForGantt>();
 
     private string chartWidth = "100%";
-    private IEnumerable<QuestionResponseStatisticsVM> SurveyStatistics { get; set; } = new List<QuestionResponseStatisticsVM>();
+    private IEnumerable<SurveyStatisticsVM> SurveyStatistics { get; set; } = new List<SurveyStatisticsVM>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -122,7 +122,7 @@ public partial class OrganizationStatisticsTab
 
         this.activities = await UpcommingActivitiesAsync(5);
 
-        //this.SurveyStatistics = await this.SurveyService.GetStatisticsByOrganizationIdAsync(SelectedOrganization.Id, selectedYear);
+        this.SurveyStatistics = await this.SurveyService.GetStatisticsByOrganizationIdAsync(SelectedOrganization.Id, orgStatisticsDateRange.Start.Value, orgStatisticsDateRange.End.Value);
     }
     public async Task<OrganizationStatisticVM?> OrganizationStatisticsAsync(DateRange range)
     {

@@ -11,9 +11,10 @@ using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Survey.Queries.GetSurveyResponses;
 
-public class GetSurveyStatisticsQuery : IRequest<IEnumerable<QuestionResponseStatisticsDto>>
+public class GetSurveyStatisticsQuery : IRequest<IEnumerable<SurveyStatisticsDto>>
 {
     public int? OrganizationId { get; set; }
     public int? ProjectId { get; set; }
-    public int? Year { get; set; }   
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }   
 }

@@ -9,7 +9,7 @@
 
 <MudText Color="Color.Tertiary" Typo="Typo.h2">@QuestionResponseStatistics.SurveyQuestion.Texts.FirstOrDefault()</MudText>
 
-@foreach (var subQuestionResponse in QuestionResponseStatistics.QuestionResponseTypes.SubQuestionResponseTypes)
+@foreach (var subQuestionResponse in QuestionResponseStatistics.QuestionResponseTypes.QuestionResponses)
         {
             <SfChart Height="30" Width="@Width">
                 <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
@@ -43,12 +43,12 @@
 {
 
     [Parameter]
-    public QuestionResponseStatisticsVM QuestionResponseStatistics { get; set; }
+    public SurveyStatisticsVM QuestionResponseStatistics { get; set; }
     
     [Parameter]
     public string Width { get; set; } = "100%";
 
-    private List<ResponseBar> GetStackedBarData(SurveyQuestionType type, SubQuestionResponseTypesVM questionResponseStatistics)
+    private List<ResponseBar> GetStackedBarData(SurveyQuestionType type, QuestionResponseStatisticsVM questionResponseStatistics)
     {
         var result = questionResponseStatistics.ResponseTypes
             .Select(rt => (enumType: StackedBarName(type, rt.ResponseType), value: rt.Value))

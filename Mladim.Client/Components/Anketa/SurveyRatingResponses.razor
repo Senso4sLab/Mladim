@@ -56,9 +56,9 @@
                 <tr class="d-flex">
                     <th scope="row" class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-3">@row.Criterion</th>
 
-                    @foreach (var column in Response.AvailableResponseTypes.ToList())
+                    @foreach (var column in AvailableResponseTypes)
                     {
-                        <td class="@(row.Criterion == "Skupaj" ? "bold_font": "normal_font") col-1">@row.ReponseTypesPerCriterion.FirstOrDefault(rt => rt.ResponseType.ToString() == column.ToString())?.Value</td>
+                        <td class="@(row.Criterion == "Skupaj" ? "bold_font": "normal_font") col-1">@(row.ReponseTypesPerCriterion.FirstOrDefault(rt => rt.ResponseType.ToString() == column.ToString())?.Value ?? 0)</td>
                     }
 
                     <td class="@(row.Criterion=="Skupaj" ? "bold_font" : "normal_font") col-1">@Math.Round(row.ReponseTypesPerCriterion.Sum(pr => pr.Value), 0)</td>
@@ -79,6 +79,7 @@
     public CogntigencyTableContext Context { get; set; } = default!;
 
     private ContingencyTable Table = default!;
+    private IEnumerable<SurveyRatingResponseType> AvailableResponseTypes = Enum.GetValues<SurveyRatingResponseType>().ToList();
 
     private ContingencyTable GetContingencyTable() =>
         this.Context.GetContingencyTableFor(Response);

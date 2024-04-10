@@ -6,8 +6,6 @@ using System.Text.Json.Serialization;
 
 namespace Mladim.Domain.Models.Survey.Responses;
 
-
-
 public class AnonymousSurveyResponse
 {
     public int Id { get; set; }
@@ -29,56 +27,48 @@ public class QuestionResponse
 
 }
 
-public class SelectableQuestionResponse : QuestionResponse, ISelectableResponse
-{
-    [NotMapped]
-    public virtual IEnumerable<Enum> ResponseEnum => new Enum[] {};
-}
-
-
 public interface ISelectableResponse
-{  
+{
     IEnumerable<Enum> ResponseEnum { get; }
 }
 
-
-
-
-public class QuestionResponse<T> : SelectableQuestionResponse
+public class SelectableQuestionResponse<T> : QuestionResponse, ISelectableResponse where T : Enum
 {
     public T Response { get; set; } = default!;
+
+    [NotMapped]
+    public virtual IEnumerable<Enum> ResponseEnum => new Enum[] { Response };
 }
 
 
+public interface ITextResponse
+{
+    string Response { get; set; }
+}
 
-public class QuestionTextResponse : QuestionResponse
+public class QuestionTextResponse : QuestionResponse, ITextResponse
 {
     public string Response { get; set; } = default!;
-
 }
 
-public class QuestionRatingResponse : QuestionResponse<SurveyRatingResponseType>, ISelectableResponse
-{    
-    public override IEnumerable<Enum> ResponseEnum => new Enum[] { this.Response };
+public class QuestionRatingResponse : SelectableQuestionResponse<SurveyRatingResponseType>
+{   
 }
-public class QuestionBooleanResponse : QuestionResponse<SurveyBooleanResponseType>, ISelectableResponse
+public class QuestionBooleanResponse : SelectableQuestionResponse<SurveyRatingResponseType>
+{   
+}
+
+public abstract class MultiSelectableQuestionResponse<T> : QuestionResponse, ISelectableResponse where T : Enum
 {
+    public IEnumerable<T> Response { get; set; } = default!;
 
-   
-    public override IEnumerable<Enum> ResponseEnum => new Enum[] { this.Response };
+    [NotMapped]
+    public virtual IEnumerable<Enum> ResponseEnum => Response.OfType<Enum>().ToList();
 }
 
-public class QuestionMultiButtonResponse : QuestionResponse<List<SurveyButtonResponseType>>, ISelectableResponse
-{
+public class QuestionMultiButtonResponse : MultiSelectableQuestionResponse<SurveyButtonResponseType>{}
+public class QuestionMultiRepetitiveButtonResponse : MultiSelectableQuestionResponse<SurveyRepetitiveButtonResponseType> { }    
 
-   
-    public override IEnumerable<Enum> ResponseEnum => this.Response.OfType<Enum>() ;
-}
-public class QuestionMultiRepetitiveButtonResponse : QuestionResponse<List<SurveyRepetitiveButtonResponseType>>, ISelectableResponse
-{
-  
-    public override IEnumerable<Enum> ResponseEnum => this.Response.OfType<Enum>();
-}
 
 
 

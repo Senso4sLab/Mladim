@@ -17,10 +17,7 @@ public class SurveyQuestionVM
             Header = Header,
             Texts = new List<string>(Texts),
             Type = Type,
-        };
-    
-        
-  
+        }; 
 
 }
 

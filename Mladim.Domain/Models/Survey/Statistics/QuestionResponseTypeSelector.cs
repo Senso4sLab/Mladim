@@ -15,17 +15,17 @@ public class QuestionResponseTypeSelector // eno vprašanje
         this.QuestionResponses = questionResponses.ToList();
     }
 
-    public QuestionResponseTypes AverageQuestionResponseTypes()
+    public SurveyStatistics AverageQuestionResponseTypes()
     {
         var result = GroupedAverageActivitiesByQuestionResponseTypes()
             .SelectMany(qr => qr.SubQuestionResponseTypes.Select((sqr, index) => (sqr, index)))
             .GroupBy(tuple => tuple.index, (index, tuples) => tuples.Select(tuple => tuple.sqr))
             .Select(AverageSubQuestionResponseTypes).ToList();
 
-        return new QuestionResponseTypes(this.QuestionId, result);
+        return new SurveyStatistics(this.QuestionId, result);
     }
 
-    private SubQuestionResponseTypes AverageSubQuestionResponseTypes(IEnumerable<SubQuestionResponseTypes> subQuestions)
+    private QuestionResponseStatistics AverageSubQuestionResponseTypes(IEnumerable<QuestionResponseStatistics> subQuestions)
     {
         var numOfParticipants = subQuestions.Count();
 
@@ -34,7 +34,7 @@ public class QuestionResponseTypeSelector // eno vprašanje
             .Select(g => new ParticipantResponseType(g.Key, AveragePercent(g.ToList(), numOfParticipants)))
             .ToList();
 
-        return new SubQuestionResponseTypes(result);
+        return new QuestionResponseStatistics(result);
     }
 
     private float AveragePercent(List<ParticipantResponseType> participantResponseTypes, int len)
@@ -62,11 +62,15 @@ public class QuestionResponseTypeSelector // eno vprašanje
     }
 
 
-    private SubQuestionResponseTypes AverageResponseTypes(IEnumerable<Enum> responseTypes)
+    private QuestionResponseStatistics AverageResponseTypes(IEnumerable<Enum> responseTypes)
     {
-        var numOfResponseTypes = responseTypes.Count();
+        var length = responseTypes.Count();        
 
-        return new SubQuestionResponseTypes(responseTypes.GroupBy(rt => rt)
-            .Select(g => ParticipantResponseType.Create(g.Key, g.Count()).ToPercent(numOfResponseTypes)));
+        return new QuestionResponseStatistics(responseTypes.GroupBy(rt => rt)
+            .Select(g => ParticipantResponseType.Create(g.Key, Percent(g.Count(), length))));
     }
+
+    private float Percent(int element, int length) =>
+        (float)Math.Round((float)element / length,1);
+
 }

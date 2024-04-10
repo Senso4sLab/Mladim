@@ -60,9 +60,7 @@ public partial class ActivityResults
 
             csv.WriteField("Spol");
             csv.WriteField("Starostna skupina");
-
-
-            var delimeter = csv.Configuration.Delimiter;
+                       
 
             foreach (var question in surveyQuestions)
             {

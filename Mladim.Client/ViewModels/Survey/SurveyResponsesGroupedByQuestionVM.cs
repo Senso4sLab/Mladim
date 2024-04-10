@@ -1,7 +1,9 @@
-﻿using Mladim.Domain.Enums;
+﻿using Mladim.Client.Extensions;
+using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
 using Mladim.Domain.Models.Survey.ParticipantResponseTypes;
 using Mladim.Domain.Models.Survey.Questions;
+using Syncfusion.Blazor.Data;
 
 namespace Mladim.Client.ViewModels.Survey;
 
@@ -34,13 +36,13 @@ public abstract class SurveyResponsesGroupedByQuestionVM
     public abstract IEnumerable<AnonymousParticipantVM> Participants { get; }
 
     public static SurveyResponsesGroupedByQuestionVM Create(SurveyQuestionVM question, IEnumerable<ParticipantQuestionResponseVM> responses) =>
-        responses switch
+        question.Type switch
         {
-            IEnumerable<ParticipantQuestionResponseVM<ISelectableResponse>> selectedResponses => new SurveyResponsesGroupedBySelectableQuestionVM(question, selectedResponses),
-            IEnumerable<ParticipantQuestionResponseVM<IMultiSelectableResponse>> multiSelectesResponses => new SurveyResponsesGroupedByMultipleSelectableQuestionVM(question, multiSelectesResponses),
-            IEnumerable<ParticipantQuestionResponseVM<ITextResponse>> textResponses => new SurveyTextResponsesGroupedByQuestion(question, textResponses),
-            _ => throw new NotImplementedException(),
-        };
+            SurveyQuestionType.Text => new SurveyTextResponsesGroupedByQuestion(question, responses.OfType<ParticipantQuestionResponseVM<ITextResponse>>()),
+            SurveyQuestionType.Rating or SurveyQuestionType.Boolean => new SurveyResponsesGroupedBySelectableQuestionVM(question, responses.OfType<ParticipantQuestionResponseVM<ISelectableResponse>>()),        
+            SurveyQuestionType.Multiple or SurveyQuestionType.MultipleRepetitive => new SurveyResponsesGroupedByMultipleSelectableQuestionVM(question, responses.OfType<ParticipantQuestionResponseVM<IMultiSelectableResponse>>()),             
+            _ => throw new NotImplementedException()
+        };  
 }
 
 public class SurveyResponsesGroupedByQuestionVM<T> : SurveyResponsesGroupedByQuestionVM
@@ -157,28 +159,17 @@ public class NumOfParticipantsUnit : UnitSelector
 public class PercantagesUnit : UnitSelector
 {
     public PercantagesUnit()
-        :base("Odstotki")
-    {
-
-    }
-    private float NumberOfParticipants(IEnumerable<ParticipantResponseTypeByCriterion> responseTypeByCriteria) =>
-      responseTypeByCriteria.SelectMany(prc => prc.ReponseTypesPerCriterion).Sum(pr => pr.Value);
-
-  
+        :base("Odstotki") {}  
     private ParticipantResponseType ToPercent(ParticipantResponseType reponseType, float numParticipants) =>
-        new ParticipantResponseType(reponseType.ResponseType, (float)Math.Round((reponseType.Value * 100 / numParticipants), 1));
-    
+        new ParticipantResponseType(reponseType.ResponseType, (float)Math.Round((reponseType.Value * 100 / numParticipants), 1));    
 
-    protected override IEnumerable<ParticipantResponseTypeByCriterion> ResponseTypeInSelectedUnit(IEnumerable<ParticipantResponseTypeByCriterion> responseTypeByCriteria)
-    {
-        var numOfParticipants = NumberOfParticipants(responseTypeByCriteria);
-        return responseTypeByCriteria.Select(prt => new ParticipantResponseTypeByCriterion(prt.Criterion, ResponseTypeInSelectedUnit(prt, numOfParticipants))).ToList();
-    }
-    
-    private IEnumerable<ParticipantResponseType> ResponseTypeInSelectedUnit(ParticipantResponseTypeByCriterion responseType, float numOfParticipants)
-    {
-        return responseType.ReponseTypesPerCriterion.Select(prt => ToPercent(prt, numOfParticipants));
-    }
+    protected override IEnumerable<ParticipantResponseTypeByCriterion> ResponseTypeInSelectedUnit(IEnumerable<ParticipantResponseTypeByCriterion> responseTypeByCriteria) =>           
+         responseTypeByCriteria.Select(prt => new ParticipantResponseTypeByCriterion(prt.Criterion, ResponseTypeInSelectedUnit(prt))).ToList();
+
+    private IEnumerable<ParticipantResponseType> ResponseTypeInSelectedUnit(ParticipantResponseTypeByCriterion responseType) =>
+        ParticipantResponseTypePercent(responseType, responseType.ReponseTypesPerCriterion.Sum(pr => pr.Value));
+    private IEnumerable<ParticipantResponseType> ParticipantResponseTypePercent(ParticipantResponseTypeByCriterion responseType, float numOfParticipants) =>
+        responseType.ReponseTypesPerCriterion.Select(prt => ToPercent(prt, numOfParticipants));
 }
 
 

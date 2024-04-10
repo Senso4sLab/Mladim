@@ -3,8 +3,8 @@
 public class ActivityQuestionResponseTypes
 {
     public int ActivityId { get; }
-    public IEnumerable<SubQuestionResponseTypes> SubQuestionResponseTypes { get; } = new List<SubQuestionResponseTypes>();
-    public ActivityQuestionResponseTypes(int activityId, IEnumerable<SubQuestionResponseTypes> subQuestionResponseTypes)
+    public IEnumerable<QuestionResponseStatistics> SubQuestionResponseTypes { get; } = new List<QuestionResponseStatistics>();
+    public ActivityQuestionResponseTypes(int activityId, IEnumerable<QuestionResponseStatistics> subQuestionResponseTypes)
     {
         this.ActivityId = activityId;
         this.SubQuestionResponseTypes = subQuestionResponseTypes.ToList();

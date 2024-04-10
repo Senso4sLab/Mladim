@@ -54,9 +54,9 @@ public class SurveyProfile : Profile
 
        
 
-        CreateMap<QuestionResponseStatistics, QuestionResponseStatisticsDto>();
-        CreateMap<QuestionResponseTypes, QuestionResponseTypesDto>();
-        CreateMap<SubQuestionResponseTypes, SubQuestionResponseTypesDto>();
+        CreateMap<QuestionSurveyStatistics, SurveyStatisticsDto>();
+        CreateMap<SurveyStatistics, QuestionResponseTypesDto>();
+        CreateMap<QuestionResponseStatistics, SubQuestionResponseTypesDto>();
         CreateMap<ParticipantResponseType, ParticipantResponseTypeDto>()
              .ForMember(dest => dest.ResponseType, m => m.MapFrom(src => src.ResponseType.ToString()));
        

@@ -52,9 +52,9 @@ public class SurveyProfile : Profile
             .ReverseMap();
 
 
-        CreateMap<QuestionResponseStatisticsDto, QuestionResponseStatisticsVM>();       
-        CreateMap<QuestionResponseTypesDto, QuestionResponseTypesVM>();
-        CreateMap<SubQuestionResponseTypesDto, SubQuestionResponseTypesVM>();
+        CreateMap<SurveyStatisticsDto, SurveyStatisticsVM>();       
+        CreateMap<QuestionResponseTypesDto, ResponseStatisticsVM>();
+        CreateMap<SubQuestionResponseTypesDto, QuestionResponseStatisticsVM>();
         CreateMap<ParticipantResponseTypeDto, ParticipantResponseTypeVM>();
     }
 
