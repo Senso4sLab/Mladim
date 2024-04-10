@@ -9,6 +9,7 @@ using Mladim.Domain.Enums;
 using Mladim.Domain.Dtos.Survey.Statistics;
 using Mladim.Domain.Models.Survey.Statistics;
 using CsvHelper.TypeConversion;
+using System.Data;
 
 namespace Mladim.Client.MappingProfiles.Profiles.Survey;
 
@@ -52,10 +53,11 @@ public class SurveyProfile : Profile
             .ReverseMap();
 
 
-        CreateMap<SurveyStatisticsDto, SurveyStatisticsVM>();       
-        CreateMap<QuestionResponseTypesDto, ResponseStatisticsVM>();
-        CreateMap<SubQuestionResponseTypesDto, QuestionResponseStatisticsVM>();
-        CreateMap<ParticipantResponseTypeDto, ParticipantResponseTypeVM>();
+
+        CreateMap<QuestionSurveyStatisticsVM, QuestionSurveyStatisticsDto>().ReverseMap();
+        CreateMap<SurveyStatisticsVM, SurveyStatisticsDto>().ReverseMap();
+        CreateMap<QuestionResponseStatisticsVM, QuestionResponseStatisticsDto>().ReverseMap();
+        CreateMap<ParticipantResponseTypeVM, ParticipantResponseTypeDto>().ReverseMap();
     }
 
 

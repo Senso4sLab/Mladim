@@ -7,34 +7,38 @@
 
 <MudStack>
 
-<MudText Color="Color.Tertiary" Typo="Typo.h2">@QuestionResponseStatistics.SurveyQuestion.Texts.FirstOrDefault()</MudText>
+    @if(!string.IsNullOrEmpty(QuestionStatistics.SurveyQuestion.Header))
+    {
+       <MudText Color="Color.Tertiary" Typo="Typo.h2">@QuestionStatistics.SurveyQuestion.Header</MudText>
+    }
 
-@foreach (var subQuestionResponse in QuestionResponseStatistics.QuestionResponseTypes.QuestionResponses)
-        {
-            <SfChart Height="30" Width="@Width">
-                <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
-                <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category"/>   
-                <ChartPrimaryYAxis Visible="false"/>
-                <ChartArea>
-                    <ChartAreaBorder Width="0"></ChartAreaBorder>
-                </ChartArea>   
-                <ChartSeriesCollection>
-            @foreach (var seriesData in GetStackedBarData(QuestionResponseStatistics.SurveyQuestion.Type, subQuestionResponse).ToList())
-                    {
-                        <ChartSeries DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName" Type="ChartSeriesType.StackingBar100">
+    @for (int index = 0; index < QuestionStatistics.Statistics.QuestionsResponseTypes.Count(); index++)
+    {
+        <MudText Color="Color.Tertiary" Typo="Typo.h2">@QuestionStatistics.SurveyQuestion.Texts[index]</MudText>
 
-                            <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius" />
-                            <ChartMarker>
-                                <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">                          
-                                    <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
-                                </ChartDataLabel>
-                            </ChartMarker>
-                        </ChartSeries>
-                    }
-                </ChartSeriesCollection>
-            </SfChart>
-        }
+        <SfChart Height="30" Width="@Width">
+            <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
+            <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
+            <ChartPrimaryYAxis Visible="false" />
+            <ChartArea>
+                <ChartAreaBorder Width="0"></ChartAreaBorder>
+            </ChartArea>
+            <ChartSeriesCollection>
+                @foreach (var seriesData in GetStackedBarData(QuestionStatistics.SurveyQuestion.Type, QuestionStatistics.Statistics.QuestionsResponseTypes[index]))
+                {
+                    <ChartSeries DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName" Type="ChartSeriesType.StackingBar100">
 
+                        <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius" />
+                        <ChartMarker>
+                            <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
+                                <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
+                            </ChartDataLabel>
+                        </ChartMarker>
+                    </ChartSeries>
+                }
+            </ChartSeriesCollection>
+        </SfChart>
+    }    
 </MudStack>
     
 
@@ -43,8 +47,8 @@
 {
 
     [Parameter]
-    public SurveyStatisticsVM QuestionResponseStatistics { get; set; }
-    
+    public QuestionSurveyStatisticsVM QuestionStatistics { get; set; } = default!;
+
     [Parameter]
     public string Width { get; set; } = "100%";
 
@@ -70,6 +74,7 @@
          SurveyQuestionType.Rating => Enum.Parse<SurveyRatingResponseType>(name),
          SurveyQuestionType.Multiple => Enum.Parse<SurveyButtonResponseType>(name),
          SurveyQuestionType.MultipleRepetitive => Enum.Parse<SurveyRepetitiveButtonResponseType>(name),
+         _ => throw new NotImplementedException(),
      };
 
 
@@ -92,6 +97,7 @@
             SurveyRepetitiveButtonResponseType.Greatly => "4DA456",
             SurveyRepetitiveButtonResponseType.Quite => "394241",
             SurveyRepetitiveButtonResponseType.Little => "ffc700",
-            SurveyRepetitiveButtonResponseType.None => "8ED974",           
+            SurveyRepetitiveButtonResponseType.None => "8ED974",   
+            _ => throw new NotImplementedException(),
         };
 }

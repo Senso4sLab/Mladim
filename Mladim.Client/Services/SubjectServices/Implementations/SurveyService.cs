@@ -53,17 +53,17 @@ public class SurveyService : ISurveyService
         return this.Mapper.Map<IEnumerable<AnonymousSurveyResponseVM>>(responses);       
     }
 
-    public async Task<IEnumerable<SurveyStatisticsVM>> GetStatisticsByOrganizationIdAsync(int organizationId, DateTime start, DateTime end)
+    public async Task<IEnumerable<QuestionSurveyStatisticsVM>> GetStatisticsByOrganizationIdAsync(int organizationId, DateTime start, DateTime end)
     {
         string url = string.Format(MladimApiUrls.GetSurveyStatisticsByOrganization, organizationId, start, end);
-        var responses = await HttpClient.GetAsync<IEnumerable<SurveyStatisticsDto>>(url);
-        return this.Mapper.Map<IEnumerable<SurveyStatisticsVM>>(responses);
+        var responses = await HttpClient.GetAsync<IEnumerable<QuestionSurveyStatisticsDto>>(url);            
+        return this.Mapper.Map<IEnumerable<QuestionSurveyStatisticsVM>>(responses);       
     }
 
-    public async Task<IEnumerable<SurveyStatisticsVM>> GetStatisticsByProjectIdIdAsync(int projectId)
+    public async Task<IEnumerable<QuestionSurveyStatisticsVM>> GetStatisticsByProjectIdIdAsync(int projectId)
     {
         string url = string.Format(MladimApiUrls.GetSurveyStatisticsByProject, projectId);
         var responses = await HttpClient.GetAsync<IEnumerable<SurveyStatisticsDto>>(url);
-        return this.Mapper.Map<IEnumerable<SurveyStatisticsVM>>(responses);
+        return this.Mapper.Map<IEnumerable<QuestionSurveyStatisticsVM>>(responses);
     }
 }

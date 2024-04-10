@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace Mladim.Application.Features.Survey.Queries.GetSurveyResponses;
 
-public class GetSurveyStatisticsQueryHandler : IRequestHandler<GetSurveyStatisticsQuery, IEnumerable<SurveyStatisticsDto>>
+public class GetSurveyStatisticsQueryHandler : IRequestHandler<GetSurveyStatisticsQuery, IEnumerable<QuestionSurveyStatisticsDto>>
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
@@ -24,13 +24,13 @@ public class GetSurveyStatisticsQueryHandler : IRequestHandler<GetSurveyStatisti
         Mapper = mapper;
         UnitOfWork = unitOfWork;
     }
-    public async Task<IEnumerable<SurveyStatisticsDto>> Handle(GetSurveyStatisticsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<QuestionSurveyStatisticsDto>> Handle(GetSurveyStatisticsQuery request, CancellationToken cancellationToken)
     {
 
         //IEnumerable<int> questionIds = new List<int>() {1,2,3,4,5,11 };
 
         if (request.ProjectId is null && request.OrganizationId is null)
-            return Enumerable.Empty<SurveyStatisticsDto>();
+            return Enumerable.Empty<QuestionSurveyStatisticsDto>();
 
 
         var surveyResponses = request.ProjectId is int projectId ? 
@@ -47,15 +47,16 @@ public class GetSurveyStatisticsQueryHandler : IRequestHandler<GetSurveyStatisti
            .Select(qrts => qrts.AverageQuestionResponseTypes())
            .ToList();
 
+       
+
         var surveyQuestions = await UnitOfWork.SurveyQuestionRepository
             .GetSurveyQuestionnairy(1, Gender.Female, SurveyQuestionCategory.General | SurveyQuestionCategory.Group | SurveyQuestionCategory.Repetitive);
-
+        
         var questionsResponseStatistics = questionResponseTypes.Join(surveyQuestions, qrt => qrt.QuestionId, sq => sq.UniqueQuestionId, (qrt, sq) =>new QuestionSurveyStatistics(sq, qrt))
-            .Where(qrs => qrs.QuestionResponseTypes.SubQuestionResponseTypes.Count() > 0)            
-            .ToList();
-        //SurveyStatistics xs -> SurveyStatistics
+            .Where(qrs => qrs.Statistics.QuestionsResponseTypes.Count() > 0)            
+            .ToList();      
 
-        return this.Mapper.Map<IEnumerable<SurveyStatisticsDto>>(questionsResponseStatistics);
+        return this.Mapper.Map<IEnumerable<QuestionSurveyStatisticsDto>>(questionsResponseStatistics);
                 
     }
 

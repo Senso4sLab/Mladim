@@ -54,8 +54,8 @@ namespace Mladim.WebAPI.Controllers
 
 
         [Authorize]
-        [HttpGet("statistics")]
-        public async Task<ActionResult<IEnumerable<SurveyStatisticsDto>>> GetStatistics([FromQuery] GetSurveyStatisticsQuery statisticsQuery)
+        [HttpGet("statistics")] 
+        public async Task<ActionResult<IEnumerable<QuestionSurveyStatisticsDto>>> GetStatistics([FromQuery] GetSurveyStatisticsQuery statisticsQuery)
         {
             var surveyQuestionnairy = await this.Mediator.Send(statisticsQuery);
 

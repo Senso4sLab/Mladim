@@ -20,15 +20,13 @@ public class QuestionResponseTypeSelector // eno vprašanje
         var result = GroupedAverageActivitiesByQuestionResponseTypes()
             .SelectMany(qr => qr.SubQuestionResponseTypes.Select((sqr, index) => (sqr, index)))
             .GroupBy(tuple => tuple.index, (index, tuples) => tuples.Select(tuple => tuple.sqr))
-            .Select(AverageSubQuestionResponseTypes).ToList();
+            .Select(qrs => AverageSubQuestionResponseTypes(qrs, qrs.Count())).ToList();
 
         return new SurveyStatistics(this.QuestionId, result);
     }
 
-    private QuestionResponseStatistics AverageSubQuestionResponseTypes(IEnumerable<QuestionResponseStatistics> subQuestions)
+    private QuestionResponseStatistics AverageSubQuestionResponseTypes(IEnumerable<QuestionResponseStatistics> subQuestions, int numOfParticipants)
     {
-        var numOfParticipants = subQuestions.Count();
-
         var result = subQuestions.SelectMany(sbrt => sbrt.ResponseTypes)
             .GroupBy(prt => prt.ResponseType)
             .Select(g => new ParticipantResponseType(g.Key, AveragePercent(g.ToList(), numOfParticipants)))
@@ -50,18 +48,16 @@ public class QuestionResponseTypeSelector // eno vprašanje
             .ToList();
     }
 
-    // eno vprašanje za eno aktivity
+    // eno vprašanje za eno aktivnost
     private ActivityQuestionResponseTypes ActivityAverageResponseTypes(int activityId, IEnumerable<QuestionResponse> questionResponses)
     {
-        var result = questionResponses.OfType<SelectableQuestionResponse>()
+        var result = questionResponses.OfType<ISelectableResponse>()
              .SelectMany(qr => qr.ResponseEnum.Select((r, index) => (r, index)))
              .GroupBy(tuple => tuple.index, (index, tuples) => tuples.Select(tuple => tuple.r))
              .Select(AverageResponseTypes);
 
         return new ActivityQuestionResponseTypes(activityId, result);
     }
-
-
     private QuestionResponseStatistics AverageResponseTypes(IEnumerable<Enum> responseTypes)
     {
         var length = responseTypes.Count();        

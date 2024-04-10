@@ -2,4 +2,4 @@
 
 namespace Mladim.Domain.Models.Survey.Statistics;
 
-public record QuestionSurveyStatistics(SurveyQuestion SurveyQuestion, SurveyStatistics QuestionResponseTypes);
+public record QuestionSurveyStatistics(SurveyQuestion SurveyQuestion, SurveyStatistics Statistics);

@@ -118,14 +118,10 @@
 
 
     @foreach (var questionResponse in surveyStatistics)
-    {
-        @if (questionResponse.SurveyQuestion.Type != SurveyQuestionType.Multiple && questionResponse.SurveyQuestion.Type != SurveyQuestionType.MultipleRepetitive)
-        {
-            <MudItem sm="12">
-                <SurveyStatisticsChart QuestionResponseStatistics="@questionResponse"></SurveyStatisticsChart>
-            </MudItem>
-
-        }
+    {     
+        <MudItem sm="12">
+            <SurveyStatisticsChart QuestionStatistics ="@questionResponse"></SurveyStatisticsChart>
+        </MudItem>        
     }
   
 

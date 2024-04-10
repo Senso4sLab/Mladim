@@ -59,7 +59,7 @@ public partial class OrganizationStatisticsTab
     private List<ActivityForGantt> activities = new List<ActivityForGantt>();
 
     private string chartWidth = "100%";
-    private IEnumerable<SurveyStatisticsVM> SurveyStatistics { get; set; } = new List<SurveyStatisticsVM>();
+    private IEnumerable<QuestionSurveyStatisticsVM> SurveyStatistics { get; set; } = new List<QuestionSurveyStatisticsVM>();
 
     protected override async Task OnInitializedAsync()
     {

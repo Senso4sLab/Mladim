@@ -37,7 +37,7 @@ public partial class ProjectStatisticsTab
     private ProjectStatisticsVM? projectStatistics;
 
 
-    private IEnumerable<SurveyStatisticsVM> surveyStatistics = new List<SurveyStatisticsVM>();  
+    private IEnumerable<QuestionSurveyStatisticsVM> surveyStatistics = new List<QuestionSurveyStatisticsVM>();  
 
     //private List<DoughnutPiece> GenderDoughnut = new List<DoughnutPiece>();
     //private List<DoughnutPiece> AgeDoughnut = new List<DoughnutPiece>();

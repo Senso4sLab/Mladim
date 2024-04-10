@@ -9,6 +9,6 @@ public interface ISurveyService
     Task<IEnumerable<AnonymousSurveyResponseVM>> GetAnonymousSurveyResponsesAsync(int activityId);
     Task<IEnumerable<SurveyQuestionVM>> GetSurveyQuestionnairyAsync(int activityId, Gender gender);
     Task<bool> PostAnonymousSurveyResponseAsync(int activityId, AnonymousSurveyResponseVM anonymousSurveyResponse);    
-    Task<IEnumerable<SurveyStatisticsVM>> GetStatisticsByProjectIdIdAsync(int projectId);
-    Task<IEnumerable<SurveyStatisticsVM>> GetStatisticsByOrganizationIdAsync(int organizationId, DateTime start, DateTime end);
+    Task<IEnumerable<QuestionSurveyStatisticsVM>> GetStatisticsByProjectIdIdAsync(int projectId);
+    Task<IEnumerable<QuestionSurveyStatisticsVM>> GetStatisticsByOrganizationIdAsync(int organizationId, DateTime start, DateTime end);
 }
