@@ -92,8 +92,8 @@
                 }
 
                 <MudItem xs="12" >
-                <MudStack Row Spacing="3" AlignItems="AlignItems.Stretch" >
-                     <MudPaper Outlined="true" Class="pa-4">                             
+                    <MudStack Row Spacing="3" AlignItems="AlignItems.Stretch" >
+                            <MudPaper Outlined="true" Class="pa-4">                             
                                      <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
                                         <MudAvatar Style="background-color:#4da456" Variant="Variant.Filled" Size="MudBlazor.Size.Large">
                                             <MudImage Class="pa-3" Src="/participants.png" />
@@ -103,7 +103,7 @@
                                             <MudText Typo="Typo.h2" Color="Color.Tertiary">Udeleženci</MudText>
                                         </MudStack>        
                                     </MudStack>                            
-                                </MudPaper>
+                            </MudPaper>
                             <MudPaper Outlined="true" Class="pa-4">
                                 <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
                                          <MudAvatar Style="background-color:#FCCA46" Variant="Variant.Filled" Size="MudBlazor.Size.Large">
@@ -125,21 +125,31 @@
                                              <MudText Typo="Typo.h2" Color="Color.Tertiary">Aktivni projekti</MudText>
                                         </MudStack>
                                     </MudStack>
-                                </MudPaper>
-                        </MudStack>              
+                            </MudPaper>
+                    </MudStack>              
                 </MudItem>
 
-                @foreach(var questionResponse in SurveyStatistics)
+                @foreach (var questionResponse in ShownQuestionsSurveyStatistics)
                 {                   
-                    <MudItem sm="12">
-                        <SurveyStatisticsChart Width="@chartWidth" QuestionStatistics="@questionResponse"/>
+                    <MudItem sm="12">                       
+                       <SurveyStatisticsChart Width="@chartWidth" QuestionStatistics="@questionResponse"/>                       
                     </MudItem>               
                 }
+                 <MudItem sm="12">
+                    @if (ShownQuestionsSurveyStatistics.Any())
+                    {
+                        <MudStack Row Justify="Justify.Center">
+                            <MudToggleIconButton Toggled="@MoreQuestionStatistics" ToggledChanged="OnMoreQuestionStatisticsChanged" 
+                                Icon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary" 
+                                ToggledIcon="@Icons.Material.Filled.KeyboardArrowUp" ToggledColor="Color.Primary" />
+                        </MudStack>
+                    }
+                 </MudItem>  
            </MudGrid>
 
         </div>
 
-    @if (activities.Count > 0)
+    @if (activities.Any())
     {
 
         <MudText Typo="Typo.h2" Color="Color.Tertiary">Seznam prihajajočih aktivnosti</MudText>

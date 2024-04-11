@@ -31,8 +31,9 @@ public partial class OrganizationStatisticsTab
     [Inject]
     public IJSRuntime JS { get; set; }
 
+    bool MoreQuestionStatistics { get; set; } = false;
+    IEnumerable<int> DefaultQuestionsForStatistics = new List<int>() { 1, 2, 3, 4, 5, 11 };
 
-    
 
     SfAccumulationChart accChart;
 
@@ -45,21 +46,18 @@ public partial class OrganizationStatisticsTab
     //[Parameter]
     public DefaultOrganization? SelectedOrganization { get; set; }
 
-    private OrganizationStatisticVM organizationStatistics { get; set; }
+    private OrganizationStatisticVM organizationStatistics { get; set; } = default!;
 
-    //private IEnumerable<int> availableYears = new List<int>();  
-    //private int selectedYear = DateTime.UtcNow.Year;
+  
 
     private DateRange statisticsDateRange = new DateRange();
-
-
-
-
-
+    
     private List<ActivityForGantt> activities = new List<ActivityForGantt>();
 
     private string chartWidth = "100%";
-    private IEnumerable<QuestionSurveyStatisticsVM> SurveyStatistics { get; set; } = new List<QuestionSurveyStatisticsVM>();
+    private IEnumerable<QuestionSurveyStatisticsVM> ShownQuestionsSurveyStatistics { get; set; } = new List<QuestionSurveyStatisticsVM>();
+
+    private IEnumerable<QuestionSurveyStatisticsVM> QuestionsSurveyStatistics { get; set; } = new List<QuestionSurveyStatisticsVM>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -68,12 +66,13 @@ public partial class OrganizationStatisticsTab
         await OrgStatisticsDateTimePickerClosed();
     }
 
-    private async Task Export()
+    public void OnMoreQuestionStatisticsChanged(bool toggled)
     {
-        
+        MoreQuestionStatistics = !MoreQuestionStatistics;
+        ShownQuestionsSurveyStatistics = ShowingQuestionsForSurveyStatistics();    
     }
 
-    
+
 
 
     private void SetDefaultOrgStatisticsDateRange(DateTime now)
@@ -88,17 +87,15 @@ public partial class OrganizationStatisticsTab
    
     private async Task GeneratePdf()
     {
-        chartWidth = "680px";
-
-        //Task.Delay(1000).ContinueWith(async x =>
-        //{
-        //    await JS.InvokeVoidAsync("extractHtmlAndPrint", "org_statistic_id");
-        //    chartWidth = "100%";
-        //    StateHasChanged();
-        //});
+        chartWidth = "680px";      
 
         //await accChart.ExportAsync(Syncfusion.Blazor.Charts.ExportType.PNG, "test", null, false);
+
+        await Task.Delay(100);
+        
         await accChart.PrintAsync(Element);
+
+        chartWidth = "100%";
     }
 
     public async Task<List<ActivityForGantt>> UpcommingActivitiesAsync(int numOfUpcommingActivities)
@@ -122,10 +119,21 @@ public partial class OrganizationStatisticsTab
 
         this.activities = await UpcommingActivitiesAsync(5);
 
-        this.SurveyStatistics = await this.SurveyService.GetStatisticsByOrganizationIdAsync(SelectedOrganization.Id, statisticsDateRange.Start.Value, statisticsDateRange.End.Value);
-
-
+        this.QuestionsSurveyStatistics = await this.SurveyService.GetStatisticsByOrganizationIdAsync(SelectedOrganization.Id, statisticsDateRange.Start.Value, statisticsDateRange.End.Value);
+        this.MoreQuestionStatistics = false;
+        this.ShownQuestionsSurveyStatistics = ShowingQuestionsForSurveyStatistics();     
     }
+
+    private IEnumerable<QuestionSurveyStatisticsVM> ShowingQuestionsForSurveyStatistics() =>
+        this.MoreQuestionStatistics ? 
+        this.QuestionsSurveyStatistics.ToList() : 
+        this.QuestionsSurveyStatistics.Where(qss => DefaultQuestionsForStatistics.Any(q => q == qss.SurveyQuestion.UniqueQuestionId)).ToList();
+
+
+    
+
+   
+    
     public async Task<OrganizationStatisticVM?> OrganizationStatisticsAsync(DateRange range)
     {
         return await this.OrganizationService.GetStatisticsByDateRangeAsync(SelectedOrganization!.Id, range.Start!.Value, range.End!.Value);

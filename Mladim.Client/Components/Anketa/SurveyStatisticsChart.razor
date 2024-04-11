@@ -38,10 +38,7 @@
                 }
             </ChartSeriesCollection>
         </SfChart>
-    } 
-    <MudStack Row Justify="Justify.Center">           
-        <MudToggleIconButton Toggled="@MoreQuestionStatistics" ToggledChanged="OnMoreQuestionStatisticsChanged" Icon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary" ToggledIcon="@Icons.Material.Filled.KeyboardArrowUp" ToggledColor="Color.Primary" />
-    </MudStack>
+    }    
 
 </MudStack>
     
@@ -54,24 +51,26 @@
     public QuestionSurveyStatisticsVM QuestionStatistics { get; set; } = default!;
 
     [Parameter]
-    public string Width { get; set; } = "100%";
+    public string Width { get; set; } = "100%";    
 
-    public bool MoreQuestionStatistics { get; set; }
+    private List<QuestionResponseBar> questionsResponseBars = default!;    
 
-    private List<QuestionResponseBar> questionsResponseBars = default!;
+    // protected override void OnInitialized()
+    // {
+    //     questionsResponseBars = this.QuestionStatistics.SurveyQuestion.Texts
+    //         .Select((q, index) => new QuestionResponseBar(q, GetStackedBarData(index)))
+    //         .ToList();   
+    // }
 
-    private IEnumerable<int> questionIds = new List<int>() {1, 2, 3, 4, 5, 11};
-
-    protected override void OnInitialized()
+    protected override void OnParametersSet()
     {
         questionsResponseBars = this.QuestionStatistics.SurveyQuestion.Texts
-            .Select((q, index) => new QuestionResponseBar(q, GetStackedBarData(index)))
-            .ToList();   
+           .Select((q, index) => new QuestionResponseBar(q, GetStackedBarData(index)))
+           .ToList();
     }
 
     private IEnumerable<ResponseBar> GetStackedBarData(int index) => 
-        this.GetStackedBarData(QuestionStatistics.SurveyQuestion.Type, QuestionStatistics.Statistics.QuestionsResponseTypes[index]);
-
+    this.GetStackedBarData(QuestionStatistics.SurveyQuestion.Type, QuestionStatistics.Statistics.QuestionsResponseTypes[index]);
 
     private List<ResponseBar> GetStackedBarData(SurveyQuestionType type, QuestionResponseStatisticsVM questionResponseStatistics)
     {
@@ -89,10 +88,7 @@
     }
 
 
-    public void OnMoreQuestionStatisticsChanged(bool toggled)
-    {
-       
-    }
+ 
 
 
 
