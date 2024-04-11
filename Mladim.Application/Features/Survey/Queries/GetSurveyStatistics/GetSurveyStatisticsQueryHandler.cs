@@ -26,9 +26,6 @@ public class GetSurveyStatisticsQueryHandler : IRequestHandler<GetSurveyStatisti
     }
     public async Task<IEnumerable<QuestionSurveyStatisticsDto>> Handle(GetSurveyStatisticsQuery request, CancellationToken cancellationToken)
     {
-
-        //IEnumerable<int> questionIds = new List<int>() {1,2,3,4,5,11 };
-
         if (request.ProjectId is null && request.OrganizationId is null)
             return Enumerable.Empty<QuestionSurveyStatisticsDto>();
 
