@@ -67,6 +67,6 @@ public class QuestionResponseTypeSelector // eno vprašanje
     }
 
     private float Percent(int element, int length) =>
-        (float)Math.Round((float)element / length,1);
+        (float)Math.Round(100 * (float)element / length, 1);
 
 }

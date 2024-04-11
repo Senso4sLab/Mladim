@@ -50,7 +50,7 @@ public partial class OrganizationStatisticsTab
     //private IEnumerable<int> availableYears = new List<int>();  
     //private int selectedYear = DateTime.UtcNow.Year;
 
-    private DateRange orgStatisticsDateRange = new DateRange();
+    private DateRange statisticsDateRange = new DateRange();
 
 
 
@@ -78,7 +78,7 @@ public partial class OrganizationStatisticsTab
 
     private void SetDefaultOrgStatisticsDateRange(DateTime now)
     {
-        orgStatisticsDateRange = new DateRange(now.AddYears(-1), now);
+        statisticsDateRange = new DateRange(now.AddYears(-1), now);
     }
 
 
@@ -117,12 +117,14 @@ public partial class OrganizationStatisticsTab
 
     private async Task OrgStatisticsDateTimePickerClosed()
     {
-        this.organizationStatistics = await OrganizationStatisticsAsync(orgStatisticsDateRange);
+        this.organizationStatistics = await OrganizationStatisticsAsync(statisticsDateRange);
         this.isAnyParticipant = organizationStatistics?.AgeDoughnut.Count() > 0 && organizationStatistics?.GenderDoughnut.Count() > 0;
 
         this.activities = await UpcommingActivitiesAsync(5);
 
-        this.SurveyStatistics = await this.SurveyService.GetStatisticsByOrganizationIdAsync(SelectedOrganization.Id, orgStatisticsDateRange.Start.Value, orgStatisticsDateRange.End.Value);
+        this.SurveyStatistics = await this.SurveyService.GetStatisticsByOrganizationIdAsync(SelectedOrganization.Id, statisticsDateRange.Start.Value, statisticsDateRange.End.Value);
+
+
     }
     public async Task<OrganizationStatisticVM?> OrganizationStatisticsAsync(DateRange range)
     {

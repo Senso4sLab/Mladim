@@ -54,7 +54,7 @@ public class QuestionTextResponse : QuestionResponse, ITextResponse
 public class QuestionRatingResponse : SelectableQuestionResponse<SurveyRatingResponseType>
 {   
 }
-public class QuestionBooleanResponse : SelectableQuestionResponse<SurveyRatingResponseType>
+public class QuestionBooleanResponse : SelectableQuestionResponse<SurveyBooleanResponseType>
 {   
 }
 

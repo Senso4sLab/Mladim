@@ -3,6 +3,7 @@
 @using Mladim.Domain.Enums;
 @using Syncfusion.Blazor.Charts
 @using Syncfusion.Blazor.Grids;
+@using System.Diagnostics
 
 
 <style>
@@ -32,8 +33,8 @@
 <MudStack Spacing="4" Class="py-5" >
         <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="py-3">
              <MudStack Row Spacing="3">
-                 <MudDatePicker Color="Color.Primary" Label="Začetek" MaxDate="@orgStatisticsDateRange?.End" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@orgStatisticsDateRange.Start" OpenTo="OpenTo.Year" FixDay="1" />
-                 <MudDatePicker Color="Color.Primary" Label="Konec" MinDate="@orgStatisticsDateRange?.Start" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@orgStatisticsDateRange.End" OpenTo="OpenTo.Year" FixDay="1" />
+                 <MudDatePicker Color="Color.Primary" Label="Začetek" MaxDate="@statisticsDateRange?.End" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@statisticsDateRange.Start" OpenTo="OpenTo.Year" FixDay="1" />
+                 <MudDatePicker Color="Color.Primary" Label="Konec" MinDate="@statisticsDateRange?.Start" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@statisticsDateRange.End" OpenTo="OpenTo.Year" FixDay="1" />
              </MudStack>
              <MudIconButton Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.PictureAsPdf" OnClick="GeneratePdf"></MudIconButton>
          </MudStack>
@@ -129,10 +130,10 @@
                 </MudItem>
 
                 @foreach(var questionResponse in SurveyStatistics)
-                {                    
-                   <MudItem sm="12">
-                       <SurveyStatisticsChart Width="@chartWidth" QuestionStatistics="@questionResponse"/>
-                   </MudItem>                     
+                {                   
+                    <MudItem sm="12">
+                        <SurveyStatisticsChart Width="@chartWidth" QuestionStatistics="@questionResponse"/>
+                    </MudItem>               
                 }
            </MudGrid>
 

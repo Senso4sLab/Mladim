@@ -10,11 +10,11 @@
     @if(!string.IsNullOrEmpty(QuestionStatistics.SurveyQuestion.Header))
     {
        <MudText Color="Color.Tertiary" Typo="Typo.h2">@QuestionStatistics.SurveyQuestion.Header</MudText>
-    }
+    }    
 
-    @for (int index = 0; index < QuestionStatistics.Statistics.QuestionsResponseTypes.Count(); index++)
+    @foreach (var questionResponseBar in questionsResponseBars)
     {
-        <MudText Color="Color.Tertiary" Typo="Typo.h2">@QuestionStatistics.SurveyQuestion.Texts[index]</MudText>
+        <MudText Color="Color.Tertiary" Typo="Typo.h2">@questionResponseBar.Question</MudText>
 
         <SfChart Height="30" Width="@Width">
             <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
@@ -24,7 +24,7 @@
                 <ChartAreaBorder Width="0"></ChartAreaBorder>
             </ChartArea>
             <ChartSeriesCollection>
-                @foreach (var seriesData in GetStackedBarData(QuestionStatistics.SurveyQuestion.Type, QuestionStatistics.Statistics.QuestionsResponseTypes[index]))
+                @foreach (var seriesData in questionResponseBar.ResponseBar)
                 {
                     <ChartSeries DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName" Type="ChartSeriesType.StackingBar100">
 
@@ -51,6 +51,20 @@
 
     [Parameter]
     public string Width { get; set; } = "100%";
+
+
+    private List<QuestionResponseBar> questionsResponseBars = default!;
+
+    protected override void OnInitialized()
+    {
+        questionsResponseBars = this.QuestionStatistics.SurveyQuestion.Texts
+            .Select((q, index) => new QuestionResponseBar(q, GetStackedBarData(index)))
+            .ToList();   
+    }
+
+    private IEnumerable<ResponseBar> GetStackedBarData(int index) => 
+        this.GetStackedBarData(QuestionStatistics.SurveyQuestion.Type, QuestionStatistics.Statistics.QuestionsResponseTypes[index]);
+
 
     private List<ResponseBar> GetStackedBarData(SurveyQuestionType type, QuestionResponseStatisticsVM questionResponseStatistics)
     {
@@ -100,4 +114,7 @@
             SurveyRepetitiveButtonResponseType.None => "8ED974",   
             _ => throw new NotImplementedException(),
         };
+
+
+    public record QuestionResponseBar(string Question, IEnumerable<ResponseBar> ResponseBar);
 }
