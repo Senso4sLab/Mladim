@@ -39,11 +39,7 @@ public partial class OrganizationStatisticsTab
 
      ElementReference Element;
 
-    //[CascadingParameter]
-    //public OrganizationVM? SelectedOrganization { get; set; }
-
-
-    //[Parameter]
+    
     public DefaultOrganization? SelectedOrganization { get; set; }
 
     private OrganizationStatisticVM organizationStatistics { get; set; } = default!;
