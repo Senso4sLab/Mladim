@@ -38,7 +38,9 @@
                 }
             </ChartSeriesCollection>
         </SfChart>
-    }    
+    } 
+    <MudToggleIconButton Toggled="@MoreQuestionStatistics" ToggledChanged="OnMoreQuestionStatisticsChanged" Icon="@Icons.Material.Filled.KeyboardArrowDown" Color="Color.Primary" ToggledIcon="@Icons.Material.Filled.KeyboardArrowUp" ToggledColor="Color.Primary" />
+
 </MudStack>
     
 
@@ -52,6 +54,7 @@
     [Parameter]
     public string Width { get; set; } = "100%";
 
+    public bool MoreQuestionStatistics { get; set; }
 
     private List<QuestionResponseBar> questionsResponseBars = default!;
 
@@ -80,6 +83,14 @@
 
         return result;
     }
+
+
+    public void OnMoreQuestionStatisticsChanged(bool toggled)
+    {
+       
+    }
+
+
 
     private Enum StackedBarName(SurveyQuestionType type, string name) =>
      type switch
