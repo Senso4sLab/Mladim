@@ -69,21 +69,28 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
         else
         {
             if (await this.UnitOfWork.OrganizationRepository.IsUserInOrganizationAsync(user.Id, organization.Id))
-                throw new Exception("Uporabnik je že dodan v organizacijo");
-
-            user.Organizations.Add(organization);
-            await this.AuthService.AddClaimAsync(user, claim);
-            await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);
-            await this.UnitOfWork.SaveChangesAsync();
-
-            if (Enum.TryParse(claim.Type, out ApplicationClaim appClaim))
             {
-
-                var emailContent = string.Format(this.EmailContent.ContentUserAddedNewOrganization, appClaim.GetDisplayAttribute());
+                // re-send invitation
+                var emailToken = await this.AuthService.EmailTokenAsync(user);
+                var registrationUrl = $"{HttpContextAccessor?.HttpContext?.AppBaseUrl()}/registration?EmailId={emailToken}";
+                var emailContent = string.Format(this.EmailContent.ContentAddedNewUser, registrationUrl);
                 await SendEmailAsync(emailContent, request.Email);
             }
             else
-                throw new Exception("Izbrani tip uporabnika ne obstaja");
+            {
+                user.Organizations.Add(organization);
+                await this.AuthService.AddClaimAsync(user, claim);
+                await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);
+                await this.UnitOfWork.SaveChangesAsync();
+
+                if (Enum.TryParse(claim.Type, out ApplicationClaim appClaim))
+                {
+                    var emailContent = string.Format(this.EmailContent.ContentUserAddedNewOrganization, appClaim.GetDisplayAttribute());
+                    await SendEmailAsync(emailContent, request.Email);
+                }
+                else
+                    throw new Exception("Izbrani tip uporabnika ne obstaja");
+            }
         }
 
         return this.Mapper.Map<StaffMemberDetailsQueryDto>(staffMember);

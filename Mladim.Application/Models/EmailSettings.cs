@@ -12,6 +12,7 @@ public class PredefinedEmailContent
     public string ContentAddedNewUser { get; set; } = string.Empty;
     public string ContentUserAddedNewOrganization { get; set; } = string.Empty;
     public string ContentUserAddedNewClaim { get; set; } = string.Empty;
+   
 }
 
 
