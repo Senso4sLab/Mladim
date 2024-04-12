@@ -154,9 +154,19 @@ public class AuthService : IAuthService
 
 
     public async Task<string> EmailTokenAsync(AppUser appUser)
-    {
+    {        
         return await this.UserManager.GenerateEmailConfirmationTokenAsync(appUser);
     }
+
+    public async Task<bool> ResetPasswordAsync(AppUser user, string token, string password)
+    {
+        var identityResult = await this.UserManager.ResetPasswordAsync(user, token, password);
+        return identityResult.Succeeded;
+    }      
+
+
+    public Task<string> GeneratePasswordResetTokenAsync(AppUser user) =>
+        this.UserManager.GeneratePasswordResetTokenAsync(user);
 
 
     public async Task<Result<AuthResponse>> RegisterConfirmationAsync(string email, string emailToken, string password)

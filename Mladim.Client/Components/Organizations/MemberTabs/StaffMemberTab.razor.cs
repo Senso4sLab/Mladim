@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Mladim.Client.ViewModels;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.Services.PopupService;
@@ -37,9 +37,7 @@ public partial class StaffMemberTab
 
     private async Task AddStaffMemberAsync()
     {
-        var staffMember = new StaffMemberVM() { Claim = ApplicationClaim.Worker };
-
-       
+        var staffMember = new StaffMemberVM() { Claim = ApplicationClaim.Worker };       
 
         var dialogResponse = await this.PopupService.ShowStaffMemberDialog("Nov uporabnik", staffMember);
 
@@ -51,7 +49,7 @@ public partial class StaffMemberTab
         if (staffMember != null)
         {
             Staff.Add(staffMember);
-            this.PopupService.ShowSnackbarSuccess("Uporabnik uspe�no dodan");
+            this.PopupService.ShowSnackbarSuccess("Uporabnik uspešno dodan");
         }
         else
             this.PopupService.ShowSnackbarError();
@@ -62,6 +60,25 @@ public partial class StaffMemberTab
         this.IsActive = isActive;
         await OnParametersSetAsync();
     }
+
+    private async Task ResendInvitationAsync(StaffMemberVM staffMember)
+    {
+        var dialogResponse = await this.PopupService.ShowSimpleTextDialogAsync("Ponovno pošiljanje vabila ", $"Ali ste prepričani, da želite osebi {staffMember.FullName} ponovno poslati vabilo za pridružitev k vaši organizaciji?");
+
+        if (!dialogResponse)
+            return;
+
+        var succeedResponse = await this.StaffService.AddAsync(this.Organization.Id, staffMember);
+
+        if (succeedResponse!= null)        
+            this.PopupService.ShowSnackbarSuccess("Vabilo je uspešno poslano");       
+        else
+            this.PopupService.ShowSnackbarError();
+    }
+
+    
+
+
 
     private async Task UpdateStaffMemberAsync(StaffMemberVM staffMember)
     {
@@ -75,7 +92,7 @@ public partial class StaffMemberTab
 
         if (succeedResponse)
         {
-            this.PopupService.ShowSnackbarSuccess("Podatki uspe�no posodobljeni");
+            this.PopupService.ShowSnackbarSuccess("Podatki uspešno posodobljeni");
             await OnParametersSetAsync();
         }
         else
