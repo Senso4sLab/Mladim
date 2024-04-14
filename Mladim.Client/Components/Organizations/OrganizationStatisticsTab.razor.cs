@@ -78,20 +78,33 @@ public partial class OrganizationStatisticsTab
 
 
 
-    bool isAnyParticipant = false;   
+    bool isAnyParticipant = false;
 
+    System.Action ExportCharts { get;set; }
    
+  
     private async Task GeneratePdf()
     {
-        chartWidth = "680px";      
+        //chartWidth = "680px";      
 
-        //await accChart.ExportAsync(Syncfusion.Blazor.Charts.ExportType.PNG, "test", null, false);
+        ////await accChart.ExportAsync(Syncfusion.Blazor.Charts.ExportType.PNG, "test", null, false);
 
-        await Task.Delay(100);
-        
-        await accChart.PrintAsync(Element);
+        //await Task.Delay(100);
 
-        chartWidth = "100%";
+        //await accChart.PrintAsync(Element);
+
+        //chartWidth = "100%";
+
+        ExportCharts += () => Console.WriteLine("test");
+
+        if (ExportCharts == null)
+        {
+
+        }
+
+
+        ExportCharts?.Invoke();
+        //Actionn();
     }
 
     public async Task<List<ActivityForGantt>> UpcommingActivitiesAsync(int numOfUpcommingActivities)

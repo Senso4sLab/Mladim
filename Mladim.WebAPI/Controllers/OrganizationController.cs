@@ -15,6 +15,7 @@ using Mladim.Domain.Dtos;
 using Mladim.Domain.Dtos.Organization;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
+using System.Globalization;
 
 namespace Mladim.WebAPI.Controllers;
 
@@ -85,12 +86,13 @@ public class OrganizationController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("{orgId}/statistics")]
-    public async Task<ActionResult<OrganizationStatisticQueryDto>> GetStatistics(int orgId, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
-    {
-        var query = new GetOrganizationStatisticQuery { OrganizationId = orgId, DateTimeRange = DateTimeRange.Create(startDate, endDate) };
+   
+
+    [HttpGet("{orgId}/statistics")] 
+    public async Task<ActionResult<OrganizationStatisticQueryDto>> GetStatistics(int orgId, DateTime startDate, DateTime endDate)
+    {        
         
-        var response = await this.Mediator.Send(query);
+        var response = await this.Mediator.Send(new GetOrganizationStatisticQuery() { OrganizationId = orgId, DateTimeRange = DateTimeRange.Create(startDate, endDate)});
 
         return Ok(response);
     }

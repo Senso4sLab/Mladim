@@ -14,5 +14,5 @@ namespace Mladim.Application.Features.Organizations.Queries.GetOrganizationStati
 public class GetOrganizationStatisticQuery : IRequest<OrganizationStatisticQueryDto>
 {
     public int OrganizationId { get; set; }
-    public DateTimeRange DateTimeRange { get;set; }     
+    public DateTimeRange DateTimeRange { get; set; } 
 }

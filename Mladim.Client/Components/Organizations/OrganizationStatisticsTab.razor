@@ -131,8 +131,8 @@
 
                 @foreach (var questionResponse in ShownQuestionsSurveyStatistics)
                 {                   
-                    <MudItem sm="12">                       
-                       <SurveyStatisticsChart Width="@chartWidth" QuestionStatistics="@questionResponse"/>                       
+                    <MudItem sm="12">
+                        <SurveyStatisticsChart ExportChartAsImage="@Genera" Width="@chartWidth" QuestionStatistics="@questionResponse" />
                     </MudItem>               
                 }
                  <MudItem sm="12">

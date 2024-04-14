@@ -11,6 +11,7 @@ using Mladim.Client.Models;
 using Mladim.Domain.Models;
 using Mladim.Client.ViewModels.Organization;
 using Mladim.Domain.Dtos.Organization;
+using Mladim.Client.Pages;
 
 namespace Mladim.Client.Services.SubjectServices.Implementations;
 
@@ -63,7 +64,7 @@ public class OrganizationService : IOrganizationService
 
     public async Task<OrganizationStatisticVM?> GetStatisticsByDateRangeAsync(int organizationId, DateTime start, DateTime end)
     {
-        string url = string.Format(MladimApiUrls.GetOrganizationStatistics, organizationId, start.ToString(), end.ToString());      
+        string url = string.Format(MladimApiUrls.GetOrganizationStatistics, organizationId, start.ToLongDateString(),end.ToLongDateString());      
 
         var organizations = await HttpClient.GetAsync<OrganizationStatisticQueryDto>(url);
         return this.Mapper.Map<OrganizationStatisticVM>(organizations);
