@@ -38,8 +38,7 @@ public partial class OrganizationStatisticsTab
     SfAccumulationChart accChart;
 
      ElementReference Element;
-
-    
+    public System.Action ExportCharts { get; set; } = null;
     public DefaultOrganization? SelectedOrganization { get; set; }
 
     private OrganizationStatisticVM organizationStatistics { get; set; } = default!;
@@ -80,7 +79,7 @@ public partial class OrganizationStatisticsTab
 
     bool isAnyParticipant = false;
 
-    System.Action ExportCharts { get;set; }
+  
    
   
     private async Task GeneratePdf()
@@ -95,16 +94,13 @@ public partial class OrganizationStatisticsTab
 
         //chartWidth = "100%";
 
-        ExportCharts += () => Console.WriteLine("test");
+        //ExportCharts += () => Console.WriteLine("test");
 
-        if (ExportCharts == null)
-        {
-
-        }
+      
 
 
         ExportCharts?.Invoke();
-        //Actionn();
+        
     }
 
     public async Task<List<ActivityForGantt>> UpcommingActivitiesAsync(int numOfUpcommingActivities)

@@ -132,7 +132,7 @@
                 @foreach (var questionResponse in ShownQuestionsSurveyStatistics)
                 {                   
                     <MudItem sm="12">
-                        <SurveyStatisticsChart ExportChartAsImage="@Genera" Width="@chartWidth" QuestionStatistics="@questionResponse" />
+                        <SurveyStatisticsChart Parent="@this" Width="@chartWidth" QuestionStatistics="@questionResponse" />
                     </MudItem>               
                 }
                  <MudItem sm="12">

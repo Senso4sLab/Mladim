@@ -16,18 +16,17 @@
     {
         <MudText Color="Color.Tertiary" Typo="Typo.h2">@questionResponseBar.Question</MudText>
 
-        <SfChart @ref="@Chart" Height="30" Width="@Width" EnableAnimation="false"  >
+        <SfChart @ref="@Chart" Height="30" Width="@Width" EnableAnimation="false">
             <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
             <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
             <ChartPrimaryYAxis Visible="false" />
             <ChartArea>
                 <ChartAreaBorder Width="0"></ChartAreaBorder>
             </ChartArea>
-            <ChartEvents OnDataLabelRender="IgnoreZeroLabels"></ChartEvents>
             <ChartSeriesCollection>
                 @foreach (var seriesData in questionResponseBar.ResponseBar)
                 {
-                    <ChartSeries DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName"  Type="ChartSeriesType.StackingBar100">
+                    <ChartSeries DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName" Type="ChartSeriesType.StackingBar100">
 
                         <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius" />
                         <ChartMarker>
@@ -78,7 +77,7 @@
     }
 
     private IEnumerable<ResponseBar> GetStackedBarData(int index) => 
-        this.GetStackedBarData(QuestionStatistics.SurveyQuestion.Type, QuestionStatistics.Statistics.QuestionsResponseTypes[index]);
+    this.GetStackedBarData(QuestionStatistics.SurveyQuestion.Type, QuestionStatistics.Statistics.QuestionsResponseTypes[index]);
 
     private List<ResponseBar> GetStackedBarData(SurveyQuestionType type, QuestionResponseStatisticsVM questionResponseStatistics)
     {
@@ -107,8 +106,7 @@
          _ => throw new NotImplementedException(),
      };
 
-    private void IgnoreZeroLabels(TextRenderEventArgs args) =>
-        args.Text = args.Text == "0" ? String.Empty : args.Text;   
+
 
 
     private string Fill(Enum responseType) =>

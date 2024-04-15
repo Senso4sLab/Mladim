@@ -38,7 +38,7 @@ public class BarValue
         this.ClassIcon = classIcon;
     }
 
-    public static BarValue CreateBarValue(string name, float value, string classicon = "") =>
-        new BarValue("barValue", name, value, classicon);
+    public static BarValue CreateBarValue(string name, float value, string classIcon = "") =>
+        new BarValue("barValue", name, value, classIcon);
 
 }
