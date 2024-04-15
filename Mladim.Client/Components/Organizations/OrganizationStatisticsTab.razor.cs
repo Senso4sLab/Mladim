@@ -84,17 +84,12 @@ public partial class OrganizationStatisticsTab
   
     private async Task GeneratePdf()
     {
-        //chartWidth = "680px";      
-
-        ////await accChart.ExportAsync(Syncfusion.Blazor.Charts.ExportType.PNG, "test", null, false);
-
+        //chartWidth = "680px";        
         //await Task.Delay(100);
-
         //await accChart.PrintAsync(Element);
-
         //chartWidth = "100%";
 
-        //ExportCharts += () => Console.WriteLine("test");
+        
 
       
 

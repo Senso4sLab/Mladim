@@ -3,39 +3,45 @@
 @using Mladim.Domain.Enums;
 @using Syncfusion.Blazor.Charts
 @using Mladim.Domain.Extensions
+@implements IDisposable
 
 
 <MudStack>
 
-    @if(!string.IsNullOrEmpty(QuestionStatistics.SurveyQuestion.Header))
+    @* @if(!string.IsNullOrEmpty(QuestionStatistics.SurveyQuestion.Header))
     {
        <MudText Color="Color.Tertiary" Typo="Typo.h2">@QuestionStatistics.SurveyQuestion.Header</MudText>
-    }    
+    }   *@  
 
     @foreach (var questionResponseBar in questionsResponseBars)
     {
-        <MudText Color="Color.Tertiary" Typo="Typo.h2">@questionResponseBar.Question</MudText>
+       @*  <MudText Color="Color.Tertiary" Typo="Typo.h2">@questionResponseBar.Question</MudText> *@
 
-        <SfChart @ref="@Chart" Height="30" Width="@Width" EnableAnimation="false"  >
+        <SfChart @ref="@Chart" Height="70" Width="@Width" EnableAnimation="false" Title="@GetTitle(questionResponseBar)">
             <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
             <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
             <ChartPrimaryYAxis Visible="false" />
+            <ChartTitleStyle FontFamily="Poppins" FontWeight="600" Size="1rem"  Color="#43525d" TextAlignment="Alignment.Near"></ChartTitleStyle>
             <ChartArea>
                 <ChartAreaBorder Width="0"></ChartAreaBorder>
             </ChartArea>
             <ChartEvents OnDataLabelRender="IgnoreZeroLabels"></ChartEvents>
+            
             <ChartSeriesCollection>
+                
+               
                 @foreach (var seriesData in questionResponseBar.ResponseBar)
                 {
-                    <ChartSeries DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName"  Type="ChartSeriesType.StackingBar100">
-
-                        <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius" />
-                        <ChartMarker>
-                            <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
-                                <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
-                            </ChartDataLabel>
-                        </ChartMarker>
-                    </ChartSeries>
+                   
+                        <ChartSeries  DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName"  Type="ChartSeriesType.StackingBar100">                         
+                            <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius" />
+                            <ChartMarker>
+                                <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
+                                    <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
+                                </ChartDataLabel>
+                            </ChartMarker>                      
+                        </ChartSeries>
+                   
                 }
             </ChartSeriesCollection>
         </SfChart>
@@ -62,13 +68,22 @@
 
     protected override void OnInitialized()
     {
-        Parent.ExportCharts += async() =>
-        {
-            await Chart.ExportAsync(ExportType.PNG, Guid.NewGuid().ToString());
-        };     
+        Parent.ExportCharts += ExportChartToImage;
     }
 
-  
+    private string GetTitle(QuestionResponseBar responseBar)
+    {
+        if (QuestionStatistics.SurveyQuestion.Header is string header)
+            return $"{header} {responseBar.Question}";
+
+        return responseBar.Question;
+    }
+
+    private async void ExportChartToImage()
+    {
+        await Chart.ExportAsync(ExportType.PNG, Guid.NewGuid().ToString());
+    }
+
 
     protected override void OnParametersSet()
     {
@@ -93,6 +108,11 @@
         result.Last().RightRadius = 10;
 
         return result;
+    }
+
+    public void Dispose()
+    {
+        Parent.ExportCharts -= ExportChartToImage;
     }
 
 
