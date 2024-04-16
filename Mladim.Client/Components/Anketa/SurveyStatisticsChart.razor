@@ -53,6 +53,10 @@
     protected override void OnInitialized()
     {
         Parent.AddExportChart(ExportChartToImage());       
+
+        questionsResponseBars = this.QuestionStatistics.SurveyQuestion.Texts
+          .Select((q, index) => new QuestionResponseBar(q, GetStackedBarData(index)))
+          .ToList();
     }
 
     private string GetTitle(QuestionResponseBar responseBar)
@@ -66,13 +70,7 @@
     private Func<Task> ExportChartToImage() =>
         () => Chart.ExportAsync(ExportType.PNG, Guid.NewGuid().ToString());
 
-
-    protected override void OnParametersSet()
-    {
-        questionsResponseBars = this.QuestionStatistics.SurveyQuestion.Texts
-           .Select((q, index) => new QuestionResponseBar(q, GetStackedBarData(index)))
-           .ToList();
-    }
+   
 
     private IEnumerable<ResponseBar> GetStackedBarData(int index) => 
         this.GetStackedBarData(QuestionStatistics.SurveyQuestion.Type, QuestionStatistics.Statistics.QuestionsResponseTypes[index]);

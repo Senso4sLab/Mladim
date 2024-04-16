@@ -8,16 +8,14 @@ namespace Mladim.Infrastracture.Repositories;
 
 public class SurveyResponseRepository : GenericRepository<AnonymousSurveyResponse>, ISurveyResponseRepository
 {
-    public SurveyResponseRepository(ApplicationDbContext context) : base(context)
-    {
-    }
+    public SurveyResponseRepository(ApplicationDbContext context) : base(context) {}
     public async Task<List<AnonymousSurveyResponse>> GetSurveyResponsesByQuestionIdsAndOrganizationAsync(int organizationId, DateTimeRange? dateRange = null)
     {
-        var responses = this.DbSet         
-          .Where(r => r.Activity.Project.OrganizationId == organizationId);
-
-        if(dateRange is not null)
-            responses.Where(r => r.Activity.TimeRange.StartDate <= dateRange.StartDate && r.Activity.TimeRange.EndDate >= dateRange.EndDate);        
+        var responses = this.DbSet
+          .Where(r => r.Activity.Project.OrganizationId == organizationId).AsQueryable(); 
+        
+        if (dateRange is not null)
+            responses = responses.Where(r => (r.Activity.TimeRange.StartDate >= dateRange.StartDate) && (r.Activity.TimeRange.EndDate <= dateRange.EndDate));
 
         return await responses.AsNoTracking().ToListAsync();
     }
@@ -29,6 +27,4 @@ public class SurveyResponseRepository : GenericRepository<AnonymousSurveyRespons
 
         return await responses.AsNoTracking().ToListAsync();           
     }
-
-
 }

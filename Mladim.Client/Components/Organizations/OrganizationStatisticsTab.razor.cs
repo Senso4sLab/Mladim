@@ -62,7 +62,7 @@ public partial class OrganizationStatisticsTab
     {
         SelectedOrganization = await this.OrganizationService.DefaultOrganizationAsync();
         SetDefaultOrgStatisticsDateRange(DateTime.UtcNow);       
-        await OrgStatisticsDateTimePickerClosed();      
+        await UpdateOrgStatisticsDataAsync();      
     }  
 
 
@@ -123,19 +123,33 @@ public partial class OrganizationStatisticsTab
        this.Navigation.NavigateTo($"/activity/{args.Data.ActivityId}");
 
 
-    private async Task OrgStatisticsDateTimePickerClosed()
-    {
+    private async Task UpdateOrgStatisticsDataAsync()
+    {       
+       
         this.organizationStatistics = await OrganizationStatisticsAsync(statisticsDateRange);
         this.isAnyParticipant = organizationStatistics?.AgeDoughnut.Count() > 0 && organizationStatistics?.GenderDoughnut.Count() > 0;
 
-        this.activities = await UpcommingActivitiesAsync(5);
-
+        this.activities = await UpcommingActivitiesAsync(5);     
+        
         this.QuestionsSurveyStatistics = await this.SurveyService.GetStatisticsByOrganizationIdAsync(SelectedOrganization.Id, statisticsDateRange.Start.Value, statisticsDateRange.End.Value);
-        this.MoreQuestionStatistics = false;   
 
-        ShownQuestionsSurveyStatistics = QuestionsSurveyStatistics.IntersectBy(defaultQuestionsForStatistics, qs => qs.SurveyQuestion.UniqueQuestionId).ToList();    
+        this.MoreQuestionStatistics = false;
 
-        ShowingQuestionsForSurveyStatistics();     
+        UpdateShownQuestionsSurveyStatistics();
+    }
+
+    private void UpdateShownQuestionsSurveyStatistics()
+    {
+        ShownQuestionsSurveyStatistics.Clear();
+        StateHasChanged();
+        ShownQuestionsSurveyStatistics = QuestionsSurveyStatistics.IntersectBy(defaultQuestionsForStatistics, qs => qs.SurveyQuestion.UniqueQuestionId).ToList();
+        ShowingQuestionsForSurveyStatistics();
+    }
+
+
+    private async Task OrgStatisticsDateTimePickerClosed()
+    {
+        await UpdateOrgStatisticsDataAsync();        
     }
 
     private void ShowingQuestionsForSurveyStatistics()
