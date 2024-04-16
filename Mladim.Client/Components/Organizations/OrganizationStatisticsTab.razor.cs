@@ -38,7 +38,10 @@ public partial class OrganizationStatisticsTab
     SfAccumulationChart accChart;
 
      ElementReference Element;
-    public System.Action ExportCharts { get; set; } = null;
+    //public System.Action ExportCharts { get; set; } = null;
+
+
+    List<Task> ExportChartsAsync = new List<Task>();  
     public DefaultOrganization? SelectedOrganization { get; set; }
 
     private OrganizationStatisticVM organizationStatistics { get; set; } = default!;
@@ -67,6 +70,11 @@ public partial class OrganizationStatisticsTab
         ShownQuestionsSurveyStatistics = ShowingQuestionsForSurveyStatistics();    
     }
 
+    public void AddExportChart(Task exportChart)
+    {
+        this.ExportChartsAsync.Add(exportChart);    
+    }
+
 
 
 
@@ -89,12 +97,12 @@ public partial class OrganizationStatisticsTab
         //await accChart.PrintAsync(Element);
         //chartWidth = "100%";
 
-        
-
-      
 
 
-        ExportCharts?.Invoke();
+
+
+        await Task.WhenAll(ExportChartsAsync);
+        //ExportCharts?.Invoke();
         
     }
 

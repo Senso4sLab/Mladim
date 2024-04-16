@@ -68,7 +68,7 @@
 
     protected override void OnInitialized()
     {
-        Parent.ExportCharts += ExportChartToImage;
+        Parent.ExportChartsAsync += ExportChartToImage;
     }
 
     private string GetTitle(QuestionResponseBar responseBar)
@@ -112,7 +112,7 @@
 
     public void Dispose()
     {
-        Parent.ExportCharts -= ExportChartToImage;
+        Parent.ExportChartsAsync -= ExportChartToImage;
     }
 
 
