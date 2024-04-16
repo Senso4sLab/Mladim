@@ -30,24 +30,22 @@ public partial class OrganizationStatisticsTab
     public NavigationManager Navigation { get; set; } = default!;
 
     [Inject]
-    public IJSRuntime JS { get; set; }
+    public IJSRuntime JS { get; set; } = default!;
 
     bool MoreQuestionStatistics { get; set; } = false;
     IEnumerable<int> defaultQuestionsForStatistics = new List<int>() { 1, 2, 3, 4, 5, 11 };
 
 
     bool isActiveExportingImages = false;
+    bool isAnyParticipant = false;
 
-
-    SfAccumulationChart accChart;
-
-     ElementReference Element;
-    //public System.Action ExportCharts { get; set; } = null;
+    SfAccumulationChart accChart = default!;
+    ElementReference Element;
+    
 
 
     List<Func<Task>> ExportChartsAsync = new List<Func<Task>>();
     public DefaultOrganization? SelectedOrganization { get; set; }
-
     private OrganizationStatisticVM organizationStatistics { get; set; } = default!;
 
   
@@ -56,7 +54,7 @@ public partial class OrganizationStatisticsTab
     
     private List<ActivityForGantt> activities = new List<ActivityForGantt>();
 
-    private string chartWidth = "100%";
+    public string stackedBarWidth = "100%";
     private List<QuestionSurveyStatisticsVM> ShownQuestionsSurveyStatistics { get; set; } = new List<QuestionSurveyStatisticsVM>();
 
     private IEnumerable<QuestionSurveyStatisticsVM> QuestionsSurveyStatistics { get; set; } = new List<QuestionSurveyStatisticsVM>();
@@ -84,36 +82,21 @@ public partial class OrganizationStatisticsTab
     {
         this.ExportChartsAsync.Remove(exportChart);
     }
-
-
-
-
     private void SetDefaultOrgStatisticsDateRange(DateTime now)
     {
         statisticsDateRange = new DateRange(now.AddYears(-1), now);
-    }
-
-
-
-    bool isAnyParticipant = false;
-
+    }  
   
-   
-  
-    private async Task GeneratePdf()
+    private async Task GeneratePdfAsync()
     {
-        chartWidth = "680px";        
+        stackedBarWidth = "680px";        
         await Task.Delay(100);
         await accChart.PrintAsync(Element);
-        chartWidth = "100%";
-
-        //await Task.WhenAll(ExportChartsAsync.Select(x => x.Invoke()));
-        //ExportCharts?.Invoke();
-        
+        stackedBarWidth = "100%";       
     }
 
 
-    public async Task GenerateImages()
+    public async Task GenerateImagesAsync()
     {
         isActiveExportingImages = true;       
         await Task.WhenAll(ExportChartsAsync.Select(x => x.Invoke()));

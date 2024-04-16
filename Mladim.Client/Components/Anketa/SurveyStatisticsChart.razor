@@ -6,33 +6,20 @@
 @implements IDisposable
 
 
-<MudStack>
-
-    @* @if(!string.IsNullOrEmpty(QuestionStatistics.SurveyQuestion.Header))
-    {
-       <MudText Color="Color.Tertiary" Typo="Typo.h2">@QuestionStatistics.SurveyQuestion.Header</MudText>
-    }   *@  
-
+<MudStack >
     @foreach (var questionResponseBar in questionsResponseBars)
     {
-       @*  <MudText Color="Color.Tertiary" Typo="Typo.h2">@questionResponseBar.Question</MudText> *@
-
-        <SfChart @ref="@Chart" Height="70" Width="@Width" EnableAnimation="false" Title="@GetTitle(questionResponseBar)">
+        <SfChart @ref="@Chart" Height="70" Width="@Parent.stackedBarWidth" EnableAnimation="false" Title="@GetTitle(questionResponseBar)">
             <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
             <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
             <ChartPrimaryYAxis Visible="false" />
             <ChartTitleStyle FontFamily="Poppins" FontWeight="600" Size="1rem"  Color="#43525d" TextAlignment="Alignment.Near"></ChartTitleStyle>
             <ChartArea>
                 <ChartAreaBorder Width="0"></ChartAreaBorder>
-            </ChartArea>
-            <ChartEvents OnDataLabelRender="IgnoreZeroLabels"></ChartEvents>
-            
-            <ChartSeriesCollection>
-                
-               
+            </ChartArea>          
+            <ChartSeriesCollection>               
                 @foreach (var seriesData in questionResponseBar.ResponseBar)
-                {
-                   
+                {                   
                         <ChartSeries  DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName"  Type="ChartSeriesType.StackingBar100">                         
                             <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius" />
                             <ChartMarker>
@@ -40,8 +27,7 @@
                                     <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
                                 </ChartDataLabel>
                             </ChartMarker>                      
-                        </ChartSeries>
-                   
+                        </ChartSeries>                   
                 }
             </ChartSeriesCollection>
         </SfChart>
@@ -56,9 +42,7 @@
 
     [Parameter]
     public QuestionSurveyStatisticsVM QuestionStatistics { get; set; } = default!;
-
-    [Parameter]
-    public string Width { get; set; } = "100%";
+       
 
     [Parameter]
     public OrganizationStatisticsTab Parent { get; set; } = default!;
@@ -123,10 +107,7 @@
          SurveyQuestionType.Multiple => Enum.Parse<SurveyButtonResponseType>(name),
          SurveyQuestionType.MultipleRepetitive => Enum.Parse<SurveyRepetitiveButtonResponseType>(name),
          _ => throw new NotImplementedException(),
-     };
-
-    private void IgnoreZeroLabels(TextRenderEventArgs args) =>
-        args.Text = args.Text == "0" ? String.Empty : args.Text;   
+     };  
 
 
     private string Fill(Enum responseType) =>

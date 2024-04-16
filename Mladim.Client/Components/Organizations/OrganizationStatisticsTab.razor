@@ -37,21 +37,14 @@
                  <MudDatePicker Color="Color.Primary" Label="Konec" MinDate="@statisticsDateRange?.Start" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@statisticsDateRange.End" OpenTo="OpenTo.Year" FixDay="1" />
              </MudStack>
              <MudStack Row>
-                    <MudIconButton Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.PictureAsPdf" OnClick="GeneratePdf"></MudIconButton>
-                    <MudIconButton Disabled="@isActiveExportingImages" OnClick="GenerateImages" Variant="Variant.Outlined" Color="Color.Primary" Icon="@Icons.Material.Filled.Image">
-                      
-                    </MudIconButton>
+                    <MudIconButton Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.PictureAsPdf" OnClick="GeneratePdfAsync"></MudIconButton>
+                    <MudIconButton Disabled="@isActiveExportingImages" Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.Image" OnClick="GenerateImagesAsync"></MudIconButton>
              </MudStack>
            
          </MudStack>
        
 
         <div id="org_statistic_id" @ref="Element">
-       @*  <MudThemeProvider Theme="MainLayout.MyCustomTheme" /> 
-        *@
-
-
-
            <MudGrid Class="py-2">
                 @if (isAnyParticipant)
                 {
@@ -138,7 +131,7 @@
                 @foreach (var questionResponse in ShownQuestionsSurveyStatistics)
                 {                   
                     <MudItem sm="12">
-                        <SurveyStatisticsChart Parent="@this" Width="@chartWidth" QuestionStatistics="@questionResponse" />
+                        <SurveyStatisticsChart Parent="@this" QuestionStatistics="@questionResponse" />
                     </MudItem>               
                 }
                  <MudItem sm="12">
