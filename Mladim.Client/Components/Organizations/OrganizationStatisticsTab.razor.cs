@@ -63,11 +63,18 @@ public partial class OrganizationStatisticsTab
         SelectedOrganization = await this.OrganizationService.DefaultOrganizationAsync();
         SetDefaultOrgStatisticsDateRange(DateTime.UtcNow);
 
-        ExportChartsAsync.AddRange(new[] { ExportChartToImage(ParticipantsByAgeChart), ExportChartToImage(ParticipantsByGenderChart)});
+       
         
         await OrgStatisticsDateTimePickerClosed();
        
     }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+       if(firstRender)
+        ExportChartsAsync.AddRange(new[] { ExportChartToImage(ParticipantsByAgeChart), ExportChartToImage(ParticipantsByGenderChart) });
+    }
+
 
     public void OnMoreQuestionStatisticsChanged(bool toggled)
     {
