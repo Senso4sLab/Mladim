@@ -10,6 +10,7 @@ using System.Timers;
 using MudBlazor;
 using Syncfusion.Blazor.Charts;
 using Mladim.Domain.Models.Survey.Statistics;
+using static MudBlazor.CategoryTypes;
 
 
 namespace Mladim.Client.Components.Organizations;
@@ -39,16 +40,14 @@ public partial class OrganizationStatisticsTab
     bool isActiveExportingImages = false;
     bool isAnyParticipant = false;
 
-    SfAccumulationChart accChart = default!;
-    ElementReference Element;
-    
+    SfAccumulationChart ParticipantsByAgeChart = default!;
+    SfAccumulationChart ParticipantsByGenderChart = default!;
 
+    ElementReference Element;
 
     List<Func<Task>> ExportChartsAsync = new List<Func<Task>>();
     public DefaultOrganization? SelectedOrganization { get; set; }
-    private OrganizationStatisticVM organizationStatistics { get; set; } = default!;
-
-  
+    private OrganizationStatisticVM organizationStatistics { get; set; } = default!; 
 
     private DateRange statisticsDateRange = new DateRange();
     
@@ -63,6 +62,9 @@ public partial class OrganizationStatisticsTab
     {
         SelectedOrganization = await this.OrganizationService.DefaultOrganizationAsync();
         SetDefaultOrgStatisticsDateRange(DateTime.UtcNow);
+
+        ExportChartsAsync.AddRange(new[] { ExportChartToImage(ParticipantsByAgeChart), ExportChartToImage(ParticipantsByGenderChart)});
+        
         await OrgStatisticsDateTimePickerClosed();
        
     }
@@ -89,11 +91,16 @@ public partial class OrganizationStatisticsTab
   
     private async Task GeneratePdfAsync()
     {
-        stackedBarWidth = "680px";        
+        stackedBarWidth = "800px";        
         await Task.Delay(100);
-        await accChart.PrintAsync(Element);
+        await ParticipantsByAgeChart.PrintAsync(Element);
         stackedBarWidth = "100%";       
     }
+
+ 
+
+    private Func<Task> ExportChartToImage(SfAccumulationChart chart) =>
+        () => chart.ExportAsync(Syncfusion.Blazor.Charts.ExportType.PNG, Guid.NewGuid().ToString());
 
 
     public async Task GenerateImagesAsync()

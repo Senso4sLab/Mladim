@@ -50,7 +50,7 @@
                 {
                     <MudItem md="6">
                             <MudPaper Outlined="true">
-                                <SfAccumulationChart @ref="@accChart" Title="Razporeditev udeležencev po starostni skupini" EnableAnimation="false" EnableSmartLabels="false" CustomClass="custom-row">
+                                <SfAccumulationChart @ref="@ParticipantsByAgeChart" Title="Razporeditev udeležencev po starostni skupini" EnableAnimation="false" EnableSmartLabels="false" CustomClass="custom-row">
                                     <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
                                     <AccumulationChartSeriesCollection>
                                         <AccumulationChartSeries DataSource="@organizationStatistics.AgeDoughnut" PointColorMapping="Fill" XName="Name" YName="Value" InnerRadius="80%">
@@ -67,7 +67,7 @@
                         </MudItem>
                     <MudItem md="6">
                             <MudPaper Outlined="true">
-                                <SfAccumulationChart Title="Razporeditev udeležencev po spolu" EnableAnimation="false" EnableSmartLabels="false">
+                        <SfAccumulationChart @ref="@ParticipantsByGenderChart" Title="Razporeditev udeležencev po spolu" EnableAnimation="false" EnableSmartLabels="false">
                                     <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
                                     <AccumulationChartSeriesCollection>
                                         <AccumulationChartSeries DataSource="@organizationStatistics.GenderDoughnut" PointColorMapping="Fill" XName="Name" YName="Value" InnerRadius="80%">
