@@ -61,19 +61,9 @@ public partial class OrganizationStatisticsTab
     protected override async Task OnInitializedAsync()
     {
         SelectedOrganization = await this.OrganizationService.DefaultOrganizationAsync();
-        SetDefaultOrgStatisticsDateRange(DateTime.UtcNow);
-
-       
-        
-        await OrgStatisticsDateTimePickerClosed();
-       
-    }
-
-    protected override void OnAfterRender(bool firstRender)
-    {
-       if(firstRender)
-        ExportChartsAsync.AddRange(new[] { ExportChartToImage(ParticipantsByAgeChart), ExportChartToImage(ParticipantsByGenderChart) });
-    }
+        SetDefaultOrgStatisticsDateRange(DateTime.UtcNow);       
+        await OrgStatisticsDateTimePickerClosed();      
+    }  
 
 
     public void OnMoreQuestionStatisticsChanged(bool toggled)
@@ -106,13 +96,15 @@ public partial class OrganizationStatisticsTab
 
  
 
-    private Func<Task> ExportChartToImage(SfAccumulationChart chart) =>
-        () => chart.ExportAsync(Syncfusion.Blazor.Charts.ExportType.PNG, Guid.NewGuid().ToString());
+    private Task ExportAccumulationChartToImage(SfAccumulationChart? chart) =>
+        chart?.ExportAsync(Syncfusion.Blazor.Charts.ExportType.PNG, Guid.NewGuid().ToString()) ?? Task.CompletedTask;
 
 
     public async Task GenerateImagesAsync()
     {
-        isActiveExportingImages = true;       
+        isActiveExportingImages = true;
+        await ExportAccumulationChartToImage(ParticipantsByAgeChart);
+        await ExportAccumulationChartToImage(ParticipantsByGenderChart);
         await Task.WhenAll(ExportChartsAsync.Select(x => x.Invoke()));
         isActiveExportingImages = false;
     }
