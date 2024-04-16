@@ -61,7 +61,7 @@
 
     protected override void OnInitialized()
     {
-        Parent.ExportCharts += async() =>
+        Parent.ExportChartsAsync += async() =>
         {
             await Chart.ExportAsync(ExportType.PNG, Guid.NewGuid().ToString());
         };     
