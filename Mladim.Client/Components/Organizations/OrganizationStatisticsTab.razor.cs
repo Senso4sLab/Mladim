@@ -9,6 +9,7 @@ using Microsoft.JSInterop;
 using System.Timers;
 using MudBlazor;
 using Syncfusion.Blazor.Charts;
+using Mladim.Domain.Models.Survey.Statistics;
 
 
 namespace Mladim.Client.Components.Organizations;
@@ -32,7 +33,10 @@ public partial class OrganizationStatisticsTab
     public IJSRuntime JS { get; set; }
 
     bool MoreQuestionStatistics { get; set; } = false;
-    IEnumerable<int> DefaultQuestionsForStatistics = new List<int>() { 1, 2, 3, 4, 5, 11 };
+    IEnumerable<int> defaultQuestionsForStatistics = new List<int>() { 1, 2, 3, 4, 5, 11 };
+
+
+    bool isActiveExportingImages = false;
 
 
     SfAccumulationChart accChart;
@@ -41,7 +45,7 @@ public partial class OrganizationStatisticsTab
     //public System.Action ExportCharts { get; set; } = null;
 
 
-    List<Task> ExportChartsAsync = new List<Task>();  
+    List<Func<Task>> ExportChartsAsync = new List<Func<Task>>();
     public DefaultOrganization? SelectedOrganization { get; set; }
 
     private OrganizationStatisticVM organizationStatistics { get; set; } = default!;
@@ -53,7 +57,7 @@ public partial class OrganizationStatisticsTab
     private List<ActivityForGantt> activities = new List<ActivityForGantt>();
 
     private string chartWidth = "100%";
-    private IEnumerable<QuestionSurveyStatisticsVM> ShownQuestionsSurveyStatistics { get; set; } = new List<QuestionSurveyStatisticsVM>();
+    private List<QuestionSurveyStatisticsVM> ShownQuestionsSurveyStatistics { get; set; } = new List<QuestionSurveyStatisticsVM>();
 
     private IEnumerable<QuestionSurveyStatisticsVM> QuestionsSurveyStatistics { get; set; } = new List<QuestionSurveyStatisticsVM>();
 
@@ -62,17 +66,23 @@ public partial class OrganizationStatisticsTab
         SelectedOrganization = await this.OrganizationService.DefaultOrganizationAsync();
         SetDefaultOrgStatisticsDateRange(DateTime.UtcNow);
         await OrgStatisticsDateTimePickerClosed();
+       
     }
 
     public void OnMoreQuestionStatisticsChanged(bool toggled)
     {
         MoreQuestionStatistics = !MoreQuestionStatistics;
-        ShownQuestionsSurveyStatistics = ShowingQuestionsForSurveyStatistics();    
+        ShowingQuestionsForSurveyStatistics();    
     }
 
-    public void AddExportChart(Task exportChart)
+    public void AddExportChart(Func<Task> exportChart)
     {
         this.ExportChartsAsync.Add(exportChart);    
+    }
+
+    public void RemoveExportChart(Func<Task> exportChart)
+    {
+        this.ExportChartsAsync.Remove(exportChart);
     }
 
 
@@ -92,18 +102,22 @@ public partial class OrganizationStatisticsTab
   
     private async Task GeneratePdf()
     {
-        //chartWidth = "680px";        
-        //await Task.Delay(100);
-        //await accChart.PrintAsync(Element);
-        //chartWidth = "100%";
+        chartWidth = "680px";        
+        await Task.Delay(100);
+        await accChart.PrintAsync(Element);
+        chartWidth = "100%";
 
-
-
-
-
-        await Task.WhenAll(ExportChartsAsync);
+        //await Task.WhenAll(ExportChartsAsync.Select(x => x.Invoke()));
         //ExportCharts?.Invoke();
         
+    }
+
+
+    public async Task GenerateImages()
+    {
+        isActiveExportingImages = true;       
+        await Task.WhenAll(ExportChartsAsync.Select(x => x.Invoke()));
+        isActiveExportingImages = false;
     }
 
     public async Task<List<ActivityForGantt>> UpcommingActivitiesAsync(int numOfUpcommingActivities)
@@ -128,19 +142,26 @@ public partial class OrganizationStatisticsTab
         this.activities = await UpcommingActivitiesAsync(5);
 
         this.QuestionsSurveyStatistics = await this.SurveyService.GetStatisticsByOrganizationIdAsync(SelectedOrganization.Id, statisticsDateRange.Start.Value, statisticsDateRange.End.Value);
-        this.MoreQuestionStatistics = false;
-        this.ShownQuestionsSurveyStatistics = ShowingQuestionsForSurveyStatistics();     
+        this.MoreQuestionStatistics = false;   
+
+        ShownQuestionsSurveyStatistics = QuestionsSurveyStatistics.IntersectBy(defaultQuestionsForStatistics, qs => qs.SurveyQuestion.UniqueQuestionId).ToList();    
+
+        ShowingQuestionsForSurveyStatistics();     
     }
 
-    private IEnumerable<QuestionSurveyStatisticsVM> ShowingQuestionsForSurveyStatistics() =>
-        this.MoreQuestionStatistics ? 
-        this.QuestionsSurveyStatistics.ToList() : 
-        this.QuestionsSurveyStatistics.Where(qss => DefaultQuestionsForStatistics.Any(q => q == qss.SurveyQuestion.UniqueQuestionId)).ToList();
+    private void ShowingQuestionsForSurveyStatistics()
+    {
 
+        var questionSurveyStatistics = QuestionsSurveyStatistics.ExceptBy(defaultQuestionsForStatistics, qs => qs.SurveyQuestion.UniqueQuestionId).ToList();
 
-    
-
-   
+        if (MoreQuestionStatistics)        
+            ShownQuestionsSurveyStatistics.AddRange(questionSurveyStatistics);       
+        else
+        {
+            foreach (var question in questionSurveyStatistics)           
+                ShownQuestionsSurveyStatistics.Remove(question);           
+        }        
+    }   
     
     public async Task<OrganizationStatisticVM?> OrganizationStatisticsAsync(DateRange range)
     {

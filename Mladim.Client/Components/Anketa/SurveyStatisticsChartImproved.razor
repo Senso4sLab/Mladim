@@ -61,10 +61,10 @@
 
     protected override void OnInitialized()
     {
-        Parent.ExportChartsAsync += async() =>
-        {
-            await Chart.ExportAsync(ExportType.PNG, Guid.NewGuid().ToString());
-        };     
+        // Parent.ExportChartsAsync += async() =>
+        // {
+        //     await Chart.ExportAsync(ExportType.PNG, Guid.NewGuid().ToString());
+        // };     
     }
 
   

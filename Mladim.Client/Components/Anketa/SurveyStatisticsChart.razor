@@ -68,7 +68,7 @@
 
     protected override void OnInitialized()
     {
-        Parent.ExportChartsAsync += ExportChartToImage;
+        Parent.AddExportChart(ExportChartToImage());       
     }
 
     private string GetTitle(QuestionResponseBar responseBar)
@@ -79,10 +79,8 @@
         return responseBar.Question;
     }
 
-    private async void ExportChartToImage()
-    {
-        await Chart.ExportAsync(ExportType.PNG, Guid.NewGuid().ToString());
-    }
+    private Func<Task> ExportChartToImage() =>
+        () => Chart.ExportAsync(ExportType.PNG, Guid.NewGuid().ToString());
 
 
     protected override void OnParametersSet()
@@ -111,8 +109,8 @@
     }
 
     public void Dispose()
-    {
-        Parent.ExportChartsAsync -= ExportChartToImage;
+    {      
+        Parent.RemoveExportChart(ExportChartToImage());
     }
 
 

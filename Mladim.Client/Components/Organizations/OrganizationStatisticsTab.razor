@@ -36,7 +36,13 @@
                  <MudDatePicker Color="Color.Primary" Label="Začetek" MaxDate="@statisticsDateRange?.End" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@statisticsDateRange.Start" OpenTo="OpenTo.Year" FixDay="1" />
                  <MudDatePicker Color="Color.Primary" Label="Konec" MinDate="@statisticsDateRange?.Start" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@statisticsDateRange.End" OpenTo="OpenTo.Year" FixDay="1" />
              </MudStack>
-             <MudIconButton Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.PictureAsPdf" OnClick="GeneratePdf"></MudIconButton>
+             <MudStack Row>
+                    <MudIconButton Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.PictureAsPdf" OnClick="GeneratePdf"></MudIconButton>
+                    <MudIconButton Disabled="@isActiveExportingImages" OnClick="GenerateImages" Variant="Variant.Outlined" Color="Color.Primary" Icon="@Icons.Material.Filled.Image">
+                      
+                    </MudIconButton>
+             </MudStack>
+           
          </MudStack>
        
 
