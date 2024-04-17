@@ -6,19 +6,18 @@
 @implements IDisposable
 
 
-<MudStack >
-    @foreach (var questionResponseBar in questionsResponseBars)
-    {
-        <SfChart @ref="@Chart" Height="70" Width="@Parent.stackedBarWidth" EnableAnimation="false" Title="@GetTitle(questionResponseBar)">
-            <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
+
+
+    <SfChart @ref="@Chart" Height="70" Width="@Parent.stackedBarWidth" EnableAnimation="false" Title="@Title">
+        <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
             <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
             <ChartPrimaryYAxis Visible="false" />
             <ChartTitleStyle FontFamily="Poppins" FontWeight="600" Size="1rem"  Color="#43525d" TextAlignment="Alignment.Near"></ChartTitleStyle>
             <ChartArea>
                 <ChartAreaBorder Width="0"></ChartAreaBorder>
             </ChartArea>          
-            <ChartSeriesCollection>               
-                @foreach (var seriesData in questionResponseBar.ResponseBar)
+            <ChartSeriesCollection>
+                @foreach (var seriesData in QuestionsResponseBar.ResponseBar)
                 {                   
                         <ChartSeries  DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName"  Type="ChartSeriesType.StackingBar100">                         
                             <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius" />
@@ -31,104 +30,37 @@
                 }
             </ChartSeriesCollection>
         </SfChart>
-    }    
-
-</MudStack>
-    
-
 
 @code 
 {
 
-    [Parameter]
-    public QuestionSurveyStatisticsVM QuestionStatistics { get; set; } = default!;
-       
+        [Parameter]
+        public OrganizationStatisticsTab Parent { get; set; } = default!;
 
-    [Parameter]
-    public OrganizationStatisticsTab Parent { get; set; } = default!;
+        [Parameter]
+        public QuestionResponseBar QuestionsResponseBar { get; set; } = default!;
 
-    private List<QuestionResponseBar> questionsResponseBars = default!;
+        [Parameter]
+        public string Title { get; set; } = default!;
+
     private SfChart Chart = default!;
 
     protected override void OnInitialized()
-    {
-        Parent.AddExportChart(ExportChartToImage());       
+    {      
 
-        questionsResponseBars = this.QuestionStatistics.SurveyQuestion.Texts
-          .Select((q, index) => new QuestionResponseBar(q, GetStackedBarData(index)))
-          .ToList();
-    }
+        Parent.AddExportChart(ExportChartToImage());     
+    }   
 
-    private string GetTitle(QuestionResponseBar responseBar)
-    {
-        if (QuestionStatistics.SurveyQuestion.Header is string header)
-            return $"{header} {responseBar.Question}";
-
-        return responseBar.Question;
-    }
-
-    private Func<Task> ExportChartToImage() =>
+    private Func<Task> ExportChartToImage() =>    
         () => Chart.ExportAsync(ExportType.PNG, Guid.NewGuid().ToString());
 
-   
-
-    private IEnumerable<ResponseBar> GetStackedBarData(int index) => 
-        this.GetStackedBarData(QuestionStatistics.SurveyQuestion.Type, QuestionStatistics.Statistics.QuestionsResponseTypes[index]);
-
-    private List<ResponseBar> GetStackedBarData(SurveyQuestionType type, QuestionResponseStatisticsVM questionResponseStatistics)
-    {
-        var result = questionResponseStatistics.ResponseTypes
-            .Select(rt => (enumType: StackedBarName(type, rt.ResponseType), value: rt.Value))
-            .OrderBy(rt => rt.enumType)
-            .Select(rt => (fill: Fill(rt.enumType), barList: new List<BarValue>(new[] { BarValue.CreateBarValue(rt.enumType.GetDisplayAttribute(), rt.value) })))
-            .Select(bv => ResponseBar.CreateResponseBar(bv.fill, bv.barList))
-            .ToList();
-
-        result.First().LeftRadius = 10;
-        result.Last().RightRadius = 10;
-
-        return result;
-    }
+    
+      
 
     public void Dispose()
     {      
         Parent.RemoveExportChart(ExportChartToImage());
     }
 
-
-
-    private Enum StackedBarName(SurveyQuestionType type, string name) =>
-     type switch
-     {
-         SurveyQuestionType.Boolean => Enum.Parse<SurveyBooleanResponseType>(name),
-         SurveyQuestionType.Rating => Enum.Parse<SurveyRatingResponseType>(name),
-         SurveyQuestionType.Multiple => Enum.Parse<SurveyButtonResponseType>(name),
-         SurveyQuestionType.MultipleRepetitive => Enum.Parse<SurveyRepetitiveButtonResponseType>(name),
-         _ => throw new NotImplementedException(),
-     };  
-
-
-    private string Fill(Enum responseType) =>
-         responseType switch
-        {
-            SurveyBooleanResponseType.ThumpsUp   => "#4DA456",
-            SurveyBooleanResponseType.ThumpsDown => "#8ED974",
-            SurveyRatingResponseType.OneSmile    => "#7cc769",
-            SurveyRatingResponseType.TwoSmiles   => "#394241",
-            SurveyRatingResponseType.ThreeSmiles => "#ffc700",
-            SurveyRatingResponseType.FourSmiles  => "#8ED974",
-            SurveyRatingResponseType.FiveSmiles  => "#4DA456",
-            SurveyButtonResponseType.VeryCorrect => "#4DA456",
-            SurveyButtonResponseType.PartiallyCorrect => "#394241",
-            SurveyButtonResponseType.Correct => "#ffc700",
-            SurveyButtonResponseType.Incorrect => "#8ED974",
-            SurveyRepetitiveButtonResponseType.Greatly => "#4DA456",
-            SurveyRepetitiveButtonResponseType.Quite => "#394241",
-            SurveyRepetitiveButtonResponseType.Little => "#ffc700",
-            SurveyRepetitiveButtonResponseType.None => "#8ED974",   
-            _ => throw new NotImplementedException(),
-        };
-
-
-    public record QuestionResponseBar(string Question, IEnumerable<ResponseBar> ResponseBar);
+   
 }

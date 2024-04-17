@@ -61,7 +61,11 @@ public partial class OrganizationStatisticsTab
     protected override async Task OnInitializedAsync()
     {
         SelectedOrganization = await this.OrganizationService.DefaultOrganizationAsync();
-        SetDefaultOrgStatisticsDateRange(DateTime.UtcNow);       
+        SetDefaultOrgStatisticsDateRange(DateTime.UtcNow);
+
+        ExportChartsAsync.Add(() => ExportAccumulationChartToImage(ParticipantsByAgeChart));
+        ExportChartsAsync.Add(() => ExportAccumulationChartToImage(ParticipantsByGenderChart));
+
         await UpdateOrgStatisticsDataAsync();      
     }  
 
@@ -103,10 +107,14 @@ public partial class OrganizationStatisticsTab
     public async Task GenerateImagesAsync()
     {
         isActiveExportingImages = true;
-        await ExportAccumulationChartToImage(ParticipantsByAgeChart);
-        await ExportAccumulationChartToImage(ParticipantsByGenderChart);
-        await Task.WhenAll(ExportChartsAsync.Select(x => x.Invoke()));
-        isActiveExportingImages = false;
+
+        foreach (var chunk in ExportChartsAsync.Chunk(6))
+        {
+            await Task.WhenAll(chunk.Select(x => x.Invoke()));
+            await Task.Delay(1000);
+        }
+
+        isActiveExportingImages = false;       
     }
 
     public async Task<List<ActivityForGantt>> UpcommingActivitiesAsync(int numOfUpcommingActivities)
