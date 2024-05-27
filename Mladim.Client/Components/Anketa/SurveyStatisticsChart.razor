@@ -8,7 +8,7 @@
 
 
 
-    <SfChart @ref="@Chart" Height="70" Width="@Parent.stackedBarWidth" EnableAnimation="false" Title="@Title">
+    <SfChart @ref="@Chart" Height="70" Width="@Parent.StackedBarWidth" EnableAnimation="false" Title="@Title">
         <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
             <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
             <ChartPrimaryYAxis Visible="false" />
@@ -35,7 +35,7 @@
 {
 
         [Parameter]
-        public OrganizationStatisticsTab Parent { get; set; } = default!;
+        public IExportChart Parent { get; set; } = default!;
 
         [Parameter]
         public QuestionResponseBar QuestionsResponseBar { get; set; } = default!;

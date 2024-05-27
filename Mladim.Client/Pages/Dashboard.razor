@@ -19,17 +19,17 @@
                 </MudTabPanel>
             }
             
-            @if (activeProjects.Any())
+            @if (hasActiveProjects)
             {
                 <MudTabPanel Text="Aktivni projekti">
-                    <ProjectStatisticsTab PastActivities=false Projects="activeProjects"></ProjectStatisticsTab>
+                    <ProjectStatisticsTab PastActivities=false></ProjectStatisticsTab>
                 </MudTabPanel> 
             }
 
-            @if (pastProjects.Any())
+            @if (hasPastProjects)
             {
                 <MudTabPanel Text="Pretekli projekti">
-                    <ProjectStatisticsTab PastActivities=true Projects="pastProjects"></ProjectStatisticsTab>
+                    <ProjectStatisticsTab PastActivities=true></ProjectStatisticsTab>
                 </MudTabPanel>
             }
         </MudTabs>

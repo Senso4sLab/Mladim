@@ -15,40 +15,42 @@
         <UserLoginSettings />
     </MudAppBar>
 
-    <MudDrawer @bind-Open="@_drawerOpen" Elevation="0" DisableOverlay=false Variant="DrawerVariant.Mini" OpenMiniOnHover=true MiniWidth="65px"  style="background-color:#4da456; ">
-        <div style="height:50%; overflow:hidden; border-right:1px solid #eeeeee;background-color:#ffffff; border-radius: 0px 20px 0px 0px">
-            <div style="padding: 30px 2px;">
-                @if (_drawerOpen)
-                {              
-                    <MudImage Class="px-5" Src="logo.png" Height="43" Alt="Mladim logo"/>
-                }
-                else
-                {
+    <MudDrawer @bind-Open="@_drawerOpen" Elevation="0" DisableOverlay="false" Variant="DrawerVariant.Mini" OpenMiniOnHover=true MiniWidth="65px"  style="background-color:#4da456; ">
+       
+            <div style="height:50%; overflow:hidden; border-right:1px solid #eeeeee;background-color:#ffffff; border-radius: 0px 20px 0px 0px">
+                <div style="padding: 30px 2px;">
+                    @if (_drawerOpen)
+                    {              
+                        <MudImage Class="px-5" Src="logo.png" Height="43" Alt="Mladim logo"/>
+                    }
+                    else
+                    {
                    
-                    <div style="height:43px; width: 100%; margin-left:8px; padding-top:10px;">
-                        <MudImage Src="logo-M-only.png" Width="45" Alt="Mladim M logo" />
-                    </div>
-                }
+                        <div style="height:43px; width: 100%; margin-left:8px; padding-top:10px;">
+                            <MudImage Src="logo-M-only.png" Width="45" Alt="Mladim M logo" />
+                        </div>
+                    }
+                </div>
+                <MudNavMenu Color="Color.Primary" Style="font-family:Poppins; font-size: 0.9rem; font-weight: 400; line-height: 1.5;" Rounded=true Margin="Margin.Normal" Class="pa-2">
+                    @if(SelectedOrganization != null)
+                    {
+                         <MudNavLink Class="navlink-hover" Href="/" Match="NavLinkMatch.All"  Icon="@CustomIcons.Dashboard">Prikazna plošča</MudNavLink>
+                    }               
+                    <MudNavLink Class="navlink-hover" Href="/organization" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Description">Organizacija</MudNavLink>
+                    <MudNavLink Class="navlink-hover" Href="/projects" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ImportContacts">Projekti</MudNavLink>
+                    <MudNavLink Class="navlink-hover" Href="/activities" Match="NavLinkMatch.All" Icon="@CustomIcons.ActivityGrayFilled">Aktivnosti</MudNavLink>
+                    <MudNavLink Class="navlink-hover" Href="/enka" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.QuestionAnswer">1ka Mladim</MudNavLink>
+                </MudNavMenu>          
             </div>
-            <MudNavMenu Color="Color.Primary" Style="font-family:Poppins; font-size: 0.9rem; font-weight: 400; line-height: 1.5;" Rounded=true Margin="Margin.Normal" Class="pa-2">
-                @if(SelectedOrganization != null)
-                {
-                     <MudNavLink Class="navlink-hover" Href="/" Match="NavLinkMatch.All" Icon="@CustomIcons.Dashboard">Prikazna plošča</MudNavLink>
-                }               
-                <MudNavLink Class="navlink-hover" Href="/organization" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Description">Organizacija</MudNavLink>
-                <MudNavLink Class="navlink-hover" Href="/projects" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ImportContacts">Projekti</MudNavLink>
-                <MudNavLink Class="navlink-hover" Href="/activities" Match="NavLinkMatch.All" Icon="@CustomIcons.ActivityGrayFilled">Aktivnosti</MudNavLink>
-                <MudNavLink Class="navlink-hover" Href="/enka" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.QuestionAnswer">1ka Mladim</MudNavLink>
-            </MudNavMenu>          
-        </div>
-        <div style="height:50%; overflow:hidden; background-color:white;" >
-            <div style="height:100%; width:100%; position:relative;  border-right:1px solid #eeeeee; border-radius: 0px 0px 20px 0px;" class="rounded-br-xl">
-                @if (_drawerOpen)
-                {
-                    <img style="vertical-align:bottom; position:absolute; left:20px; bottom:10px;  width:80%;" src="calltoaction.png" alt="mobile"/>
-                }
+            <div style="height:50%; overflow:hidden; background-color:white;" >
+                <div style="height:100%; width:100%; position:relative;  border-right:1px solid #eeeeee; border-radius: 0px 0px 20px 0px;" class="rounded-br-xl">
+                    @if (_drawerOpen)
+                    {
+                        <img style="vertical-align:bottom; position:absolute; left:20px; bottom:10px;  width:80%;" src="calltoaction.png" alt="mobile"/>
+                    }
+                </div>
             </div>
-        </div>
+       
     </MudDrawer> 
 
 

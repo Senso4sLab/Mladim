@@ -6,7 +6,7 @@
 
 
 
-<MudStack >
+<MudStack AlignItems="AlignItems.Stretch" >
     @foreach (var tuple in questionsResponseBars)
     {
         <SurveyStatisticsChart Parent="@Parent" QuestionsResponseBar="@tuple.qrb" Title="@tuple.title"></SurveyStatisticsChart>
@@ -22,10 +22,9 @@
     public QuestionSurveyStatisticsVM QuestionStatistics { get; set; } = default!;       
 
     [Parameter]
-    public OrganizationStatisticsTab Parent { get; set; } = default!;
+    public IExportChart Parent { get; set; } = default!;
 
-    private List<(string title,QuestionResponseBar qrb)> questionsResponseBars = default!;
-    
+    private List<(string title,QuestionResponseBar qrb)> questionsResponseBars = default!;    
 
     protected override void OnInitialized()
     {
@@ -61,15 +60,6 @@
 
         return result;
     }
-
-    // public void Dispose()
-    // {      
-    //     Parent.RemoveExportChart(ExportChartToImage());
-    // }
-
-    
-
-
 
     private Enum StackedBarName(SurveyQuestionType type, string name) =>
      type switch

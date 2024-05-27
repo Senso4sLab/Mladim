@@ -15,7 +15,7 @@ using static MudBlazor.CategoryTypes;
 
 namespace Mladim.Client.Components.Organizations;
 
-public partial class OrganizationStatisticsTab
+public partial class OrganizationStatisticsTab : IExportChart
 {
 
     [Inject]
@@ -53,7 +53,7 @@ public partial class OrganizationStatisticsTab
     
     private List<ActivityForGantt> activities = new List<ActivityForGantt>();
 
-    public string stackedBarWidth = "100%";
+    public string StackedBarWidth { get; set; } =  "100%";
     private List<QuestionSurveyStatisticsVM> ShownQuestionsSurveyStatistics { get; set; } = new List<QuestionSurveyStatisticsVM>();
 
     private IEnumerable<QuestionSurveyStatisticsVM> QuestionsSurveyStatistics { get; set; } = new List<QuestionSurveyStatisticsVM>();
@@ -92,10 +92,10 @@ public partial class OrganizationStatisticsTab
   
     private async Task GeneratePdfAsync()
     {
-        stackedBarWidth = "800px";        
+        StackedBarWidth = "800px";        
         await Task.Delay(100);
         await ParticipantsByAgeChart.PrintAsync(Element);
-        stackedBarWidth = "100%";       
+        StackedBarWidth = "100%";       
     }
 
  

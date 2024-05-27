@@ -3,6 +3,7 @@ using Mladim.Client.ViewModels;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.Services.Authentication;
 using Mladim.Client.Models;
+using Mladim.Client.Components.Organizations;
 
 namespace Mladim.Client.Pages;
 
@@ -15,17 +16,18 @@ public partial class Dashboard
     [Inject]
     public IAuthService AuthService { get; set; } = default!;
 
-    public DefaultOrganization? SelectedOrganization { get; set; }
-
-
     [Inject]
     protected IOrganizationService OrganizationService { get; set; } = default!;
 
 
-    private IEnumerable<ProjectVM> activeProjects = new List<ProjectVM>();
-    private IEnumerable<ProjectVM> pastProjects = new List<ProjectVM>();
+  
 
-    private bool IsOrganizationStatisticsVisible  = true;
+    bool hasActiveProjects = false;
+    bool hasPastProjects = false;
+
+    private bool IsOrganizationStatisticsVisible  = true;     
+
+    public DefaultOrganization? SelectedOrganization { get; set; }
 
     protected async override Task OnInitializedAsync()
     {
@@ -41,8 +43,8 @@ public partial class Dashboard
 
         var dateTime = DateTime.UtcNow;
 
-        activeProjects = projects.Where(p => !p.IsCompleted(dateTime)).ToList();
-        pastProjects = projects.Where(p => p.IsCompleted(dateTime)).ToList();
+        hasActiveProjects = projects.Where(p => !p.IsCompleted(dateTime)).Any();
+        hasPastProjects = projects.Where(p => p.IsCompleted(dateTime)).Any();      
 
     }
 

@@ -63,7 +63,7 @@ public class SurveyService : ISurveyService
     public async Task<IEnumerable<QuestionSurveyStatisticsVM>> GetStatisticsByProjectIdIdAsync(int projectId)
     {
         string url = string.Format(MladimApiUrls.GetSurveyStatisticsByProject, projectId);
-        var responses = await HttpClient.GetAsync<IEnumerable<SurveyStatisticsDto>>(url);
+        var responses = await HttpClient.GetAsync<IEnumerable<QuestionSurveyStatisticsDto>>(url);
         return this.Mapper.Map<IEnumerable<QuestionSurveyStatisticsVM>>(responses);
     }
 }

@@ -5,10 +5,12 @@ using Syncfusion.Blazor.Grids;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.ViewModels.Project;
 using Mladim.Client.ViewModels.Survey;
+using Mladim.Client.Models;
+using static MudBlazor.CategoryTypes;
 
 namespace Mladim.Client.Components.Organizations;
 
-public partial class ProjectStatisticsTab
+public partial class ProjectStatisticsTab : IExportChart
 {
     [Inject]
     public IActivityService ActivityService { get; set; } = default!;
@@ -19,28 +21,33 @@ public partial class ProjectStatisticsTab
     [Inject]
     public ISurveyService SurveyService { get; set; } = default!;
 
+
+    [Inject]
+    public IOrganizationService OrganizationService { get; set; } = default!;
+
     [Inject]
     public NavigationManager Navigation { get; set; } = default!;    
        
 
     [Parameter]
-    public bool PastActivities { get; set; }
+    public bool PastActivities { get; set; }   
 
-    [Parameter]
-    public IEnumerable<ProjectVM> Projects { get; set; } = new List<ProjectVM>();
+    public string StackedBarWidth { get; set; } = "100%";
+
+    List<Func<Task>> ExportChartsAsync = new List<Func<Task>>();
 
 
     private List<ActivityForGantt> activities = new List<ActivityForGantt>();
 
-    private ProjectVM? selectedProject;
+    private ProjectVM selectedProject;
 
     private ProjectStatisticsVM? projectStatistics;
 
 
-    private IEnumerable<QuestionSurveyStatisticsVM> surveyStatistics = new List<QuestionSurveyStatisticsVM>();  
+    private IEnumerable<QuestionSurveyStatisticsVM> surveyStatistics = new List<QuestionSurveyStatisticsVM>();
 
-    //private List<DoughnutPiece> GenderDoughnut = new List<DoughnutPiece>();
-    //private List<DoughnutPiece> AgeDoughnut = new List<DoughnutPiece>();
+
+    private IEnumerable<ProjectVM> Projects = new List<ProjectVM>();
 
     public void SelectedActivity(RowSelectEventArgs<ActivityForGantt> args) =>
       this.Navigation.NavigateTo($"/activity/{args.Data.ActivityId}");
@@ -48,12 +55,28 @@ public partial class ProjectStatisticsTab
 
     protected override async Task  OnInitializedAsync()
     {
+        var organization = await this.OrganizationService.DefaultOrganizationAsync();
+        Projects = await ProjectsByOrganizationAsync(organization.Id);
+
+        var dateTime = DateTime.UtcNow;
+
+        //if(PastActivities)
+        //    Projects = Projects.Where(p => p.IsCompleted(dateTime)).ToList();
+        //else
+        //    Projects = Projects.Where(p => !p.IsCompleted(dateTime)).ToList();
+
+
         selectedProject = Projects.FirstOrDefault();
         
         if (selectedProject == null)
             return;
 
-        await OnChangedSelectedProjectAsync(selectedProject.Id);
+        //await OnChangedSelectedProjectAsync(selectedProject.Id);
+    }
+
+    public async Task<IEnumerable<ProjectVM>> ProjectsByOrganizationAsync(int organizationId)
+    {
+        return await this.ProjectService.GetByOrganizationIdAsync(organizationId);
     }
 
     private async Task OnChangedSelectedProjectAsync(int projectId)
@@ -61,6 +84,16 @@ public partial class ProjectStatisticsTab
         projectStatistics = await ProjectStatisticsAsync(projectId);
         activities = await ActivitiesAsync(projectId);
         surveyStatistics = await SurveyService.GetStatisticsByProjectIdIdAsync(projectId);
+    }
+
+    public void AddExportChart(Func<Task> exportChart)
+    {
+        this.ExportChartsAsync.Add(exportChart);
+    }
+
+    public void RemoveExportChart(Func<Task> exportChart)
+    {
+        this.ExportChartsAsync.Remove(exportChart);
     }
 
 
@@ -89,6 +122,14 @@ public partial class ProjectStatisticsTab
     public void RowDataBound(RowDataBoundEventArgs<ActivityForGantt> args)
     {
         args.Row.AddClass(new string[] { "custom-row" });
+    }
+
+    private async Task GeneratePdfAsync()
+    {
+        StackedBarWidth = "800px";
+        await Task.Delay(100);
+        //await ParticipantsByAgeChart.PrintAsync(Element);
+        StackedBarWidth = "100%";
     }
 
 }

@@ -36,19 +36,20 @@
 <MudStack Spacing="4" Class="py-5">
     <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
         <div style="width:400px;">
-            <MudSelect T="ProjectVM" Label="Izberi želeni projekt" Value=selectedProject ValueChanged="OnProjectChangedAsync"  Variant=Variant.Outlined AdornmentColor="Color.Primary">
+            <MudSelect T="ProjectVM" Label="Izberi želeni projekt" Value="@selectedProject" ValueChanged="@OnProjectChangedAsync"  Variant=Variant.Outlined AdornmentColor="Color.Primary">
                 @foreach (var project in Projects)
                 {
-                    <MudSelectItem Value="@project">@project.Attributes.Name</MudSelectItem>
+                    <MudSelectItem Value="@project">@project.Attributes?.Name</MudSelectItem>
                 }
             </MudSelect>
         </div>
         <MudText Color="Color.Primary">Trajanje projekta: @selectedProject?.DateRange?.Start?.ToString("d MMMM, yyyy") - @selectedProject?.DateRange?.End?.ToString("d MMMM, yyyy")</MudText>
     </MudStack>
 
-    @if (projectStatistics != null && projectStatistics.TotalParticipants > 0)
+   
+    @* @if (projectStatistics?.TotalParticipants > 0)
     {
-        <MudGrid>
+        <MudGrid >
             <MudItem xl="4" sm="6">
                 <MudPaper Outlined="true">
                     <SfAccumulationChart Title="Razporeditev udeležencev po starostni skupini" EnableAnimation="true" EnableSmartLabels="true" CustomClass="custom-row">
@@ -113,16 +114,24 @@
                      </MudItem>
                  </MudGrid>
             </MudItem>
-        </MudGrid>       
-    }
+        
+       
+                @foreach (var questionResponse in surveyStatistics)
+                {
+                    <MudItem sm="12">
+                        <SurveyStatisticsCharts Parent="@this" QuestionStatistics="@questionResponse"></SurveyStatisticsCharts>
+                    </MudItem>
+                }
+             
+
+        </MudGrid> 
+       
+    } *@
+
+  
 
 
-    @foreach (var questionResponse in surveyStatistics)
-    {     
-        <MudItem sm="12">
-            <SurveyStatisticsChart QuestionStatistics ="@questionResponse"></SurveyStatisticsChart>
-        </MudItem>        
-    }
+   
   
 
     @if (activities.Any())
@@ -131,7 +140,7 @@
 
         <MudText Typo="Typo.h2" Color="Color.Tertiary">@($"Seznam {upcommingActivity} aktivnosti")</MudText>        
 
-        <SfGantt class="pt-5" DataSource="@activities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true >
+       @*  <SfGantt class="pt-5" Width="100%" DataSource="@activities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true >
             <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId"/>
             <GanttTooltipSettings ShowTooltip="true" TValue="ActivityForGantt">
                 <TaskbarTemplate>
@@ -187,7 +196,7 @@
                 </TaskbarTemplate>
             </GanttTemplates>
             <GanttEvents TValue="ActivityForGantt" RowDataBound="RowDataBound" RowSelected="SelectedActivity"></GanttEvents>
-        </SfGantt>
+        </SfGantt> *@
     }
     else
     {

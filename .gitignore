@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Mladim.Domain/Models/AnonymousParticipantGroup.cs
+/TestDb/Data/ApplicationContext.cs
+/TestDb/Migrations/20230706105021_Initial.cs
+/TestDb/Migrations/20230706105021_Initial.Designer.cs
+/TestDb/Migrations/20230706110127_Initiall.cs
+/TestDb/Migrations/20230706110127_Initiall.Designer.cs
+/TestDb/Migrations/20230706113812_Initialll.cs
+/TestDb/Migrations/20230706113812_Initialll.Designer.cs
+/TestDb/Migrations/ApplicationContextModelSnapshot.cs
+/TestDb/Program.cs
+/TestDb/TestDb.csproj
