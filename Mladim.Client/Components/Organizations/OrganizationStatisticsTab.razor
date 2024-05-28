@@ -33,8 +33,8 @@
 <MudStack Spacing="4" Class="py-5" >
         <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="py-3">
              <MudStack Row Spacing="3">
-             <MudDatePicker Variant="Variant.Outlined" Color="Color.Primary" Label="Začetek" MaxDate="@statisticsDateRange?.End" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@statisticsDateRange.Start" OpenTo="OpenTo.Year" FixDay="1" />
-             <MudDatePicker Variant="Variant.Outlined" Color="Color.Primary" Label="Konec" MinDate="@statisticsDateRange?.Start" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@statisticsDateRange.End" OpenTo="OpenTo.Year" FixDay="1" />
+                 <MudDatePicker Variant="Variant.Outlined" Color="Color.Primary" Label="Začetek" MaxDate="@statisticsDateRange?.End" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@statisticsDateRange.Start" OpenTo="OpenTo.Year" FixDay="1" />
+                 <MudDatePicker Variant="Variant.Outlined" Color="Color.Primary" Label="Konec" MinDate="@statisticsDateRange?.Start" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@statisticsDateRange.End" OpenTo="OpenTo.Year" FixDay="1" />
              </MudStack>
              <MudStack Row>
                     <MudIconButton Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.PictureAsPdf" OnClick="GeneratePdfAsync"></MudIconButton>

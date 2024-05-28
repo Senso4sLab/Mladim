@@ -8,6 +8,7 @@ using Mladim.Client.ViewModels.Survey;
 using Mladim.Client.Models;
 using static MudBlazor.CategoryTypes;
 using Mladim.Domain.Models;
+using Syncfusion.Blazor.Charts;
 
 namespace Mladim.Client.Components.Organizations;
 
@@ -45,8 +46,13 @@ public partial class ProjectStatisticsTab : IExportChart
     private ProjectStatisticsVM? projectStatistics;
 
     private string activitiesText = string.Empty;
+    bool isActiveExportingImages = false;
 
-    private IEnumerable<QuestionSurveyStatisticsVM> surveyStatistics = new List<QuestionSurveyStatisticsVM>();
+    SfAccumulationChart ParticipantsByAgeChart = default!;
+    SfAccumulationChart ParticipantsByGenderChart = default!;
+    ElementReference Element;
+
+    private List<QuestionSurveyStatisticsVM> surveyStatistics = new List<QuestionSurveyStatisticsVM>();
 
 
     private IEnumerable<ProjectVM> Projects = new List<ProjectVM>();
@@ -77,14 +83,15 @@ public partial class ProjectStatisticsTab : IExportChart
 
         if (Projects.FirstOrDefault() is ProjectVM project)        
             selectedProjects.Add(project);
-            
-        
-                
+
+        ExportChartsAsync.Add(() => ExportAccumulationChartToImage(ParticipantsByAgeChart));
+        ExportChartsAsync.Add(() => ExportAccumulationChartToImage(ParticipantsByGenderChart));
     }
 
-    
 
-  
+    private Task ExportAccumulationChartToImage(SfAccumulationChart? chart) =>
+        chart?.ExportAsync(Syncfusion.Blazor.Charts.ExportType.PNG, Guid.NewGuid().ToString()) ?? Task.CompletedTask;
+
 
     public async Task<IEnumerable<ProjectVM>> ProjectsByOrganizationAsync(int organizationId)
     {
@@ -92,11 +99,13 @@ public partial class ProjectStatisticsTab : IExportChart
     }
 
     private async Task OnChangedSelectedProjectAsync(int projectId)
-    {
-               
-        projectStatistics = await ProjectStatisticsAsync(projectId);
+    {        
         activities = await ActivitiesAsync(projectId);
-        surveyStatistics = await SurveyService.GetStatisticsByProjectIdIdAsync(projectId);
+        projectStatistics = await ProjectStatisticsAsync(projectId);   
+        
+        surveyStatistics.Clear();
+        StateHasChanged();
+        surveyStatistics = new (await SurveyService.GetStatisticsByProjectIdIdAsync(projectId));
        
     }
 
@@ -126,9 +135,9 @@ public partial class ProjectStatisticsTab : IExportChart
 
     private async Task OnProjectsSelectionChangedAsync(IEnumerable<ProjectVM> projects)
     {
+       
         selectedProjects = projects.ToList();
-        await OnChangedSelectedProjectAsync(selectedProjects.FirstOrDefault().Id);
-      
+        await OnChangedSelectedProjectAsync(projects.FirstOrDefault().Id);
     }
 
     public void RowDataBound(RowDataBoundEventArgs<ActivityForGantt> args)
@@ -140,8 +149,22 @@ public partial class ProjectStatisticsTab : IExportChart
     {
         StackedBarWidth = "800px";
         await Task.Delay(100);
-        //await ParticipantsByAgeChart.PrintAsync(Element);
+        await ParticipantsByAgeChart.PrintAsync(Element);
         StackedBarWidth = "100%";
+        StateHasChanged();
+    }
+
+    public async Task GenerateImagesAsync()
+    {
+        isActiveExportingImages = true;
+
+        foreach (var chunk in ExportChartsAsync.Chunk(6))
+        {
+            await Task.WhenAll(chunk.Select(x => x.Invoke()));
+            await Task.Delay(1000);
+        }
+
+        isActiveExportingImages = false;
     }
 
 }

@@ -43,17 +43,24 @@
                 }
             </MudSelect>
         </div>
-        <MudText Color="Color.Primary">Trajanje projekta: @selectedProjects.FirstOrDefault()?.DateRange?.Start?.ToString("d MMMM, yyyy") - @selectedProjects.FirstOrDefault()?.DateRange?.End?.ToString("d MMMM, yyyy")</MudText>
+        <MudStack Row Spacing="5" AlignItems="AlignItems.Center">
+            <MudText Color="Color.Primary">Trajanje projekta: @selectedProjects.FirstOrDefault()?.DateRange?.Start?.ToString("d MMMM, yyyy") - @selectedProjects.FirstOrDefault()?.DateRange?.End?.ToString("d MMMM, yyyy")</MudText>
+                <MudStack Row>
+                <MudIconButton Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.PictureAsPdf" OnClick="GeneratePdfAsync"></MudIconButton>
+                <MudIconButton Disabled="@isActiveExportingImages" Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.Image" OnClick="GenerateImagesAsync"></MudIconButton>
+            </MudStack>
+        </MudStack>
+     
     </MudStack>
 
    
-    
+     <div @ref="Element">
         <MudGrid >
             @if (projectStatistics?.TotalParticipants > 0)
             {
                 <MudItem md="6">
                     <MudPaper Outlined="true">
-                        <SfAccumulationChart Title="Razporeditev udeležencev po starostni skupini" EnableAnimation="true" EnableSmartLabels="true" CustomClass="custom-row">
+                    <SfAccumulationChart @ref="@ParticipantsByAgeChart" Title="Razporeditev udeležencev po starostni skupini" EnableAnimation="true" EnableSmartLabels="true" CustomClass="custom-row">
                             <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
                             <AccumulationChartSeriesCollection>
                                 <AccumulationChartSeries DataSource="@projectStatistics.AgeDoughnut" PointColorMapping="Fill" XName="Name" YName="Value" InnerRadius="80%">
@@ -70,7 +77,7 @@
                 </MudItem>
                 <MudItem md="6">
                     <MudPaper Outlined="true">
-                        <SfAccumulationChart Title="Razporeditev udeležencev po spolu" EnableAnimation="true" EnableSmartLabels="true">
+                        <SfAccumulationChart @ref="@ParticipantsByGenderChart" Title="Razporeditev udeležencev po spolu" EnableAnimation="true" EnableSmartLabels="true">
                             <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191"/>
                             <AccumulationChartSeriesCollection>
                                 <AccumulationChartSeries DataSource="@projectStatistics.GenderDoughnut" PointColorMapping="Fill" XName="Name" YName="Value" InnerRadius="80%">                                
@@ -116,81 +123,84 @@
                     </MudItem>
 
                 <MudItem sm="12">
-                @foreach (var questionResponse in surveyStatistics)
-                {                   
-                   <SurveyStatisticsCharts Parent="@this" QuestionStatistics="@questionResponse"/>                  
-                }
-
-            </MudItem>
+                    @foreach (var questionResponse in surveyStatistics)
+                    {                   
+                       <SurveyStatisticsCharts Parent="@this" QuestionStatistics="@questionResponse"/>                  
+                    }
+                </MudItem>
             }      
 
         </MudGrid>
+     </div>
    
 
    
-        <MudText Typo="Typo.h2" Color="Color.Tertiary">@($"Seznam {activitiesText} aktivnosti")</MudText>
        
-        <SfGantt class="pt-5" Width="100%" DataSource="@activities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true>
-            <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId" />
-            <GanttTooltipSettings ShowTooltip="true" TValue="ActivityForGantt">
-                <TaskbarTemplate>
-                    @{
-                        <div>@context.ActivityName</div>
-                        <div>Začetek: @context.StartDate.ToShortDateString()</div>
-                        <div>Konec: @context.EndDate.ToShortDateString()</div>
-                    }
-                </TaskbarTemplate>
-            </GanttTooltipSettings>
-            <GanttSplitterSettings ColumnIndex=5></GanttSplitterSettings>
-            <GanttColumns>
-                <GanttColumn Field="Id" HeaderText="Št." Visible=false>
-                    <HeaderTemplate>
-                        <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
-                            @((context as GridColumn).HeaderText)
-                        </div>
-                    </HeaderTemplate>
-                </GanttColumn>
-                <GanttColumn Field="ActivityName" HeaderText="Ime aktivnosti">
-                    <HeaderTemplate>
-                        <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
-                            @((context as GridColumn).HeaderText)
-                        </div>
-                    </HeaderTemplate>
-                </GanttColumn>
-                <GanttColumn Field="ProjectName" HeaderText="Ime projekta">
-                    <HeaderTemplate>
-                        <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
-                            @((context as GridColumn).HeaderText)
-                        </div>
-                    </HeaderTemplate>
-                </GanttColumn>
-                <GanttColumn Field="StartDate" HeaderText="Začetek" Width="100">
-                    <HeaderTemplate>
-                        <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
-                            @((context as GridColumn).HeaderText)
-                        </div>
-                    </HeaderTemplate>
-                </GanttColumn>
-                <GanttColumn Field="EndDate" HeaderText="Konec" Width="100">
-                    <HeaderTemplate>
-                        <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
-                            @((context as GridColumn).HeaderText)
-                        </div>
-                    </HeaderTemplate>
-                </GanttColumn>
-            </GanttColumns>
+       @if(activities.Any())
+       {
+            <MudText Typo="Typo.h2" Color="Color.Tertiary">@($"Seznam {activitiesText} aktivnosti")</MudText>
+            <SfGantt class="pt-5" Width="100%" DataSource="@activities" RowHeight="40" TaskbarHeight="30" IncludeWeekend=true>
+                <GanttTaskFields Id="Id" Name="ActivityName" StartDate="StartDate" EndDate="EndDate" ParentID="ParentId" />
+                <GanttTooltipSettings ShowTooltip="true" TValue="ActivityForGantt">
+                    <TaskbarTemplate>
+                        @{
+                            <div>@context.ActivityName</div>
+                            <div>Začetek: @context.StartDate.ToShortDateString()</div>
+                            <div>Konec: @context.EndDate.ToShortDateString()</div>
+                         }
+                    </TaskbarTemplate>
+                </GanttTooltipSettings>
+                <GanttSplitterSettings ColumnIndex=5></GanttSplitterSettings>
+                <GanttColumns>
+                    <GanttColumn Field="Id" HeaderText="Št." Visible=false>
+                        <HeaderTemplate>
+                            <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
+                                @((context as GridColumn).HeaderText)
+                            </div>
+                        </HeaderTemplate>
+                    </GanttColumn>
+                    <GanttColumn Field="ActivityName" HeaderText="Ime aktivnosti">
+                        <HeaderTemplate>
+                            <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
+                                @((context as GridColumn).HeaderText)
+                            </div>
+                        </HeaderTemplate>
+                    </GanttColumn>
+                    <GanttColumn Field="ProjectName" HeaderText="Ime projekta">
+                        <HeaderTemplate>
+                            <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
+                                @((context as GridColumn).HeaderText)
+                            </div>
+                        </HeaderTemplate>
+                    </GanttColumn>
+                    <GanttColumn Field="StartDate" HeaderText="Začetek" Width="100">
+                        <HeaderTemplate>
+                            <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
+                                @((context as GridColumn).HeaderText)
+                            </div>
+                        </HeaderTemplate>
+                    </GanttColumn>
+                    <GanttColumn Field="EndDate" HeaderText="Konec" Width="100">
+                        <HeaderTemplate>
+                            <div style="font-family:Poppins;font-size:0.9rem;font-weight:400;line-height:normal;letter-spacing:-0.024rem;">
+                                @((context as GridColumn).HeaderText)
+                            </div>
+                        </HeaderTemplate>
+                    </GanttColumn>
+                </GanttColumns>
 
-            <GanttTemplates TValue="ActivityForGantt">
-                <TaskbarTemplate>
-                    <div class="e-gantt-parent-taskbar" style="background-color:#4da456; height:30px; border: 4px solid #4da456; border-radius:8px;" />
-                </TaskbarTemplate>
-            </GanttTemplates>
-            <GanttEvents TValue="ActivityForGantt" RowDataBound="RowDataBound" RowSelected="SelectedActivity"></GanttEvents>
+                <GanttTemplates TValue="ActivityForGantt">
+                    <TaskbarTemplate>
+                        <div class="e-gantt-parent-taskbar" style="background-color:#4da456; height:30px; border: 4px solid #4da456; border-radius:8px;" />
+                    </TaskbarTemplate>
+                </GanttTemplates>
+                <GanttEvents TValue="ActivityForGantt" RowDataBound="RowDataBound" RowSelected="SelectedActivity"></GanttEvents>
         </SfGantt>
-
-      
-    
-   
+    }
+    else
+    {
+        <MudText Typo="Typo.h2" Color="Color.Tertiary">Projekt nima nobenih prihajajočih aktivnosti.</MudText>
+    }
 </MudStack>
 
 
