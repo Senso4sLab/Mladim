@@ -39,10 +39,8 @@
              <MudStack Row>
                     <MudIconButton Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.PictureAsPdf" OnClick="GeneratePdfAsync"></MudIconButton>
                     <MudIconButton Disabled="@isActiveExportingImages" Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.Image" OnClick="GenerateImagesAsync"></MudIconButton>
-             </MudStack>
-           
-         </MudStack>
-       
+             </MudStack>           
+        </MudStack>       
 
         <div @ref="Element">
            <MudGrid Class="py-2">
@@ -145,7 +143,6 @@
                     }
                  </MudItem>  
            </MudGrid>
-
         </div>
 
     @if (activities.Any())
