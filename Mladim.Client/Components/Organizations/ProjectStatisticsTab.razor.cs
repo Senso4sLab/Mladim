@@ -1,4 +1,4 @@
-using global::Microsoft.AspNetCore.Components;
+﻿using global::Microsoft.AspNetCore.Components;
 using Mladim.Client.ViewModels;
 using Mladim.Client.ViewModels.Activity;
 using Syncfusion.Blazor.Grids;
@@ -7,6 +7,7 @@ using Mladim.Client.ViewModels.Project;
 using Mladim.Client.ViewModels.Survey;
 using Mladim.Client.Models;
 using static MudBlazor.CategoryTypes;
+using Mladim.Domain.Models;
 
 namespace Mladim.Client.Components.Organizations;
 
@@ -39,10 +40,11 @@ public partial class ProjectStatisticsTab : IExportChart
 
     private List<ActivityForGantt> activities = new List<ActivityForGantt>();
 
-    private ProjectVM selectedProject;
+    private List<ProjectVM> selectedProjects = new List<ProjectVM>(); 
 
     private ProjectStatisticsVM? projectStatistics;
 
+    private string activitiesText = string.Empty;
 
     private IEnumerable<QuestionSurveyStatisticsVM> surveyStatistics = new List<QuestionSurveyStatisticsVM>();
 
@@ -52,27 +54,37 @@ public partial class ProjectStatisticsTab : IExportChart
     public void SelectedActivity(RowSelectEventArgs<ActivityForGantt> args) =>
       this.Navigation.NavigateTo($"/activity/{args.Data.ActivityId}");
        
-
-    protected override async Task  OnInitializedAsync()
+    private async Task<int> GetOrganizationIdAsync()
     {
         var organization = await this.OrganizationService.DefaultOrganizationAsync();
-        Projects = await ProjectsByOrganizationAsync(organization.Id);
+        return organization!.Id;
+    }
+
+    
+    protected override async Task  OnInitializedAsync()
+    {       
+        Projects = await ProjectsByOrganizationAsync(await GetOrganizationIdAsync());
 
         var dateTime = DateTime.UtcNow;
 
-        //if(PastActivities)
-        //    Projects = Projects.Where(p => p.IsCompleted(dateTime)).ToList();
-        //else
-        //    Projects = Projects.Where(p => !p.IsCompleted(dateTime)).ToList();
+        if (PastActivities)
+            Projects = Projects.Where(p => p.IsCompleted(dateTime)).ToList();
+        else
+        {
+            Projects = Projects.Where(p => !p.IsCompleted(dateTime)).ToList();
+            activitiesText = "prihajajočih";
+        }
 
-
-        selectedProject = Projects.FirstOrDefault();
+        if (Projects.FirstOrDefault() is ProjectVM project)        
+            selectedProjects.Add(project);
+            
         
-        if (selectedProject == null)
-            return;
-
-        //await OnChangedSelectedProjectAsync(selectedProject.Id);
+                
     }
+
+    
+
+  
 
     public async Task<IEnumerable<ProjectVM>> ProjectsByOrganizationAsync(int organizationId)
     {
@@ -81,9 +93,11 @@ public partial class ProjectStatisticsTab : IExportChart
 
     private async Task OnChangedSelectedProjectAsync(int projectId)
     {
+               
         projectStatistics = await ProjectStatisticsAsync(projectId);
         activities = await ActivitiesAsync(projectId);
         surveyStatistics = await SurveyService.GetStatisticsByProjectIdIdAsync(projectId);
+       
     }
 
     public void AddExportChart(Func<Task> exportChart)
@@ -110,13 +124,11 @@ public partial class ProjectStatisticsTab : IExportChart
     }
 
 
-    private async Task OnProjectChangedAsync(ProjectVM project)
+    private async Task OnProjectsSelectionChangedAsync(IEnumerable<ProjectVM> projects)
     {
-        if (selectedProject.Id != project.Id)
-        {
-            selectedProject = project;
-            await OnChangedSelectedProjectAsync(selectedProject.Id);
-        }
+        selectedProjects = projects.ToList();
+        await OnChangedSelectedProjectAsync(selectedProjects.FirstOrDefault().Id);
+      
     }
 
     public void RowDataBound(RowDataBoundEventArgs<ActivityForGantt> args)

@@ -67,7 +67,9 @@ public partial class OrganizationStatisticsTab : IExportChart
         ExportChartsAsync.Add(() => ExportAccumulationChartToImage(ParticipantsByGenderChart));
 
         await UpdateOrgStatisticsDataAsync();      
-    }  
+    }
+
+  
 
 
     public void OnMoreQuestionStatisticsChanged(bool toggled)
