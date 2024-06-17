@@ -38,5 +38,7 @@ public class OtherProfile : Profile
         CreateMap<OrganizationAttributesCommandDto, OrganizationAttributes>();
         CreateMap<OrganizationAttributes, OrganizationAttributesQueryDto>();
 
+        CreateMap<OrganizationAttributes, OrganizationAttributesShortQueryDto>();
+
     }
 }

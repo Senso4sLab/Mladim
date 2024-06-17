@@ -13,12 +13,12 @@ using System.Security.Claims;
 
 namespace Mladim.Application.Features.Organizations.Queries.GetOrganizations;
 
-public class GetOrganizationsQueryHandler : IRequestHandler<GetOrganizationsQuery, IEnumerable<OrganizationQueryDto>>
+public class GetOrganizationsDescriptionQueryHandler : IRequestHandler<GetOrganizationsQuery, IEnumerable<OrganizationQueryDto>>
 {
     public IUnitOfWork UnitOfWork { get; }
     public IMapper Mapper { get; }
     public HttpContext HttpContext { get; }
-    public GetOrganizationsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+    public GetOrganizationsDescriptionQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
     {
         this.Mapper = mapper;
         this.UnitOfWork = unitOfWork;

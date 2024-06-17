@@ -28,6 +28,7 @@ public class Organizations : Profile
            .ForMember(db => db.NPMAims, dto => dto.MapFrom(field => (OrganizationNPMAims)(field.NPMAims.Sum(x => (int)x))));
 
         CreateMap<OrganizationQueryDto, OrganizationVM>();
+        CreateMap<OrganizationAttributesShortQueryDto, OrganizationAttributesShortVM>();        
         CreateMap<OrganizationStatisticQueryDto, OrganizationStatisticVM>();
        
 

@@ -2,27 +2,67 @@
 body
 {
     overflow:hidden;
+    
 }
 
 .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited, .btn-primary:focus {
     background-color: #84d369 !important;
     border: none !important;
+    min-width:200px;
+    min-height:54px;
+    padding:0px !important;
     
     box-shadow: none !important;
 }
 
 .btn-secondary, .btn-secondary:hover, .btn-secondary:active, .btn-secondary:visited, .btn-secondary:focus {
     background-color: #4da456 !important;
-    border: none !important;   
+    border: none !important;
     box-shadow: none !important;
+    padding: 0px !important;
+    min-width: 200px;
+    min-height: 54px;
 }
 
+#banner_img {
+   
+    border-radius: 14px;
+    cursor: pointer;
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%,rgba(0,0,0,0) 80%);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%,rgba(0,0,0,0) 80%);
+    position:absolute;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+#logo_img 
+{   
+    position: absolute;
+    top: 85%;
+    left: 10px;
+    height: 10%;     
+}
+
+
+.shadow {
+    position: relative;
+    display:inline-block;   
+    margin-bottom: 3px;
+    height: 255px;
+    width: 255px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px !important;
+    border-radius: 14px;
+    top: 0;
+    left: 0;
+}
 
 
 .scroll-container {
     width: 100%;   
     overflow-x: hidden;
     position:relative;
+    height: 300px;
 }
 
 .carousel-primary,
@@ -30,21 +70,22 @@ body
     top: 0%;
     left: 100%;
     width: 100%;
+    /*height:250px;*/
     position: absolute;
     overflow-x: hidden;
     white-space: nowrap;
 }
 
-    .carousel-primary img {
-        margin-left: 20px;
-        min-width: 50px;
-        max-width: 400px;
-        width: 100%;
+    /*.carousel-primary img {
+        margin-left: 20px;*/
+      /*  min-width: 50px;
+        max-width: 400px;*/
+        /*width: 100%;
         border-radius: 14px;
         cursor: pointer;
         mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 70%,rgba(0,0,0,0));
         -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 70%,rgba(0,0,0,0));
-    }
+    }*/
 
 .carousel-primary {
     display:flex;

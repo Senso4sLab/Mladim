@@ -1,5 +1,6 @@
 ﻿using Mladim.Client.Components.Dialogs;
 using Mladim.Client.ViewModels;
+using Mladim.Client.ViewModels.Organization;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
@@ -105,12 +106,12 @@ namespace Mladim.Client.Services.PopupService
             return !result.Canceled;
         }
 
-        public async Task<bool> ShowYouthOrganizationDialog(string title, YouthOrganization youthOrganization)
+        public async Task<bool> ShowYouthOrganizationDialog(string title, OrganizationAttributesShortVM attributes)
         {
             var parameters = new DialogParameters();
 
 
-            parameters.Add("YouthOrganization", youthOrganization);
+            parameters.Add("OrgAttributes", attributes);
 
             var dialog = await DialogService.ShowAsync<YouthOrganizationInfo>(title, parameters, new DialogOptions() { CloseButton = false, NoHeader = true, FullWidth = true });
 

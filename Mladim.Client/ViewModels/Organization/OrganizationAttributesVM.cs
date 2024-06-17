@@ -2,6 +2,7 @@
 
 namespace Mladim.Client.ViewModels.Organization;
 
+
 public class OrganizationAttributesVM
 {
     public string Name { get;  set; } = string.Empty;
@@ -14,6 +15,7 @@ public class OrganizationAttributesVM
     public string? RegistrationNumber { get;  set; }
     public string? LogoUrl { get; set; }
     public string? BannerUrl { get;set; }
+    public bool AllowShareData { get; set; }
 
     public DateTime CreatedStamp { get; set; } = DateTime.UtcNow;
     public IEnumerable<AgeGroups> AgeGroups { get; set; } = new List<AgeGroups>();

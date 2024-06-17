@@ -33,6 +33,11 @@ public class OrganizationRepository : GenericRepository<Organization>, IOrganiza
             .ToListAsync();
     }
 
+    public async Task<IEnumerable<OrganizationAttributes>> GetOrganizationsAttibutes(int numOfOrganizations)
+    {
+        return await this.DbSet.Where(o => !string.IsNullOrWhiteSpace(o.Attributes.BannerUrl) && !string.IsNullOrWhiteSpace(o.Attributes.LogoUrl) && o.Attributes.AllowShareData)
+                .Select(o => o.Attributes).Take(numOfOrganizations).AsNoTracking().ToListAsync();       
+    }
 }
 
 

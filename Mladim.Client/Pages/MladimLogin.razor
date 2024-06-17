@@ -1,5 +1,7 @@
-﻿@* @page "/login" *@
+﻿@page "/logintest"
 @using Mladim.Client.Services.PopupService
+@using Mladim.Client.Services.SubjectServices.Contracts
+@using Mladim.Client.ViewModels.Organization
 @layout LoginLayout
 @inject IPopupService popupService
 
@@ -7,56 +9,77 @@
 <PageTitle>Prijava</PageTitle>
 
 
-
-
-<div class="d-flex flex-column justify-content-around" style="height:100vh;">
-    <div style="padding-left:30px;">
+<div class="d-flex flex-column justify-content-between" style="height:100vh;">
+    <div style="padding-left:25px; padding-top:30px;">
         <img src="logo.png" height="40"/>
     </div>
     <div class="text-center">
-        <lottie-player src="MladimLogo.json" background="transparent" speed="1" style="height: 210px;" loop autoplay></lottie-player>
+        <lottie-player  src="MladimLogo.json" background="transparent" speed="1" style="height:200px; text-align:center;" loop autoplay></lottie-player>
         <div class="text-center">
-            <button onclick="@(() =>OnAboutUsClicked())" type="button" class="btn btn-primary px-12 mx-1">O NAS</button>
-            <button onclick="@(() =>OnLoginClicked())" type="button" class="btn btn-secondary px-12 mx-1">VPIS</button>
+            <button  onclick="@(() =>OnAboutUsClicked())" type="button" class="btn btn-primary mx-1">O NAS</button>
+            <button onclick="@(() =>OnLoginClicked())" type="button" class="btn btn-secondary mx-1">VPIS</button>
         </div>
     </div>
 
-    <div class="scroll-container" style="height:300px;">
-        <div class="carousel-primary @(IsMouseOnYouthOrganizationImg || popUpIsOpen ? "stop-animation" : "")">
-            @foreach (var youthOrganization in YouthOrganizations)
-            {
-                <img @onmouseover="OnMouseOver" @onmouseleave="OnMouseLeave" onclick="@(() => OnYouthOrganizationClicked(youthOrganization))" src="@youthOrganization.ImgUrl" />
-            }
-        </div>
-        <div class="carousel-primary carousel-secondary @(IsMouseOnYouthOrganizationImg || popUpIsOpen ? "stop-animation" : "")">
-            @foreach (var youthOrganization in YouthOrganizations)
-            {
-                <img @onmouseover="OnMouseOver" @onmouseleave="OnMouseLeave" onclick="@(() => OnYouthOrganizationClicked(youthOrganization))" src="@youthOrganization.ImgUrl" />
-            }
-        </div>
+    @if (OrganizationsAttributes.Any())
+    {
+        <div class="scroll-container" >
+            <div  class="carousel-primary @(IsMouseOnYouthOrganizationImg || popUpIsOpen ? "stop-animation" : "")">
+                @foreach (var orgAttributes in OrganizationsAttributes)
+                {
+                    <div style="position:relative; margin-left: 20px;">
+                        <div class="shadow">
+                            <img id="banner_img" @onmouseover="OnMouseOver" @onmouseleave="OnMouseLeave" onclick="@(() => OnYouthOrganizationClicked(orgAttributes))" src="@orgAttributes.BannerUrl" />
+                            <img id="logo_img" src="@orgAttributes.LogoUrl" />                               
+                        </div>
+                    </div>                  
+                } 
+            </div>
+            <div class="carousel-primary carousel-secondary @(IsMouseOnYouthOrganizationImg || popUpIsOpen ? "stop-animation" : "")">
+                @foreach (var orgAttributes in OrganizationsAttributes)
+                {
+                    <div style="position:relative; margin-left: 20px;">                       
+                        <div class="shadow">
+                            <img id="banner_img" @onmouseover="OnMouseOver" @onmouseleave="OnMouseLeave" onclick="@(() => OnYouthOrganizationClicked(orgAttributes))" src="@orgAttributes.BannerUrl" />
+                            <img id="logo_img" src="@orgAttributes.LogoUrl" />
+                        </div>
+                       
+                    </div>
+                }
+            </div>
     </div>
+    }
 </div>
 
 
 @code
 {
-    private IEnumerable<YouthOrganization> YouthOrganizations = new List<YouthOrganization>();
+    [Inject]
+    public IOrganizationService OrganizationService { get; set; }
+
+    private IEnumerable<OrganizationAttributesShortVM> OrganizationsAttributes = new List<OrganizationAttributesShortVM>();
 
 
     bool IsMouseOnYouthOrganizationImg = false;
     bool popUpIsOpen = false;
-    protected override void OnInitialized()
+
+    protected override async Task OnInitializedAsync()
     {
-        YouthOrganizations = GetYouthOrganizations().ToList();       
+        //OrganizationsAttributes = await this.OrganizationService.GeRandomOrganizationsAttributes(6);
+
+        OrganizationsAttributes = LocalOrganizationsAttributes().ToList();
     }
 
-    private IEnumerable<YouthOrganization> GetYouthOrganizations()
+
+    private IEnumerable<OrganizationAttributesShortVM> LocalOrganizationsAttributes()
     {
-        yield return new YouthOrganization("youth/youth1.jpeg");
-        yield return new YouthOrganization("youth/youth2.png");
-        yield return new YouthOrganization("youth/youth3.jpeg");
-        yield return new YouthOrganization("youth/youth4.jpg");
+        yield return new OrganizationAttributesShortVM { BannerUrl = "/youth/youth1.jpeg", LogoUrl="/logo.png" };
+        yield return new OrganizationAttributesShortVM { BannerUrl = "/youth/youth2.png", LogoUrl = "/logo.png" };
+        yield return new OrganizationAttributesShortVM { BannerUrl = "/youth/youth3.jpeg", LogoUrl = "/logo.png" };
+        yield return new OrganizationAttributesShortVM { BannerUrl = "/youth/youth4.jpg", LogoUrl = "/logo.png" };
+        yield return new OrganizationAttributesShortVM { BannerUrl = "/youth/youth5.jpeg", LogoUrl = "/logo.png" };
     }
+
 
 
     private void OnMouseOver(MouseEventArgs mouseArg)
@@ -72,11 +95,11 @@
     }
 
 
-    private async Task OnYouthOrganizationClicked(YouthOrganization youthOrganization)
+    private async Task OnYouthOrganizationClicked(OrganizationAttributesShortVM attribute)
     {
         popUpIsOpen = true;
         StateHasChanged();
-        var result = await popupService.ShowYouthOrganizationDialog("", youthOrganization);
+        var result = await popupService.ShowYouthOrganizationDialog("", attribute);
         popUpIsOpen = false;
         StateHasChanged();
     }
@@ -98,9 +121,6 @@
         popUpIsOpen = false;
         StateHasChanged();
     }
-
-
-
    
 }
 

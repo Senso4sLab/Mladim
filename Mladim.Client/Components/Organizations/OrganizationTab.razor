@@ -63,8 +63,9 @@
                 <MudItem xs="12" sm="6">
                     <MudTextField ReadOnly=@ReadOnly @bind-Value="Organization.Attributes.WebpageUrl" Label="Spletna stran" Variant="Variant.Outlined"></MudTextField>
                 </MudItem>
-             
-
+                <MudItem xs="12" sm="6">
+                    <MudCheckBox ReadOnly=@ReadOnly @bind-Value="Organization.Attributes.AllowShareData" Label="Dovoljenje za objavo podatkov na začetni strani mladim.si"></MudCheckBox>
+                </MudItem>
             </MudGrid>           
         </MudExpansionPanel>       
 

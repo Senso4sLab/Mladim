@@ -16,6 +16,7 @@ public class OrganizationAttributesCommandDto
     public string? Email { get; set; }
     public string? WebpageUrl { get; set; }
     public string? VatNumber { get; set; }
+    public bool AllowShareData { get; set; }
     public string? RegistrationNumber { get; set; }
     public string? LogoUrl { get; set; }
     public string? BannerUrl { get; set; }

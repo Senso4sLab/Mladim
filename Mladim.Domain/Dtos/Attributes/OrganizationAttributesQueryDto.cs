@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Dtos.Attributes;
 
+
 public class OrganizationAttributesQueryDto
 {
     public string Name { get; set; } = string.Empty;
@@ -18,6 +19,7 @@ public class OrganizationAttributesQueryDto
     public string? VatNumber { get; set; }
     public DateTime CreatedStamp { get; set; }
     public string? RegistrationNumber { get; set; }
+    public bool AllowShareData { get; set; }
     public string? BannerUrl { get; set; }
     public string? LogoUrl { get; set; }
     public AgeGroups AgeGroups { get; set; }

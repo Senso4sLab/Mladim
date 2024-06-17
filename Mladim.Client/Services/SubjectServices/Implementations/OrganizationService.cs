@@ -12,6 +12,8 @@ using Mladim.Domain.Models;
 using Mladim.Client.ViewModels.Organization;
 using Mladim.Domain.Dtos.Organization;
 using Mladim.Client.Pages;
+using Mladim.Client.MappingProfiles.Profiles.Organizations;
+using Mladim.Domain.Dtos.Attributes;
 
 namespace Mladim.Client.Services.SubjectServices.Implementations;
 
@@ -105,6 +107,11 @@ public class OrganizationService : IOrganizationService
         return false;
     }
 
+    public async Task<IEnumerable<OrganizationAttributesShortVM>> GeRandomOrganizationsAttributes(int numOfOrganizations)
+    {
+        string url = string.Format(MladimApiUrls.GetRandomOrganizationsAttributes, numOfOrganizations);
 
-
+        var orgAttributes = await HttpClient.GetAsync<IEnumerable<OrganizationAttributesShortQueryDto>>(url);
+        return this.Mapper.Map<IEnumerable<OrganizationAttributesShortVM>>(orgAttributes);
+    }
 }

@@ -10,8 +10,10 @@ using Mladim.Application.Features.Organizations.Commands.UpdateOrganization;
 using Mladim.Application.Features.Organizations.Commands.UserGetOrganization;
 using Mladim.Application.Features.Organizations.Queries.GetOrganization;
 using Mladim.Application.Features.Organizations.Queries.GetOrganizations;
+using Mladim.Application.Features.Organizations.Queries.GetOrganizationsDescription;
 using Mladim.Application.Features.Organizations.Queries.GetOrganizationStatistics;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.Attributes;
 using Mladim.Domain.Dtos.Organization;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
@@ -86,7 +88,16 @@ public class OrganizationController : ControllerBase
         return Ok(response);
     }
 
-   
+    [AllowAnonymous]
+    [HttpGet("random/{numberOrg}")]
+    public async Task<ActionResult<IEnumerable<OrganizationAttributesShortQueryDto>>> GetRandomOrganizationAttributesAsync(int numberOrg)
+    {
+        var response = await this.Mediator.Send(new GetOrganizationsDescriptionQuery() { NumberOfOrganizations = numberOrg });  
+
+        return Ok(response);
+    }
+
+
 
     [HttpGet("{orgId}/statistics")] 
     public async Task<ActionResult<OrganizationStatisticQueryDto>> GetStatistics(int orgId, DateTime startDate, DateTime endDate)

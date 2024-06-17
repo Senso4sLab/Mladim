@@ -77,7 +77,7 @@ public class MladimApiUrls
 
     public string GetSurveyStatisticsByProject { get; set; } = string.Empty;
 
-
+    public string GetRandomOrganizationsAttributes { get; set; } = string.Empty;
 
 
 }
