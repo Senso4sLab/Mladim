@@ -25,12 +25,12 @@
     <DialogContent>
       
         <MudPaper Class="d-flex align-stretch" Elevation="0">
-            <MudStack Class="pa-5 d-flex flex-1" Spacing="4">               
+            <MudStack Class="pa-5 d-flex flex-1" Spacing="4" AlignItems="AlignItems.Start">               
                 <MudImage Height="50" ObjectFit="ObjectFit.Contain" Src=@OrgAttributes.LogoUrl></MudImage>
                 <MudText Typo="Typo.h1"><b>@OrgAttributes.Name</b></MudText>
                 <MudStack Spacing="2">
                         <MudText Color="Color.Secondary" Typo="Typo.h2">Opis organizacije</MudText>
-                        <MudText Typo="Typo.h2" Color="Color.Dark">@OrgAttributes.Description</MudText>
+                        <MudText Typo="Typo.h2" style="font-weight:normal;" Color="Color.Dark">@OrgAttributes.Description</MudText>
                 </MudStack>              
             </MudStack>
             <MudImage Class="d-flex flex-1" ObjectFit="ObjectFit.Cover" Src=@OrgAttributes.BannerUrl></MudImage>

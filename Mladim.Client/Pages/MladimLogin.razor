@@ -65,9 +65,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        //OrganizationsAttributes = await this.OrganizationService.GeRandomOrganizationsAttributes(6);
+        OrganizationsAttributes = await this.OrganizationService.GeRandomOrganizationsAttributes(5);
 
-        OrganizationsAttributes = LocalOrganizationsAttributes().ToList();
+        //OrganizationsAttributes = LocalOrganizationsAttributes().ToList();
     }
 
 
