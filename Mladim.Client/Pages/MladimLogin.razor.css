@@ -47,10 +47,9 @@ body
 
 .shadow {
     position: relative;
-    display:inline-block;   
     margin-bottom: 3px;
-    height: 255px;
-    width: 255px;
+    height: 18vw;
+    width: 18vw;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px !important;
     border-radius: 14px;
     top: 0;
@@ -59,10 +58,13 @@ body
 
 
 .scroll-container {
-    width: 100%;   
-    overflow-x: hidden;
+    width: 100%;
+    overflow-x: hidden;    
+    height: 100%;
+    display: flex;   
+    justify-content:center ;
+    align-items:center;  
     position:relative;
-    height: 300px;
 }
 
 .carousel-primary,
@@ -73,7 +75,7 @@ body
     /*height:250px;*/
     position: absolute;
     overflow-x: hidden;
-    white-space: nowrap;
+    white-space: nowrap; 
 }
 
     /*.carousel-primary img {
@@ -88,7 +90,7 @@ body
     }*/
 
 .carousel-primary {
-    display:flex;
+    display:flex;    
     flex-wrap: nowrap;
     justify-content:space-around;
     animation: scroll-horizontal 30s linear infinite;

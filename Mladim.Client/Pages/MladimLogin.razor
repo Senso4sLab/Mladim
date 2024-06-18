@@ -24,29 +24,31 @@
     @if (OrganizationsAttributes.Any())
     {
         <div class="scroll-container" >
-            <div  class="carousel-primary @(IsMouseOnYouthOrganizationImg || popUpIsOpen ? "stop-animation" : "")">
-                @foreach (var orgAttributes in OrganizationsAttributes)
-                {
-                    <div style="position:relative; margin-left: 20px;">
-                        <div class="shadow">
-                            <img id="banner_img" @onmouseover="OnMouseOver" @onmouseleave="OnMouseLeave" onclick="@(() => OnYouthOrganizationClicked(orgAttributes))" src="@orgAttributes.BannerUrl" />
-                            <img id="logo_img" src="@orgAttributes.LogoUrl" />                               
+            <div style="position:relative; height:18vw; width:100%;">
+                <div class="carousel-primary  @(IsMouseOnYouthOrganizationImg || popUpIsOpen ? "stop-animation" : "")">
+                    @foreach (var orgAttributes in OrganizationsAttributes)
+                    {
+                        <div style="margin-left:5px;">
+                            <div class="shadow">
+                                <img id="banner_img" @onmouseover="OnMouseOver" @onmouseleave="OnMouseLeave" onclick="@(() => OnYouthOrganizationClicked(orgAttributes))" src="@orgAttributes.BannerUrl" />
+                                <img id="logo_img" src="@orgAttributes.LogoUrl" />                               
+                            </div>
+                        </div>                  
+                    } 
+                </div>
+                <div   class="carousel-primary carousel-secondary @(IsMouseOnYouthOrganizationImg || popUpIsOpen ? "stop-animation" : "")">
+                    @foreach (var orgAttributes in OrganizationsAttributes)
+                    {
+                        <div style="margin-left:5px;">                       
+                            <div class="shadow">
+                                <img id="banner_img" @onmouseover="OnMouseOver" @onmouseleave="OnMouseLeave" onclick="@(() => OnYouthOrganizationClicked(orgAttributes))" src="@orgAttributes.BannerUrl" />
+                                <img id="logo_img" src="@orgAttributes.LogoUrl" />
+                            </div>                       
                         </div>
-                    </div>                  
-                } 
-            </div>
-            <div class="carousel-primary carousel-secondary @(IsMouseOnYouthOrganizationImg || popUpIsOpen ? "stop-animation" : "")">
-                @foreach (var orgAttributes in OrganizationsAttributes)
-                {
-                    <div style="position:relative; margin-left: 20px;">                       
-                        <div class="shadow">
-                            <img id="banner_img" @onmouseover="OnMouseOver" @onmouseleave="OnMouseLeave" onclick="@(() => OnYouthOrganizationClicked(orgAttributes))" src="@orgAttributes.BannerUrl" />
-                            <img id="logo_img" src="@orgAttributes.LogoUrl" />
-                        </div>
-                       
-                    </div>
-                }
-            </div>
+                    }
+                </div>
+          </div>
+            
     </div>
     }
 </div>
