@@ -60,7 +60,8 @@ body
 .scroll-container {
     width: 100%;
     overflow-x: hidden;    
-    height: 100%;
+    
+    padding-bottom:5vh !important;
     display: flex;   
     justify-content:center ;
     align-items:center;  

@@ -50,6 +50,9 @@ public partial class StaffMemberTab
         {
             Staff.Add(staffMember);
             this.PopupService.ShowSnackbarSuccess("Uporabnik uspešno dodan");
+
+            if (staffMember is { IEmailSent: true })
+                this.PopupService.ShowSnackbarSuccess("Vabilo je uspešno poslano");
         }
         else
             this.PopupService.ShowSnackbarError();
@@ -70,7 +73,7 @@ public partial class StaffMemberTab
 
         var succeedResponse = await this.StaffService.AddAsync(this.Organization.Id, staffMember);
 
-        if (succeedResponse!= null)        
+        if (succeedResponse is { IEmailSent: true})        
             this.PopupService.ShowSnackbarSuccess("Vabilo je uspešno poslano");       
         else
             this.PopupService.ShowSnackbarError();

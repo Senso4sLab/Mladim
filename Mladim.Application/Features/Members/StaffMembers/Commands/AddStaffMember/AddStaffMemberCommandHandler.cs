@@ -49,6 +49,8 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
 
         var user = await this.UnitOfWork.AppUserRepository.FindByEmailAsync(request.Email);
 
+        string emailContent = string.Empty;
+
         if (user == null)
         {
             user = await CreateUserAsync(request.Name, request.Surname, request.Email);
@@ -57,14 +59,15 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
             user.Organizations.Add(organization);         
             await this.AuthService.AddClaimAsync(user, claim);
             await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);
-            await this.UnitOfWork.SaveChangesAsync();
 
-
-            var emailToken = await this.AuthService.EmailTokenAsync(user);            
-
+            var emailToken = await this.AuthService.EmailTokenAsync(user);
             var registrationUrl = $"{HttpContextAccessor?.HttpContext?.AppBaseUrl()}/registration?EmailId={emailToken}";
-            var emailContent = string.Format(this.EmailContent.ContentAddedNewUser, registrationUrl);
-            await SendEmailAsync(emailContent, request.Email);
+            emailContent = string.Format(this.EmailContent.ContentAddedNewUser, registrationUrl);
+
+            if (await SendEmailAsync(emailContent, request.Email))
+            {
+                staffMember.EmailSent = DateTime.UtcNow;                
+            }
         }
         else
         {
@@ -73,32 +76,36 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
                 // re-send invitation
                 var emailToken = await this.AuthService.EmailTokenAsync(user);
                 var registrationUrl = $"{HttpContextAccessor?.HttpContext?.AppBaseUrl()}/registration?EmailId={emailToken}";
-                var emailContent = string.Format(this.EmailContent.ContentAddedNewUser, registrationUrl);
-                await SendEmailAsync(emailContent, request.Email);
+                emailContent = string.Format(this.EmailContent.ContentAddedNewUser, registrationUrl);            
             }
             else
             {
                 user.Organizations.Add(organization);
                 await this.AuthService.AddClaimAsync(user, claim);
-                await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);
-                await this.UnitOfWork.SaveChangesAsync();
+                await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);                
 
-                if (Enum.TryParse(claim.Type, out ApplicationClaim appClaim))
-                {
-                    var emailContent = string.Format(this.EmailContent.ContentUserAddedNewOrganization, appClaim.GetDisplayAttribute());
-                    await SendEmailAsync(emailContent, request.Email);
-                }
-                else
+                if(!Enum.TryParse(claim.Type, out ApplicationClaim appClaim))
                     throw new Exception("Izbrani tip uporabnika ne obstaja");
+               
+                emailContent = string.Format(this.EmailContent.ContentUserAddedNewOrganization, appClaim.GetDisplayAttribute());                         
             }
         }
 
-        return this.Mapper.Map<StaffMemberDetailsQueryDto>(staffMember);
-    }
 
+        bool isEmailSend = await SendEmailAsync(emailContent, request.Email);
 
+        if (isEmailSend)        
+            staffMember.EmailSent = DateTime.UtcNow;
 
-   
+        await this.UnitOfWork.SaveChangesAsync();
+
+        var staffMemberDto = this.Mapper.Map<StaffMemberDetailsQueryDto>(staffMember);
+
+        if (isEmailSend)
+            staffMemberDto.IEmailSent = true;
+
+        return staffMemberDto;
+    }   
 
     private async Task<bool> SendEmailAsync(string content, string receipent)
     {

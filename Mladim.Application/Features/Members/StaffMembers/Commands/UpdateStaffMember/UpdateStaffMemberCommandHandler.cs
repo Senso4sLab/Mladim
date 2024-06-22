@@ -68,7 +68,12 @@ public class UpdateStaffMemberCommandHandler : IRequestHandler<UpdateStaffMember
             if (Enum.TryParse(claim.Type, out ApplicationClaim appClaim) && organization != null)
             {
                 var emailContent = string.Format(this.EmailContent.ContentUserAddedNewClaim, appClaim.GetDisplayAttribute());
-                await SendEmailAsync(emailContent, request.Email);               
+                
+                if(await SendEmailAsync(emailContent, request.Email))
+                {
+                    staffMember.EmailSent = DateTime.UtcNow;
+                    await this.UnitOfWork.SaveChangesAsync();
+                }    
             }
             else
                 throw new Exception("Izbrani tip uporabnika ne obstaja");          

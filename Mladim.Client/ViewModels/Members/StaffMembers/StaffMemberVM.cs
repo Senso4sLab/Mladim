@@ -8,4 +8,6 @@ public class StaffMemberVM : MemberVM
     public string Email { get; set; } = string.Empty;    
     public bool IsRegistered { get; set; }
     public ApplicationClaim Claim { get; set; }
+
+    public bool IEmailSent { get; set; }
 }

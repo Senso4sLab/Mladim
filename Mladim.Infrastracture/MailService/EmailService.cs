@@ -27,13 +27,9 @@ public class EmailService : IEmailService
     {
         try
         {
-            EmailSendOperation emailSendOperation = await this.EmailClient.SendAsync(WaitUntil.Started, email.Sender, email.Receipent, email.Subject, email.HtmlContent);
+            EmailSendOperation emailSendOperation = await this.EmailClient.SendAsync(WaitUntil.Completed, email.Sender, email.Receipent, email.Subject, email.HtmlContent);
 
-            //EmailSendResult status = emailSendOperation.Value;
-
-            //return status.Status == EmailSendStatus.Succeeded;
-
-            return true;
+            return emailSendOperation.Value.Status == EmailSendStatus.Succeeded;
         }
         catch (RequestFailedException ex) 
         {
