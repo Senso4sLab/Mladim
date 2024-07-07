@@ -33,6 +33,9 @@
 	  
 	  
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+	  
+	  
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.61.3" />
     <!--<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />-->
   </ItemGroup>
 

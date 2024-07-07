@@ -1,0 +1,16 @@
+﻿@page "/report"
+@attribute [Authorize]
+
+<PageTitle>Poročilo</PageTitle>
+
+@if(report is null)
+{
+    <lablel>Podatki se nalagajo!</lablel>
+    <br/>
+}
+else
+{
+    <div id="embed-container" style="height:800px;"></div>
+}
+
+

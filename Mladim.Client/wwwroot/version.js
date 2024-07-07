@@ -1,1 +1,1 @@
-﻿const CACHE_VERSION = 7.2
+﻿const CACHE_VERSION = 7.3

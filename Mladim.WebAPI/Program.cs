@@ -1,9 +1,12 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using Mladim.Application;
 using Mladim.Application.Contracts.File;
 using Mladim.Infrastracture;
 using Mladim.WebAPI.Services;
 using Swashbuckle.AspNetCore.Filters;
+using static System.Net.WebRequestMethods;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddJsonOptions(options => 
     options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+
+
+//builder.Services
+//  .AddMicrosoftIdentityWebAppAuthentication(builder.Configuration)
+//  .EnableTokenAcquisitionToCallDownstreamApi(new[] {"https://analysis.windows.net/powerbi/api/Report.Read.All"})
+//  .AddInMemoryTokenCaches();
 
 builder.Services.AddRazorPages();
 

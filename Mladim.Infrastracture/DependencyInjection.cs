@@ -12,12 +12,14 @@ using Microsoft.IdentityModel.Tokens;
 using Mladim.Application.Contracts.EmailService;
 using Mladim.Application.Contracts.Identity;
 using Mladim.Application.Contracts.Persistence;
+using Mladim.Application.Contracts.PowerBIService;
 using Mladim.Application.Models;
 using Mladim.Domain.IdentityModels;
 
 using Mladim.Infrastracture.Identity;
 using Mladim.Infrastracture.MailService;
 using Mladim.Infrastracture.Persistance;
+using Mladim.Infrastracture.PowerBI;
 using Mladim.Infrastracture.Repositories;
 using System.Text;
 
@@ -49,7 +51,7 @@ public static class DependencyInjection
             options.TokenLifespan = TimeSpan.FromDays(7);
         });
 
-
+        collection.AddScoped<IPowerBIService, PowerBIService>();
         collection.AddScoped<IUnitOfWork, UnitOfWork>();
         collection.AddTransient<IAuthService, AuthService>();
         collection.AddScoped<IAppUserRepository, AppUserRepository>();
