@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
@@ -18,10 +19,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 
 
-//builder.Services
-//  .AddMicrosoftIdentityWebAppAuthentication(builder.Configuration)
-//  .EnableTokenAcquisitionToCallDownstreamApi(new[] {"https://analysis.windows.net/powerbi/api/Report.Read.All"})
-//  .AddInMemoryTokenCaches();
+
 
 builder.Services.AddRazorPages();
 
