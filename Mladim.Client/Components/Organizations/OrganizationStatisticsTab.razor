@@ -33,13 +33,14 @@
 <MudStack Spacing="4" Class="py-5" >
         <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center" Class="py-3">
              <MudStack Row Spacing="3">
-                 <MudDatePicker Variant="Variant.Outlined" Color="Color.Primary" Label="Začetek" MaxDate="@statisticsDateRange?.End" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@statisticsDateRange.Start" OpenTo="OpenTo.Year" FixDay="1" />
-                 <MudDatePicker Variant="Variant.Outlined" Color="Color.Primary" Label="Konec" MinDate="@statisticsDateRange?.Start" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@statisticsDateRange.End" OpenTo="OpenTo.Year" FixDay="1" />
+                 <MudDatePicker Variant="Variant.Outlined" Color="Color.Primary" Label="Začetek" MaxDate="@statisticsDateRange?.End" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@statisticsDateRange.Start" />
+                 <MudDatePicker Variant="Variant.Outlined" Color="Color.Primary" Label="Konec" MinDate="@statisticsDateRange?.Start" PickerClosed="@OrgStatisticsDateTimePickerClosed" @bind-Date="@statisticsDateRange.End"  />
              </MudStack>
              <MudStack Row>
+            <MudIconButton Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.Analytics" OnClick="OnClickCsvExportFile"></MudIconButton>
                     <MudIconButton Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.PictureAsPdf" OnClick="GeneratePdfAsync"></MudIconButton>
-                    <MudIconButton Disabled="@isActiveExportingImages" Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.Image" OnClick="GenerateImagesAsync"></MudIconButton>
-             </MudStack>           
+                    <MudIconButton Disabled="@isActiveExportingImages" Variant="Variant.Outlined" Size="MudBlazor.Size.Large" Color="Color.Primary" Icon="@Icons.Material.Filled.Image" OnClick="GenerateImagesAsync"></MudIconButton>                    
+                </MudStack>           
         </MudStack>       
 
         <div @ref="Element">
@@ -96,7 +97,7 @@
                                             <MudImage Class="pa-3" Src="/participants.png" />
                                         </MudAvatar>
                                         <MudStack Spacing="1">
-                                            <MudText Typo="Typo.h2" Color="Color.Tertiary">@(organizationStatistics?.IndividualParticipants + organizationStatistics?.AnonymousParticipants)</MudText>
+                                 <MudText Typo="Typo.h2" Color="Color.Tertiary">@(totalParticipants)</MudText>
                                             <MudText Typo="Typo.h2" Color="Color.Tertiary">Udeleženci</MudText>
                                         </MudStack>        
                                     </MudStack>                            
@@ -107,7 +108,7 @@
                                             <MudImage Class="pa-3" Src="/activities.png" />
                                          </MudAvatar>
                                          <MudStack Spacing="1">
-                                             <MudText Typo="Typo.h2" Color="Color.Tertiary">@(organizationStatistics?.ActiveActivities.Count + organizationStatistics?.PastActivities.Count)</MudText>
+                                             <MudText Typo="Typo.h2" Color="Color.Tertiary">@totalActivities</MudText>
                                                 <MudText Typo="Typo.h2" Color="Color.Tertiary">Aktivnosti</MudText>
                                          </MudStack>
                                     </MudStack>
@@ -115,11 +116,22 @@
                             <MudPaper Outlined="true" Class="pa-4">
                                 <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
                                         <MudAvatar Style="background-color:#8ED974; color:white" Variant="Variant.Filled" Size="MudBlazor.Size.Large">
-                                            <MudImage Class="pa-2" Src="/projects.png" />
+                                 <MudImage Class="pa-2" Src="/activities.png" />
                                         </MudAvatar>
                                         <MudStack Spacing="1">
                                              <MudText Typo="Typo.h2" Color="Color.Tertiary">@organizationStatistics?.ActiveProjects.Count</MudText>
                                              <MudText Typo="Typo.h2" Color="Color.Tertiary">Aktivni projekti</MudText>
+                                        </MudStack>
+                                    </MudStack>
+                            </MudPaper>
+                            <MudPaper Outlined="true" Class="pa-4">
+                                <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
+                                     <MudAvatar Style="background-color:#8ED974; color:white" Variant="Variant.Filled" Size="MudBlazor.Size.Large">
+                                         <MudImage Class="pa-2" Src="/projects.png" />
+                                     </MudAvatar>
+                                     <MudStack Spacing="1">
+                                         <MudText Typo="Typo.h2" Color="Color.Tertiary">@organizationStatistics?.TotalActivitiesHours</MudText>
+                                            <MudText Typo="Typo.h2" Color="Color.Tertiary">Št. ur aktivnosti</MudText>
                                         </MudStack>
                                     </MudStack>
                             </MudPaper>

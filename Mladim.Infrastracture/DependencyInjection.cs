@@ -27,8 +27,6 @@ namespace Mladim.Infrastracture;
 
 public static class DependencyInjection
 {
-   
-
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection collection, IConfiguration configuration)
     {
         collection.AddDbContext<ApplicationDbContext>(options =>

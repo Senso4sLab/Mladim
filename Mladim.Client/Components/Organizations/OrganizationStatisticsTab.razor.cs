@@ -1,4 +1,4 @@
-using global::Microsoft.AspNetCore.Components;
+﻿using global::Microsoft.AspNetCore.Components;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.ViewModels.Activity;
 using Syncfusion.Blazor.Grids;
@@ -11,6 +11,11 @@ using MudBlazor;
 using Syncfusion.Blazor.Charts;
 using Mladim.Domain.Models.Survey.Statistics;
 using static MudBlazor.CategoryTypes;
+using CsvHelper.Configuration;
+using CsvHelper;
+using Mladim.Domain.Extensions;
+using Mladim.Domain.Models.Survey.Questions;
+using System.Globalization;
 
 
 namespace Mladim.Client.Components.Organizations;
@@ -58,6 +63,9 @@ public partial class OrganizationStatisticsTab : IExportChart
 
     private IEnumerable<QuestionSurveyStatisticsVM> QuestionsSurveyStatistics { get; set; } = new List<QuestionSurveyStatisticsVM>();
 
+
+    int totalParticipants = 0;
+    int totalActivities = 0;
     protected override async Task OnInitializedAsync()
     {
         SelectedOrganization = await this.OrganizationService.DefaultOrganizationAsync();
@@ -69,7 +77,63 @@ public partial class OrganizationStatisticsTab : IExportChart
         await UpdateOrgStatisticsDataAsync();      
     }
 
-  
+    private async Task OnClickCsvExportFile()
+    {
+        var memoryStream = new MemoryStream();
+        var streamWriter = new StreamWriter(memoryStream);
+
+        var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = ";", LeaveOpen = true, };
+
+        using (var csv = new CsvWriter(streamWriter, csvConfiguration))
+        {
+            csv.WriteField("Začetni datum");
+            csv.WriteField("Končni datum");
+            csv.WriteField("Št. udeležencev");
+
+            if(organizationStatistics?.ParticipantsByGenders.Count > 0)
+            {
+                foreach(var participantByGender in organizationStatistics.ParticipantsByGenders)
+                    csv.WriteField($"{participantByGender.Gender.GetDisplayAttribute()}");
+            }
+
+            if(organizationStatistics?.ParticipantsByAgeGroups.Count > 0)
+            {
+                foreach (var participantByAgeGroup in organizationStatistics.ParticipantsByAgeGroups)
+                    csv.WriteField($"{participantByAgeGroup.AgeGroup.GetDisplayAttribute()}");
+            }
+
+            csv.WriteField("Št. aktivnosti");
+            csv.WriteField("Št. ur vseh aktivnosti");           
+
+            csv.NextRecord();
+
+            csv.WriteField(statisticsDateRange.Start.Value.ToString("dd/MM/yyyy"));
+            csv.WriteField(statisticsDateRange.End.Value.ToString("dd/MM/yyyy"));
+            csv.WriteField(totalParticipants);
+
+            if (organizationStatistics?.ParticipantsByGenders.Count > 0)
+            {
+                foreach (var participantByGender in organizationStatistics.ParticipantsByGenders)
+                    csv.WriteField($"{participantByGender.Number}");
+            }
+
+            if (organizationStatistics?.ParticipantsByAgeGroups.Count > 0)
+            {
+                foreach (var participantByAgeGroup in organizationStatistics.ParticipantsByAgeGroups)
+                    csv.WriteField($"{participantByAgeGroup.Number}");
+            }
+
+            csv.WriteField(totalActivities);
+            csv.WriteField(organizationStatistics?.TotalActivitiesHours);
+
+        }
+        memoryStream.Position = 0;
+
+        using var streamRef = new DotNetStreamReference(stream: memoryStream);
+        await JS.InvokeVoidAsync("downloadFileFromStream", $"Statistika_{SelectedOrganization.Name}.csv", streamRef);
+    }
+
+
 
 
     public void OnMoreQuestionStatisticsChanged(bool toggled)
@@ -137,6 +201,11 @@ public partial class OrganizationStatisticsTab : IExportChart
     {       
        
         this.organizationStatistics = await OrganizationStatisticsAsync(statisticsDateRange);
+
+        this.totalParticipants = organizationStatistics?.IndividualParticipants + organizationStatistics?.AnonymousParticipants ?? 0;
+
+        this.totalActivities = organizationStatistics?.ActiveActivities.Count + organizationStatistics?.PastActivities.Count ?? 0;
+
         this.isAnyParticipant = organizationStatistics?.AgeDoughnut.Count() > 0 && organizationStatistics?.GenderDoughnut.Count() > 0;
 
         this.activities = await UpcommingActivitiesAsync(5);     

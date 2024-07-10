@@ -18,6 +18,7 @@ public class OrganizationStatisticVM
     public List<ParticipantsAgeGroupVM> ParticipantsByAgeGroups = new List<ParticipantsAgeGroupVM>();
     public int IndividualParticipants { get; set; }
     public int AnonymousParticipants { get; set; }
+    public double TotalActivitiesHours { get; set; }
 
 
     private IEnumerable<DoughnutPiece> genderDoughnut = null!;

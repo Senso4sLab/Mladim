@@ -20,6 +20,7 @@ public class OrganizationStatisticQueryDto
 
     public int IndividualParticipants { get; set; }
     public int AnonymousParticipants { get; set; }
+    public double TotalActivitiesHours { get; set; }
 
     public OrganizationStatisticQueryDto()
     {
@@ -38,7 +39,7 @@ public class OrganizationStatisticQueryDto
 
     public static OrganizationStatisticQueryDto Create(List<NamedEntityDto> activeProjects, List<NamedEntityDto> pastProjects,
         List<NamedEntityDto> activeActivities, List<NamedEntityDto> pastActivities, int individualParticipants, int anonymousParticipants, 
-        IEnumerable<ParticipantsGenderDto> participantsGender, IEnumerable<ParticipantsAgeGroupDto> participantAgeGroup) =>
+        IEnumerable<ParticipantsGenderDto> participantsGender, IEnumerable<ParticipantsAgeGroupDto> participantAgeGroup, double totalActivitiesHours) =>
         new OrganizationStatisticQueryDto(participantsGender, participantAgeGroup)
         {            
             ActiveProjects = activeProjects,
@@ -46,7 +47,8 @@ public class OrganizationStatisticQueryDto
             ActiveActivities = activeActivities, 
             PastActivities = pastActivities,
             IndividualParticipants = individualParticipants,
-            AnonymousParticipants = anonymousParticipants,           
+            AnonymousParticipants = anonymousParticipants, 
+            TotalActivitiesHours = totalActivitiesHours,
         };
 
 

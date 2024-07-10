@@ -60,6 +60,8 @@ public class GetOrganizationStatisticQueryHandler : IRequestHandler<GetOrganizat
 
             activities = activities.Where(a => a.TimeRange.OverlapWith(request.DateTimeRange));
 
+            var totalHoursActivites = activities.Sum(a => (a.TimeRange.EndTime - a.TimeRange.StartTime).Value.TotalHours);
+
             var activeActivities = activities.Where(a => a.TimeRange.IsDateTimeInRange(currentDate))
                 .Select(a => NamedEntityDto.Create(a.Id, a.Attributes.Name))
                 .ToList();
@@ -82,7 +84,7 @@ public class GetOrganizationStatisticQueryHandler : IRequestHandler<GetOrganizat
             var participantsInGroups = activities.SelectMany(a => a.Groups.SelectMany(g => g.Members.Select(m => m as Participant))).ToList();
 
             return OrganizationStatisticQueryDto.Create(activeProjects, pastProjects, activeActivities, pastActivites, individualParticipants,
-                anonymousParticipants, ParticipantByGender(activities, participantsInGroups), ParticipantsByAgeGroup(activities, participantsInGroups));
+                anonymousParticipants, ParticipantByGender(activities, participantsInGroups), ParticipantsByAgeGroup(activities, participantsInGroups), totalHoursActivites);
         }
         catch(Exception ex)
         {
