@@ -16,6 +16,7 @@ using CsvHelper;
 using Mladim.Domain.Extensions;
 using Mladim.Domain.Models.Survey.Questions;
 using System.Globalization;
+using Mladim.Client.Services.SubjectServices.Implementations;
 
 
 namespace Mladim.Client.Components.Organizations;
@@ -79,6 +80,11 @@ public partial class OrganizationStatisticsTab : IExportChart
 
     private async Task OnClickCsvExportFile()
     {
+
+
+        
+
+
         var memoryStream = new MemoryStream();
         var streamWriter = new StreamWriter(memoryStream);
 
@@ -126,7 +132,24 @@ public partial class OrganizationStatisticsTab : IExportChart
             csv.WriteField(totalActivities);
             csv.WriteField(organizationStatistics?.TotalActivitiesHours);
 
+            csv.NextRecord();
+
+            var activities = await ActivityService.GetByOrganizationIdAsync(SelectedOrganization.Id, statisticsDateRange.Start, statisticsDateRange.End);
+
+            if(activities != null)
+            {
+                csv.WriteField("Ime projekta");
+                csv.WriteField("Ime aktivnosti");
+                csv.WriteField("Datum aktivnosti");
+                csv.WriteField("Trajanje aktivnosti");
+                csv.WriteField("Vrsta aktivnosti");
+                csv.WriteField("Tip aktivnosti");
+                csv.WriteField("Skupno št. udeležencev");
+                csv.WriteField("Struktura udeležencev");
+            }
+
         }
+
         memoryStream.Position = 0;
 
         using var streamRef = new DotNetStreamReference(stream: memoryStream);
@@ -186,7 +209,7 @@ public partial class OrganizationStatisticsTab : IExportChart
     public async Task<List<ActivityForGantt>> UpcommingActivitiesAsync(int numOfUpcommingActivities)
     {
         // If upcomming activities is equal ti null all activities will be fetched!
-        var upcommingActivities = await this.ActivityService.GetByOrganizationIdAsync(SelectedOrganization.Id, numOfUpcommingActivities);
+        var upcommingActivities = await this.ActivityService.GetByOrganizationIdAsync(SelectedOrganization.Id, null, null,numOfUpcommingActivities);
 
         return upcommingActivities.Select((a, i) => ActivityForGantt.Create(i + 1, a.Id, a.Attributes.Name, a.Project, a.TimeRange)).ToList();
     }

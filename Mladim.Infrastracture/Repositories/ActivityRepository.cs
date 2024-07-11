@@ -62,6 +62,18 @@ public class ActivityRepository : GenericRepository<Activity>, IActivityReposito
     }
 
 
+    public async Task<IEnumerable<ActivityWithProjectName>> GetActivitiesWithProjectNameAndMembers(Expression<Func<Activity, bool>> predicate)
+    {
+        var sequence = this.DbSet
+            .Where(predicate)
+            .Include(p => p.Groups)
+            .ThenInclude(ag => ag.Members)
+            .Include(p => p.Participants);
+
+        return await sequence.Select(a => ActivityWithProjectName.Create(a.ProjectId, a.Project.Attributes.Name, a)).AsNoTracking().ToListAsync();
+    }
+
+
     public async Task<IEnumerable<ActivityWithProjectName>> GetActivitiesWithProjectNameAndStaffMember(Expression<Func<Activity, bool>> predicate,  int? upcomingActivities)
     {
         var sequence = this.DbSet

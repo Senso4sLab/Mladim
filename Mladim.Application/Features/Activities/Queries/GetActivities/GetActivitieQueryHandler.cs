@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Mladim.Application.Contracts.Persistence;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Enums;
@@ -37,31 +38,33 @@ public class GetActivitieQueryHandler : IRequestHandler<GetActivitiesQuery, IEnu
                 .GetActivitiesWithProjectName(a => a.ProjectId ==  projectId, request.UpcomingActivities);
 
             return this.Mapper.Map<IEnumerable<ActivityWithProjectNameQueryDto>>(activities);
+        }        
+
+        int? orgId = request.OrganizationId.Value;      
+
+        if (orgId is null)
+            return Enumerable.Empty<ActivityQueryDto>();
+
+       
+       
+        if (IsAdminOrManager(this.HttpContext.User.Claims, orgId.Value))
+        {
+            var activities = await this.UnitOfWork.ActivityRepository
+                .GetActivitiesWithProjectName(a => a.Project.OrganizationId == orgId, request.UpcomingActivities);
+
+            return this.Mapper.Map<IEnumerable<ActivityWithProjectNameQueryDto>>(activities);
         }
-        
-        if(request.OrganizationId is int organizationId)
-        {         
+        else
+        {
+            var email = this.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value;
 
-            if(IsAdminOrManager(this.HttpContext.User.Claims, organizationId))
-            {
-                var activities = await this.UnitOfWork.ActivityRepository
-                    .GetActivitiesWithProjectName(a => a.Project.OrganizationId == organizationId, request.UpcomingActivities);
+            var activities = await this.UnitOfWork.ActivityRepository
+                .GetActivitiesWithProjectNameAndStaffMember(a => a.Project.OrganizationId == orgId.Value && a.Project.Staff.Any(s => s.StaffMember.Email == email), request.UpcomingActivities);
 
-                return this.Mapper.Map<IEnumerable<ActivityWithProjectNameQueryDto>>(activities);
-            }
-            else
-            {
-                var email = this.HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value;
-                
-                var activities = await this.UnitOfWork.ActivityRepository
-                    .GetActivitiesWithProjectNameAndStaffMember(a => a.Project.OrganizationId == organizationId && a.Project.Staff.Any(s => s.StaffMember.Email == email), request.UpcomingActivities);
+            return this.Mapper.Map<IEnumerable<ActivityWithProjectNameQueryDto>>(activities);
 
-                return this.Mapper.Map<IEnumerable<ActivityWithProjectNameQueryDto>>(activities);
-
-            }          
         }
-        
-        return Enumerable.Empty<ActivityQueryDto>();
+               
     }
 
     private bool IsAdminOrManager(IEnumerable<Claim> claims, int organizationId)

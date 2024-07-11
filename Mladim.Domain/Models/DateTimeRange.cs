@@ -59,5 +59,13 @@ public class DateTimeRange : IEquatable<DateTimeRange>
         other?.EndTime == this.EndTime;
     public override int GetHashCode() =>
         HashCode.Combine(this.StartDate, this.EndDate, this.StartTime, this.EndTime);
+
+
+    public static bool operator ==(DateTimeRange a, DateTimeRange b)
+        => a.StartDate == b.StartDate && a.EndDate == b.EndDate;
+    public static bool operator !=(DateTimeRange a, DateTimeRange b)
+        => !(a == b);
+
     
+
 }
