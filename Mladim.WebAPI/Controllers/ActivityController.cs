@@ -5,9 +5,13 @@ using Mladim.Application.Features.Activities.Commands.AddActivity;
 using Mladim.Application.Features.Activities.Commands.RemoveActivity;
 using Mladim.Application.Features.Activities.Commands.UpdateActivity;
 using Mladim.Application.Features.Activities.Queries.GetActivities;
+using Mladim.Application.Features.Activities.Queries.GetActivitiesStatistics;
 using Mladim.Application.Features.Activities.Queries.GetActivity;
 using Mladim.Application.Features.Activities.Queries.GetActivityName;
+using Mladim.Application.Features.Organizations.Queries.GetOrganizationStatistics;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.Organization;
+using Mladim.Domain.Models;
 
 namespace Mladim.WebAPI.Controllers;
 
@@ -65,6 +69,17 @@ public class ActivityController : ControllerBase
     public async Task<ActionResult<IEnumerable<ActivityQueryDto>>> GetAllByQueryAsync([FromQuery] GetActivitiesQuery query)
     {
         var response = await this.Mediator.Send(query);
+        return Ok(response);
+    }
+
+
+
+    [HttpGet("statistics")]
+    public async Task<ActionResult<IEnumerable<ActivityStatisticQueryDto>>> GetStatistics(int organizationId, DateTime startDate, DateTime endDate)
+    {
+
+        var response = await this.Mediator.Send(new GetActivitiesStatisticsQuery() { OrganizationId = organizationId, Start = startDate, End = endDate});
+
         return Ok(response);
     }
 
