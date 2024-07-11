@@ -12,6 +12,7 @@ namespace Mladim.Application.Features.Activities.Queries.GetActivitiesStatistics
 public class GetActivitiesStatisticsQuery : IRequest<IEnumerable<ActivityStatisticQueryDto>>
 {
     public int OrganizationId { get; set; }
-    public DateTimeRange DateTimeRange { get; set; }
+    public DateTime Start { get; set; }
+    public DateTime End { get; set; }
 
 }
