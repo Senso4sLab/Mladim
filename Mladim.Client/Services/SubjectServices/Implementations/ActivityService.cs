@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Options;
+using Mladim.Client.Extensions;
 using Mladim.Client.Models;
 using Mladim.Client.Pages;
 using Mladim.Client.Services.HttpService.Generic;
@@ -55,12 +56,22 @@ public class ActivityService : IActivityService
         return this.Mapper.Map<IEnumerable<ActivityWithProjectNameVM>>(activities);
     }
 
-    public async Task<IEnumerable<ActivityWithProjectNameVM>> GetByOrganizationIdAsync(int organizationId, DateTime? start = null, DateTime? end = null,  int? upcommingActivities = null)
+    public async Task<IEnumerable<ActivityWithProjectNameVM>> GetByOrganizationIdAsync(int organizationId, int? upcommingActivities = null)
     {
-        string url = string.Format(MladimApiUrls.GetActivitiesByOrganizationId, organizationId, start, end, upcommingActivities);
+        string url = string.Format(MladimApiUrls.GetActivitiesByOrganizationId, organizationId, upcommingActivities);
         var activities = await HttpClient.GetAllAsync<ActivityWithProjectNameQueryDto>(url);
         return this.Mapper.Map<IEnumerable<ActivityWithProjectNameVM>>(activities);
     }
+
+
+    public async Task<IEnumerable<ActivityStatisticVM>> GetStatistics(int organizationId, DateTime start, DateTime end)
+    {
+
+        string url = string.Format(MladimApiUrls.GetActivitiesStatistics, organizationId, start.ToLongDateString(), end.ToLongDateString());
+        var activities = await HttpClient.GetAllAsync<ActivityStatisticQueryDto>(url);
+        return this.Mapper.Map<IEnumerable<ActivityStatisticVM>>(activities);
+    }
+
 
     public async Task<bool> RemoveAsync(int activityId)
     {

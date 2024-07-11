@@ -37,7 +37,7 @@ public class GetActivitiesStatisticsHandler : IRequestHandler<GetActivitiesStati
             var participantByAgeGroup = ParticipantsByAgeGroup(activity, participantsInGroups);
             var activityAttribute = this.Mapper.Map<ActivityAttributesQueryDto>(activity.Attributes);           
 
-            activityStatistics.Add(ActivityStatisticQueryDto.Create(activityAttribute, activity.Project.FullName, participantByAgeGroup, participantByGender));
+            activityStatistics.Add(ActivityStatisticQueryDto.Create(activityAttribute, activity.TimeRange.StartDate, activity.TimeRange.EndDate,  activity.Project.FullName, participantByAgeGroup, participantByGender));
         }
         return activityStatistics;
     }

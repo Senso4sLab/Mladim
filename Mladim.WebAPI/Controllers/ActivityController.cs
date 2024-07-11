@@ -75,11 +75,10 @@ public class ActivityController : ControllerBase
 
 
     [HttpGet("statistics")]
-    public async Task<ActionResult<IEnumerable<ActivityStatisticQueryDto>>> GetStatistics(int organizationId, DateTime startDate, DateTime endDate)
+    public async Task<ActionResult<IEnumerable<ActivityStatisticQueryDto>>> GetStatistics([FromQuery]GetActivitiesStatisticsQuery query)
     {
 
-        var response = await this.Mediator.Send(new GetActivitiesStatisticsQuery() { OrganizationId = organizationId, Start = startDate, End = endDate});
-
+        var response = await this.Mediator.Send(query);
         return Ok(response);
     }
 

@@ -2,6 +2,8 @@
 using Mladim.Client.ViewModels.AttachedFile;
 using Mladim.Client.ViewModels.Project;
 using Mladim.Domain.Dtos;
+using Mladim.Domain.Dtos.Attributes;
+using Mladim.Domain.Dtos.Members.Participants;
 using Mladim.Domain.Enums;
 using MudBlazor;
 

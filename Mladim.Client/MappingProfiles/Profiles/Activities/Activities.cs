@@ -47,6 +47,8 @@ public class Activities : Profile
 
         CreateMap<ActivityAttributesQueryDto, ActivityAttributesVM>()
              .ForMember(dto => dto.ActivityTypes, dt => dt.MapFrom(field => field.ActivityTypes.ToEnums()));
+
+        CreateMap<ActivityStatisticQueryDto, ActivityStatisticVM>();
             
     }
 }

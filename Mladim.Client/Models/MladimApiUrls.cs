@@ -25,6 +25,8 @@ public class MladimApiUrls
     public string RemoveActivity { get; set; } = string.Empty;
     public string ActivityCommand { get; set; } = string.Empty;
 
+    public string GetActivitiesStatistics { get; set; } = string.Empty;
+
 
     public string GroupCommand { get; set; } = string.Empty;
     public string GetGroupById { get; set; } = string.Empty;

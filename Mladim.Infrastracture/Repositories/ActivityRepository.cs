@@ -69,8 +69,10 @@ public class ActivityRepository : GenericRepository<Activity>, IActivityReposito
             .Include(p => p.Groups)
             .ThenInclude(ag => ag.Members)
             .Include(p => p.Participants);
+           
 
-        return await sequence.Select(a => ActivityWithProjectName.Create(a.ProjectId, a.Project.Attributes.Name, a)).AsNoTracking().ToListAsync();
+
+        return await sequence.Select(a => ActivityWithProjectName.Create(a.ProjectId, a.Project.Attributes.Name, a, a.Groups, a.Participants, a.AnonymousParticipantGroups)).ToListAsync();
     }
 
 

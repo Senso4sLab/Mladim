@@ -17,6 +17,7 @@ using Mladim.Domain.Extensions;
 using Mladim.Domain.Models.Survey.Questions;
 using System.Globalization;
 using Mladim.Client.Services.SubjectServices.Implementations;
+using Mladim.Domain.Enums;
 
 
 namespace Mladim.Client.Components.Organizations;
@@ -79,10 +80,7 @@ public partial class OrganizationStatisticsTab : IExportChart
     }
 
     private async Task OnClickCsvExportFile()
-    {
-
-
-        
+    {       
 
 
         var memoryStream = new MemoryStream();
@@ -134,18 +132,35 @@ public partial class OrganizationStatisticsTab : IExportChart
 
             csv.NextRecord();
 
-            var activities = await ActivityService.GetByOrganizationIdAsync(SelectedOrganization.Id, statisticsDateRange.Start, statisticsDateRange.End);
+            var activitiesStatistics = await ActivityService.GetStatistics(SelectedOrganization.Id, statisticsDateRange.Start.Value, statisticsDateRange.End.Value);            
 
-            if(activities != null)
+            if (activitiesStatistics != null)
             {
                 csv.WriteField("Ime projekta");
                 csv.WriteField("Ime aktivnosti");
-                csv.WriteField("Datum aktivnosti");
+                csv.WriteField("Začetek aktivnosti");
                 csv.WriteField("Trajanje aktivnosti");
-                csv.WriteField("Vrsta aktivnosti");
-                csv.WriteField("Tip aktivnosti");
+                csv.WriteField("Vrsta aktivnosti"); // skupinska, ponavljajoča
+                csv.WriteField("Tip aktivnosti"); // imamo
                 csv.WriteField("Skupno št. udeležencev");
-                csv.WriteField("Struktura udeležencev");
+
+                foreach(var gender in Enum.GetValues<Gender>())
+                    csv.WriteField($"{gender.GetDisplayAttribute()}");
+
+                foreach (var ageGroup in Enum.GetValues<AgeGroups>())
+                    csv.WriteField($"{ageGroup.GetDisplayAttribute()}");
+
+                csv.NextRecord();
+
+                foreach(var activityStatistics in activitiesStatistics)
+                {
+                    csv.WriteField($"{activityStatistics.ProjectName}");
+                    csv.WriteField($"{activityStatistics.Attributes.Name}");
+                    csv.WriteField($"{activityStatistics.Start.ToString("dd/MM/yyyy")}");
+                    csv.WriteField($"{(activityStatistics.End - activityStatistics.Start).TotalHours}");
+
+                    csv.WriteField($"{activitiesStatistics.Sum(a => a.ParticipantsByAgeGroups.Sum(p => p.Number))}");
+                }
             }
 
         }
@@ -209,7 +224,7 @@ public partial class OrganizationStatisticsTab : IExportChart
     public async Task<List<ActivityForGantt>> UpcommingActivitiesAsync(int numOfUpcommingActivities)
     {
         // If upcomming activities is equal ti null all activities will be fetched!
-        var upcommingActivities = await this.ActivityService.GetByOrganizationIdAsync(SelectedOrganization.Id, null, null,numOfUpcommingActivities);
+        var upcommingActivities = await this.ActivityService.GetByOrganizationIdAsync(SelectedOrganization.Id, numOfUpcommingActivities);
 
         return upcommingActivities.Select((a, i) => ActivityForGantt.Create(i + 1, a.Id, a.Attributes.Name, a.Project, a.TimeRange)).ToList();
     }
