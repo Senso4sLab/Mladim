@@ -131,6 +131,7 @@ public partial class OrganizationStatisticsTab : IExportChart
             csv.WriteField(organizationStatistics?.TotalActivitiesHours);
 
             csv.NextRecord();
+            csv.NextRecord();
 
             var activitiesStatistics = await ActivityService.GetStatistics(SelectedOrganization.Id, statisticsDateRange.Start.Value, statisticsDateRange.End.Value);            
 
@@ -141,7 +142,8 @@ public partial class OrganizationStatisticsTab : IExportChart
                 csv.WriteField("Začetek aktivnosti");
                 csv.WriteField("Trajanje aktivnosti");
                 csv.WriteField("Vrsta aktivnosti"); // skupinska, ponavljajoča
-                csv.WriteField("Tip aktivnosti"); // imamo
+                csv.WriteField("Skupinska aktivnost"); // imamo
+                csv.WriteField("Ponavljajoča aktivnost"); // imamo
                 csv.WriteField("Skupno št. udeležencev");
 
                 foreach(var gender in Enum.GetValues<Gender>())
@@ -157,9 +159,25 @@ public partial class OrganizationStatisticsTab : IExportChart
                     csv.WriteField($"{activityStatistics.ProjectName}");
                     csv.WriteField($"{activityStatistics.Attributes.Name}");
                     csv.WriteField($"{activityStatistics.Start.ToString("dd/MM/yyyy")}");
-                    csv.WriteField($"{(activityStatistics.End - activityStatistics.Start).TotalHours}");
+                    csv.WriteField($"{activityStatistics.DurationHours}");
+                    csv.WriteField($"{string.Join(',', activityStatistics.Attributes.ActivityTypes.Select(t => t.GetDisplayAttribute()))}");                    
+                    csv.WriteField($"{(activityStatistics.Attributes.IsGroup ? "DA" : "NE")}");
+                    csv.WriteField($"{(activityStatistics.Attributes.IsRepetitive ? "DA" : "NE")}");
+                    csv.WriteField($"{activityStatistics.ParticipantsByAgeGroups.Sum(p => p.Number)}");
 
-                    csv.WriteField($"{activitiesStatistics.Sum(a => a.ParticipantsByAgeGroups.Sum(p => p.Number))}");
+                    foreach (var gender in Enum.GetValues<Gender>())
+                    {
+                        var participantGenderSum = activityStatistics.ParticipantsByGenders.Where(pg => pg.Gender == gender).Sum(ap => ap.Number);
+                        csv.WriteField($"{participantGenderSum}");
+                    }
+
+                    foreach (var ageGroup in Enum.GetValues<AgeGroups>())
+                    {
+                        var participantAgeGroupSum = activityStatistics.ParticipantsByAgeGroups.Where(pg => pg.AgeGroup == ageGroup).Sum(ap => ap.Number);
+                        csv.WriteField($"{participantAgeGroupSum}");
+                    }
+
+                    csv.NextRecord();
                 }
             }
 

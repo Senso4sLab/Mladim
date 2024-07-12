@@ -35,9 +35,9 @@ public class GetActivitiesStatisticsHandler : IRequestHandler<GetActivitiesStati
             var participantsInGroups = activity.Groups.SelectMany(g => g.Members.Select(m => m as Participant)).ToList();
             var participantByGender = ParticipantByGender(activity, participantsInGroups);
             var participantByAgeGroup = ParticipantsByAgeGroup(activity, participantsInGroups);
-            var activityAttribute = this.Mapper.Map<ActivityAttributesQueryDto>(activity.Attributes);           
-
-            activityStatistics.Add(ActivityStatisticQueryDto.Create(activityAttribute, activity.TimeRange.StartDate, activity.TimeRange.EndDate,  activity.Project.FullName, participantByAgeGroup, participantByGender));
+            var activityAttribute = this.Mapper.Map<ActivityAttributesQueryDto>(activity.Attributes);
+            var durationHours = (activity.TimeRange.EndTime - activity.TimeRange.StartTime)?.TotalHours ?? 0;
+            activityStatistics.Add(ActivityStatisticQueryDto.Create(activityAttribute, activity.TimeRange.StartDate, activity.TimeRange.EndDate, durationHours,  activity.Project.FullName, participantByAgeGroup, participantByGender));
         }
         return activityStatistics;
     }

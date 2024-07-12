@@ -47,7 +47,9 @@ public class ActivityRepository : GenericRepository<Activity>, IActivityReposito
 
     public async Task<IEnumerable<ActivityWithProjectName>> GetActivitiesWithProjectName(Expression<Func<Activity, bool>> predicate, int? upcomingActivities)
     {
-        var sequence = this.DbSet.Where(predicate);
+        var sequence = this.DbSet.Where(predicate)
+            .Include(p => p.Project)
+            .AsQueryable();
 
         if (upcomingActivities is int numActivities)
         {
@@ -57,22 +59,25 @@ public class ActivityRepository : GenericRepository<Activity>, IActivityReposito
                 .Take(numActivities);
         }
 
-        return await sequence.Select(a => ActivityWithProjectName.Create(a.ProjectId, a.Project.Attributes.Name, a))
-            .ToListAsync();
+        var result = await sequence.ToListAsync();
+
+        return result.Select(a => ActivityWithProjectName.Create(a.ProjectId, a.Project.Attributes.Name, a)).ToList();
+           
     }
 
 
     public async Task<IEnumerable<ActivityWithProjectName>> GetActivitiesWithProjectNameAndMembers(Expression<Func<Activity, bool>> predicate)
     {
-        var sequence = this.DbSet
-            .Where(predicate)
-            .Include(p => p.Groups)
-            .ThenInclude(ag => ag.Members)
-            .Include(p => p.Participants);
-           
-
-
-        return await sequence.Select(a => ActivityWithProjectName.Create(a.ProjectId, a.Project.Attributes.Name, a, a.Groups, a.Participants, a.AnonymousParticipantGroups)).ToListAsync();
+       
+            var sequence = await this.DbSet
+                .Where(predicate)
+                .Include(p => p.Project)
+                .Include(p => p.Groups)
+                .ThenInclude(ag => ag.Members)
+                .Include(p => p.Participants)
+                .ToListAsync();
+            return sequence.Select(a => ActivityWithProjectName.Create(a.ProjectId, a.Project.Attributes.Name, a, a.Groups, a.Participants, a.AnonymousParticipantGroups)).ToList();
+       
     }
 
 
@@ -92,8 +97,8 @@ public class ActivityRepository : GenericRepository<Activity>, IActivityReposito
                 .Take(numActivities);
         }
 
-        return await sequence.Select(a => ActivityWithProjectName.Create(a.ProjectId, a.Project.Attributes.Name, a))
-            .ToListAsync();
+        return (await sequence.ToListAsync()).Select(a => ActivityWithProjectName.Create(a.ProjectId, a.Project.Attributes.Name, a)).ToList();
+            
     }
 
 

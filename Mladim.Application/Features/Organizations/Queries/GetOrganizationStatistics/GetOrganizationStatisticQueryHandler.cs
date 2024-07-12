@@ -85,6 +85,9 @@ public class GetOrganizationStatisticQueryHandler : IRequestHandler<GetOrganizat
 
             return OrganizationStatisticQueryDto.Create(activeProjects, pastProjects, activeActivities, pastActivites, individualParticipants,
                 anonymousParticipants, ParticipantByGender(activities, participantsInGroups), ParticipantsByAgeGroup(activities, participantsInGroups), totalHoursActivites);
+
+
+            
         }
         catch(Exception ex)
         {
