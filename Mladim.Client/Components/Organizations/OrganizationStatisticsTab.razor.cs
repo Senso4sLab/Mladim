@@ -140,7 +140,7 @@ public partial class OrganizationStatisticsTab : IExportChart
                 csv.WriteField("Ime projekta");
                 csv.WriteField("Ime aktivnosti");
                 csv.WriteField("Začetek aktivnosti");
-                csv.WriteField("Trajanje aktivnosti");
+                csv.WriteField("Konec aktivnosti");
                 csv.WriteField("Vrsta aktivnosti"); // skupinska, ponavljajoča
                 csv.WriteField("Skupinska aktivnost"); // imamo
                 csv.WriteField("Ponavljajoča aktivnost"); // imamo
@@ -159,7 +159,7 @@ public partial class OrganizationStatisticsTab : IExportChart
                     csv.WriteField($"{activityStatistics.ProjectName}");
                     csv.WriteField($"{activityStatistics.Attributes.Name}");
                     csv.WriteField($"{activityStatistics.Start.ToString("dd/MM/yyyy")}");
-                    csv.WriteField($"{activityStatistics.DurationHours}");
+                    csv.WriteField($"{activityStatistics.End.ToString("dd/MM/yyyy")}");
                     csv.WriteField($"{string.Join(',', activityStatistics.Attributes.ActivityTypes.Select(t => t.GetDisplayAttribute()))}");                    
                     csv.WriteField($"{(activityStatistics.Attributes.IsGroup ? "DA" : "NE")}");
                     csv.WriteField($"{(activityStatistics.Attributes.IsRepetitive ? "DA" : "NE")}");
