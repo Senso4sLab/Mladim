@@ -88,6 +88,7 @@ public partial class OrganizationStatisticsTab : IExportChart
     private async Task OnClickCsvExportFile()
     {
         CsvService.Open();
+
         CsvService.Write("Začetni datum", "Končni datum", "Št. udeležencev");
 
         if (organizationStatistics?.ParticipantsByGenders.Count > 0)
