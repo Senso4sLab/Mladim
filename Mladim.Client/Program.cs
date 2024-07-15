@@ -20,6 +20,9 @@ using Syncfusion.Blazor;
 using Microsoft.AspNetCore.Authorization;
 using Mladim.Client.Authorization;
 using Microsoft.Extensions.Options;
+using Mladim.Client.Services.Csv;
+using Mladim.Client.Csv;
+
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -56,6 +59,9 @@ builder.Services.AddTransient<HttpAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, UserHasWorkerClaimHandler>();
 
 builder.Services.AddSingleton<IAuthorizationHandler, UserHasWorkerClaimHandler>();
+builder.Services.AddSingleton<ICsvService, CsvService>();
+
+
 builder.Services.AddAuthorizationCore(options =>
 {
     options.AddPolicy("HasWorkerClaim", policy => policy.Requirements.Add(new UserHasWorkerClaim()));

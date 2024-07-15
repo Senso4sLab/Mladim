@@ -18,6 +18,9 @@ using Mladim.Domain.Models.Survey.Questions;
 using System.Globalization;
 using Mladim.Client.Services.SubjectServices.Implementations;
 using Mladim.Domain.Enums;
+using Mladim.Client.Services.Csv;
+using Mladim.Client.Csv;
+using Syncfusion.Blazor.PivotView;
 
 
 namespace Mladim.Client.Components.Organizations;
@@ -39,6 +42,9 @@ public partial class OrganizationStatisticsTab : IExportChart
 
     [Inject]
     public IJSRuntime JS { get; set; } = default!;
+
+    [Inject]
+    public ICsvService CsvService { get; set; }
 
     bool MoreQuestionStatistics { get; set; } = false;
     IEnumerable<int> defaultQuestionsForStatistics = new List<int>() { 1, 2, 3, 4, 5, 11 };
@@ -80,113 +86,66 @@ public partial class OrganizationStatisticsTab : IExportChart
     }
 
     private async Task OnClickCsvExportFile()
-    {       
+    {
+        CsvService.Open();
+        CsvService.Write("Začetni datum", "Končni datum", "Št. udeležencev");
 
+        if (organizationStatistics?.ParticipantsByGenders.Count > 0)
+            CsvService.Write(organizationStatistics?.ParticipantsByGenders.Select(p => p.Gender.GetDisplayAttribute())!);
 
-        var memoryStream = new MemoryStream();
-        var streamWriter = new StreamWriter(memoryStream);
+        if (organizationStatistics?.ParticipantsByAgeGroups.Count > 0)
+            CsvService.Write(organizationStatistics?.ParticipantsByAgeGroups.Select(p => p.AgeGroup.GetDisplayAttribute())!);
 
-        var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = ";", LeaveOpen = true, };
+        CsvService.Write("Št. aktivnosti", "Št. ur vseh aktivnosti");
+        CsvService.NextRow();
 
-        using (var csv = new CsvWriter(streamWriter, csvConfiguration))
+        CsvService.Write(statisticsDateRange.Start!.Value.ToString("dd/MM/yyyy"), statisticsDateRange.End!.Value.ToString("dd/MM/yyyy"), totalActivities.ToString());
+
+        if (organizationStatistics?.ParticipantsByGenders.Count > 0)
+            CsvService.Write(organizationStatistics?.ParticipantsByGenders.Select(p => p.Number.ToString())!);
+
+        if (organizationStatistics?.ParticipantsByAgeGroups.Count > 0)
+            CsvService.Write(organizationStatistics?.ParticipantsByAgeGroups.Select(p => p.Number.ToString())!);
+
+        CsvService.Write(totalActivities.ToString());
+        CsvService.Write(organizationStatistics!.TotalActivitiesHours.ToString());
+
+        CsvService.NextRow();
+        CsvService.NextRow();
+
+        var activitiesStatistics = await ActivityService.GetStatistics(SelectedOrganization!.Id, statisticsDateRange.Start.Value, statisticsDateRange.End.Value);
+
+        if (activitiesStatistics != null)
         {
-            csv.WriteField("Začetni datum");
-            csv.WriteField("Končni datum");
-            csv.WriteField("Št. udeležencev");
 
-            if(organizationStatistics?.ParticipantsByGenders.Count > 0)
+            CsvService.Write("Ime projekta", "Ime aktivnosti", "Začetek aktivnosti", "Konec aktivnosti", "Vrsta aktivnosti", "Skupinska aktivnost", "Ponavljajoča aktivnost", "Skupno št. udeležencev");
+
+            CsvService.Write(Enum.GetValues<Gender>().Select(g => g.GetDisplayAttribute()));
+            CsvService.Write(Enum.GetValues<AgeGroups>().Select(ag => ag.GetDisplayAttribute()));
+
+            CsvService.NextRow();
+
+            foreach (var statistics in activitiesStatistics)
             {
-                foreach(var participantByGender in organizationStatistics.ParticipantsByGenders)
-                    csv.WriteField($"{participantByGender.Gender.GetDisplayAttribute()}");
+                CsvService.Write(statistics.ProjectName, statistics.Attributes.Name, statistics.Start.ToString("dd/MM/yyyy"), statistics.End.ToString("dd/MM/yyyy"));
+                CsvService.Write(string.Join(',', statistics.Attributes.ActivityTypes.Select(t => t.GetDisplayAttribute())));
+                CsvService.Write(statistics.Attributes.IsGroup ? "DA" : "NE", statistics.Attributes.IsRepetitive ? "DA" : "NE", statistics.ParticipantsByAgeGroups.Sum(p => p.Number).ToString());
+
+                var participantGenderSum = Enum.GetValues<Gender>().Select(g => statistics.ParticipantsByGenders.Where(pg => pg.Gender == g).Sum(ap => ap.Number).ToString());
+                CsvService.Write(participantGenderSum);
+
+                var participantAgeGroupSum = Enum.GetValues<AgeGroups>().Select(ag => statistics.ParticipantsByAgeGroups.Where(pg => pg.AgeGroup == ag).Sum(ap => ap.Number).ToString());
+                CsvService.Write(participantAgeGroupSum);
+                CsvService.NextRow();
             }
-
-            if(organizationStatistics?.ParticipantsByAgeGroups.Count > 0)
-            {
-                foreach (var participantByAgeGroup in organizationStatistics.ParticipantsByAgeGroups)
-                    csv.WriteField($"{participantByAgeGroup.AgeGroup.GetDisplayAttribute()}");
-            }
-
-            csv.WriteField("Št. aktivnosti");
-            csv.WriteField("Št. ur vseh aktivnosti");           
-
-            csv.NextRecord();
-
-            csv.WriteField(statisticsDateRange.Start.Value.ToString("dd/MM/yyyy"));
-            csv.WriteField(statisticsDateRange.End.Value.ToString("dd/MM/yyyy"));
-            csv.WriteField(totalParticipants);
-
-            if (organizationStatistics?.ParticipantsByGenders.Count > 0)
-            {
-                foreach (var participantByGender in organizationStatistics.ParticipantsByGenders)
-                    csv.WriteField($"{participantByGender.Number}");
-            }
-
-            if (organizationStatistics?.ParticipantsByAgeGroups.Count > 0)
-            {
-                foreach (var participantByAgeGroup in organizationStatistics.ParticipantsByAgeGroups)
-                    csv.WriteField($"{participantByAgeGroup.Number}");
-            }
-
-            csv.WriteField(totalActivities);
-            csv.WriteField(organizationStatistics?.TotalActivitiesHours);
-
-            csv.NextRecord();
-            csv.NextRecord();
-
-            var activitiesStatistics = await ActivityService.GetStatistics(SelectedOrganization.Id, statisticsDateRange.Start.Value, statisticsDateRange.End.Value);            
-
-            if (activitiesStatistics != null)
-            {
-                csv.WriteField("Ime projekta");
-                csv.WriteField("Ime aktivnosti");
-                csv.WriteField("Začetek aktivnosti");
-                csv.WriteField("Konec aktivnosti");
-                csv.WriteField("Vrsta aktivnosti"); // skupinska, ponavljajoča
-                csv.WriteField("Skupinska aktivnost"); // imamo
-                csv.WriteField("Ponavljajoča aktivnost"); // imamo
-                csv.WriteField("Skupno št. udeležencev");
-
-                foreach(var gender in Enum.GetValues<Gender>())
-                    csv.WriteField($"{gender.GetDisplayAttribute()}");
-
-                foreach (var ageGroup in Enum.GetValues<AgeGroups>())
-                    csv.WriteField($"{ageGroup.GetDisplayAttribute()}");
-
-                csv.NextRecord();
-
-                foreach(var activityStatistics in activitiesStatistics)
-                {
-                    csv.WriteField($"{activityStatistics.ProjectName}");
-                    csv.WriteField($"{activityStatistics.Attributes.Name}");
-                    csv.WriteField($"{activityStatistics.Start.ToString("dd/MM/yyyy")}");
-                    csv.WriteField($"{activityStatistics.End.ToString("dd/MM/yyyy")}");
-                    csv.WriteField($"{string.Join(',', activityStatistics.Attributes.ActivityTypes.Select(t => t.GetDisplayAttribute()))}");                    
-                    csv.WriteField($"{(activityStatistics.Attributes.IsGroup ? "DA" : "NE")}");
-                    csv.WriteField($"{(activityStatistics.Attributes.IsRepetitive ? "DA" : "NE")}");
-                    csv.WriteField($"{activityStatistics.ParticipantsByAgeGroups.Sum(p => p.Number)}");
-
-                    foreach (var gender in Enum.GetValues<Gender>())
-                    {
-                        var participantGenderSum = activityStatistics.ParticipantsByGenders.Where(pg => pg.Gender == gender).Sum(ap => ap.Number);
-                        csv.WriteField($"{participantGenderSum}");
-                    }
-
-                    foreach (var ageGroup in Enum.GetValues<AgeGroups>())
-                    {
-                        var participantAgeGroupSum = activityStatistics.ParticipantsByAgeGroups.Where(pg => pg.AgeGroup == ageGroup).Sum(ap => ap.Number);
-                        csv.WriteField($"{participantAgeGroupSum}");
-                    }
-
-                    csv.NextRecord();
-                }
-            }
-
         }
 
-        memoryStream.Position = 0;
-
-        using var streamRef = new DotNetStreamReference(stream: memoryStream);
+        CsvService.Close();
+       
+        using var streamRef = new DotNetStreamReference(CsvService.Stream);
+        
         await JS.InvokeVoidAsync("downloadFileFromStream", $"Statistika_{SelectedOrganization.Name}.csv", streamRef);
+       
     }
 
 
