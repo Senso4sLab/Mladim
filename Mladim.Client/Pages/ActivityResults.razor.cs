@@ -2,6 +2,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using global::Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Mladim.Client.Services.Csv;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.Utilities.CsvMapping;
 using Mladim.Client.ViewModels.Survey;
@@ -24,6 +25,11 @@ public partial class ActivityResults
 
     [Inject]
     public IJSRuntime JS { get; set; }
+
+    [Inject]
+    public ICsvService CsvService { get; set; }
+
+
 
     private IEnumerable<SurveyQuestionVM> surveyQuestions = new List<SurveyQuestionVM>();
     // AnonymousSurveyResponseVM one anonymous with multiple question responses
@@ -50,53 +56,41 @@ public partial class ActivityResults
 
     private async Task OnClickCsvExportFile()
     {
-        var memoryStream = new MemoryStream();
-        var streamWriter = new StreamWriter(memoryStream);
 
-        var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture) { Delimiter = ";", LeaveOpen = true, };
+        CsvService.Open();
 
-        using (var csv = new CsvWriter(streamWriter, csvConfiguration))
-        {   
+        CsvService.Write("Spol", "Starostna skupina");
+        CsvService.Write(surveyQuestions.SelectMany(q => q.Texts));
+        CsvService.NextRow();
 
-            csv.WriteField("Spol");
-            csv.WriteField("Starostna skupina");
-                       
+        foreach (var surveyResponse in surveyResponses)
+        {           
 
-            foreach (var question in surveyQuestions)
+            CsvService.Write(surveyResponse.AnonymousParticipant.Gender.GetDisplayAttribute(), surveyResponse.AnonymousParticipant.AgeGroup.GetDisplayAttribute());
+
+            foreach (var qResponse in surveyResponse.Responses)
             {
-                foreach (var questionText in question.Texts) // TODO preveri
-                    csv.WriteField(questionText);
-            }
-
-            csv.NextRecord();
-
-            foreach (var surveyResponse in surveyResponses)
-            {
-                csv.WriteField(surveyResponse.AnonymousParticipant.Gender.GetDisplayAttribute());
-                csv.WriteField(surveyResponse.AnonymousParticipant.AgeGroup.GetDisplayAttribute());
-
-                foreach (var qResponse in surveyResponse.Responses)
+                if (qResponse is ISelectableResponse selectable)
                 {
-                    if(qResponse is ISelectableResponse selectable)
-                    {                       
-                       csv.WriteField(selectable.ResponseEnum.GetDisplayAttribute());
-                    }
-                    else if (qResponse is IMultiSelectableResponse multiSelectable)
-                    {                        
-                        foreach (var mSelectable in multiSelectable.ResponseEnum)
-                            csv.WriteField(mSelectable.ResponseEnum.GetDisplayAttribute());
-                    }
-                    else if(qResponse is ITextResponse textable)                    
-                        csv.WriteField(textable.Response);                    
-                    
+                    CsvService.Write(selectable.ResponseEnum.GetDisplayAttribute());
                 }
-                csv.NextRecord();
-            }
-        }
-        memoryStream.Position = 0;
+                else if (qResponse is IMultiSelectableResponse multiSelectable)
+                {
+                    foreach (var mSelectable in multiSelectable.ResponseEnum)
+                        CsvService.Write(mSelectable.ResponseEnum.GetDisplayAttribute());
+                }
+                else if (qResponse is ITextResponse textable)
+                    CsvService.Write(textable.Response);
 
-        using var streamRef = new DotNetStreamReference(stream: memoryStream);
-        await JS.InvokeVoidAsync("downloadFileFromStream", $"file_{ActivityId}.csv", streamRef);        
+            }
+            CsvService.NextRow();
+        }
+
+        CsvService.Close();
+
+        using var streamRef = new DotNetStreamReference(CsvService.Stream);
+
+        await JS.InvokeVoidAsync("downloadFileFromStream", $"Statistika_anket_{ActivityId}.csv", streamRef);     
     }
 
 
