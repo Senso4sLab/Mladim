@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using Syncfusion.Blazor.Chart3D.Internal;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace Mladim.Client.Services.HttpService.Generic;
@@ -7,10 +8,16 @@ public class GenericHttpService : IGenericHttpService
 {
     protected HttpClient Client { get; }
 
-    public GenericHttpService(HttpClient client)
+    public GenericHttpService(IHttpClientFactory clientFactory)
     {
-        Client = client;
-    }    
+        Client = clientFactory.CreateClient("MladimHttpClient");
+    } 
+    
+
+    public Task<HttpResponseMessage> SendAsync(HttpRequestMessage message)
+    {
+        return this.Client.SendAsync(message);
+    }
 
     public async Task<bool> DeleteAsync(string url)
     {        

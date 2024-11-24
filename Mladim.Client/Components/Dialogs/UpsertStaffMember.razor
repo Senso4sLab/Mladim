@@ -28,7 +28,14 @@
 
                 <MudNumericField @bind-Value="staffMember.YearOfBirth" For="@(() => staffMember.YearOfBirth)" Label="Leto rojstva" Variant="Variant.Outlined" Min="@(DateTime.Now.Year - 100)" Max="@DateTime.Now.Year"/>
                 <MudTextField Disabled=!IsNewStaffMember @bind-Value="staffMember.Email" For="@(() => staffMember.Email)" Variant="Variant.Outlined" Label="Email" />
-                <MudSwitch Disabled=IsDisabledClaimSwitch @bind-Checked="staffMember.Claim" Converter="ClaimConverter" Color="Color.Primary">@($"Vloga uporabnika v organizaciji: {GetRoleName(staffMember.Claim)}")</MudSwitch>
+               @*  <MudSwitch Disabled=IsDisabledClaimSwitch @bind-Checked="staffMember.Claim" Converter="ClaimConverter" Color="Color.Primary">@($"Vloga uporabnika v organizaciji: {GetRoleName(staffMember.Claim)}")</MudSwitch> *@
+
+                <MudSelect @bind-Value="staffMember.Claim" For="@(() => staffMember.Claim)" T="ApplicationClaim" ToStringFunc="@(claim => claim.GetDisplayAttribute())" Variant="Variant.Outlined" Label="Vloga uporabnika v organizaciji" AnchorOrigin="Origin.BottomCenter">
+                    @foreach (var claim in Enum.GetValues<ApplicationClaim>())
+                    {
+                        <MudSelectItem Value="claim">@claim.GetDisplayAttribute()</MudSelectItem>
+                    }
+                </MudSelect>
             </MudStack>
         </MudForm>
     </DialogContent>
@@ -67,6 +74,9 @@
 
     bool IsDisabledClaimSwitch { get; set; }
 
+
+    private IEnumerable<string> ApplicationClaims;
+
     private MudBlazor.Converter<ApplicationClaim, bool?> ClaimConverter = new MudBlazor.Converter<ApplicationClaim, bool?>
     {
         SetFunc = claim => claim == ApplicationClaim.Manager,
@@ -75,6 +85,7 @@
 
     protected async override Task OnInitializedAsync()
     {
+       
         var defOrganization = await OrganizationService.DefaultOrganizationAsync();
         if (defOrganization != null)        
             IsDisabledClaimSwitch = await AuthService.IsUserPolicySatisfied(defOrganization.Id.ToString(), "HasWorkerClaim");        
@@ -92,12 +103,12 @@
     }
 
 
-    private string GetRoleName(ApplicationClaim role) => role switch
+   @*  private string GetRoleName(ApplicationClaim role) => role switch
     {
         ApplicationClaim.Worker => "Delavec",
         ApplicationClaim.Manager => "Menedžer",
         _ => string.Empty,
-    };
+    }; *@
 
 
     void Cancel() =>

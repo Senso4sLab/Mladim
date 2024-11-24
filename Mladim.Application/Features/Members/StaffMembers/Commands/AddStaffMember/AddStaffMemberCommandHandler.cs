@@ -13,12 +13,14 @@ using Mladim.Domain.IdentityModels;
 using Mladim.Domain.Models;
 using System.Security.Claims;
 using Mladim.Domain.Extensions;
+using System.Text.Json;
+using System.Xml.Linq;
 
 
 namespace Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
 public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberCommand, StaffMemberDetailsQueryDto>
 {
-  IMapper Mapper { get; }
+    public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
     public IAuthService AuthService { get; }
     public IEmailService EmailService { get; } 
@@ -36,76 +38,63 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
             Mapper = mapper;       
     }
    
+
+    // 1) narediš app userja dodaš mu organizacijo
+    // 2) ali pa dodaš organizacijo
+
     public async Task<StaffMemberDetailsQueryDto> Handle(AddStaffMemberCommand request, CancellationToken cancellationToken)
     {
-        var organization = await this.UnitOfWork.OrganizationRepository
-            .FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
+        var member = await this.UnitOfWork.StaffMemberRepository.FirstOrDefaultAsync(sm => sm.Email == request.Email && sm.OrganizationId == request.OrganizationId);
 
-        ArgumentNullException.ThrowIfNull(organization);
+        if (member is not null)        
+            throw new Exception("Uporabnik že obstaja v organizaciji!");
 
-        var staffMember = this.Mapper.Map<StaffMember>(request);        
+        var organization = await this.UnitOfWork.OrganizationRepository.FirstOrDefaultAsync(o => o.Id == request.OrganizationId);
 
-        var claim = new Claim(Enum.GetName(request.Claim)!, request.OrganizationId.ToString());
+        ArgumentNullException.ThrowIfNull(organization);        
 
         var user = await this.UnitOfWork.AppUserRepository.FindByEmailAsync(request.Email);
+        var claim = new Claim(Enum.GetName(request.Claim)!, request.OrganizationId.ToString());
 
         string emailContent = string.Empty;
 
-        if (user == null)
+        if (user is null)
         {
             user = await CreateUserAsync(request.Name, request.Surname, request.Email);
-            ArgumentNullException.ThrowIfNull(user);
-            
-            user.Organizations.Add(organization);         
-            await this.AuthService.AddClaimAsync(user, claim);
-            await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);
 
-            var emailToken = await this.AuthService.EmailTokenAsync(user);
+            var emailToken = await this.AuthService.GenerateEmailTokenAsync(user);
             var registrationUrl = $"{HttpContextAccessor?.HttpContext?.AppBaseUrl()}/registration?EmailId={emailToken}";
             emailContent = string.Format(this.EmailContent.ContentAddedNewUser, registrationUrl);
-
-            if (await SendEmailAsync(emailContent, request.Email))
-            {
-                staffMember.EmailSent = DateTime.UtcNow;                
-            }
         }
         else
         {
-            if (await this.UnitOfWork.OrganizationRepository.IsUserInOrganizationAsync(user.Id, organization.Id))
-            {
-                // re-send invitation
-                var emailToken = await this.AuthService.EmailTokenAsync(user);
-                var registrationUrl = $"{HttpContextAccessor?.HttpContext?.AppBaseUrl()}/registration?EmailId={emailToken}";
-                emailContent = string.Format(this.EmailContent.ContentAddedNewUser, registrationUrl);            
-            }
-            else
-            {
-                user.Organizations.Add(organization);
-                await this.AuthService.AddClaimAsync(user, claim);
-                await this.UnitOfWork.StaffMemberRepository.AddAsync(staffMember);                
+            if (!Enum.TryParse(claim.Type, out ApplicationClaim appClaim))
+                throw new Exception("Izbrani tip uporabnika ne obstaja");
 
-                if(!Enum.TryParse(claim.Type, out ApplicationClaim appClaim))
-                    throw new Exception("Izbrani tip uporabnika ne obstaja");
-               
-                emailContent = string.Format(this.EmailContent.ContentUserAddedNewOrganization, appClaim.GetDisplayAttribute());                         
-            }
+            emailContent = string.Format(this.EmailContent.ContentUserAddedNewOrganization, appClaim.GetDisplayAttribute());
         }
 
+        user.Organizations.Add(organization);
+        await this.AuthService.AddClaimAsync(user, claim);
+        
+        member = this.Mapper.Map<StaffMember>(request);
+        await this.UnitOfWork.StaffMemberRepository.AddAsync(member);       
 
         bool isEmailSend = await SendEmailAsync(emailContent, request.Email);
 
         if (isEmailSend)        
-            staffMember.EmailSent = DateTime.UtcNow;
+            member.EmailSent = DateTime.UtcNow;
 
         await this.UnitOfWork.SaveChangesAsync();
-
-        var staffMemberDto = this.Mapper.Map<StaffMemberDetailsQueryDto>(staffMember);
+        
+        var staffMemberDto = this.Mapper.Map<StaffMemberDetailsQueryDto>(member);
 
         if (isEmailSend)
             staffMemberDto.IEmailSent = true;
 
         return staffMemberDto;
-    }   
+    }
+
 
     private async Task<bool> SendEmailAsync(string content, string receipent)
     {
@@ -124,6 +113,6 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
         var userId = responseUser.Value!.UserId;
 
         return await this.UnitOfWork.AppUserRepository.FindByIdAsync(userId);
-    }
+    }   
 
 }

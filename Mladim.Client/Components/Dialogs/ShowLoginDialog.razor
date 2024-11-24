@@ -1,9 +1,126 @@
-﻿<MudDialog style="min-width:600px; padding-top:80px; padding-bottom:80px; border-radius:10px;">
+﻿@using Mladim.Client.Services.PopupService
+@using Mladim.Client.Validators
+@using Mladim.Domain.Models
+@using System.Text.Json
+<MudDialog style="min-width:600px; padding-top:80px; padding-bottom:80px; border-radius:10px;">
     <DialogContent>           
-        <LoginForm />      
+        <MudForm @ref="@loginForm" Model="@loginUser" Validation="@(loginUserValidator.ValidateValue)" OnValidSubmit="OnValidSubmit">
+            <MudStack Justify="Justify.Center" Spacing="2">
+
+                <MudImage Src="logo.png" Height="50" style="margin: 40px auto;"></MudImage>
+
+                @if (!string.IsNullOrWhiteSpace(_errorMessage))
+                {
+                    <MudAlert Severity="Severity.Error" Variant="Variant.Filled">@_errorMessage</MudAlert>
+                }
+
+
+                <MudTextField Label="Email"
+                              @bind-Value="loginUser.Email" For="@(() => loginUser.Email)" Variant="Variant.Outlined" />
+
+                <MudTextField Label="Geslo"
+                              @bind-Value="loginUser.Password" For="@(() => loginUser.Password)"
+                              InputType="@PasswordInput" Variant="Variant.Outlined"
+                              Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonPasswordClick" AdornmentAriaLabel="Pokaži geslo" />
+
+                <MudLink OnClick="@ForgottenPasswordClick" Typo="Typo.h1">Pozabljeno geslo?</MudLink>
+
+                <MudButton OnClick="@OnValidSubmit" Variant="Variant.Filled" Color="Color.Primary" Disabled="_isBusy" Class="my-5">
+
+                    <MudStack Row="true" Spacing="4" AlignItems="AlignItems.Center">
+                        <MudText Typo="Typo.h6">Vpis</MudText>
+                        @if (_isBusy)
+                        {
+                            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+                        }
+                    </MudStack>
+                </MudButton>
+
+            </MudStack>
+        </MudForm>
     </DialogContent>
 </MudDialog>
 
-@code {
+@code
+{
+    [Inject]
+    public IAuthService AuthService { get; set; } = default!;
 
+    [Inject]
+    public NavigationManager Navigation { get; set; } = default!;
+
+    [Inject]
+    public IHttpClientFactory HttpFactory { get; set; } = default!;
+
+
+    [Inject]
+    public IPopupService PopupService { get; set; } = default!;
+
+
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+    private bool _isBusy = false;
+    private string _errorMessage = string.Empty;
+    private LoginUser loginUser = new LoginUser();
+
+
+    bool isShow;
+    private InputType PasswordInput = InputType.Password;
+    private string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    private MudForm? loginForm;
+
+    LoginUserValidator loginUserValidator = new LoginUserValidator();
+
+
+    private HttpClient httpClient = default!;
+    protected override void OnInitialized()
+    {
+        httpClient = HttpFactory.CreateClient("1kaHttpClient");
+    }
+
+    public async Task OnValidSubmit()
+    {
+
+        await loginForm.Validate();
+
+        if (!loginForm.IsValid)
+            return;
+
+        _isBusy = true;
+
+        var response = await this.AuthService.LoginAsync(loginUser);      
+
+        _isBusy = false;
+
+        this._errorMessage = response.Message;
+
+        if (response.Succeeded)
+            this.Navigation.NavigateTo("/organization");
+
+    }
+
+    public async Task ForgottenPasswordClick()
+    {
+        MudDialog.Cancel();
+        await PopupService.ShowPasswordDialog("");
+    }
+
+    
+    public void ButtonPasswordClick()
+    {
+        if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
 }

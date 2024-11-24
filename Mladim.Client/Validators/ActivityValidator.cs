@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Markdig.Helpers;
 using Mladim.Client.ViewModels;
 
 namespace Mladim.Client.Validators;
@@ -11,10 +12,11 @@ public class ActivityValidator : AbstractValidator<ActivityVM>
             .NotEmpty()
             .WithMessage("Vnosno polje je obvezno");
 
-        //RuleFor(x => x.Attributes.Description)
-        //    .NotEmpty()
-        //    .NotNull()
-        //    .WithMessage("Vnosno polje je obvezno");
+        RuleFor(x => x.Attributes.Description)
+            .NotEmpty()
+            .NotNull()
+            .Must(d => d.Where(c => !c.IsWhitespace()).Any())
+            .WithMessage("Vnosno polje je obvezno");
 
         RuleFor(x => x.StartTime)
             .NotEmpty()

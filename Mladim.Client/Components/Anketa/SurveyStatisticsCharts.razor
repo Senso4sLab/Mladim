@@ -77,9 +77,9 @@
         {
             SurveyBooleanResponseType.ThumpsUp   => "#4DA456",
             SurveyBooleanResponseType.ThumpsDown => "#8ED974",
-            SurveyRatingResponseType.OneSmile    => "#7cc769",
-            SurveyRatingResponseType.TwoSmiles   => "#394241",
-            SurveyRatingResponseType.ThreeSmiles => "#ffc700",
+             SurveyRatingResponseType.OneSmile => "#cc7a00",
+             SurveyRatingResponseType.TwoSmiles => "#ffc700",
+             SurveyRatingResponseType.ThreeSmiles => "#e6e600",
             SurveyRatingResponseType.FourSmiles  => "#8ED974",
             SurveyRatingResponseType.FiveSmiles  => "#4DA456",
             SurveyButtonResponseType.VeryCorrect => "#4DA456",
@@ -92,6 +92,28 @@
             SurveyRepetitiveButtonResponseType.None => "#8ED974",   
             _ => throw new NotImplementedException(),
         };
+
+
+    private string Fill1(Enum responseType) =>
+      responseType switch
+      {
+      SurveyBooleanResponseType.ThumpsUp   => "#4DA456",
+      SurveyBooleanResponseType.ThumpsDown => "#8ED974",
+      SurveyRatingResponseType.OneSmile    => "#7cc769",
+      SurveyRatingResponseType.TwoSmiles   => "#394241",
+      SurveyRatingResponseType.ThreeSmiles => "#ffc700",
+      SurveyRatingResponseType.FourSmiles  => "#8ED974",
+      SurveyRatingResponseType.FiveSmiles  => "#4DA456",
+      SurveyButtonResponseType.VeryCorrect => "#4DA456",
+      SurveyButtonResponseType.PartiallyCorrect => "#394241",
+      SurveyButtonResponseType.Correct => "#ffc700",
+      SurveyButtonResponseType.Incorrect => "#8ED974",
+      SurveyRepetitiveButtonResponseType.Greatly => "#4DA456",
+      SurveyRepetitiveButtonResponseType.Quite => "#394241",
+      SurveyRepetitiveButtonResponseType.Little => "#ffc700",
+      SurveyRepetitiveButtonResponseType.None => "#8ED974",
+      _ => throw new NotImplementedException(),
+      };
 
 
    

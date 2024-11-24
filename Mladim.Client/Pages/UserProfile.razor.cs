@@ -9,7 +9,6 @@ using Mladim.Client.Services.PopupService;
 using Mladim.Domain.Models;
 using Mladim.Client.Validators;
 using Mladim.Client.Services.FileService;
-using Mladim.Client.ViewModels.Organization;
 using Microsoft.AspNetCore.Components.Forms;
 
 namespace Mladim.Client.Pages;
@@ -59,7 +58,7 @@ public partial class UserProfile
     private InputType ConfirmedPasswordInput = InputType.Password;
     private string ConfirmedPasswordInputIcon = Icons.Material.Filled.VisibilityOff;
 
-
+   
     protected override async Task OnInitializedAsync()
     {
         if (authenticationState is null)

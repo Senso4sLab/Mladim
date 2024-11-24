@@ -9,7 +9,7 @@ public class GetSurveyResponseQueryHandler : IRequestHandler<GetSurveyResponseQu
 {
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
-
+    
     public GetSurveyResponseQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
     {
         Mapper = mapper;

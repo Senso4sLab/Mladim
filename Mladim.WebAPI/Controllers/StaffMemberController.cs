@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mladim.Application.Features.Members.StaffMembers.Commands.AddStaffMember;
+using Mladim.Application.Features.Members.StaffMembers.Commands.ResetStaffMemberPassword;
 using Mladim.Application.Features.Members.StaffMembers.Commands.UpdateStaffMember;
 using Mladim.Application.Features.Members.StaffMembers.Queries.GetLeadStaffMembers;
 using Mladim.Application.Features.Members.StaffMembers.Queries.GetStaffMember;
@@ -29,6 +30,14 @@ public class StaffMemberController : ControllerBase
         var response = await this.Mediator.Send(request);
         return Ok(response);
       
+    }
+
+    [HttpPost("resendEmail")]
+    public async Task<ActionResult<Result>> ResendEmailAsync(ResendConfiramtionEmailCommand request)
+    {
+        var response = await this.Mediator.Send(request);
+        return Ok(response);
+
     }
 
 

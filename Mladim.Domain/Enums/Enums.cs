@@ -110,6 +110,8 @@ public enum OrganizationFields
     Komunikacija = 64,
     [Display(Name = "Varovanje zdravja in okolja")]
     Varovanje = 128,
+    [Display(Name = "Drugo")]
+    Drugo = 256,
 };
 
 
@@ -197,6 +199,33 @@ public enum ActivityTypes
     [Display(Name = "Digitalno mladinsko delo")]
     [Description("Digitalno mladinsko delo pomeni proaktivno uporabo ali naslavljanje digitalnih medijev in tehnologij v mladinskem delu. Digitalno mladinsko delo ni metoda mladinskega dela, vendar je lahko vključeno v katerokoli okolje mladinskega dela (odprto mladinsko delo, mladinsko informiranje in svetovanje, mladinski klubi...).")]
     Digitalno = 524288,
+    [Display(Name = "Drugo")]
+    [Description("Drugo")]
+    Drugo = 1048576,
+};
+
+
+[Flags]
+public enum ActivityFields
+{
+    [Display(Name = "Avtonomija mladih")]
+    Avtonomija = 1,
+    [Display(Name = "Neformalno učenje in usposabljanje ter večanje kompetenc mladih")]
+    Neformalno_ucenje = 2,
+    [Display(Name = "Dostop mladih do trga delovne sile in razvoj podjetnosti mladih")]
+    Trg_dela_mladih = 4,
+    [Display(Name = "Skrb za mlade z manj priložnostmi v družbi")]
+    Skrb_mladih = 8,
+    [Display(Name = "Prostovoljstvo, solidarnost in medgeneracijsko sodelovanje mladih")]
+    Prostovoljstvo = 16,
+    [Display(Name = "Mobilnost mladih in mednarodno povezovanje")]
+    Mobilnost = 32,
+    [Display(Name = "Zdrav način življenja in preprečevanje različnih oblik odvisnosti mladih")]
+    Zdrav_nacin = 64,
+    [Display(Name = "Dostop mladih do kulturnih dobrin in spodbujanje ustvarjalnosti ter inovativnosti mladih")]
+    Kulturne_dobrine = 128,
+    [Display(Name = "Sodelovanje mladih pri upravljanju javnih zadev v družbi")]
+    Javne_zadeve = 256,
 };
 
 

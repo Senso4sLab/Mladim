@@ -22,6 +22,7 @@ using Mladim.Client.Authorization;
 using Microsoft.Extensions.Options;
 using Mladim.Client.Services.Csv;
 using Mladim.Client.Csv;
+using System.Net.Http;
 
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -38,9 +39,7 @@ builder.Services.AddMudServices(config =>
     config.SnackbarConfiguration.HideTransitionDuration = 500;
     config.SnackbarConfiguration.ShowTransitionDuration = 500;
     config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
-    config.PopoverOptions.ThrowOnDuplicateProvider = false;
-    
-   
+    config.PopoverOptions.ThrowOnDuplicateProvider = false;   
 
 });
 
@@ -49,22 +48,38 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddHttpClient("MladimHttpClient", client =>
 {
     client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
+    
 }).AddHttpMessageHandler<HttpAuthorizationHandler>();
 
-builder.Services.AddScoped(sp => sp.GetService<IHttpClientFactory>()!.CreateClient("MladimHttpClient"));
+builder.Services.AddHttpClient("1kaHttpClient", client => 
+{
+    client.BaseAddress = new Uri("https://mladim1ka.azurewebsites.net/1ka/");
+
+}).AddHttpMessageHandler<Http1kaHandler>();
+
+
+//builder.Services.AddScoped(sp => sp.GetService<IHttpClientFactory>()!.CreateClient("MladimHttpClient"));
 
 builder.Services.AddSyncfusionBlazor();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());    
 builder.Services.AddTransient<HttpAuthorizationHandler>();
-builder.Services.AddSingleton<IAuthorizationHandler, UserHasWorkerClaimHandler>();
+builder.Services.AddTransient<Http1kaHandler>();
 
 builder.Services.AddSingleton<IAuthorizationHandler, UserHasWorkerClaimHandler>();
+
+builder.Services.AddSingleton<IAuthorizationHandler, UserHasManagerClaimHandler>();
+
+
+
 builder.Services.AddSingleton<ICsvService, CsvService>();
+
+
 
 
 builder.Services.AddAuthorizationCore(options =>
 {
     options.AddPolicy("HasWorkerClaim", policy => policy.Requirements.Add(new UserHasWorkerClaim()));
+    options.AddPolicy("HasManagerClaim", policy => policy.Requirements.Add(new UserHasManagerClaim()));
 });
 
 builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
@@ -88,8 +103,8 @@ builder.Services.AddScoped<IPopupService, PopupService>();
     builder.Services.Configure<StorageKeys>(builder.Configuration.GetSection("StorageKeys"));
 }
 
-
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NAaF5cWWBCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWH1dcXVRRGleVUdyX0A=");
+//Ngo9BigBOggjHTQxAR8/V1NAaF5cWWBCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWH1dcXVRRGleVUdyX0A=
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NDaF5cWWtCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWH9eeHRQRGhcWUNwXkQ=");
 
 
 

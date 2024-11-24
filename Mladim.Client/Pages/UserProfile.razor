@@ -76,6 +76,7 @@
         else
         {
             <MudForm Model="userPassword" @ref="@userPasswordForm" Validation="@(userPasswordValidator.ValidateValue)">
+               
                 <MudTextField Label="Trenutno geslo"
                 @bind-Value="userPassword.OldPassword" For="@(() => userPassword.OldPassword)"
                                 InputType="@PasswordInput"

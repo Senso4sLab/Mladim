@@ -32,7 +32,5 @@ public partial class ActivityResultTable
     private CogntigencyTableContext cogntigencyTableContext { get; set; } = new CogntigencyTableContext();
 
     private IEnumerable<SurveyCriterionSelector> CriterionSelectors = new List<SurveyCriterionSelector>() { new GenderSelector(), new AgeGroupSelector() };
-    private IEnumerable<UnitSelector> UnitSelectors = new List<UnitSelector>() { new PercantagesUnit(), new NumOfParticipantsUnit() };   
-
-   
+    private IEnumerable<UnitSelector> UnitSelectors = new List<UnitSelector>() { new PercantagesUnit(), new NumOfParticipantsUnit() }; 
 }

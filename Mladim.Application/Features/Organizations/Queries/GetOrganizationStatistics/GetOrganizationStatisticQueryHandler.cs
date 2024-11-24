@@ -8,6 +8,7 @@ using Mladim.Domain.Dtos.Members;
 using Mladim.Domain.Dtos.Members.Participants;
 using Mladim.Domain.Dtos.Organization;
 using Mladim.Domain.Models;
+using Mladim.Domain.Models.Survey.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,13 +79,19 @@ public class GetOrganizationStatisticQueryHandler : IRequestHandler<GetOrganizat
 
             individualParticipants += activities.Sum(a => a.Groups.Sum(g => g.Members.Count));
 
+            //št. izpolnjenih anket
+
+            var surveyResponses = await UnitOfWork.SurveyResponseRepository.GetSurveyResponsesByQuestionIdsAndOrganizationAsync(request.OrganizationId, request.DateTimeRange);
+               
+
+
             //  participant by gender and age group           
 
             // št. participantov v groupah
             var participantsInGroups = activities.SelectMany(a => a.Groups.SelectMany(g => g.Members.Select(m => m as Participant))).ToList();
 
             return OrganizationStatisticQueryDto.Create(activeProjects, pastProjects, activeActivities, pastActivites, individualParticipants,
-                anonymousParticipants, ParticipantByGender(activities, participantsInGroups), ParticipantsByAgeGroup(activities, participantsInGroups), totalHoursActivites);
+                anonymousParticipants, surveyResponses.Count(), ParticipantByGender(activities, participantsInGroups), ParticipantsByAgeGroup(activities, participantsInGroups), totalHoursActivites);
 
 
             

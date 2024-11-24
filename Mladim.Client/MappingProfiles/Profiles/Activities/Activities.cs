@@ -42,11 +42,15 @@ public class Activities : Profile
 
 
         CreateMap<ActivityAttributesVM, ActivityAttributesCommandDto>()
-             .ForMember(db => db.ActivityTypes, dto => dto.MapFrom(field => (ActivityTypes)(field.ActivityTypes.Sum(x => (int)x))));
-             //.ForMember(db => db.RepetitiveInterval, dto => dto.MapFrom(field => (field.ActivityRepetitiveInterval.ToTimeSpan())));
+             .ForMember(db => db.ActivityTypes, dto => dto.MapFrom(field => (ActivityTypes)(field.ActivityTypes.Sum(x => (int)x))))
+             .ForMember(db => db.ActivityFields, dto => dto.MapFrom(field => (ActivityFields)(field.ActivityFields.Sum(x => (int)x))));
+
+
+        //.ForMember(db => db.RepetitiveInterval, dto => dto.MapFrom(field => (field.ActivityRepetitiveInterval.ToTimeSpan())));
 
         CreateMap<ActivityAttributesQueryDto, ActivityAttributesVM>()
-             .ForMember(dto => dto.ActivityTypes, dt => dt.MapFrom(field => field.ActivityTypes.ToEnums()));
+             .ForMember(dto => dto.ActivityTypes, dt => dt.MapFrom(field => field.ActivityTypes.ToEnums()))
+             .ForMember(dto => dto.ActivityFields, dt => dt.MapFrom(field => field.ActivityFiels.ToEnums()));
 
         CreateMap<ActivityStatisticQueryDto, ActivityStatisticVM>();
             

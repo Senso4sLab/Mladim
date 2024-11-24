@@ -9,19 +9,15 @@
         <MudText Typo="Typo.h2" Color="Color.Tertiary">@(editable ? "Vnesi podatke o projektu" : "Podatki o projektu")</MudText>
 
 
-         <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-             <MudToggleIconButton Toggled="@editable" ToggledChanged="OnProjectEditableChanged" Size="Size.Small"
-                                  Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" Title="Edit"
-                                  ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary" ToggledTitle="Save" />
 
-             @if (!editable)
-            {
-                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error" OnClick="DeleteProjectAsync"/>
-            }
-
-
-            <MudIconButton Color="Color.Secondary" Size="Size.Small" Icon="@Icons.Material.Filled.Cancel" OnClick="CancelProjectAsync" />            
-         </MudButtonGroup>
+        @if (UpdateState && !editable)
+        {
+            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(() => editable = !editable)" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error" OnClick="@(() => DeleteProjectAsync())" />
+            </MudButtonGroup>
+        }
+      
     </MudStack>
 
     <MudTextField ReadOnly ="!editable" @bind-Value="project.Attributes.Name" Variant="Variant.Outlined" Label="Ime projekta">@project.Attributes.Name</MudTextField>
@@ -98,6 +94,16 @@
             </ButtonTemplate>
         </MudFileUpload>
     }
+
+    <MudStack Row AlignItems="AlignItems.End" Justify="Justify.FlexEnd">
+         <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+             @if (editable)
+            {
+                <MudIconButton Icon="@Icons.Material.Filled.Save" Size="Size.Small" Color="Color.Primary" OnClick="@(() =>OnProjectEditableChanged())" />
+            }
+            <MudIconButton Color="Color.Secondary" Size="Size.Small" Icon="@Icons.Material.Filled.Cancel" OnClick="CancelProjectAsync" />
+        </MudButtonGroup>
+    </MudStack>
 
 </MudStack>
 

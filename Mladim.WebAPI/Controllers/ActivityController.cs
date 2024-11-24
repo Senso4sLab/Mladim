@@ -72,8 +72,6 @@ public class ActivityController : ControllerBase
         return Ok(response);
     }
 
-
-
     [HttpGet("statistics")]
     public async Task<ActionResult<IEnumerable<ActivityStatisticQueryDto>>> GetStatistics([FromQuery]GetActivitiesStatisticsQuery query)
     {

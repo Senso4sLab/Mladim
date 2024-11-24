@@ -8,21 +8,33 @@
 
 
 
-    <SfChart @ref="@Chart" Height="70" Width="@Parent.StackedBarWidth"  EnableAnimation="false" Title="@Title">
-        <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
+    <SfChart  Height="70px" @ref="@Chart" Width="@Parent.StackedBarWidth"  EnableAnimation="false" Title="@Title" >       
+        <ChartMargin Left="0" Right="0" Top="0" Bottom="0"/>
             <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
             <ChartPrimaryYAxis Visible="false" />
-            <ChartTitleStyle FontFamily="Poppins" FontWeight="600" Size="1rem"  Color="#43525d" TextAlignment="Alignment.Near"></ChartTitleStyle>
+           @*  <ChartTooltipSettings  Enable="true" >
+                <Template>
+                    @{
+                        var data = context as ChartTooltipInfo;
+                        <div style="width:100%;">
+                            <div style="display:flex; background-color: DodgerBlue;justify-content:center;">
+                                <div>@data.Y  </div>
+                            </div>
+                        </div>             
+                    }
+                </Template>
+                </ChartTooltipSettings> *@
+            <ChartTitleStyle  FontFamily="Poppins" FontWeight="600" Size="1rem" Color="#43525d" TextAlignment="Alignment.Near" TextOverflow="TextOverflow.None" />
             <ChartArea>
-                <ChartAreaBorder Width="0"></ChartAreaBorder>
+                <ChartAreaBorder Width="0"></ChartAreaBorder>                
             </ChartArea>          
-            <ChartSeriesCollection>
+            <ChartSeriesCollection >
                 @foreach (var seriesData in QuestionsResponseBar.ResponseBar)
                 {                   
-                        <ChartSeries  DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName"  Type="ChartSeriesType.StackingBar100">                         
+                        <ChartSeries  ColumnWidth="0.7" DataSource="@seriesData.Data" Fill="@seriesData.Fill" XName="@seriesData.XName" YName="@seriesData.YName"  Type="ChartSeriesType.StackingBar100" >                         
                             <ChartCornerRadius BottomLeft="@seriesData.LeftRadius" TopLeft="@seriesData.LeftRadius" BottomRight="@seriesData.RightRadius" TopRight="@seriesData.RightRadius" />
-                            <ChartMarker>
-                                <ChartDataLabel Visible="true" Name="Label" Position="Syncfusion.Blazor.Charts.LabelPosition.Middle">
+                            <ChartMarker >
+                                <ChartDataLabel  Visible="true" Name="Label"  Position="Syncfusion.Blazor.Charts.LabelPosition.Middle" >
                                     <ChartDataLabelFont Color="#ffffff"></ChartDataLabelFont>
                                 </ChartDataLabel>
                             </ChartMarker>                      
@@ -34,16 +46,17 @@
 @code 
 {
 
-        [Parameter]
-        public IExportChart Parent { get; set; } = default!;
+    [Parameter]
+    public IExportChart Parent { get; set; } = default!;
 
-        [Parameter]
-        public QuestionResponseBar QuestionsResponseBar { get; set; } = default!;
+    [Parameter]
+    public QuestionResponseBar QuestionsResponseBar { get; set; } = default!;
 
-        [Parameter]
-        public string Title { get; set; } = default!;
+    [Parameter]
+    public string Title { get; set; } = default!;
 
     private SfChart Chart = default!;
+    
 
     protected override void OnInitialized()
     {      
@@ -54,12 +67,23 @@
     private Func<Task> ExportChartToImage() =>    
         () => Chart.ExportAsync(ExportType.PNG, Guid.NewGuid().ToString());
 
-    
-      
+
+
 
     public void Dispose()
     {      
         Parent.RemoveExportChart(ExportChartToImage());
+    }
+
+    public void SeriesRender(SeriesRenderEventArgs args)
+    {
+      
+    }
+
+    public void RangeResizeRender(ResizeEventArgs args)
+    {         
+        Console.WriteLine(args.CurrentSize.Height);
+        Console.WriteLine(args.CurrentSize.Width);
     }
 
    

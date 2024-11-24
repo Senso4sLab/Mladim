@@ -27,8 +27,7 @@ public partial class StaffMemberTab
     {
        
         this.Staff = new List<StaffMemberVM>(await GetStaffByOrganizationId());
-    }
-        
+    }        
     
 
     private Task<IEnumerable<StaffMemberVM>> GetStaffByOrganizationId() =>
@@ -44,18 +43,20 @@ public partial class StaffMemberTab
         if (!dialogResponse)
             return;
 
-        staffMember = await this.StaffService.AddAsync(this.Organization.Id, staffMember);       
+        staffMember = await this.StaffService.AddAsync(this.Organization.Id, staffMember);
 
-        if (staffMember != null)
+        if (staffMember is null)
         {
-            Staff.Add(staffMember);
-            this.PopupService.ShowSnackbarSuccess("Uporabnik uspešno dodan");
-
-            if (staffMember is { IEmailSent: true })
-                this.PopupService.ShowSnackbarSuccess("Vabilo je uspešno poslano");
-        }
-        else
             this.PopupService.ShowSnackbarError();
+            return;
+        }
+
+        Staff.Add(staffMember!);
+        this.PopupService.ShowSnackbarSuccess("Uporabnik uspešno dodan");
+
+        if (staffMember is { IEmailSent: true })
+            this.PopupService.ShowSnackbarSuccess("Vabilo je uspešno poslano");
+       
     }
 
     private async Task CheckedChangedAsync(bool isActive)
@@ -71,12 +72,12 @@ public partial class StaffMemberTab
         if (!dialogResponse)
             return;
 
-        var succeedResponse = await this.StaffService.AddAsync(this.Organization.Id, staffMember);
+        var response = await this.StaffService.ResendEmailAsync(this.Organization.Id, staffMember.Email);
 
-        if (succeedResponse is { IEmailSent: true})        
-            this.PopupService.ShowSnackbarSuccess("Vabilo je uspešno poslano");       
+        if(response?.Succeeded == true)
+            this.PopupService.ShowSnackbarSuccess("Vabilo je uspešno poslano");      
         else
-            this.PopupService.ShowSnackbarError();
+            this.PopupService.ShowSnackbarError(response?.Message ?? "Prišlo je do napake poskusite znova");
     }
 
     

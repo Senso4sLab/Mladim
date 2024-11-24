@@ -5,6 +5,7 @@ namespace Mladim.Domain.Models;
 public class ActivityAttributes : BaseAttibutes
 {
     public ActivityTypes ActivityTypes { get; protected set; }
+    //public ActivityFields ActivityFiels { get; protected set; }
     public bool IsGroup { get; set; }
     public bool IsRepetitive { get; set; }
     public ActivityRepetitiveInterval RepetitiveInterval { get; set; }

@@ -12,6 +12,9 @@
         }
         <MudText Typo="Typo.h2" Color="Color.Tertiary" style="margin: 10px auto;">Potrditev uporabniškega računa</MudText>
 
+        <MudTextField Label="Ime"
+                      @bind-Value="urlRegistration.Name" For="@(() => urlRegistration.Name)" Variant="Variant.Outlined" />
+
         <MudTextField Label="Email"
             @bind-Value="urlRegistration.Email" For="@(() => urlRegistration.Email)" Variant="Variant.Outlined" />
 
@@ -24,6 +27,8 @@
             @bind-Value="urlRegistration.ConfirmPassword" For="@(() =>  urlRegistration.ConfirmPassword)"
                       InputType="@ConfirmPasswordInput" Variant="Variant.Outlined"
                       Adornment="Adornment.End" AdornmentIcon="@ConfirmPasswordInputIcon" OnAdornmentClick="ButtonConfirmPasswordClick" AdornmentAriaLabel="Pokaži geslo" />
+
+        <MudCheckBox @bind-Value="_checked1ka" Label="Želim brezplačno uporabljati odprtokodno orodje 1ka, ki je nameščeno znotraj orodja Mladim" Color="Color.Primary"></MudCheckBox>
 
 
         <MudButton OnClick="@OnValidSubmit" Variant="Variant.Filled" Color="Color.Primary" Disabled="_isBusy" Class="my-5">

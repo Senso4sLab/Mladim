@@ -38,6 +38,8 @@ public class MladimApiUrls
 
     public string StaffMemberCommand { get; set; } = string.Empty;
 
+    public string ResendEmailCommand { get;set; } = string.Empty;
+
     public string GetParticipantsByOrganizationId { get; set; } = string.Empty;
     public string ParticipantCommand { get; set; } = string.Empty;
 
@@ -52,6 +54,10 @@ public class MladimApiUrls
 
     public string AccountCommand { get; set; } = string.Empty;
     public string GetAccountById { get; set; } = string.Empty;
+
+    public string ResetPassword { get;set; } = string.Empty;
+
+    public string ConfirmResetPassword { get; set; } = string.Empty;    
 
 
     public string GetFileByProjectId { get; set; } = string.Empty;

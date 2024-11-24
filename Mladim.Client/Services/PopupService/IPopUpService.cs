@@ -25,4 +25,5 @@ public interface IPopupService
     Task<bool> ShowAboutUsDialog(string title);
 
     Task<bool> ShowLoginDialog(string title);
+    Task<bool> ShowPasswordDialog(string title);
 }

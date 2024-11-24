@@ -258,6 +258,9 @@ namespace Mladim.Infrastracture.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<bool>("Mladim1ka")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -282,6 +285,9 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<long?>("ResetPasswordUtc")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -1325,7 +1331,6 @@ namespace Mladim.Infrastracture.Migrations
                                 .HasColumnType("int");
 
                             b1.Property<string>("Description")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<bool>("IsGroup")
@@ -1440,7 +1445,6 @@ namespace Mladim.Infrastracture.Migrations
                                 .HasColumnType("datetime2");
 
                             b1.Property<string>("Description")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Email")
@@ -1597,7 +1601,6 @@ namespace Mladim.Infrastracture.Migrations
                                 .HasColumnType("int");
 
                             b1.Property<string>("Description")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Name")

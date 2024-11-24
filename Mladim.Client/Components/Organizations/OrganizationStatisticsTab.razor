@@ -47,7 +47,7 @@
            <MudGrid Class="py-2">
                 @if (isAnyParticipant)
                 {
-                    <MudItem md="6">
+                    <MudItem xl="6">
                             <MudPaper Outlined="true">
                                 <SfAccumulationChart @ref="@ParticipantsByAgeChart"  Title="Razporeditev udeležencev po starostni skupini" EnableAnimation="false" EnableSmartLabels="false" CustomClass="custom-row">
                                     <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
@@ -64,7 +64,7 @@
                                 </SfAccumulationChart>
                             </MudPaper>
                         </MudItem>
-                    <MudItem md="6">
+                    <MudItem xl="6">
                             <MudPaper Outlined="true">
                         <SfAccumulationChart @ref="@ParticipantsByGenderChart" Title="Razporeditev udeležencev po spolu" EnableAnimation="false" EnableSmartLabels="false">
                                     <AccumulationChartTitleStyle FontFamily="Poppins" FontWeight="400" Size="0.9rem" Color="#6e7191" />
@@ -89,8 +89,8 @@
                     </MudItem>          
                 }
 
-                <MudItem xs="12" >
-                    <MudStack Row Spacing="3" AlignItems="AlignItems.Stretch" >
+                <MudItem xs="12">
+                    <MudStack Row Spacing="3" AlignItems="AlignItems.Stretch" Wrap="Wrap.Wrap" >
                             <MudPaper Outlined="true" Class="pa-4">                             
                                      <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
                                         <MudAvatar Style="background-color:#4da456" Variant="Variant.Filled" Size="MudBlazor.Size.Large">
@@ -135,6 +135,17 @@
                                         </MudStack>
                                     </MudStack>
                             </MudPaper>
+                            <MudPaper Outlined="true" Class="pa-4">
+                                <MudStack Row AlignItems="AlignItems.Center" Spacing="2">
+                                 <MudAvatar Style="background-color:#4da456" Variant="Variant.Filled" Size="MudBlazor.Size.Large">
+                                 <MudImage Class="pa-3" Src="/activities.png" />
+                                 </MudAvatar>
+                                 <MudStack Spacing="1">
+                                 <MudText Typo="Typo.h2" Color="Color.Tertiary">@(organizationStatistics?.TotalSurvies ?? 0)</MudText>
+                                     <MudText Typo="Typo.h2" Color="Color.Tertiary">Št. izpolnjenih anket</MudText>
+                                 </MudStack>
+                             </MudStack>
+                     </MudPaper>
                     </MudStack>              
                 </MudItem>
 

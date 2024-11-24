@@ -1,15 +1,13 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Options;
-using Mladim.Client.ViewModels;
 using Mladim.Client.Services.HttpService.Generic;
-
-using System.Net.Http.Json;
 using System.Security.Claims;
 using Mladim.Client.Models;
-using Mladim.Application.Models;
 using Mladim.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
+using Microsoft.AspNetCore.Components.WebAssembly.Http;
 
 namespace Mladim.Client.Services.Authentication;
 
@@ -46,17 +44,35 @@ public class AuthService : IAuthService
         if (!response.Succeeded)
             return response;
 
+        if(response.Value.Mladim1ka)
+        {
+            await UserLogin1kaAsync(loginUser.Email, loginUser.Password); 
+        }
+
         await this.Storage.SetItemAsStringAsync(this.StorageKeys.AccessToken, response.Value!.Token);
         await this.AuthStateProvider.GetAuthenticationStateAsync();
         return response;        
     }
 
-   
 
-
-    public async Task<Result<AuthResponse>> ConfirmRegistrationAsync(string email, string emailToken,  string password)
+    public async Task<Result> ResetPasswordAsync(UserEmail email)
     {
-        var userConfirmation = new UserRegistrationConfirmation { Email = email, EmailToken = emailToken, Password = password };
+      
+       return await this.HttpClient.PostAsync<UserEmail, Result>(this.MladimApiUrls.ResetPassword, email);
+       
+    }
+
+    public async Task<Result> ConfirmResetPasswordAsync(NewPasswordUser user)
+    {
+        return await this.HttpClient.PostAsync<NewPasswordUser, Result>(this.MladimApiUrls.ConfirmResetPassword, user);
+    }
+
+
+
+
+    public async Task<Result<AuthResponse>> ConfirmRegistrationAsync(string name, string email, string emailToken,  string password, bool mladim1ka)
+    {
+        var userConfirmation = new UserRegistrationConfirmation { Name = name, Email = email, EmailToken = emailToken, Password = password, Mladim1ka = mladim1ka };
 
         var response = await this.HttpClient.PostAsync<UserRegistrationConfirmation, Result<AuthResponse>>(this.MladimApiUrls.ConfirmRegistration, userConfirmation);
 
@@ -112,4 +128,45 @@ public class AuthService : IAuthService
             await this.AuthStateProvider.GetAuthenticationStateAsync();
         }
     }
+
+
+    private async Task<bool> UserLogin1kaAsync(string email, string geslo)
+    {       
+
+        var user = new Login1kaUser(email, geslo, "Prijava");
+
+        var userJson = JsonSerializer.Serialize(user);    
+
+        HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, "https://mladim1ka.azurewebsites.net/1ka/frontend/api/api.php?action=login")
+        {
+            Content = new StringContent(userJson),
+        };      
+        
+        message.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+        message.Content.Headers.Add("Content-Length", $"{userJson.Length}");
+
+        HttpClient client = new HttpClient();
+
+        var response = await HttpClient.SendAsync(message);
+
+        var responseCode = response.IsSuccessStatusCode;
+
+        client?.Dispose();
+
+        return responseCode;
+    }
+
+
+    public record Login1kaUser(string email, string pass, string submit);
+
+
+
+
+
+
+
+
+
+
+
 }

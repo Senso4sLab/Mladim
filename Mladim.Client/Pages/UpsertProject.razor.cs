@@ -72,13 +72,9 @@ public partial class UpsertProject
             editable = true;
     }
 
-    public async Task OnProjectEditableChanged(bool toggled)
-    {
-        if (editable)
+    public async Task OnProjectEditableChanged()
+    {       
             await SaveProjectAsync();
-
-        editable = toggled;
-
     }
     
 

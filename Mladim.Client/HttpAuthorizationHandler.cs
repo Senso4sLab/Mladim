@@ -1,6 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.Extensions.Options;
 using Mladim.Client.Models;
+using static MudBlazor.Colors;
 
 public class HttpAuthorizationHandler : DelegatingHandler
 {
@@ -24,3 +25,4 @@ public class HttpAuthorizationHandler : DelegatingHandler
         return await base.SendAsync(request, cancellationToken);
     }
 }
+

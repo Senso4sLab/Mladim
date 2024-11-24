@@ -4,6 +4,7 @@ using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.Services.Authentication;
 using Mladim.Client.Models;
 using Mladim.Client.Components.Organizations;
+using System.Security.Claims;
 
 namespace Mladim.Client.Pages;
 
@@ -36,8 +37,9 @@ public partial class Dashboard
 
         if (SelectedOrganization == null)
             return;
+       
 
-        IsOrganizationStatisticsVisible = !await AuthService.IsUserPolicySatisfied(SelectedOrganization!.Id.ToString(), "HasWorkerClaim");              
+        IsOrganizationStatisticsVisible = await AuthService.IsUserPolicySatisfied(SelectedOrganization!.Id.ToString(), "HasManagerClaim");              
 
         var projects = await ProjectsByOrganizationAsync(SelectedOrganization.Id);
 

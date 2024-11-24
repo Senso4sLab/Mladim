@@ -10,7 +10,9 @@ public class AppUser : IdentityUser
     public string Surname { get; set; } = string.Empty;
     public string Nickname { get; set; } = string.Empty;
     public string? ImageUrl { get; set; }
-    public List<Organization> Organizations { get; set; } = new();
+    public bool Mladim1ka { get; set; } = false;
+    public List<Organization> Organizations { get; set; } = new();   
+    public long? ResetPasswordUtc { get; set; }
 
     private AppUser()
     {

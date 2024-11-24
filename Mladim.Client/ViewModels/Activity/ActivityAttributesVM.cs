@@ -10,5 +10,6 @@ public class ActivityAttributesVM
     public bool IsRepetitive { get; set; }
     public ActivityRepetitiveInterval RepetitiveInterval { get; set; }
     public int NumOfRepetitions { get; set; }
-    public IEnumerable<ActivityTypes> ActivityTypes { get; set; } = new List<ActivityTypes>();    
+    public IEnumerable<ActivityTypes> ActivityTypes { get; set; } = new List<ActivityTypes>();
+    public IEnumerable<ActivityFields> ActivityFields { get; set; } = new List<ActivityFields>();
 }

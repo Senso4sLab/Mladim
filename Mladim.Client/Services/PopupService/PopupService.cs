@@ -120,6 +120,21 @@ namespace Mladim.Client.Services.PopupService
             return !result.Canceled;
         }
 
+        public async Task<bool> ShowPasswordDialog(string title)
+        {             
+
+            var dialog = await DialogService.ShowAsync<ForgottenPasswordDialog>(title, DialogOptions);
+
+            var result = await dialog.Result;
+
+            return !result.Canceled;
+        }
+
+
+
+
+
+
         public async Task<bool> ShowAboutUsDialog(string title)
         {
             var dialog = await DialogService.ShowAsync<ShowAboutUsDialog>(title, DialogOptions);

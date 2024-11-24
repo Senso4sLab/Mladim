@@ -11,13 +11,7 @@ namespace Mladim.Domain.Dtos.Survey.Responses;
 public class AnonymousSurveyResponseDto
 {
     public List<QuestionResponseDto> Responses { get; set; } = new();
-    public AnonymousParticipantCommandDto AnonymousParticipant { get; set; } = default!;
-    public static AnonymousSurveyResponseDto Create(AnonymousParticipantCommandDto anonymousParticipant, IEnumerable<QuestionResponseDto> responses) =>
-        new AnonymousSurveyResponseDto
-        {
-            AnonymousParticipant = anonymousParticipant,
-            Responses = responses.ToList(),
-        };
+    public AnonymousParticipantCommandDto AnonymousParticipant { get; set; } = default!;   
 
 }
 

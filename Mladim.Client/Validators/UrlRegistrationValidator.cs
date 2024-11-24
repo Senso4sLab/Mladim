@@ -6,6 +6,10 @@ namespace Mladim.Client.Validators;
 
 
 
+
+
+
+
 public class UrlRegistrationValidator : AbstractValidator<UrlRegistration>
 {
     public UrlRegistrationValidator()
@@ -13,6 +17,14 @@ public class UrlRegistrationValidator : AbstractValidator<UrlRegistration>
         RuleFor(x => x.Email)
             .EmailAddress()
             .WithMessage("Neveljavna oblika email naslova");
+
+
+        RuleFor(x => x.Name)
+         .NotEmpty()
+         .NotNull()
+         .WithMessage("Vnosno polje je obvezno");
+
+
 
         RuleFor(x => x.Password)
            .NotEmpty()

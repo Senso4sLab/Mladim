@@ -1,16 +1,117 @@
 ﻿@page "/enka"
+@using System.Text.Json
+@using System.Text
+@using System.Net
+@inject IHttpClientFactory clientfactory
+
 
 <PageTitle>En klik anketa</PageTitle>
 @attribute [Authorize]
 
 
+<div style="height:100vh;">
+    <iframe  src="@url" scrolling="yes" frameborder="0" allowfullscreen></iframe>
+</div> 
 
-
-<div style="width:100%; height:100vh">
-    <iframe src="https://mama.survey360.eu/index.php" scrolling="yes" frameborder="0" allowfullscreen></iframe>
-</div>
 
 @code 
 {
+    //https://mama.survey360.eu/index.php
+    string url = string.Empty;
+
+
+    protected async override Task OnInitializedAsync()
+    {
+        // var result = await UserLoginIn1kaAsync("samosimoncic@gmail.com", "gAZELCA.5");
+
+        // if(result)
+        url = "https://mladim1ka.azurewebsites.net/1ka/";
+    }
+
+    private async Task<bool> UserLoginSimpleIn1kaAsync(string email, string pass)
+    {
+        var user = new Login1kaUser(email, pass, "Prijava");
+
+        var userJson = JsonSerializer.Serialize(user);
+
+        var req = new HttpRequestMessage(HttpMethod.Post, "https://mladim1ka.azurewebsites.net/1ka/frontend/api/api.php?action=login")
+            {
+                Content = new StringContent(userJson),
+            };
+
+
+        req.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+
+        var handler = new HttpClientHandler()
+            {
+                AllowAutoRedirect = true,
+
+            };
+        var HttpClien = new HttpClient(handler);
+
+
+        req.Content.Headers.Add("Content-Length", $"{userJson.Length}");
+
+
+        var res = await HttpClien.SendAsync(req);
+
+        return res.IsSuccessStatusCode;
+
+    }
+
+
+    private async Task<bool> UserLoginIn1kaAsync(string email, string pass)
+    {
+        var user = new Login1kaUser(email, pass, "Prijava");
+
+        var userJson = JsonSerializer.Serialize(user);        
+
+        var httpClient = clientfactory.CreateClient("1kaHttpClient");
+
+        // register frontend/api/api.php?action=register
+
+
+        var res = await httpClient.PostAsync("frontend/api/api.php?action=login", new StringContent(userJson));
+
+        return res.IsSuccessStatusCode;
+    }
+
+
+
+
+    private async Task<bool> UserRegisterin1kaAsync(string ime, string email, string geslo, string geslo2, int agree = 1, string submit = "Registracija")
+    {
+        var user = new Register1kaUser(ime, email, geslo, geslo2, agree, submit);
+
+        var userJson = JsonSerializer.Serialize(user);
+
+        var httpClient = clientfactory.CreateClient("1kaHttpClient");   
+
+        var res = await httpClient.PostAsync("frontend/api/api.php?action=register", new StringContent(userJson));
+
+        return res.IsSuccessStatusCode;
+    }
+
+    private async Task<bool> UserConfirmRegisterin1kaAsync(string ime, string email, string geslo, string geslo2, int language = 1)
+    {
+        var user = new RegisterConfirm1kaUser(ime, email, geslo, geslo2, language);
+
+        var userJson = JsonSerializer.Serialize(user);
+
+        var httpClient = clientfactory.CreateClient("1kaHttpClient");
+
+        var res = await httpClient.PostAsync("frontend/api/api.php?action=register_confirm", new StringContent(userJson));
+
+        return res.IsSuccessStatusCode;
+    }
+
+
+
+
+
+    public record Login1kaUser(string email, string pass, string submit);
+
+    public record Register1kaUser(string ime, string email, string geslo, string geslo2, int agree, string submit); // submit=Registracija
+    public record RegisterConfirm1kaUser(string ime, string email, string geslo, string geslo2, int language); // submit=Registracija
 
 }

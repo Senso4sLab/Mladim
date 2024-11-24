@@ -16,13 +16,13 @@
     }
 </style>
 
-<MudDialog Style="min-width:600px; padding-bottom:10px;">
+<MudDialog Style="min-width:850px; padding-bottom:10px;">
     <DialogContent>
         <MudDataGrid T="AnonymousParticipantTableElements" Items="@Elements" ReadOnly=false EditMode="DataGridEditMode.Cell"
                      Bordered="true" Dense="false" EditTrigger="DataGridEditTrigger.Manual"
                      HeaderClass="font-size-header-mud-data-grid" RowStyleFunc="RowStyleFunc">
             <Columns>
-                <PropertyColumn Property="x => x.AgeGroup.GetDisplayAttribute()" Title="Starostna skupina" IsEditable="false" />
+                <PropertyColumn  Property="x => x.AgeGroup.GetDisplayAttribute()" Title="Starostna skupina" IsEditable="false" />
                 <PropertyColumn  Property="x => x.Male" Title="@Gender.Male.GetDisplayAttribute()">
                     <EditTemplate>
                         <MudNumericField @bind-Value="context.Item.Male" Min="0" />
@@ -36,6 +36,11 @@
                 <PropertyColumn Property="x => x.Other" Title="@Gender.Other.GetDisplayAttribute()">
                     <EditTemplate>
                         <MudNumericField @bind-Value="context.Item.Other" Min="0" />
+                    </EditTemplate>
+                </PropertyColumn>
+                <PropertyColumn Property="x => x.Undefined" Title="@Gender.Undefined.GetDisplayAttribute()">
+                    <EditTemplate>
+                        <MudNumericField @bind-Value="context.Item.Undefined" Min="0" />
                     </EditTemplate>
                 </PropertyColumn>
             </Columns>
@@ -70,6 +75,9 @@
                 .Sum(p => p.Number),
                Other = aParticipants.Where(p => p.AgeGroup == ageGroup && p.Gender == Gender.Other)
                 .Sum(p => p.Number),
+               Undefined = aParticipants.Where(p => p.AgeGroup == ageGroup && p.Gender == Gender.Undefined)
+                    .Sum(p => p.Number),
+
            }).ToList();   
 
 
@@ -88,7 +96,8 @@
                     {
                         Gender.Male => g.Sum(x => x.Male),
                         Gender.Female => g.Sum(x => x.Female),
-                        Gender.Other => g.Sum(x => x.Other),                      
+                        Gender.Other => g.Sum(x => x.Other), 
+                        Gender.Undefined => g.Sum(x => x.Undefined),
                         _ => 0,
                     }                   
                 })).Where(ap => ap.Number > 0)

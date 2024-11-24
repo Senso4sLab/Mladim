@@ -8,6 +8,7 @@ using Mladim.Client.Utilities.CsvMapping;
 using Mladim.Client.ViewModels.Survey;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Extensions;
+using Mladim.Domain.Models.Survey.Questions;
 using System.Globalization;
 
 namespace Mladim.Client.Pages;
@@ -41,9 +42,28 @@ public partial class ActivityResults
         {
             surveyQuestions = await SurveyService.GetSurveyQuestionnairyAsync(activityId, Gender.Female);
             surveyResponses = await SurveyService.GetAnonymousSurveyResponsesAsync(activityId);
-            SurveyResponsesGroupByQuestions = GetSurveyResponsesGroupByQuestion(activityId);
+
+
+            //surveyQuestions = surveyQuestions.Where(x => x.Type != SurveyQuestionType.Multiple).ToList();
+
+            //surveyResponses = surveyResponses.Where(sr => sr.Responses.Any())                
+            //    .ToList();
+            
+
+            //foreach(var sr in surveyResponses)
+            //{
+            //    sr.Responses = Test(sr.Responses);
+            //}
+
+            SurveyResponsesGroupByQuestions = GetSurveyResponsesGroupByQuestion(activityId);           
+            
         }
     }
+
+    
+   
+
+
 
     private IEnumerable<SurveyResponsesGroupedByQuestionVM> GetSurveyResponsesGroupByQuestion(int activityId) =>
         surveyResponses.SelectMany(sr => sr.Responses, (asr, response) => (response.UniqueQuestionId, ParticipantResponse: ParticipantQuestionResponseVM.Create(asr.AnonymousParticipant, response)))
@@ -51,8 +71,12 @@ public partial class ActivityResults
             .Select(g => SurveyResponsesGroupedByQuestionVM.Create(GetSurveyQuestionById(g.Key), g))
             .ToList();
 
-    private SurveyQuestionVM? GetSurveyQuestionById(int id) =>
-        surveyQuestions.FirstOrDefault(sq => sq.UniqueQuestionId == id);
+    private SurveyQuestionVM? GetSurveyQuestionById(int id)
+    {
+        var sq = surveyQuestions.FirstOrDefault(sq => sq.UniqueQuestionId == id);
+        return sq;
+    }
+        
 
     private async Task OnClickCsvExportFile()
     {

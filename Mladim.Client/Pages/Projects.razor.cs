@@ -4,6 +4,8 @@ using Mladim.Client.Services.PopupService;
 using Mladim.Client.Services.SubjectServices.Contracts;
 using Mladim.Client.Models;
 using Mladim.Client.Services.Authentication;
+using HtmlAgilityPack;
+using Mladim.Domain.Models;
 
 namespace Mladim.Client.Pages;
 
@@ -41,6 +43,13 @@ public partial class Projects
         var userId = await AuthService.GetUserIdentityAsync();
         var projects = await this.ProjectService.GetByOrganizationIdAsync(defaultOrg!.Id); 
         return projects.ToList();
+    }
+
+    private string ProjectDescriptionNoHtmlTags(string withHtml)
+    {
+        HtmlDocument htmlDoc = new HtmlDocument();
+        htmlDoc.LoadHtml(withHtml);
+        return htmlDoc.DocumentNode.InnerText;
     }
 
 

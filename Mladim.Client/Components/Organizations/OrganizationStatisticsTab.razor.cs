@@ -74,6 +74,7 @@ public partial class OrganizationStatisticsTab : IExportChart
 
     int totalParticipants = 0;
     int totalActivities = 0;
+    
     protected override async Task OnInitializedAsync()
     {
         SelectedOrganization = await this.OrganizationService.DefaultOrganizationAsync();
@@ -174,7 +175,7 @@ public partial class OrganizationStatisticsTab : IExportChart
   
     private async Task GeneratePdfAsync()
     {
-        StackedBarWidth = "800px";        
+        StackedBarWidth = "800px";      
         await Task.Delay(100);
         await ParticipantsByAgeChart.PrintAsync(Element);
         StackedBarWidth = "100%";       
@@ -220,6 +221,8 @@ public partial class OrganizationStatisticsTab : IExportChart
 
         this.totalParticipants = organizationStatistics?.IndividualParticipants + organizationStatistics?.AnonymousParticipants ?? 0;
 
+       
+
         this.totalActivities = organizationStatistics?.ActiveActivities.Count + organizationStatistics?.PastActivities.Count ?? 0;
 
         this.isAnyParticipant = organizationStatistics?.AgeDoughnut.Count() > 0 && organizationStatistics?.GenderDoughnut.Count() > 0;
@@ -228,7 +231,11 @@ public partial class OrganizationStatisticsTab : IExportChart
         
         this.QuestionsSurveyStatistics = await this.SurveyService.GetStatisticsByOrganizationIdAsync(SelectedOrganization.Id, statisticsDateRange.Start.Value, statisticsDateRange.End.Value);
 
-        this.MoreQuestionStatistics = false;
+        var resulr = QuestionsSurveyStatistics.ToList();
+
+
+
+       this.MoreQuestionStatistics = false;
 
         UpdateShownQuestionsSurveyStatistics();
     }

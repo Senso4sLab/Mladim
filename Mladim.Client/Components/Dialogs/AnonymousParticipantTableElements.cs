@@ -18,4 +18,7 @@ public class AnonymousParticipantTableElements
     [Display(Name = "Drugo")]
     public int Other { get; set; }
 
+    [Display(Name = "Neopredeljen")]
+    public int Undefined { get; set; }
+
 }

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Mladim.Domain.Models;
 
@@ -20,6 +13,7 @@ public class UserPassword
 
 public class UrlRegistration
 {
+    public string Name { get;set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string UserId { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
@@ -53,7 +47,10 @@ public class UserRegistration
 
 
 public class UserRegistrationConfirmation
-{   
+{
+    [Required]
+    public string Name { get; set; } = string.Empty;
+
     [Required]   
     public string EmailToken { get; set; } = string.Empty;
 
@@ -63,7 +60,11 @@ public class UserRegistrationConfirmation
     [Required]
     public string Password { get; set; } = string.Empty;
 
+    public bool Mladim1ka { get; set; } = false;
+
 }
+
+
 
 
 

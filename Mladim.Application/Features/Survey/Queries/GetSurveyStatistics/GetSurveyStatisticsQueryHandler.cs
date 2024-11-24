@@ -43,12 +43,12 @@ public class GetSurveyStatisticsQueryHandler : IRequestHandler<GetSurveyStatisti
            .Select(gtuple => new QuestionResponseTypeSelector(gtuple.questionId, gtuple.Item2))
            .Select(qrts => qrts.AverageQuestionResponseTypes())
            .ToList();
-
        
 
         var surveyQuestions = await UnitOfWork.SurveyQuestionRepository
             .GetSurveyQuestionnairy(1, Gender.Female, SurveyQuestionCategory.General | SurveyQuestionCategory.Group | SurveyQuestionCategory.Repetitive);
-        
+
+      
         var questionsResponseStatistics = questionResponseTypes.Join(surveyQuestions, qrt => qrt.QuestionId, sq => sq.UniqueQuestionId, (qrt, sq) =>new QuestionSurveyStatistics(sq, qrt))
             .Where(qrs => qrs.Statistics.QuestionsResponseTypes.Count() > 0)            
             .ToList();      

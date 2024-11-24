@@ -1,4 +1,5 @@
-﻿namespace Mladim.Client.Services.HttpService.Generic;
+﻿
+namespace Mladim.Client.Services.HttpService.Generic;
 
 public interface IGenericHttpService
 {
@@ -10,4 +11,5 @@ public interface IGenericHttpService
     Task<Stream> GetStreamAsync(string url);
     Task<string?> PostAsync<TIn>(string url, TIn request);
     Task<string> GetStringAsync(string url);
+    Task<HttpResponseMessage> SendAsync(HttpRequestMessage message);
 }

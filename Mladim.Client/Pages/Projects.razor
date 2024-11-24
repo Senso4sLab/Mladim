@@ -1,5 +1,7 @@
 ﻿@page "/projects"
 @attribute [Authorize]
+@using HtmlAgilityPack
+
 
 <PageTitle>Projekti</PageTitle>
 
@@ -23,11 +25,11 @@
                                 <MudText style="min-height:30px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical;" Typo="Typo.h2" Color="Color.Tertiary">@project.Attributes.Name</MudText>
                             </CardHeaderContent>
                             <CardHeaderActions>
-                                <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Color="Color.Primary" @onclick="@(()=> ShowProjectAsync(project))" />                          
+                                <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Color="Color.Primary" @onclick="@(()=> ShowProjectAsync(project))" />   
                             </CardHeaderActions>
                         </MudCardHeader>
                         <MudCardContent>
-                            <MudText style="min-height:100px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 6; line-clamp: 6; -webkit-box-orient: vertical;" Typo="Typo.h5" Color="Color.Tertiary">@((MarkupString)project.Attributes.Description)</MudText>
+                                <MudText style="min-height:100px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 6; line-clamp: 6; -webkit-box-orient: vertical;" Typo="Typo.h5" Color="Color.Tertiary">@(ProjectDescriptionNoHtmlTags(project.Attributes.Description))</MudText>
                         </MudCardContent>
                         <MudCardActions >
                                 <MudStack Row Spacing="6" Justify="Justify.FlexEnd" style="width:100%; margin-bottom:20px;">

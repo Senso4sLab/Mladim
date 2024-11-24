@@ -23,9 +23,9 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="FluentValidation" Version="11.5.2" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.2" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
+    <PackageReference Include="FluentValidation" Version="11.6.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.6.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.67" />
     <PackageReference Include="MediatR" Version="12.0.1" />
 
 	<FrameworkReference Include="Microsoft.AspNetCore.App" />
@@ -40,6 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Mladim.Client\Mladim.Client.csproj" />
     <ProjectReference Include="..\Mladim.Domain\Mladim.Domain.csproj" />
   </ItemGroup>
 

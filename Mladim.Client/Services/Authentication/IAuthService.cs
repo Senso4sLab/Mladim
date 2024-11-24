@@ -14,5 +14,7 @@ public interface IAuthService
 
     Task LogoutAsync();  
 
-    Task<Result<AuthResponse>> ConfirmRegistrationAsync(string email, string emailToken, string password);
+    Task<Result<AuthResponse>> ConfirmRegistrationAsync(string name, string email, string emailToken, string password, bool mladim1ka);
+    Task<Result> ResetPasswordAsync(UserEmail email);
+    Task<Result> ConfirmResetPasswordAsync(NewPasswordUser user);
 }

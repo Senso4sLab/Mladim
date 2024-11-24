@@ -10,6 +10,7 @@ using Mladim.Client.Models;
 using Mladim.Domain.Models;
 using Mladim.Domain.Dtos.Members;
 using Mladim.Client.ViewModels.Members.StaffMembers;
+using Mladim.Client.MappingProfiles.Profiles.Staff;
 
 namespace Mladim.Client.Services.SubjectServices.Implementations;
 
@@ -45,6 +46,14 @@ public class StaffMemberService : IStaffMemberService
         string url = string.Format(this.ApiUrls.GetLeadStaffMembers, organizationId);
         var baseDto = await this.HttpService.GetAllAsync<StaffMemberLeadQueryDto>(url);
         return this.Mapper.Map<IEnumerable<StaffMemberLeadVM>>(baseDto);
+    }
+
+
+    public async Task<Result?> ResendEmailAsync(int organizationId, string email)
+    {
+        var command = new ResendConfiramtionEmailCommandDto(organizationId, email);
+
+        return await this.HttpService.PostAsync<ResendConfiramtionEmailCommandDto, Result>(ApiUrls.ResendEmailCommand, command);        
     }
 
 

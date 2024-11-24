@@ -25,21 +25,14 @@ public interface IMultiSelectableResponse
     List<ISelectableResponse> ResponseEnum { get; }
 }
 
-//public abstract class SelectableQuestionResponseVM : QuestionResponseVM, ISelectableResponse
-//{
-//    public abstract Enum ResponseEnum { get; }
-//    public SelectableQuestionResponseVM(int uniqueQuestionId) : base(uniqueQuestionId) { }
-//}
 
 public class SelectableQuestionResponseVM<T>: QuestionResponseVM, ISelectableResponse where T: Enum
 {
     public virtual T Response { get; set; } = default!;
     public Enum ResponseEnum => this.Response;
     public SelectableQuestionResponseVM(int uniqueQuestionId) :base(uniqueQuestionId) { }
-    private SelectableQuestionResponseVM(int uniqueQuestionId, T  response) : this(uniqueQuestionId) =>
-        this.Response = response;
-    public static SelectableQuestionResponseVM<T> Create(SurveyQuestionVM question, T response) =>
-        new SelectableQuestionResponseVM<T>(question.UniqueQuestionId, response);
+    
+    
 }
 
 public class QuestionRatingResponseVM : SelectableQuestionResponseVM<SurveyRatingResponseType> 

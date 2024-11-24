@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Mladim.Application.Contracts.Identity;
 using Mladim.Application.Features.Accounts.Commands.ChangePassword;
+using Mladim.Application.Features.Accounts.Commands.CheckResetPassword;
+using Mladim.Application.Features.Accounts.Commands.ResetPassword;
 using Mladim.Application.Features.Accounts.Commands.UpdateAppUser;
 using Mladim.Application.Features.Accounts.Queries.GetAppUser;
 using Mladim.Application.Models;
@@ -31,6 +33,20 @@ public class AccountController : ControllerBase
         return Ok(response);
     }
 
+    [HttpPost("resetPassword")]
+    public async Task<ActionResult<Result>> ResetPasswordAsync(ResetPasswordCommand request)
+    {
+        var response = await this.Mediater.Send(request);
+        return Ok(response);
+    }
+
+    [HttpPost("confirmResetPassword")]
+    public async Task<ActionResult<Result>> ConfirmResetPasswordAsync(CheckResetPasswordCommand request)
+    {
+        var response = await this.Mediater.Send(request);
+        return Ok(response);
+    }
+
 
 
     [Authorize]
@@ -45,7 +61,7 @@ public class AccountController : ControllerBase
     [HttpPost("confirmRegistration")]
     public async Task<ActionResult<Result<AuthResponse>>> RegisterConfirmationAsync(UserRegistrationConfirmation request)
     {
-        var response = await this.AuthService.RegisterConfirmationAsync(request.Email,request.EmailToken, request.Password);
+        var response = await this.AuthService.RegisterConfirmationAsync(request.Name, request.Email,request.EmailToken, request.Password, request.Mladim1ka);
         return Ok(response);
     }
 

@@ -32,7 +32,7 @@ namespace Mladim.Client.Components.Organizations;
 
 public partial class GroupTab
 {
-    private bool IsStaffGroup = false;
+    
 
     private bool ShowActiveGroups = true;
 
@@ -50,14 +50,19 @@ public partial class GroupTab
     private GroupType GroupType => 
         IsStaffGroup ? GroupType.Project : GroupType.Activity;
 
+
+    private bool IsStaffGroup = false;
+    
+
+
     protected async override Task OnParametersSetAsync() =>
         this.Groups = new(await this.GroupService.
             GetByOrganizationIdAsync(this.Organization.Id, this.GroupType, ShowActiveGroups));
 
 
-    private async Task GroupSwitchChangedAsync(bool isStaffGroup)
-    {       
-        this.IsStaffGroup = isStaffGroup;
+    private async Task SelectedValueChangedAsync(IEnumerable<bool> selectedValues)
+    {
+        this.IsStaffGroup = selectedValues.First();
         await OnParametersSetAsync();
     }
 

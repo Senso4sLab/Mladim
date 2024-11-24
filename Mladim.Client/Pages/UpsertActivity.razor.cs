@@ -14,6 +14,9 @@ using MudBlazor;
 using Mladim.Client.Validators;
 using Mladim.Domain.Models;
 using Mladim.Client.Extensions;
+using Syncfusion.Blazor.RichTextEditor;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace Mladim.Client.Pages;
 
@@ -74,7 +77,7 @@ public partial class UpsertActivity
     private ActivityValidator activityValidator = new ActivityValidator();
     IEnumerable<ActivityRepetitiveInterval> ActivityRepetitiveIntervals => 
         Enum.GetValues<ActivityRepetitiveInterval>().ToList();
-
+   
 
     public bool editable = true;
 
@@ -106,6 +109,11 @@ public partial class UpsertActivity
             editable = true;
     }
 
+    private void OnTextChangedMudSelectLeadActivity(string text)
+    {
+        
+    }
+
 
     private Converter<TimeSpan> activityIntervalConverter = new Converter<TimeSpan>
     {
@@ -125,19 +133,14 @@ public partial class UpsertActivity
     }
 
 
-    public async Task OnActivityEditableChanged(bool toggled)
+    public async Task OnActivityEditableChanged()
     {
-        if (editable)
-        {
-            await activityForm.Validate();
+        await activityForm.Validate();
 
-            if (!activityForm.IsValid)
-                return;
+        if (!activityForm.IsValid)
+            return;          
 
-            await SaveActivityAsync();
-        }
-
-        editable = toggled;
+        await SaveActivityAsync();             
     }
 
 
@@ -167,6 +170,14 @@ public partial class UpsertActivity
         Navigation.NavigateTo("/activities");
     }
 
+
+
+    public void EditActivityAsync()
+    {
+        editable = !editable;
+    }
+
+
     public async Task DeleteActivityAsync()
     { 
         var dialogResponse = await this.PopupService.ShowSimpleTextDialogAsync("Odstranjevanje aktivnosti", "Ali želite odstraniti aktivnost?");
@@ -177,8 +188,7 @@ public partial class UpsertActivity
         var htmlResponse = await this.ActivityService.RemoveAsync(ActivityId.Value);
 
         if (htmlResponse)
-        {
-           
+        {           
             this.PopupService.ShowSnackbarSuccess("Aktivnost je bila uspešno odstranjena");
         }
         else
@@ -241,6 +251,9 @@ public partial class UpsertActivity
         var resultGroups = await this.PopupService
             .ShowAnonymousParticipantGroupsDialog("Dodajanje udeležencev po starostnih skupinah in spolu", activity.AnonymousParticipantActivities);
         
+
+      
+
         if(resultGroups.Any())
         {
             this.activity.AnonymousParticipantActivities = resultGroups.ToList();

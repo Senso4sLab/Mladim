@@ -9,18 +9,14 @@
             <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
                 <MudText Typo="Typo.h2" Color="Color.Tertiary">@(editable ? "Vnesi podatke o aktivnosti" : "Podatki o aktivnosti")</MudText>
 
-                 <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-                     <MudToggleIconButton  Toggled="@editable" ToggledChanged="OnActivityEditableChanged" Size="Size.Small"
-                                          Icon="@Icons.Material.Filled.Edit" Color="@Color.Primary" Title="Edit"
-                                          ToggledIcon="@Icons.Material.Filled.Save" ToggledColor="@Color.Primary" ToggledTitle="Save" />
 
-                    @if (!editable)
-                    {
+                @if(UpdateState && !editable)
+                {
+                     <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">     
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Color="Color.Primary" OnClick="@(() => EditActivityAsync())" />
                         <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error" OnClick="@(() => DeleteActivityAsync())" />
-                    }
-
-                    <MudIconButton Color="Color.Secondary" Size="Size.Small" Icon="@Icons.Material.Filled.Cancel" OnClick="CancelActivityAsync"/>
-                </MudButtonGroup>
+                    </MudButtonGroup>
+                }             
              </MudStack>
 
             <MudTextField ReadOnly="!editable" @bind-Value="activity.Attributes.Name" Variant="Variant.Outlined" For="@(() => activity.Attributes.Name)" Label="Ime aktivnosti">@activity.Attributes.Name</MudTextField>
@@ -40,8 +36,18 @@
         
             }
             <MudStack Row Justify="Justify.FlexStart" Spacing="10">
-                <MudCheckBox @bind-Checked="@activity.Attributes.IsGroup" ReadOnly=UpdateState Label="Skupinska aktivnost" Color="Color.Primary"></MudCheckBox>
-                <MudCheckBox @bind-Checked="@activity.Attributes.IsRepetitive" ReadOnly=UpdateState Label="Ponavljajoča aktivnost" Color="Color.Primary"></MudCheckBox>       
+                <MudStack Spacing="2" Row AlignItems="AlignItems.Center">
+                    <MudCheckBox @bind-Checked="@activity.Attributes.IsGroup" ReadOnly=UpdateState Label="Skupinska aktivnost" Color="Color.Primary"></MudCheckBox>
+                    <MudTooltip Text="Aktivnost, ki je namenjena zaključeni in v naprej definirani skupini mladih.">
+                        <MudIconButton Size=Size.Small Icon="@Icons.Material.Filled.QuestionMark" />
+                    </MudTooltip>
+                </MudStack>
+                <MudStack Spacing="2" Row AlignItems="AlignItems.Center">
+                    <MudCheckBox @bind-Checked="@activity.Attributes.IsRepetitive" ReadOnly=UpdateState Label="Ponavljajoča aktivnost" Color="Color.Primary"></MudCheckBox>
+                    <MudTooltip Text="Aktivnost, ki se v določenem obdobju ponavlja z istimi ali različnimi udeleženci.">
+                        <MudIconButton Size=Size.Small Icon="@Icons.Material.Filled.QuestionMark" />
+                    </MudTooltip>
+                </MudStack>                   
             </MudStack>   
 
             @if(activity.Attributes.IsRepetitive)
@@ -58,16 +64,31 @@
             }
           
             <div>
-                <SfRichTextEditor Readonly="!editable" @bind-Value="@activity.Attributes.Description" Placeholder="Nekaj o aktivnosti" />
+                <SfRichTextEditor @bind-Value="@activity.Attributes.Description"  Readonly="!editable" Placeholder="Nekaj o aktivnosti" />               
             </div>
                
 
             <MultiSelect ReadOnly="!editable" ToolTip= "editable" TItem="ActivityTypes" @bind-EnumValues="activity.Attributes.ActivityTypes" Label="Tip aktivnosti" />
 
-            <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Staff" Variant="Variant.Outlined" Label="Vodje aktivnosti" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
+
+
+      @*   <MultiSelect ReadOnly="!editable" ToolTip="editable" TItem="ActivityFields" @bind-EnumValues="activity.Attributes.ActivityFields" Label="Področje aktivnosti" /> *@
+
+
+        <MudSelect ReadOnly="!editable" T="ActivityFields" ToStringFunc="@(item => item.GetDisplayAttribute())" MultiSelection="true" @bind-SelectedValues="activity.Attributes.ActivityFields" Variant="Variant.Outlined" Label="Področje aktivnosti" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
+            @foreach (var activityField in Enum.GetValues<ActivityFields>())
+            {
+                <MudSelectItem Value="activityField">@activityField.GetDisplayAttribute()</MudSelectItem>
+            }
+        </MudSelect>
+
+
+        <MudSelect ReadOnly="!editable" T="NamedEntityVM" ToStringFunc="@((staff)=> staff.FullName)" MultiSelection="true" @bind-SelectedValues="activity.Staff" Variant="Variant.Outlined" Label="Vodje aktivnosti" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable ? Adornment.End : Adornment.None)">
                  @foreach (var staffMember in staff)
                 {
                     <MudSelectItem Value="staffMember">@staffMember.FullName</MudSelectItem>
+
+
                 }
             </MudSelect>
 
@@ -171,6 +192,18 @@
                         <MudLink Href="@QrUrl" Typo="Typo.h2" Color="Color.Tertiary">Povezava do ankete</MudLink>              
                     </MudStack>
                 </div>
-            }   
+            }  
+            
+
+            <MudStack Row AlignItems="AlignItems.End" Justify="Justify.FlexEnd">
+            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                @if(editable)
+                {
+                    <MudIconButton Icon="@Icons.Material.Filled.Save" Size="Size.Small" Color="Color.Primary" OnClick="@(() =>OnActivityEditableChanged())" />
+                }
+                <MudIconButton Color="Color.Secondary" Size="Size.Small" Icon="@Icons.Material.Filled.Cancel" OnClick="CancelActivityAsync" />
+            </MudButtonGroup>
+            </MudStack>
+
      </MudStack>
 </MudForm>
