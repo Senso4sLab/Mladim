@@ -20,20 +20,20 @@ namespace Mladim.Infrastracture.Identity;
 
 public class AuthService : IAuthService
 {
-    private UserManager<AppUser> UserManager { get; }
+    private UserManager<AppUser> UserManager { get; }   
 
-    private IAppUserRepository UserRepository { get; }
+    public IUnitOfWork UnitOfWork { get; }
     private JwtSettings JwtSettings { get; }
-    public AuthService(UserManager<AppUser> userManager, IAppUserRepository userRepository, IOptions<JwtSettings> jwtSettings)
+    public AuthService(UserManager<AppUser> userManager, IUnitOfWork unitOfWork, IOptions<JwtSettings> jwtSettings)
     {
         this.UserManager = userManager;
-        this.UserRepository = userRepository;
+        this.UnitOfWork = unitOfWork;
         this.JwtSettings = jwtSettings.Value;       
     }
    
     public async Task<Result<AuthResponse>> LoginAsync(string email, string password)
     {      
-            var user = await this.UserRepository.FindByEmailAsync(email);
+            var user = await this.UnitOfWork.AppUserRepository.FindByEmailAsync(email);
 
             if (user == null)
                 return Result<AuthResponse>.Error("Vnešeni podatki so napačni");
@@ -170,6 +170,7 @@ public class AuthService : IAuthService
 
         if (!await ConfirmEmailAsync(user, emailToken))
             return Result<AuthResponse>.Error("Potrditev registracije ni uspela.");
+               
 
         if (mladim1ka)
         {
@@ -192,7 +193,7 @@ public class AuthService : IAuthService
             return Result<AuthResponse>.Error("Gesla ni mogoče spremeniti! Preveri, ali vsebuje vsaj eno veliko črko, eno malo črko, eno številko in en poseben znak.");
 
         user.Name = name;
-        await UserManager.UpdateAsync(user);
+        await UserManager.UpdateAsync(user);        
 
         var authResponse = new AuthResponse
         {
@@ -380,13 +381,13 @@ public class AuthService : IAuthService
 
     public async Task<Result<RegistrationResponse>> RegisterAsync(string name, string surname, string nickname, string email, string? password = null)  
     {
-        var user = await this.UserRepository.FindByEmailAsync(email);
+        var user = await this.UnitOfWork.AppUserRepository.FindByEmailAsync(email);
 
         if (user != null)
             return Result<RegistrationResponse>.Error("Uporabnik že obstaja");
 
         var appUser = AppUser.Create(name, surname, nickname, email, email);
-        var response = await this.UserRepository.CreateAsync(appUser, password ?? GenerateUserPassword());     
+        var response = await this.UnitOfWork.AppUserRepository.CreateAsync(appUser, password ?? GenerateUserPassword());     
 
         if (response.Succeeded)
             return Result<RegistrationResponse>.Success(new RegistrationResponse { UserId = response.Value!.Id });

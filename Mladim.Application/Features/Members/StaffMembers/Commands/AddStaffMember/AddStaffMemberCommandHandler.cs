@@ -84,6 +84,7 @@ public class AddStaffMemberCommandHandler : IRequestHandler<AddStaffMemberComman
 
         if (isEmailSend)        
             member.EmailSent = DateTime.UtcNow;
+        
 
         await this.UnitOfWork.SaveChangesAsync();
         

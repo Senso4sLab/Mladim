@@ -50,7 +50,7 @@ public class ResendConfiramtionEmailCommandHandler : IRequestHandler<ResendConfi
 
         var user = await this.UnitOfWork.AppUserRepository.FindByEmailAsync(request.Email);
 
-        if (member is null || user?.EmailConfirmed == true)
+        if (member is null)
             return Result.Error("Uporabnik je potrjen."); 
 
         var emailToken = await this.AuthService.GenerateEmailTokenAsync(user!);
