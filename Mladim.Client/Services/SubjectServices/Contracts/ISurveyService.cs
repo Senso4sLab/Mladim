@@ -7,7 +7,7 @@ namespace Mladim.Client.Services.SubjectServices.Contracts;
 public interface ISurveyService
 {
     Task<IEnumerable<AnonymousSurveyResponseVM>> GetAnonymousSurveyResponsesAsync(int activityId);
-    Task<IEnumerable<SurveyQuestionVM>> GetSurveyQuestionnairyAsync(int activityId, Gender gender);
+    Task<IEnumerable<SurveyQuestionVM>> GetQuestionnaireAsync(int activityId);
     Task<bool> PostAnonymousSurveyResponseAsync(int activityId, AnonymousSurveyResponseVM anonymousSurveyResponse);    
     Task<IEnumerable<QuestionSurveyStatisticsVM>> GetStatisticsByProjectIdIdAsync(int projectId);
     Task<IEnumerable<QuestionSurveyStatisticsVM>> GetStatisticsByOrganizationIdAsync(int organizationId, DateTime start, DateTime end);

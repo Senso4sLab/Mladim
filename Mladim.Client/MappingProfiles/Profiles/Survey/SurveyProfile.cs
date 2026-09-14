@@ -1,14 +1,8 @@
 ﻿using AutoMapper;
-using Mladim.Client.ViewModels.Members.StaffMembers;
-using Mladim.Client.ViewModels;
-using Mladim.Domain.Dtos;
-using Mladim.Domain.Dtos.Survey.Questions;
 using Mladim.Client.ViewModels.Survey;
+using Mladim.Domain.Dtos.Survey.Questions;
 using Mladim.Domain.Dtos.Survey.Responses;
-using Mladim.Domain.Enums;
 using Mladim.Domain.Dtos.Survey.Statistics;
-using Mladim.Domain.Models.Survey.Statistics;
-using CsvHelper.TypeConversion;
 using System.Data;
 
 namespace Mladim.Client.MappingProfiles.Profiles.Survey;
@@ -17,14 +11,14 @@ public class SurveyProfile : Profile
 {
     public SurveyProfile()
     {
-        CreateMap<SurveyQuestionQueryDto, SurveyQuestionVM>()
-             .ConvertUsing<SurveryQuestionConverter>(); 
-        CreateMap<MaleSurveyQuestionDto, SurveyQuestionVM>();
-        CreateMap<FemaleSurveyQuestionDto, SurveyQuestionVM>();
-        
+        CreateMap<SurveyQuestionQueryDto, SurveyQuestionVM>();
+            
+   
         
         CreateMap<SurveyQuestionnairyQueryDto, SurveyQuestionResponseVM>();
 
+
+       
 
         CreateMap<AnonymousSurveyResponseVM, AnonymousSurveyResponseDto>().ReverseMap();
 
@@ -62,22 +56,7 @@ public class SurveyProfile : Profile
 
 
 
-    public class SurveryQuestionConverter : ITypeConverter<SurveyQuestionQueryDto, SurveyQuestionVM>
-    {
-        public SurveyQuestionVM Convert(SurveyQuestionQueryDto source, SurveyQuestionVM destination, ResolutionContext context)
-        {
-            return new SurveyQuestionVM()
-            {
-                Type = source.Type,
-                UniqueQuestionId = source.UniqueQuestionId,
-                Header = IsMultipleQuestion(source.Type) ? source.Texts.FirstOrDefault() : null,
-                Texts = IsMultipleQuestion(source.Type) ? source.Texts.Skip(1).ToList() : source.Texts.ToList(),
-            };
-           
-        }
-        private bool IsMultipleQuestion(SurveyQuestionType type) => 
-            type is SurveyQuestionType.Multiple or SurveyQuestionType.MultipleRepetitive;
-    }
+    
 
 
 

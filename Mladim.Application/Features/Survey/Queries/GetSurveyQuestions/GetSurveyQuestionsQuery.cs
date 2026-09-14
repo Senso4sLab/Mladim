@@ -12,7 +12,6 @@ namespace Mladim.Application.Features.Survey.Queries.GetSurvey;
 
 public class GetSurveyQuestionsQuery : IRequest<IEnumerable<SurveyQuestionQueryDto>>
 {
-    public int ActivityId { get; set; }
-    public Gender Gender { get;set; }
+    public int ActivityId { get; set; }   
 
 }

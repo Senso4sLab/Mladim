@@ -13,8 +13,16 @@ public class AnonymousParticipants : Profile
 
         CreateMap<AnonymousParticipantGroupVM, AnonymousParticipantGroupCommandDto>();
 
-
         CreateMap<AnonymousParticipantVM, AnonymousParticipantCommandDto>().ReverseMap();
+        CreateMap<AnonymousYouthWorkerVM, AnonymousYouthWorkerCommandDto>().ReverseMap();
+
+        CreateMap<SurveyParticipantVM, SurveyParticipantCommandDto>()
+           .Include<AnonymousParticipantVM, AnonymousParticipantCommandDto>()
+           .Include<AnonymousYouthWorkerVM, AnonymousYouthWorkerCommandDto>();
+
+        CreateMap<SurveyParticipantCommandDto, SurveyParticipantVM>()
+          .Include<AnonymousParticipantCommandDto, AnonymousParticipantVM>()
+          .Include<AnonymousYouthWorkerCommandDto, AnonymousYouthWorkerVM>();
 
     }
 }

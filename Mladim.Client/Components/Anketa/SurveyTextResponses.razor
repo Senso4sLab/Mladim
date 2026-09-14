@@ -5,7 +5,7 @@
 
 <MudPaper Class="p-2" Elevation="3">
     <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-         <MudText Color="Color.Tertiary" Class="px-2" Typo="Typo.h2">@Response.SurveyQuestion.Texts.FirstOrDefault()</MudText>
+         <MudText Color="Color.Tertiary" Class="px-2" Typo="Typo.h2">@Response.SurveyQuestion.Questions.FirstOrDefault()?.Female</MudText>
          <MudButton OnClick="@OnClickTextsResponseCommands" Color="Color.Info" Variant="Variant.Filled">Prikaz odgovorov</MudButton>
      </MudStack>
  </MudPaper>
@@ -20,7 +20,7 @@
     {
         var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true };
         DialogParameters surveyTextResponsesParameters = new DialogParameters();
-        surveyTextResponsesParameters.Add("Question", Response.SurveyQuestion.Texts.FirstOrDefault());
+        surveyTextResponsesParameters.Add("Question", Response.SurveyQuestion.Questions.FirstOrDefault());
         surveyTextResponsesParameters.Add("AnonymousCommands", Response.GetTextResponse());
         this.DialogService.Show<ShowTextQuestionCommands>("", surveyTextResponsesParameters, options);
     }

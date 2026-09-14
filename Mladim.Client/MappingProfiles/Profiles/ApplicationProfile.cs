@@ -25,7 +25,7 @@ namespace Mladim.Client.MappingProfiles.Profiles
 
             ////organization
             //CreateMap<OrganizationVM, AddOrganizationCommandDto>()
-            //   .ForMember(db => db.AgeGroups, dto => dto.MapFrom(field => (AgeGroups)(field.AgeGroups.Sum(x => (int)x))))
+            //   .ForMember(db => db.AgeGroup, dto => dto.MapFrom(field => (AgeGroup)(field.AgeGroup.Sum(x => (int)x))))
             //   .ForMember(db => db.YouthSectors, dto => dto.MapFrom(field => (YouthSectors)(field.YouthSectors.Sum(x => (int)x))))
             //   .ForMember(db => db.Types, dto => dto.MapFrom(field => (OrganizationTypes)(field.Types.Sum(x => (int)x))))
             //   .ForMember(db => db.Status, dto => dto.MapFrom(field => (OrganizationStatus)(field.Status.Sum(x => (int)x))))
@@ -33,7 +33,7 @@ namespace Mladim.Client.MappingProfiles.Profiles
             //   .ForMember(db => db.Regions, dto => dto.MapFrom(field => (OrganizationRegions)(field.Regions.Sum(x => (int)x))));
 
             //CreateMap<OrganizationVM, UpdateOrganizationCommandDto>()
-            //   .ForMember(db => db.AgeGroups, dto => dto.MapFrom(field => (AgeGroups)(field.AgeGroups.Sum(x => (int)x))))
+            //   .ForMember(db => db.AgeGroup, dto => dto.MapFrom(field => (AgeGroup)(field.AgeGroup.Sum(x => (int)x))))
             //   .ForMember(db => db.YouthSectors, dto => dto.MapFrom(field => (YouthSectors)(field.YouthSectors.Sum(x => (int)x))))
             //   .ForMember(db => db.Types, dto => dto.MapFrom(field => (OrganizationTypes)(field.Types.Sum(x => (int)x))))
             //   .ForMember(db => db.Status, dto => dto.MapFrom(field => (OrganizationStatus)(field.Status.Sum(x => (int)x))))
@@ -41,7 +41,7 @@ namespace Mladim.Client.MappingProfiles.Profiles
             //   .ForMember(db => db.Regions, dto => dto.MapFrom(field => (OrganizationRegions)(field.Regions.Sum(x => (int)x))));
             
             //CreateMap<OrganizationQueryDto, OrganizationVM>()
-            //        .ForMember(dto => dto.AgeGroups, dt => dt.MapFrom(field => field.AgeGroups.ToEnums()))
+            //        .ForMember(dto => dto.AgeGroup, dt => dt.MapFrom(field => field.AgeGroup.ToEnums()))
             //        .ForMember(dto => dto.YouthSectors, dt => dt.MapFrom(field => field.YouthSectors.ToEnums()))
             //        .ForMember(dto => dto.Types, dt => dt.MapFrom(field => field.Types.ToEnums()))
             //        .ForMember(dto => dto.Status, dt => dt.MapFrom(field => field.Status.ToEnums()))

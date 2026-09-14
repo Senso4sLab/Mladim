@@ -6,6 +6,7 @@ public class ActivityAttributes : BaseAttibutes
 {
     public ActivityTypes ActivityTypes { get; protected set; }
     //public ActivityFields ActivityFiels { get; protected set; }
+    public ActivityTargetGroup ActivityTargetGroup { get; set; } = ActivityTargetGroup.Participants;
     public bool IsGroup { get; set; }
     public bool IsRepetitive { get; set; }
     public ActivityRepetitiveInterval RepetitiveInterval { get; set; }
@@ -43,6 +44,7 @@ public class ActivityAttributes : BaseAttibutes
             Description = Description,
             Name = Name,
             NumOfRepetitions = NumOfRepetitions,
+            ActivityTargetGroup = ActivityTargetGroup,
         };
     }
 

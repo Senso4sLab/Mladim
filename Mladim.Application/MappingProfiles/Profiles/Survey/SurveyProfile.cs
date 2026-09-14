@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Mladim.Application.Features.Members.Partners.Commands.AddPartner;
-using Mladim.Application.Features.Members.StaffMembers.Commands.UpdatePartner;
+using Mladim.Domain.Dtos.Members.AnonymousParticipants;
 using Mladim.Domain.Dtos.Survey.Questions;
 using Mladim.Domain.Dtos.Survey.Responses;
 using Mladim.Domain.Dtos.Survey.Statistics;
@@ -9,12 +8,6 @@ using Mladim.Domain.Models.Survey.ParticipantResponseTypes;
 using Mladim.Domain.Models.Survey.Questions;
 using Mladim.Domain.Models.Survey.Responses;
 using Mladim.Domain.Models.Survey.Statistics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mladim.Application.MappingProfiles.Profiles.Survey;
 
@@ -23,18 +16,52 @@ public class SurveyProfile : Profile
     public SurveyProfile()
     {
 
-        CreateMap<MaleSurveyQuestion, MaleSurveyQuestionDto>();
-        CreateMap<FemaleSurveyQuestion, FemaleSurveyQuestionDto>();
+        CreateMap<SurveyQuestion, SurveyQuestionQueryDto>();
+
+        CreateMap<AnonymousParticipantCommandDto, AnonymousParticipant>().ReverseMap();
+
+        CreateMap<AnonymousYouthWorkerCommandDto, AnonymousYouthWorker>().ReverseMap();
+
+        CreateMap<AnonymousSurveyResponseDto, AnonymousSurveyResponse>()
+                   .ForMember(dest => dest.Id, opt => opt.Ignore())
+                   .ForMember(dest => dest.Activity, opt => opt.Ignore())
+                   .ForMember(dest => dest.ActivityId, opt => opt.Ignore())
+                   // ignore polymorphic properties here and set them in AfterMap
+                   .ForMember(dest => dest.AnonymousParticipant, opt => opt.Ignore())
+                   .ForMember(dest => dest.AnonymousYouthWorker, opt => opt.Ignore())
+                   .AfterMap((src, dest, ctx) =>
+                   {
+                       dest.AnonymousParticipant = null;
+                       dest.AnonymousYouthWorker = null;
+
+                       if (src.AnonymousParticipant is AnonymousParticipantCommandDto participantDto)
+                       {
+                           dest.AnonymousParticipant = ctx.Mapper.Map<AnonymousParticipant>(participantDto);
+                       }
+                       else if (src.AnonymousParticipant is AnonymousYouthWorkerCommandDto youthWorkerDto)
+                       {
+                           dest.AnonymousYouthWorker = ctx.Mapper.Map<AnonymousYouthWorker>(youthWorkerDto);
+                       }
+                   });
 
 
-        CreateMap<SurveyQuestion, SurveyQuestionQueryDto>()
-            .Include<MaleSurveyQuestion, MaleSurveyQuestionDto>()
-            .Include<FemaleSurveyQuestion, FemaleSurveyQuestionDto>();
-
-        CreateMap<SurveyQuestionnairy, SurveyQuestionnairyQueryDto>();
-
-
-        CreateMap<AnonymousSurveyResponseDto, AnonymousSurveyResponse>().ReverseMap();
+        CreateMap<AnonymousSurveyResponse, AnonymousSurveyResponseDto>()
+            .ForMember(dest => dest.AnonymousParticipant, opt => opt.Ignore())
+            .AfterMap((src, dest, ctx) =>
+            {
+                if (src.AnonymousYouthWorker is not null)
+                {
+                    dest.AnonymousParticipant = ctx.Mapper.Map<AnonymousYouthWorkerCommandDto>(src.AnonymousYouthWorker);
+                }
+                else if (src.AnonymousParticipant is not null)
+                {
+                    dest.AnonymousParticipant = ctx.Mapper.Map<AnonymousParticipantCommandDto>(src.AnonymousParticipant);
+                }
+                else
+                {
+                    dest.AnonymousParticipant = null!;
+                }
+            });
 
 
         CreateMap<QuestionRatingResponseDto, QuestionRatingResponse>().ReverseMap();

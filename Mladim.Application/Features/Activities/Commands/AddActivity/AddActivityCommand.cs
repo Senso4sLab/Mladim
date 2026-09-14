@@ -3,13 +3,6 @@ using Mladim.Domain.Dtos;
 using Mladim.Domain.Dtos.AttachedFile;
 using Mladim.Domain.Dtos.Attributes;
 using Mladim.Domain.Dtos.DateTimeRange;
-using Mladim.Domain.Enums;
-using Mladim.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mladim.Application.Features.Activities.Commands.AddActivity;
 

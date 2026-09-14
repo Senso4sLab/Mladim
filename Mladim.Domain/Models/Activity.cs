@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 
 namespace Mladim.Domain.Models;
 
-
-
 public class Activity : BaseEntity<int>
 {
     public ActivityAttributes Attributes { get; protected set; } = default!;
@@ -41,10 +39,6 @@ public class Activity : BaseEntity<int>
         this.TimeRange = datetimeRange; 
     }
 
-   
-
-
-
     public List<AnonymousParticipantGroup> AnonymousParticipantGroups { get; set; } = new();
 
     public void Add(AnonymousParticipantGroup apg)
@@ -62,8 +56,7 @@ public class Activity : BaseEntity<int>
         return this.MemberwiseClone() as Activity;
     }
 
-    public int? SurveyQuestionnairyId { get;set; }
-    public SurveyQuestionnairy SurveyQuestionnairy { get; set; } = default!;
+    
     public List<AnonymousSurveyResponse> AnonymousSurveyResponses { get; set; } = new();
 
     public int ProjectId { get; set; }

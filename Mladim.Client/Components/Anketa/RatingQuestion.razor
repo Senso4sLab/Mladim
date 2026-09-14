@@ -6,7 +6,7 @@
 
 
 <div>
-    <MudText Typo="Typo.h2" Color="Color.Tertiary" Class="py-3">@SurveyQuestion.Texts.FirstOrDefault()</MudText>
+    <MudText Typo="Typo.h2" Color="Color.Tertiary" Class="py-3">@SurveyQuestion.Questions.FirstOrDefault()?.GetByGender(Gender)</MudText>
     <ValidationMessage style="margin-bottom:0.4rem;" For="@(() => SurveryResponse.Response)" />
     <div class="row">   
         <div class="col-12">
@@ -25,6 +25,9 @@
 
 @code 
 {
+    [Parameter]
+    public Gender Gender { get; set; }
+
     [Parameter]
     public SurveyQuestionVM SurveyQuestion { get; set; } = default!;
 

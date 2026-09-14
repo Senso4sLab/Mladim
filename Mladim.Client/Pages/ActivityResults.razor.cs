@@ -1,15 +1,9 @@
-using CsvHelper;
-using CsvHelper.Configuration;
 using global::Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Mladim.Client.Services.Csv;
 using Mladim.Client.Services.SubjectServices.Contracts;
-using Mladim.Client.Utilities.CsvMapping;
 using Mladim.Client.ViewModels.Survey;
-using Mladim.Domain.Enums;
 using Mladim.Domain.Extensions;
-using Mladim.Domain.Models.Survey.Questions;
-using System.Globalization;
 
 namespace Mladim.Client.Pages;
 
@@ -40,7 +34,7 @@ public partial class ActivityResults
     {
         if (ActivityId is int activityId)
         {
-            surveyQuestions = await SurveyService.GetSurveyQuestionnairyAsync(activityId, Gender.Female);
+            surveyQuestions = await SurveyService.GetQuestionnaireAsync(activityId);
             surveyResponses = await SurveyService.GetAnonymousSurveyResponsesAsync(activityId);
 
 
@@ -56,14 +50,9 @@ public partial class ActivityResults
             //}
 
             SurveyResponsesGroupByQuestions = GetSurveyResponsesGroupByQuestion(activityId);           
-            
+        
         }
     }
-
-    
-   
-
-
 
     private IEnumerable<SurveyResponsesGroupedByQuestionVM> GetSurveyResponsesGroupByQuestion(int activityId) =>
         surveyResponses.SelectMany(sr => sr.Responses, (asr, response) => (response.UniqueQuestionId, ParticipantResponse: ParticipantQuestionResponseVM.Create(asr.AnonymousParticipant, response)))
@@ -73,10 +62,9 @@ public partial class ActivityResults
 
     private SurveyQuestionVM? GetSurveyQuestionById(int id)
     {
-        var sq = surveyQuestions.FirstOrDefault(sq => sq.UniqueQuestionId == id);
+        var sq = surveyQuestions.FirstOrDefault(sq => sq.Id == id);
         return sq;
-    }
-        
+    }        
 
     private async Task OnClickCsvExportFile()
     {
@@ -84,7 +72,7 @@ public partial class ActivityResults
         CsvService.Open();
 
         CsvService.Write("Spol", "Starostna skupina");
-        CsvService.Write(surveyQuestions.SelectMany(q => q.Texts));
+        CsvService.Write(surveyQuestions.SelectMany(q => q.Questions).Select(q => q.Female));
         CsvService.NextRow();
 
         foreach (var surveyResponse in surveyResponses)

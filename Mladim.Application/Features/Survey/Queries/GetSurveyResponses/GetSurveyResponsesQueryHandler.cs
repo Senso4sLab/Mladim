@@ -18,7 +18,8 @@ public class GetSurveyResponseQueryHandler : IRequestHandler<GetSurveyResponseQu
     public async Task<IEnumerable<AnonymousSurveyResponseDto>> Handle(GetSurveyResponseQuery request, CancellationToken cancellationToken)
     {
         var responses = await this.UnitOfWork.SurveyResponseRepository.GetAllAsync(sr => sr.ActivityId == request.ActivityId);
-
-        return this.Mapper.Map<IEnumerable<AnonymousSurveyResponseDto>>(responses);
+       
+        return this.Mapper.Map<IEnumerable<AnonymousSurveyResponseDto>>(responses);       
+       
     }
 }

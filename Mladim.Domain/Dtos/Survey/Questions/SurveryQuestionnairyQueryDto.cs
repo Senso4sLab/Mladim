@@ -1,11 +1,4 @@
-﻿using Mladim.Domain.Models.Survey.Questions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Mladim.Domain.Dtos.Survey.Questions;
+﻿namespace Mladim.Domain.Dtos.Survey.Questions;
 
 public class SurveyQuestionnairyQueryDto
 {

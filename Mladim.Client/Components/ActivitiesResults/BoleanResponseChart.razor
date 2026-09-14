@@ -6,7 +6,7 @@
 @using Mladim.Domain.Extensions;
 
 
-    <MudText  Color="Color.Tertiary" Typo="Typo.h2">@Response.SurveyQuestion.Texts.FirstOrDefault()</MudText>
+    <MudText  Color="Color.Tertiary" Typo="Typo.h2">@Response.SurveyQuestion.Questions.FirstOrDefault()?.Female</MudText>
     <SfChart Height="30">
         <ChartMargin Left="0" Right="0" Top="0" Bottom="0"></ChartMargin>
         <ChartPrimaryXAxis Visible="false" ValueType="Syncfusion.Blazor.Charts.ValueType.Category"/>   

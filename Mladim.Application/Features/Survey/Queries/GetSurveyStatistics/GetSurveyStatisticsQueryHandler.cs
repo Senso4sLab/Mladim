@@ -1,16 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore.Internal;
 using Mladim.Application.Contracts.Persistence;
-using Mladim.Domain.Dtos.Survey.Responses;
 using Mladim.Domain.Dtos.Survey.Statistics;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
-using Mladim.Domain.Models.Survey.ParticipantResponseTypes;
-using Mladim.Domain.Models.Survey.Questions;
 using Mladim.Domain.Models.Survey.Responses;
 using Mladim.Domain.Models.Survey.Statistics;
-using System.Linq;
 
 namespace Mladim.Application.Features.Survey.Queries.GetSurveyResponses;
 
@@ -31,10 +26,11 @@ public class GetSurveyStatisticsQueryHandler : IRequestHandler<GetSurveyStatisti
 
 
         var surveyResponses = request.ProjectId is int projectId ? 
-                await UnitOfWork.SurveyResponseRepository.GetSurveyResponsesByQuestionIdsAndProjectAsync(projectId) : 
+            await UnitOfWork.SurveyResponseRepository.GetSurveyResponsesByQuestionIdsAndProjectAsync(projectId) : 
                 request.OrganizationId is int organizationId ?
-                await UnitOfWork.SurveyResponseRepository.GetSurveyResponsesByQuestionIdsAndOrganizationAsync(organizationId, DateTimeRange.Create(request.StartDate, request.EndDate)) :
-                Enumerable.Empty<AnonymousSurveyResponse>().ToList();
+                    await UnitOfWork.SurveyResponseRepository.GetSurveyResponsesByQuestionIdsAndOrganizationAsync(organizationId, DateTimeRange.Create(request.StartDate, request.EndDate)) :
+                Enumerable.Empty<AnonymousSurveyResponse>()
+                .ToList();
 
        
         var questionResponseTypes = surveyResponses.SelectMany(sr => sr.Responses, (sr, qr) => (sr.ActivityId, qr)) 
@@ -42,21 +38,18 @@ public class GetSurveyStatisticsQueryHandler : IRequestHandler<GetSurveyStatisti
            .GroupBy(tuple => tuple.qr.UniqueQuestionId, (questionId, tuples) => (questionId, tuples.Select(tuple => new ActivityQuestionResponse(tuple.ActivityId, tuple.qr))))
            .Select(gtuple => new QuestionResponseTypeSelector(gtuple.questionId, gtuple.Item2))
            .Select(qrts => qrts.AverageQuestionResponseTypes())
-           .ToList();
-       
+           .ToList();       
 
         var surveyQuestions = await UnitOfWork.SurveyQuestionRepository
-            .GetSurveyQuestionnairy(1, Gender.Female, SurveyQuestionCategory.General | SurveyQuestionCategory.Group | SurveyQuestionCategory.Repetitive);
-
+            .GetQuestionnaire(ActivityTargetGroup.Participants | ActivityTargetGroup.YouthWorkers, SurveyQuestionCategory.General | SurveyQuestionCategory.Group | SurveyQuestionCategory.Repetitive);
       
-        var questionsResponseStatistics = questionResponseTypes.Join(surveyQuestions, qrt => qrt.QuestionId, sq => sq.UniqueQuestionId, (qrt, sq) =>new QuestionSurveyStatistics(sq, qrt))
+        var questionsResponseStatistics = questionResponseTypes
+            .Join(surveyQuestions, qrt => qrt.QuestionId, sq => sq.Id, (qrt, sq) =>new QuestionSurveyStatistics(sq, qrt))
             .Where(qrs => qrs.Statistics.QuestionsResponseTypes.Count() > 0)            
             .ToList();      
 
         return this.Mapper.Map<IEnumerable<QuestionSurveyStatisticsDto>>(questionsResponseStatistics);
                 
     }
-
-
     
 }

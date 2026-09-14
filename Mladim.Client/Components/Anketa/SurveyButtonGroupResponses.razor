@@ -28,7 +28,7 @@
 
         @foreach (var response in Response.SelectableResponseGroups)
     {
-        <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@response.SurveyQuestion.Texts.FirstOrDefault()</MudText>
+        <MudText Color="Color.Tertiary" Class="py-3 px-2" Typo="Typo.h2">@response.SurveyQuestion.Questions.FirstOrDefault()?.Female</MudText>
         <table class="table">
             <thead>
                 <tr class="d-flex">

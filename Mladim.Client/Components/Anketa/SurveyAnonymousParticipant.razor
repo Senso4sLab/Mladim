@@ -32,7 +32,7 @@
     private AnonymousParticipantVM AnonymousParticipant { get; set; } = new();
 
     [Parameter]
-    public EventCallback<AnonymousParticipantVM> AnonymousButton { get; set; }
+    public EventCallback<SurveyParticipantVM> AnonymousButton { get; set; }
 
     private AnonymousParticipantValidator anonymousParticipantValidator = new AnonymousParticipantValidator();
 

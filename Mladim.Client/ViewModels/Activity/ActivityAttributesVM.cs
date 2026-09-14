@@ -8,6 +8,7 @@ public class ActivityAttributesVM
     public string Description { get;  set; } = string.Empty;    
     public bool IsGroup { get; set; } 
     public bool IsRepetitive { get; set; }
+    public ActivityTargetGroup ActivityTargetGroup { get; set; } = ActivityTargetGroup.Participants;
     public ActivityRepetitiveInterval RepetitiveInterval { get; set; }
     public int NumOfRepetitions { get; set; }
     public IEnumerable<ActivityTypes> ActivityTypes { get; set; } = new List<ActivityTypes>();

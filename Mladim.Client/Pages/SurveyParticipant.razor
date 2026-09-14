@@ -1,0 +1,77 @@
+﻿@page "/survey/{activityId:int}"
+
+@using Mladim.Client.Components.Anketa
+@using Mladim.Client.Services.SubjectServices.Contracts
+@using Mladim.Client.Validators;
+@using Mladim.Client.ViewModels.Survey
+@using Mladim.Domain.Enums;
+@using Mladim.Domain.Extensions;
+@using Mladim.Domain.Models;
+
+
+@layout SurveyLayout
+
+<PageTitle>Anketa</PageTitle>
+
+
+<MudContainer Class="py-5">
+    <MudStack>
+        <MudStack Spacing="4" AlignItems="AlignItems.Center">
+            <MudImage Height="50" Src="logo.png"></MudImage>
+            @if (showSurvey)
+            {
+                <MudImage Height="70" Src="step2.png" Class="d-flex align-center justify-center py-3"></MudImage>
+            }
+            else
+            {
+                <MudImage Height="70" Src="step1.png" Class="d-flex align-center justify-center py-3"></MudImage>
+            }
+            <MudText Typo="Typo.h2" Color="Color.Tertiary">@($"Prošnja za povratno informacijo o aktivnosti {ActivitySummary?.Name ?? string.Empty}.")</MudText>
+            <MudText Typo="Typo.h1" Color="Color.Tertiary">To povabilo si dobil/-a zaradi tvoje udeležbe na omenjeni aktivnosti. Tvoje povratne informacije so namenjene bodočim izboljšavam podobnih aktivnosti, ki jih organizacija izvaja. Vsi podatki so anonimni, osebnih informacij ne zbiramo. Najlepša hvala!</MudText>
+        </MudStack>
+
+        @if (showSurvey)
+        {
+            <EditForm Model="@Responses" OnValidSubmit="@SurveyValidSubmit">
+                <ObjectGraphDataAnnotationsValidator />
+                @foreach (var response in Responses)
+                {
+                    switch (response.Response)
+                    {
+                        case QuestionTextResponseVM textResponse:
+                            <TextQuestion Gender="@Participant.Gender" SurveyQuestion="@response.Question" Response="textResponse" />
+                            break;
+                        case QuestionRatingResponseVM ratingResponse:
+                            <RatingQuestion Gender="@Participant.Gender" SurveyQuestion="@response.Question" SurveryResponse="ratingResponse" />
+                            break;
+                        case QuestionBooleanResponseVM booleanResponse:
+                            <BooleanQuestion Gender="@Participant.Gender"  SurveyQuestion="@response.Question" SurveryResponse="booleanResponse" />
+                            break;
+                        case QuestionMultiButtonResponseVM multiBtnResponse:
+                            <MultipleButtonQuestion Gender="@Participant.Gender"  SurveyQuestion="@response.Question" SurveyResponse="multiBtnResponse" />
+                            break;
+                        case QuestionMultiRepetitiveButtonResponseVM multiRepetitiveBtnResponse:
+                            <MultiRepetitiveButtonQuestion Gender="@Participant.Gender"  SurveyQuestion="@response.Question" SurveyResponse="multiRepetitiveBtnResponse" />
+                            break;
+                    }
+                }
+                <button class="btn btn-primary my-4" type="submit">POŠLJI</button>
+            </EditForm>
+        }
+        else
+        {
+            @if (ActivitySummary?.ActivityTargetGroup == ActivityTargetGroup.Participants)
+            {
+                <SurveyAnonymousParticipant AnonymousButton="OnClickAnonymousParticipant"></SurveyAnonymousParticipant>
+            }
+            else if (ActivitySummary?.ActivityTargetGroup == ActivityTargetGroup.YouthWorkers)
+            {
+                <SurveyAnonymousYouthWorker AnonymousButton="OnClickAnonymousParticipant"></SurveyAnonymousYouthWorker>
+            }            
+        }     
+    </MudStack>
+</MudContainer>
+
+
+
+

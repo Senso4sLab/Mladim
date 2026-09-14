@@ -1,14 +1,23 @@
 ﻿using Mladim.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace Mladim.Domain.Dtos.Members.AnonymousParticipants;
 
-public class AnonymousParticipantCommandDto
-{   
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+[JsonDerivedType(typeof(AnonymousParticipantCommandDto), "AnonymousParticipantCommandDto")]
+[JsonDerivedType(typeof(AnonymousYouthWorkerCommandDto), "AnonymousYouthWorkerCommandDto")]
+public abstract record SurveyParticipantCommandDto
+{
     public Gender Gender { get; set; }
     public AgeGroups AgeGroup { get; set; }
+}
+
+public record AnonymousParticipantCommandDto : SurveyParticipantCommandDto
+{      
+}
+
+public record AnonymousYouthWorkerCommandDto : SurveyParticipantCommandDto
+{   
+    public YouthWorkRole Role { get; set; }
+    public YearsOfExperienceInYouthWork YearsOfExperience { get; set; }
 }

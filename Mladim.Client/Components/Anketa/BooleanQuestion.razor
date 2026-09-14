@@ -8,7 +8,7 @@
 
 
 <div class="row">
-    <MudText Typo="Typo.h2" Color="Color.Tertiary" Class="py-3">@SurveyQuestion.Texts.FirstOrDefault()</MudText>
+    <MudText Typo="Typo.h2" Color="Color.Tertiary" Class="py-3">@SurveyQuestion.Questions.FirstOrDefault()?.GetByGender(Gender)</MudText>
     <ValidationMessage For="@(() => SurveryResponse.Response)"></ValidationMessage>
     <div class="col-12">
         <div class="btn-group" role="group">
@@ -30,6 +30,9 @@
     private string randomThumbUpId   = Guid.NewGuid().ToString();
     private string randomThumbDownId = Guid.NewGuid().ToString();
     private string name = Guid.NewGuid().ToString();
+
+    [Parameter]
+    public Gender Gender { get; set; }
 
     [Parameter]
     public SurveyQuestionVM SurveyQuestion { get; set; } = default!;

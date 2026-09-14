@@ -6,6 +6,7 @@ public class ActivityAttributesQueryDto
 {
     public ActivityTypes ActivityTypes { get; set; }
     public ActivityFields ActivityFiels { get; set; }
+    public ActivityTargetGroup ActivityTargetGroup { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public bool IsGroup { get; set; }

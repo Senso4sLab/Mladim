@@ -1,6 +1,5 @@
 ﻿using Mladim.Domain.Enums;
 using Mladim.Domain.Extensions;
-using Mladim.Domain.Models.Survey.Responses;
 
 namespace Mladim.Domain.Models;
 

@@ -1,6 +1,5 @@
 ﻿using Mladim.Domain.Dtos.Attributes;
 using Mladim.Domain.Dtos.DateTimeRange;
-using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -16,3 +15,4 @@ public class ActivityQueryDto
     public ActivityAttributesQueryDto  Attributes { get;  set; } = default!;
     public DateTimeRangeQueryDto TimeRange { get;  set; } = default!;
 }
+

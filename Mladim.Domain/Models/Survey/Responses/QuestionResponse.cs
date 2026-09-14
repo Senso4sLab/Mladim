@@ -1,6 +1,4 @@
-﻿using Mladim.Domain.Dtos.Survey.Responses;
-using Mladim.Domain.Enums;
-using Mladim.Domain.Models.Survey.Questions;
+﻿using Mladim.Domain.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -12,7 +10,8 @@ public class AnonymousSurveyResponse
     public Activity Activity { get; set; } = default!;
     public int ActivityId { get; set; }
     public List<QuestionResponse> Responses { get; set; } = new();
-    public AnonymousParticipant AnonymousParticipant { get; set; } = default!;    
+    public AnonymousParticipant? AnonymousParticipant { get; set; } = default!;
+    public AnonymousYouthWorker? AnonymousYouthWorker { get; set; } = default!;
 }
 
 [JsonDerivedType(typeof(QuestionResponse), typeDiscriminator: "baseQuestion")]

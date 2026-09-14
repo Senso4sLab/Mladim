@@ -66,9 +66,16 @@
             <div>
                 <SfRichTextEditor @bind-Value="@activity.Attributes.Description"  Readonly="!editable" Placeholder="Nekaj o aktivnosti" />               
             </div>
+
+        <MudSelect ReadOnly=UpdateState @bind-Value="@activity.Attributes.ActivityTargetGroup" Variant="Variant.Outlined" Label="Ciljna skupina" AnchorOrigin="Origin.BottomCenter" Adornment="@(editable? Adornment.End: Adornment.None)">
+            @foreach (var targetGroup in Enum.GetValues<ActivityTargetGroup>())
+            {
+                <MudSelectItem Value="targetGroup">@targetGroup.GetDisplayAttribute()</MudSelectItem>
+            }
+        </MudSelect>
                
 
-            <MultiSelect ReadOnly="!editable" ToolTip= "editable" TItem="ActivityTypes" @bind-EnumValues="activity.Attributes.ActivityTypes" Label="Tip aktivnosti" />
+        <MultiSelect ReadOnly="!editable" ToolTip= "editable" TItem="ActivityTypes" @bind-EnumValues="activity.Attributes.ActivityTypes" Label="Tip aktivnosti" />
 
 
 

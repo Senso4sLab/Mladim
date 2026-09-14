@@ -62,8 +62,5 @@ namespace Mladim.WebAPI.Controllers
             return Ok(surveyQuestionnairy);
 
         }
-
-
-
     }
 }

@@ -10,7 +10,10 @@ public class AnonymousSurveyResponseConfiguration: IEntityTypeConfiguration<Anon
     public void Configure(EntityTypeBuilder<AnonymousSurveyResponse> builder)
     {
         builder.OwnsOne(sr => sr.AnonymousParticipant);
+        builder.OwnsOne(sr => sr.AnonymousYouthWorker);
         //builder.OwnsMany(sr => sr.Responses, builder => builder.ToJson());
+        
+        
         var options = new JsonSerializerOptions(JsonSerializerDefaults.General);
 
         builder.Property(sr => sr.Responses)

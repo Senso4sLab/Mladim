@@ -19,94 +19,96 @@ using Mladim.Client.Services.FileService;
 using Syncfusion.Blazor;
 using Microsoft.AspNetCore.Authorization;
 using Mladim.Client.Authorization;
-using Microsoft.Extensions.Options;
 using Mladim.Client.Services.Csv;
 using Mladim.Client.Csv;
-using System.Net.Http;
 
-
-var builder = WebAssemblyHostBuilder.CreateDefault(args);
-builder.RootComponents.Add<App>("#app");
-builder.RootComponents.Add<HeadOutlet>("head::after");
-
-builder.Services.AddMudServices(config =>
+internal class Program
 {
-    config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
-    config.SnackbarConfiguration.PreventDuplicates = false;
-    config.SnackbarConfiguration.NewestOnTop = false;
-    config.SnackbarConfiguration.ShowCloseIcon = true;
-    config.SnackbarConfiguration.VisibleStateDuration = 6000;
-    config.SnackbarConfiguration.HideTransitionDuration = 500;
-    config.SnackbarConfiguration.ShowTransitionDuration = 500;
-    config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
-    config.PopoverOptions.ThrowOnDuplicateProvider = false;   
+    private static async Task Main(string[] args)
+    {
+        var builder = WebAssemblyHostBuilder.CreateDefault(args);
+        builder.RootComponents.Add<App>("#app");
+        builder.RootComponents.Add<HeadOutlet>("head::after");
 
-});
+        builder.Services.AddMudServices(config =>
+        {
+            config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
+            config.SnackbarConfiguration.PreventDuplicates = false;
+            config.SnackbarConfiguration.NewestOnTop = false;
+            config.SnackbarConfiguration.ShowCloseIcon = true;
+            config.SnackbarConfiguration.VisibleStateDuration = 6000;
+            config.SnackbarConfiguration.HideTransitionDuration = 500;
+            config.SnackbarConfiguration.ShowTransitionDuration = 500;
+            config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
+            config.PopoverOptions.ThrowOnDuplicateProvider = false;
 
-builder.Services.AddBlazoredLocalStorage();
+        });
 
-builder.Services.AddHttpClient("MladimHttpClient", client =>
-{
-    client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
-    
-}).AddHttpMessageHandler<HttpAuthorizationHandler>();
+        builder.Services.AddBlazoredLocalStorage();
 
-builder.Services.AddHttpClient("1kaHttpClient", client => 
-{
-    client.BaseAddress = new Uri("https://mladim1ka.azurewebsites.net/1ka/");
+        builder.Services.AddHttpClient("MladimHttpClient", client =>
+        {
+            client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
 
-}).AddHttpMessageHandler<Http1kaHandler>();
+        }).AddHttpMessageHandler<HttpAuthorizationHandler>();
 
+        builder.Services.AddHttpClient("1kaHttpClient", client =>
+        {
+            client.BaseAddress = new Uri("https://mladim1ka.azurewebsites.net/1ka/");
 
-//builder.Services.AddScoped(sp => sp.GetService<IHttpClientFactory>()!.CreateClient("MladimHttpClient"));
-
-builder.Services.AddSyncfusionBlazor();
-builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());    
-builder.Services.AddTransient<HttpAuthorizationHandler>();
-builder.Services.AddTransient<Http1kaHandler>();
-
-builder.Services.AddSingleton<IAuthorizationHandler, UserHasWorkerClaimHandler>();
-
-builder.Services.AddSingleton<IAuthorizationHandler, UserHasManagerClaimHandler>();
+        }).AddHttpMessageHandler<Http1kaHandler>();
 
 
+        //builder.Services.AddScoped(sp => sp.GetService<IHttpClientFactory>()!.CreateClient("MladimHttpClient"));
 
-builder.Services.AddSingleton<ICsvService, CsvService>();
+        builder.Services.AddSyncfusionBlazor();
+        builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        builder.Services.AddTransient<HttpAuthorizationHandler>();
+        builder.Services.AddTransient<Http1kaHandler>();
+
+        builder.Services.AddSingleton<IAuthorizationHandler, UserHasWorkerClaimHandler>();
+
+        builder.Services.AddSingleton<IAuthorizationHandler, UserHasManagerClaimHandler>();
+
+
+
+        builder.Services.AddSingleton<ICsvService, CsvService>();
 
 
 
 
-builder.Services.AddAuthorizationCore(options =>
-{
-    options.AddPolicy("HasWorkerClaim", policy => policy.Requirements.Add(new UserHasWorkerClaim()));
-    options.AddPolicy("HasManagerClaim", policy => policy.Requirements.Add(new UserHasManagerClaim()));
-});
+        builder.Services.AddAuthorizationCore(options =>
+        {
+            options.AddPolicy("HasWorkerClaim", policy => policy.Requirements.Add(new UserHasWorkerClaim()));
+            options.AddPolicy("HasManagerClaim", policy => policy.Requirements.Add(new UserHasManagerClaim()));
+        });
 
-builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
-builder.Services.AddScoped<IPopupService, PopupService>(); 
-{
-    builder.Services.AddTransient<IAuthService, AuthService>();
-    builder.Services.AddScoped<IGenericHttpService, GenericHttpService>();
-    builder.Services.AddScoped<IOrganizationService, OrganizationService>();
-    builder.Services.AddScoped<IProjectService, ProjectService>();
-    builder.Services.AddScoped<IActivityService, ActivityService>();
-    builder.Services.AddScoped<IStaffMemberService, StaffMemberService>();
-    builder.Services.AddScoped<IParticipantService, ParticipantService>();
-    builder.Services.AddScoped<IPartnerService, PartnerService>();
-    builder.Services.AddScoped<IAccountService, AccountService>();
-    builder.Services.AddScoped<IGroupService, GroupService>();
-    builder.Services.AddScoped<IFileService, FileService>();
-    builder.Services.AddScoped<ISurveyService, SurveyService>();   
+        builder.Services.AddScoped<AuthenticationStateProvider, JwtAuthenticationStateProvider>();
+        builder.Services.AddScoped<IPopupService, PopupService>();
+        {
+            builder.Services.AddTransient<IAuthService, AuthService>();
+            builder.Services.AddScoped<IGenericHttpService, GenericHttpService>();
+            builder.Services.AddScoped<IOrganizationService, OrganizationService>();
+            builder.Services.AddScoped<IProjectService, ProjectService>();
+            builder.Services.AddScoped<IActivityService, ActivityService>();
+            builder.Services.AddScoped<IStaffMemberService, StaffMemberService>();
+            builder.Services.AddScoped<IParticipantService, ParticipantService>();
+            builder.Services.AddScoped<IPartnerService, PartnerService>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<IGroupService, GroupService>();
+            builder.Services.AddScoped<IFileService, FileService>();
+            builder.Services.AddScoped<ISurveyService, SurveyService>();
+        }
+        {
+            builder.Services.Configure<MladimApiUrls>(builder.Configuration.GetSection("MladimApiUrls"));
+            builder.Services.Configure<StorageKeys>(builder.Configuration.GetSection("StorageKeys"));
+        }
+
+        //Ngo9BigBOggjHTQxAR8/V1NAaF5cWWBCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWH1dcXVRRGleVUdyX0A=
+        Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NDaF5cWWtCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWH9eeHRQRGhcWUNwXkQ=");
+
+
+
+        await builder.Build().RunAsync();
+    }
 }
-{
-    builder.Services.Configure<MladimApiUrls>(builder.Configuration.GetSection("MladimApiUrls"));
-    builder.Services.Configure<StorageKeys>(builder.Configuration.GetSection("StorageKeys"));
-}
-
-//Ngo9BigBOggjHTQxAR8/V1NAaF5cWWBCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdgWH1dcXVRRGleVUdyX0A=
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NDaF5cWWtCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWH9eeHRQRGhcWUNwXkQ=");
-
-
-
-await builder.Build().RunAsync();
-

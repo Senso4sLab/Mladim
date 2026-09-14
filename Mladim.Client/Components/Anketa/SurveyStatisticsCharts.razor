@@ -1,6 +1,7 @@
 ﻿@using Mladim.Client.Models;
 @using Mladim.Client.ViewModels.Survey;
 @using Mladim.Domain.Enums;
+@using Mladim.Domain.Models
 @using Syncfusion.Blazor.Charts
 @using Mladim.Domain.Extensions
 
@@ -28,16 +29,17 @@
 
     protected override void OnInitialized()
     {
-        questionsResponseBars = this.QuestionStatistics.SurveyQuestion.Texts
-          .Select((q, index) => new QuestionResponseBar(q, GetStackedBarData(index)))
-          .Select(qrb => (GetTitle(qrb), qrb ))
-          .ToList();       
+        questionsResponseBars = this.QuestionStatistics.SurveyQuestion.Questions
+            .Select(q => q.Female)
+            .Select((q, index) => new QuestionResponseBar(q, GetStackedBarData(index)))
+            .Select(qrb => (GetTitle(qrb), qrb ))
+            .ToList();       
     }
 
     private string GetTitle(QuestionResponseBar responseBar)
     {
-        if (QuestionStatistics.SurveyQuestion.Header is string header)
-            return $"{header} {responseBar.Question}";
+        if (QuestionStatistics.SurveyQuestion.Header is GenderText header)
+            return $"{header.Female} {responseBar.Question}";
 
         return responseBar.Question;
     }   

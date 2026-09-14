@@ -1,8 +1,5 @@
-﻿using Mladim.Client.Extensions;
-using Mladim.Domain.Enums;
-using Mladim.Domain.Models;
+﻿using Mladim.Domain.Enums;
 using Mladim.Domain.Models.Survey.ParticipantResponseTypes;
-using Mladim.Domain.Models.Survey.Questions;
 using Syncfusion.Blazor.Data;
 
 namespace Mladim.Client.ViewModels.Survey;
@@ -10,7 +7,7 @@ namespace Mladim.Client.ViewModels.Survey;
 
 
 
-public record ParticipantTextResponse(AnonymousParticipantVM Participant, string Content);
+public record ParticipantTextResponse(SurveyParticipantVM Participant, string Content);
 
 public interface ITextableReponseType
 {
@@ -19,12 +16,12 @@ public interface ITextableReponseType
 
 public interface ISelectableQuestionReponseCalculator
 {
-    ParticipantResponseTypeByCriterion ResponseTypeByCriterion(string criterion, Predicate<AnonymousParticipantVM> predicate);
+    ParticipantResponseTypeByCriterion ResponseTypeByCriterion(string criterion, Predicate<SurveyParticipantVM> predicate);
 }
 
 public interface IMultiSelectableQuestionResponseCalculator
 {
-    IEnumerable<ParticipantResponseTypeByCriterion> ResponseTypeByCriterion(string criterion, Predicate<AnonymousParticipantVM> predicate);  
+    IEnumerable<ParticipantResponseTypeByCriterion> ResponseTypeByCriterion(string criterion, Predicate<SurveyParticipantVM> predicate);  
 }
 
 
@@ -33,7 +30,7 @@ public abstract class SurveyResponsesGroupedByQuestionVM
     public SurveyQuestionVM SurveyQuestion { get; } = default!;
     public SurveyResponsesGroupedByQuestionVM(SurveyQuestionVM surveyQuestion) => 
         this.SurveyQuestion = surveyQuestion;
-    public abstract IEnumerable<AnonymousParticipantVM> Participants { get; }
+    public abstract IEnumerable<SurveyParticipantVM> Participants { get; }
 
     public static SurveyResponsesGroupedByQuestionVM Create(SurveyQuestionVM question, IEnumerable<ParticipantQuestionResponseVM> responses) =>
         question.Type switch
@@ -48,7 +45,7 @@ public abstract class SurveyResponsesGroupedByQuestionVM
 public class SurveyResponsesGroupedByQuestionVM<T> : SurveyResponsesGroupedByQuestionVM
 {   
     public List<ParticipantQuestionResponseVM<T>> Responses { get; }
-    public override IEnumerable<AnonymousParticipantVM> Participants =>
+    public override IEnumerable<SurveyParticipantVM> Participants =>
         this.Responses.Select(pqr => pqr.AnonymousParticipant)
        .ToList();
     public SurveyResponsesGroupedByQuestionVM(SurveyQuestionVM surveyQuestion, IEnumerable<ParticipantQuestionResponseVM<T>> responses) : base(surveyQuestion) =>
@@ -61,10 +58,10 @@ public class SurveyResponsesGroupedBySelectableQuestionVM : SurveyResponsesGroup
     public SurveyResponsesGroupedBySelectableQuestionVM(SurveyQuestionVM question, IEnumerable<ParticipantQuestionResponseVM<ISelectableResponse>> responses) : 
         base(question, responses) { }   
 
-    public ParticipantResponseTypeByCriterion ResponseTypeByCriterion(string criterion, Predicate<AnonymousParticipantVM> predicate) =>
+    public ParticipantResponseTypeByCriterion ResponseTypeByCriterion(string criterion, Predicate<SurveyParticipantVM> predicate) =>
        new ParticipantResponseTypeByCriterion(criterion, ResponseTypesForCriterion(predicate));
 
-    private IEnumerable<ParticipantResponseType> ResponseTypesForCriterion(Predicate<AnonymousParticipantVM> predicate) =>
+    private IEnumerable<ParticipantResponseType> ResponseTypesForCriterion(Predicate<SurveyParticipantVM> predicate) =>
        this.Responses
            .Where(pqr => predicate(pqr.AnonymousParticipant))
            .GroupBy(pgr => pgr.QuestionResponse.ResponseEnum, (key, sequence) => new ParticipantResponseType(key, sequence.Count()))         
@@ -80,21 +77,17 @@ public class SurveyResponsesGroupedByMultipleSelectableQuestionVM : SurveyRespon
     {
         SelectableResponseGroups = ConvertToManySelectableResponseGroup(Responses).ToList();
     }   
-    public IEnumerable<ParticipantResponseTypeByCriterion> ResponseTypeByCriterion(string criterion, Predicate<AnonymousParticipantVM> predicate) =>
+    public IEnumerable<ParticipantResponseTypeByCriterion> ResponseTypeByCriterion(string criterion, Predicate<SurveyParticipantVM> predicate) =>
         this.ConvertToManySelectableResponseGroup(this.Responses)       
             .Select(gqr => gqr.ResponseTypeByCriterion(criterion, predicate))
             .ToList();
 
     private IEnumerable<SurveyResponsesGroupedBySelectableQuestionVM> ConvertToManySelectableResponseGroup(IEnumerable<ParticipantQuestionResponseVM<IMultiSelectableResponse>> responses) =>    
-        this.SurveyQuestion.Texts.Select((q, index) => SurveyResponsesGroupedBySelectableQuestionVM.Create(CreateSelectableQuestion(index), ConvertToSelectableResponses(index)));
+        this.SurveyQuestion.Questions.Select((q, index) => SurveyResponsesGroupedBySelectableQuestionVM.Create(CreateSelectableQuestion(index), ConvertToSelectableResponses(index)));
 
 
-    private SurveyQuestionVM CreateSelectableQuestion(int index)
-    {
-        var surveyQuestion = this.SurveyQuestion.Clone();
-        surveyQuestion.Texts = SurveyQuestion.Texts.Skip(index).Take(1).ToList();
-        return surveyQuestion;
-    }
+    private SurveyQuestionVM CreateSelectableQuestion(int index) => 
+        SurveyQuestion.CloneWithQuestions(SurveyQuestion.Questions[index]);
 
     private IEnumerable<ParticipantQuestionResponseVM<ISelectableResponse>> ConvertToSelectableResponses(int index) =>    
         Responses.Select(pqr => new ParticipantQuestionResponseVM<ISelectableResponse>(pqr.AnonymousParticipant, pqr.QuestionResponse.ResponseEnum[index]));

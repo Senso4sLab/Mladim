@@ -7,13 +7,15 @@ using Mladim.Domain.Dtos.Survey.Responses;
 
 namespace Mladim.Client.ViewModels.Survey;
 
+
+
 public abstract class ParticipantQuestionResponseVM
 {
-    public AnonymousParticipantVM AnonymousParticipant { get; } = default!;
-    public ParticipantQuestionResponseVM(AnonymousParticipantVM anonymousParticipant) => 
+    public SurveyParticipantVM AnonymousParticipant { get; } = default!;
+    public ParticipantQuestionResponseVM(SurveyParticipantVM anonymousParticipant) => 
         this.AnonymousParticipant = anonymousParticipant;
 
-    public static ParticipantQuestionResponseVM Create(AnonymousParticipantVM participant, QuestionResponseVM response) =>
+    public static ParticipantQuestionResponseVM Create(SurveyParticipantVM participant, QuestionResponseVM response) =>
       response switch
       {
           ISelectableResponse selectedResponse => new ParticipantQuestionResponseVM<ISelectableResponse>(participant, selectedResponse),
@@ -26,9 +28,9 @@ public abstract class ParticipantQuestionResponseVM
 public class ParticipantQuestionResponseVM<T> : ParticipantQuestionResponseVM
 {  
     public T QuestionResponse { get; } = default!;
-    public ParticipantQuestionResponseVM(AnonymousParticipantVM participant, T questionResponse) : base(participant)
+    public ParticipantQuestionResponseVM(SurveyParticipantVM participant, T questionResponse) : base(participant)
     {      
-        this.QuestionResponse = questionResponse;
+        this.QuestionResponse = questionResponse; 
     }
 }
 

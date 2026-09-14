@@ -4,10 +4,10 @@ namespace Mladim.Client.ViewModels.Survey;
 
 public class AnonymousSurveyResponseVM
 {
-    public AnonymousParticipantVM AnonymousParticipant { get; set; } = default!;
+    public SurveyParticipantVM AnonymousParticipant { get; set; } = default!;
     public List<QuestionResponseVM> Responses { get; set; } = new();    
 
-    public static AnonymousSurveyResponseVM Create(AnonymousParticipantVM participant, IEnumerable<QuestionResponseVM> responses)
+    public static AnonymousSurveyResponseVM Create(SurveyParticipantVM participant, IEnumerable<QuestionResponseVM> responses)
     {
         return new AnonymousSurveyResponseVM() { AnonymousParticipant = participant, Responses = responses.ToList() };
     }

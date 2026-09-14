@@ -5,16 +5,20 @@
 
 
 <div>
-    <MudText Typo="Typo.h2" Color="Color.Tertiary" Class="py-3">@SurveyQuestion.Header</MudText>
+    <MudText Typo="Typo.h2" Color="Color.Tertiary" Class="py-3">@SurveyQuestion.Header?.GetByGender(Gender)</MudText>
 
-    @for (int i = 0; i < SurveyQuestion.Texts.Count; i++)
+    @for (int i = 0; i < SurveyQuestion.Questions.Count; i++)
     {
-        <ButtonQuestion SurveyQuestion="@SurveyQuestion.Texts[i]" SurveyResponse="@SurveyResponse.Response[i]" />
+        <ButtonQuestion SurveyQuestion="@SurveyQuestion.Questions[i].GetByGender(Gender)" SurveyResponse="@SurveyResponse.Response[i]" />
     }    
 </div>
 
 @code 
 {
+    [Parameter]
+    public Gender Gender { get; set; }
+
+
     [Parameter]
     public SurveyQuestionVM SurveyQuestion { get; set; } = default!;
 
@@ -23,9 +27,9 @@
 
     protected override void OnInitialized()
     {
-        for (int i = 0; i < SurveyQuestion.Texts.Count; i++)
+        for (int i = 0; i < SurveyQuestion.Questions.Count; i++)
         {
-            var response = new QuestionButtonResponseVM(SurveyQuestion.UniqueQuestionId);
+            var response = new QuestionButtonResponseVM(SurveyQuestion.Id);
             SurveyResponse.AddResponse(response);
         }
     }

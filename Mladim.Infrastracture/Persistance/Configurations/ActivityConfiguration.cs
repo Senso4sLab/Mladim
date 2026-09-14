@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Mladim.Domain.Enums;
 using Mladim.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mladim.Infrastracture.Persistance.Configurations;
 
@@ -16,8 +12,14 @@ public class ActivityConfiguration : IEntityTypeConfiguration<Activity>
         builder.OwnsMany(a => a.AnonymousParticipantGroups)
             .OwnsOne(ag => ag.AnonymousParticipant);
 
-        builder.OwnsOne(activity => activity.TimeRange);
-        builder.OwnsOne(activity => activity.Attributes);
+        builder.OwnsOne(activity => activity.TimeRange);      
+
+        builder.OwnsOne(activity => activity.Attributes, owned =>
+        {
+            owned.Property(a => a.ActivityTargetGroup)
+                 .HasDefaultValue(ActivityTargetGroup.Participants);
+        });
+
         builder.OwnsMany(Activity => Activity.Files);     
     }
 }

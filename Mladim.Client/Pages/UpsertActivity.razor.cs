@@ -12,11 +12,7 @@ using Syncfusion.Blazor.BarcodeGenerator;
 using Syncfusion.Licensing;
 using MudBlazor;
 using Mladim.Client.Validators;
-using Mladim.Domain.Models;
 using Mladim.Client.Extensions;
-using Syncfusion.Blazor.RichTextEditor;
-using System.Diagnostics;
-using Microsoft.AspNetCore.Components.Web;
 
 namespace Mladim.Client.Pages;
 
@@ -102,7 +98,7 @@ public partial class UpsertActivity
         if (UpdateState)
         {
             activity = await ActivityService.GetByActivityIdAsync(ActivityId.Value);
-            QrUrl = GetQrUrl(activity.Id);
+            QrUrl = GetQrUrl(activity);
             editable = false;
         }
         else
@@ -122,9 +118,11 @@ public partial class UpsertActivity
     };
 
 
-    private string GetQrUrl(int activityId)
+    private string GetQrUrl(ActivityVM activity)
     {
-        return $"{this.Navigation.BaseUri}survey/{activityId}";
+        ArgumentNullException.ThrowIfNull(activity);
+
+        return $"{Navigation.BaseUri.TrimEnd('/')}/survey/{Uri.EscapeDataString(activity.Id.ToString())}";       
     }
 
     public void ExportQRCode()

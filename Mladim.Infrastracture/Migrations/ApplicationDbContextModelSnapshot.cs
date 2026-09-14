@@ -327,14 +327,9 @@ namespace Mladim.Infrastracture.Migrations
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SurveyQuestionnairyId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
-
-                    b.HasIndex("SurveyQuestionnairyId");
 
                     b.ToTable("Activities");
                 });
@@ -532,46 +527,15 @@ namespace Mladim.Infrastracture.Migrations
                     b.Property<int>("Category")
                         .HasColumnType("int");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Texts")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Type")
+                    b.Property<int>("TargetGroup")
                         .HasColumnType("int");
 
-                    b.Property<int>("UniqueQuestionId")
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Questions");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("SurveyQuestion");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Survey.Questions.SurveyQuestionnairy", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Questionnairies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1
-                        });
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.Survey.Responses.AnonymousSurveyResponse", b =>
@@ -626,183 +590,6 @@ namespace Mladim.Infrastracture.Migrations
                     b.ToTable("ProjectProjectGroup");
                 });
 
-            modelBuilder.Entity("SurveyQuestionSurveyQuestionnairy", b =>
-                {
-                    b.Property<int>("QuestionsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SurveyQuestionnairiesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("QuestionsId", "SurveyQuestionnairiesId");
-
-                    b.HasIndex("SurveyQuestionnairiesId");
-
-                    b.ToTable("SurveyQuestionSurveyQuestionnairy");
-
-                    b.HasData(
-                        new
-                        {
-                            QuestionsId = 1,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 2,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 3,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 4,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 5,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 6,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 7,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 8,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 9,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 10,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 11,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 12,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 13,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 14,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 15,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 16,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 17,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 18,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 19,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 20,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 21,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 22,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 23,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 24,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 25,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 26,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 27,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 28,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 29,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 30,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 31,
-                            SurveyQuestionnairiesId = 1
-                        },
-                        new
-                        {
-                            QuestionsId = 32,
-                            SurveyQuestionnairiesId = 1
-                        });
-                });
-
             modelBuilder.Entity("Mladim.Domain.Models.ActivityGroup", b =>
                 {
                     b.HasBaseType("Mladim.Domain.Models.Group");
@@ -848,280 +635,6 @@ namespace Mladim.Infrastracture.Migrations
                         .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("StaffMember");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Survey.Questions.FemaleSurveyQuestion", b =>
-                {
-                    b.HasBaseType("Mladim.Domain.Models.Survey.Questions.SurveyQuestion");
-
-                    b.HasDiscriminator().HasValue("FemaleSurveyQuestion");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Category = 1,
-                            Texts = "[\"Po\\u010Dutila sem se varno in prijetno.\"]",
-                            Type = 2,
-                            UniqueQuestionId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Category = 1,
-                            Texts = "[\"Bila sem sli\\u0161ana in sprejeta.\"]",
-                            Type = 2,
-                            UniqueQuestionId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Category = 1,
-                            Texts = "[\"Sodelovala sem pri na\\u010Drtovanju ali izvedbi te aktivnosti/dogodka\"]",
-                            Type = 1,
-                            UniqueQuestionId = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Category = 1,
-                            Texts = "[\"Spodbujena sem bila k aktivni udele\\u017Ebi.\"]",
-                            Type = 1,
-                            UniqueQuestionId = 4
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Category = 1,
-                            Texts = "[\"Z aktivnostjo sem bila zadovoljna.\"]",
-                            Type = 2,
-                            UniqueQuestionId = 5
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Category = 1,
-                            Texts = "[\"Z eno ali nekaj besedami opi\\u0161i, kaj si z udele\\u017Ebo pridobila.\"]",
-                            Type = 4,
-                            UniqueQuestionId = 6
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Category = 1,
-                            Texts = "[\"Ali si zaradi svojih telesnih zna\\u010Dilnosti, socialnega polo\\u017Eaja, narodnosti ali barve ko\\u017Ee v slab\\u0161em polo\\u017Eaju kot ve\\u010Dina ostalih?\"]",
-                            Type = 1,
-                            UniqueQuestionId = 7
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Category = 2,
-                            Texts = "[\"Cilji, zaradi katerih smo delovali v skupini, so mi bili jasni.\"]",
-                            Type = 1,
-                            UniqueQuestionId = 8
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Category = 2,
-                            Texts = "[\"Sodelovala sem pri oblikovanju ciljev skupine in skupinskega dela.\"]",
-                            Type = 2,
-                            UniqueQuestionId = 9
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Category = 2,
-                            Texts = "[\"Moja pri\\u010Dakovanja, ki sem jih imela od sodelovanja v skupini, so bila jasna in znana drugim (npr.mentorju.)\"]",
-                            Type = 1,
-                            UniqueQuestionId = 10
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Category = 2,
-                            Texts = "[\"Zaradi sodelovanja v aktivnosti sem:\",\"bolj samozavestena\",\"bolj sposobna delati v skupini\",\"se je izbolj\\u0161al moj u\\u010Dni uspeh\",\"la\\u017Eje branim svoje mnenje\",\"verjamem, da je skupaj mogo\\u010De dose\\u010Di pomembne spremembe\"]",
-                            Type = 3,
-                            UniqueQuestionId = 11
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Category = 2,
-                            Texts = "[\"Mentor ni posegal v delo skupine in v smer, v katero se je razvijalo.\"]",
-                            Type = 1,
-                            UniqueQuestionId = 12
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Category = 2,
-                            Texts = "[\"Mentor je vzpostavil varen in vklju\\u010Dujo\\u010D prostor.\"]",
-                            Type = 1,
-                            UniqueQuestionId = 13
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Category = 2,
-                            Texts = "[\"Moja skupina se je redno sre\\u010Devala (vsaj dvakrat mese\\u010Dno).\"]",
-                            Type = 1,
-                            UniqueQuestionId = 14
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Category = 2,
-                            Texts = "[\"V skupini smo poleg vsebinskih aktivnosti izvajali tudi aktivnosti, ki so krepile skupino (npr. teambuilding ipd.)\"]",
-                            Type = 2,
-                            UniqueQuestionId = 15
-                        },
-                        new
-                        {
-                            Id = 31,
-                            Category = 4,
-                            Texts = "[\"V kolik\\u0161ni meri si zaradi udele\\u017Ebe okrepila naslednje sposobnosti:\",\"Sposobna sem se uspe\\u0161no sporazumevati in povezovati z drugimi.\",\"Sposobna sem ustrezno uporabljati razli\\u010Dne jezike za sporazumevanje z drugimi.\",\"Sposobna sem uporabljati matemati\\u010Dno znanje za re\\u0161evanje vsakodnevnih izzivov.\",\"Sposobna sem kompetentno uporabljati digitalna orodja pri delu, u\\u010Denju in stikih z drugimi.\",\"Sposobna sem ohranjati dobro psihi\\u010Dno in fizi\\u010Dno po\\u010Dutje ter dobre stike z drugimi.\",\"Sposobna sem oceniti svoje \\u0161ibke to\\u010Dke ter tudi pridobiti novo znanje, s katerim jih nadomestim.\",\"Sposobna sem delovati kot odgovoren dr\\u017Eavljan in se polno udele\\u017Eevati v dru\\u017Ebeno in politi\\u010Dno \\u017Eivljenje.\",\"Sposobna sem delovati podjetno in izkoristiti prilo\\u017Enosti, ki se mi ponujajo.\",\"Odprta sem do razli\\u010Dnih kultur in njihovih obi\\u010Dajev ter jih tudi spo\\u0161tujem.\"]",
-                            Type = 5,
-                            UniqueQuestionId = 16
-                        });
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Survey.Questions.MaleSurveyQuestion", b =>
-                {
-                    b.HasBaseType("Mladim.Domain.Models.Survey.Questions.SurveyQuestion");
-
-                    b.HasDiscriminator().HasValue("MaleSurveyQuestion");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 16,
-                            Category = 1,
-                            Texts = "[\"Po\\u010Dutil sem se varno in prijetno.\"]",
-                            Type = 2,
-                            UniqueQuestionId = 1
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Category = 1,
-                            Texts = "[\"Bil sem sli\\u0161an in sprejet.\"]",
-                            Type = 2,
-                            UniqueQuestionId = 2
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Category = 1,
-                            Texts = "[\"Sodeloval sem pri na\\u010Drtovanju ali izvedbi te aktivnosti/dogodka\"]",
-                            Type = 1,
-                            UniqueQuestionId = 3
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Category = 1,
-                            Texts = "[\"Spodbujen sem bil k aktivni udele\\u017Ebi.\"]",
-                            Type = 1,
-                            UniqueQuestionId = 4
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Category = 1,
-                            Texts = "[\"Z aktivnostjo sem bil zadovoljn.\"]",
-                            Type = 2,
-                            UniqueQuestionId = 5
-                        },
-                        new
-                        {
-                            Id = 21,
-                            Category = 1,
-                            Texts = "[\"Z eno ali nekaj besedami opi\\u0161i, kaj si z udele\\u017Ebo pridobil.\"]",
-                            Type = 4,
-                            UniqueQuestionId = 6
-                        },
-                        new
-                        {
-                            Id = 22,
-                            Category = 1,
-                            Texts = "[\"Ali si zaradi svojih telesnih zna\\u010Dilnosti, socialnega polo\\u017Eaja, narodnosti ali barve ko\\u017Ee v slab\\u0161em polo\\u017Eaju kot ve\\u010Dina ostalih?\"]",
-                            Type = 1,
-                            UniqueQuestionId = 7
-                        },
-                        new
-                        {
-                            Id = 23,
-                            Category = 2,
-                            Texts = "[\"Cilji, zaradi katerih smo delovali v skupini, so mi bili jasni.\"]",
-                            Type = 1,
-                            UniqueQuestionId = 8
-                        },
-                        new
-                        {
-                            Id = 24,
-                            Category = 2,
-                            Texts = "[\"Sodeloval sem pri oblikovanju ciljev skupine in skupinskega dela.\"]",
-                            Type = 2,
-                            UniqueQuestionId = 9
-                        },
-                        new
-                        {
-                            Id = 25,
-                            Category = 2,
-                            Texts = "[\"Moja pri\\u010Dakovanja, ki sem jih imel od sodelovanja v skupini, so bila jasna in znana drugim (npr.mentorju.)\"]",
-                            Type = 1,
-                            UniqueQuestionId = 10
-                        },
-                        new
-                        {
-                            Id = 26,
-                            Category = 2,
-                            Texts = "[\"Zaradi sodelovanja v aktivnosti sem:\",\"bolj samozavesten\",\"bolj sposoben delati v skupini\",\"se je izbolj\\u0161al moj u\\u010Dni uspeh\",\"la\\u017Eje branim svoje mnenje\",\"verjamem, da je skupaj mogo\\u010De dose\\u010Di pomembne spremembe\"]",
-                            Type = 3,
-                            UniqueQuestionId = 11
-                        },
-                        new
-                        {
-                            Id = 27,
-                            Category = 2,
-                            Texts = "[\"Mentor ni posegal v delo skupine in v smer, v katero se je razvijalo.\"]",
-                            Type = 1,
-                            UniqueQuestionId = 12
-                        },
-                        new
-                        {
-                            Id = 28,
-                            Category = 2,
-                            Texts = "[\"Mentor je vzpostavil varen in vklju\\u010Dujo\\u010D prostor.\"]",
-                            Type = 1,
-                            UniqueQuestionId = 13
-                        },
-                        new
-                        {
-                            Id = 29,
-                            Category = 2,
-                            Texts = "[\"Moja skupina se je redno sre\\u010Devala (vsaj dvakrat mese\\u010Dno).\"]",
-                            Type = 1,
-                            UniqueQuestionId = 14
-                        },
-                        new
-                        {
-                            Id = 30,
-                            Category = 2,
-                            Texts = "[\"V skupini smo poleg vsebinskih aktivnosti izvajali tudi aktivnosti, ki so krepile skupino (npr. teambuilding ipd.)\"]",
-                            Type = 2,
-                            UniqueQuestionId = 15
-                        },
-                        new
-                        {
-                            Id = 32,
-                            Category = 4,
-                            Texts = "[\"V kolik\\u0161ni meri si zaradi udele\\u017Ebe okrepil naslednje sposobnosti:\",\"Sposoben sem se uspe\\u0161no sporazumevati in povezovati z drugimi.\",\"Sposoben sem ustrezno uporabljati razli\\u010Dne jezike za sporazumevanje z drugimi.\",\"Sposoben sem uporabljati matemati\\u010Dno znanje za re\\u0161evanje vsakodnevnih izzivov.\",\"Sposoben sem kompetentno uporabljati digitalna orodja pri delu, u\\u010Denju in stikih z drugimi.\",\"Sposoben sem ohranjati dobro psihi\\u010Dno in fizi\\u010Dno po\\u010Dutje ter dobre stike z drugimi.\",\"Sposoben sem oceniti svoje \\u0161ibke to\\u010Dke ter tudi pridobiti novo znanje, s katerim jih nadomestim.\",\"Sposoben sem delovati kot odgovoren dr\\u017Eavljan in se polno udele\\u017Eevati v dru\\u017Ebeno in politi\\u010Dno \\u017Eivljenje.\",\"Sposoben sem delovati podjetno in izkoristiti prilo\\u017Enosti, ki se mi ponujajo.\",\"Odprt sem do razli\\u010Dnih kultur in njihovih obi\\u010Dajev ter jih tudi spo\\u0161tujem.\"]",
-                            Type = 5,
-                            UniqueQuestionId = 16
-                        });
                 });
 
             modelBuilder.Entity("ActivityActivityGroup", b =>
@@ -1258,10 +771,6 @@ namespace Mladim.Infrastracture.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mladim.Domain.Models.Survey.Questions.SurveyQuestionnairy", "SurveyQuestionnairy")
-                        .WithMany("Activities")
-                        .HasForeignKey("SurveyQuestionnairyId");
-
                     b.OwnsMany("Mladim.Domain.Models.AttachedFile", "Files", b1 =>
                         {
                             b1.Property<int>("ActivityId")
@@ -1326,6 +835,11 @@ namespace Mladim.Infrastracture.Migrations
                         {
                             b1.Property<int>("ActivityId")
                                 .HasColumnType("int");
+
+                            b1.Property<int>("ActivityTargetGroup")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int")
+                                .HasDefaultValue(1);
 
                             b1.Property<int>("ActivityTypes")
                                 .HasColumnType("int");
@@ -1415,8 +929,6 @@ namespace Mladim.Infrastracture.Migrations
                     b.Navigation("Files");
 
                     b.Navigation("Project");
-
-                    b.Navigation("SurveyQuestionnairy");
 
                     b.Navigation("TimeRange")
                         .IsRequired();
@@ -1667,6 +1179,67 @@ namespace Mladim.Infrastracture.Migrations
                     b.Navigation("StaffMember");
                 });
 
+            modelBuilder.Entity("Mladim.Domain.Models.Survey.Questions.SurveyQuestion", b =>
+                {
+                    b.OwnsOne("Mladim.Domain.Models.GenderText", "Header", b1 =>
+                        {
+                            b1.Property<int>("SurveyQuestionId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Female")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Text_Female");
+
+                            b1.Property<string>("Male")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Text_Male");
+
+                            b1.HasKey("SurveyQuestionId");
+
+                            b1.ToTable("Questions");
+
+                            b1.WithOwner()
+                                .HasForeignKey("SurveyQuestionId");
+                        });
+
+                    b.OwnsMany("Mladim.Domain.Models.GenderText", "Questions", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<string>("Female")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Text_Female");
+
+                            b1.Property<string>("Male")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Text_Male");
+
+                            b1.Property<int>("SurveyQuestionId")
+                                .HasColumnType("int");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("SurveyQuestionId");
+
+                            b1.ToTable("SurveyQuestionSubQuestions", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("SurveyQuestionId");
+                        });
+
+                    b.Navigation("Header");
+
+                    b.Navigation("Questions");
+                });
+
             modelBuilder.Entity("Mladim.Domain.Models.Survey.Responses.AnonymousSurveyResponse", b =>
                 {
                     b.HasOne("Mladim.Domain.Models.Activity", "Activity")
@@ -1674,6 +1247,31 @@ namespace Mladim.Infrastracture.Migrations
                         .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.OwnsOne("Mladim.Domain.Models.AnonymousYouthWorker", "AnonymousYouthWorker", b1 =>
+                        {
+                            b1.Property<int>("AnonymousSurveyResponseId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("AgeGroup")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Gender")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Role")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("YearsOfExperience")
+                                .HasColumnType("int");
+
+                            b1.HasKey("AnonymousSurveyResponseId");
+
+                            b1.ToTable("AnonymousSurveyResponse");
+
+                            b1.WithOwner()
+                                .HasForeignKey("AnonymousSurveyResponseId");
+                        });
 
                     b.OwnsOne("Mladim.Domain.Models.AnonymousParticipant", "AnonymousParticipant", b1 =>
                         {
@@ -1699,8 +1297,9 @@ namespace Mladim.Infrastracture.Migrations
 
                     b.Navigation("Activity");
 
-                    b.Navigation("AnonymousParticipant")
-                        .IsRequired();
+                    b.Navigation("AnonymousParticipant");
+
+                    b.Navigation("AnonymousYouthWorker");
                 });
 
             modelBuilder.Entity("PartnerProject", b =>
@@ -1733,21 +1332,6 @@ namespace Mladim.Infrastracture.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SurveyQuestionSurveyQuestionnairy", b =>
-                {
-                    b.HasOne("Mladim.Domain.Models.Survey.Questions.SurveyQuestion", null)
-                        .WithMany()
-                        .HasForeignKey("QuestionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Mladim.Domain.Models.Survey.Questions.SurveyQuestionnairy", null)
-                        .WithMany()
-                        .HasForeignKey("SurveyQuestionnairiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Mladim.Domain.Models.Activity", b =>
                 {
                     b.Navigation("AnonymousSurveyResponses");
@@ -1765,11 +1349,6 @@ namespace Mladim.Infrastracture.Migrations
                     b.Navigation("Activities");
 
                     b.Navigation("Staff");
-                });
-
-            modelBuilder.Entity("Mladim.Domain.Models.Survey.Questions.SurveyQuestionnairy", b =>
-                {
-                    b.Navigation("Activities");
                 });
 
             modelBuilder.Entity("Mladim.Domain.Models.StaffMember", b =>

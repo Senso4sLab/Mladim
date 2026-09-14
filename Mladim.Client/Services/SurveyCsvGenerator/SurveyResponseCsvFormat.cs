@@ -29,7 +29,7 @@ namespace Mladim.Client.Services.SurveyCsvGenerator;
 //        //{           
 //        //    foreach (var row in rows)
 //        //    {
-//        //        csv.WriteComment(RatingResponses.Question);
+//        //        csv.WriteComment(RatingResponses.Header);
 //        //        csv.NextRecord();
 //        //        csv.WriteRecords(row.ParticipantsPerType);
 //        //        csv.NextRecord();

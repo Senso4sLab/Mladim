@@ -57,13 +57,11 @@ public class ActivityController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet("name/{activityId}")]
-    public async Task<ActionResult<string?>> GetNameAsync(int activityId)
+    public async Task<ActionResult<ActivitySummaryDto?>> GetSummaryAsync(int activityId)
     {
-        var response = await this.Mediator.Send(new GetActivityNameQuery { ActivityId = activityId });
+        var response = await this.Mediator.Send(new GetActivitySummaryQuery { ActivityId = activityId });
         return Ok(response);
     }
-
-
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ActivityQueryDto>>> GetAllByQueryAsync([FromQuery] GetActivitiesQuery query)

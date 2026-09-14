@@ -13,5 +13,5 @@ public interface IActivityService
 
     Task<IEnumerable<ActivityStatisticVM>> GetStatistics(int organizationId, DateTime start, DateTime end);
 
-    Task<string?> GetActivityNameAsync(int activityId);
+    Task<ActivitySummaryVM?> GetActivitySummaryAsync(int activityId);
 }

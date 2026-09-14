@@ -6,21 +6,11 @@ using Mladim.Client.ViewModels.Organization;
 using Mladim.Client.ViewModels.Survey;
 using Mladim.Client.Models;
 using Microsoft.JSInterop;
-using System.Timers;
 using MudBlazor;
 using Syncfusion.Blazor.Charts;
-using Mladim.Domain.Models.Survey.Statistics;
-using static MudBlazor.CategoryTypes;
-using CsvHelper.Configuration;
-using CsvHelper;
 using Mladim.Domain.Extensions;
-using Mladim.Domain.Models.Survey.Questions;
-using System.Globalization;
-using Mladim.Client.Services.SubjectServices.Implementations;
 using Mladim.Domain.Enums;
 using Mladim.Client.Services.Csv;
-using Mladim.Client.Csv;
-using Syncfusion.Blazor.PivotView;
 
 
 namespace Mladim.Client.Components.Organizations;
@@ -244,7 +234,7 @@ public partial class OrganizationStatisticsTab : IExportChart
     {
         ShownQuestionsSurveyStatistics.Clear();
         StateHasChanged();
-        ShownQuestionsSurveyStatistics = QuestionsSurveyStatistics.IntersectBy(defaultQuestionsForStatistics, qs => qs.SurveyQuestion.UniqueQuestionId).ToList();
+        ShownQuestionsSurveyStatistics = QuestionsSurveyStatistics.IntersectBy(defaultQuestionsForStatistics, qs => qs.SurveyQuestion.Id).ToList();
         ShowingQuestionsForSurveyStatistics();
     }
 
@@ -257,7 +247,7 @@ public partial class OrganizationStatisticsTab : IExportChart
     private void ShowingQuestionsForSurveyStatistics()
     {
 
-        var questionSurveyStatistics = QuestionsSurveyStatistics.ExceptBy(defaultQuestionsForStatistics, qs => qs.SurveyQuestion.UniqueQuestionId).ToList();
+        var questionSurveyStatistics = QuestionsSurveyStatistics.ExceptBy(defaultQuestionsForStatistics, qs => qs.SurveyQuestion.Id).ToList();
 
         if (MoreQuestionStatistics)        
             ShownQuestionsSurveyStatistics.AddRange(questionSurveyStatistics);       

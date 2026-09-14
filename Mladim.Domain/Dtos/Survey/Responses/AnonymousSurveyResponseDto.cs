@@ -6,12 +6,10 @@ using System.Text.Json.Serialization;
 namespace Mladim.Domain.Dtos.Survey.Responses;
 
 
-
-
 public class AnonymousSurveyResponseDto
 {
     public List<QuestionResponseDto> Responses { get; set; } = new();
-    public AnonymousParticipantCommandDto AnonymousParticipant { get; set; } = default!;   
+    public SurveyParticipantCommandDto AnonymousParticipant { get; set; } = default!;   
 
 }
 

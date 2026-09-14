@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Mladim.Domain.Enums;
 
@@ -88,6 +82,10 @@ public enum AgeGroups
     Age25_29 = 8,
     [Display(Name = "30-35")]
     Age30_35 = 16,
+    [Display(Name = "36-49")]
+    Age36_49 = 32,
+    [Display(Name = "50+")]
+    Age50Plus = 64,
 };
 
 
@@ -132,7 +130,47 @@ public enum OrganizationNPMAims
     prostovoljstvo = 8,   
 };
 
+public enum ActivityTargetGroup
+{
+    [Display(Name = "Mladinski delavci")]
+    YouthWorkers = 2,
+    [Display(Name = "Udeleženci")]
+    Participants = 1
+}
 
+
+public enum YouthWorkRole
+{
+
+    [Display(Name = "Delo z mladimi")]
+    YouthWorker = 1,
+    [Display(Name = "Vodenje/upravljanje organizacije")]
+    Director = 2,
+    [Display(Name = "Prostovoljsko delo")]
+    Volunteer = 4,
+    [Display(Name = "Študij")]
+    Student = 8,
+    [Display(Name = "Drugo")]
+    Other = 16,
+}
+
+public enum YearsOfExperienceInYouthWork
+{
+    [Display(Name = "Manj kot 1 leto")]
+    LessThanOneYear = 1,
+
+    [Display(Name = "1–3 leta")]
+    OneToThreeYears = 2,
+
+    [Display(Name = "4–7 let")]
+    FourToSevenYears = 4,
+
+    [Display(Name = "8–15 let")]
+    EightToFifteenYears = 8,
+
+    [Display(Name = "Več kot 15 let")]
+    MoreThanFifteenYears = 16,
+}
 
 
 
@@ -379,5 +417,10 @@ public enum SurveyRepetitiveButtonResponseType
     [Display(Name = "Močno")]
     Greatly = 4,
 }
+
+
+
+
+
 
 

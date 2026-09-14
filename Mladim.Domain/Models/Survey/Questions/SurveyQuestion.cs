@@ -4,61 +4,37 @@ namespace Mladim.Domain.Models.Survey.Questions;
 
 public class SurveyQuestion
 {
-    public int Id { get; set; }
-    public List<string> Texts { get; set; } = new();    
+    public int Id { get; set; }    
+    public GenderText? Header { get; set; } 
+    public List<GenderText> Questions { get; set; } = new();
     public SurveyQuestionCategory Category { get; set; }
     public SurveyQuestionType Type { get; set; }
-    public int UniqueQuestionId { get; set; }
-    public List<SurveyQuestionnairy> SurveyQuestionnairies { get; set; } = new();
+    public ActivityTargetGroup TargetGroup { get; set; }  
     protected SurveyQuestion()
     {
-
     }
-
-    protected SurveyQuestion(int id, int uniqueQuestionId, SurveyQuestionType type, SurveyQuestionCategory category)
-    {
-        this.Id = id;       
-        this.Type = type;
-        this.Category = category;
-        this.UniqueQuestionId = uniqueQuestionId;
+    protected SurveyQuestion(SurveyQuestionType type, SurveyQuestionCategory category, ActivityTargetGroup targetGroup, GenderText? header)
+    {       
+        Type = type;
+        Category = category;  
+        TargetGroup = targetGroup;
+        Header = header;
     }
-
-    public SurveyQuestion AddText(string question)
-    {
-        Texts.Add(question);
+    public SurveyQuestion AddQuestion(GenderText subQuestion)
+    {    
+        Questions.Add(subQuestion);
         return this;
     }
-
-    public static MaleSurveyQuestion CreateMaleQuestion(int id, int uniqueQuestionId, SurveyQuestionType type, SurveyQuestionCategory category) =>
-        new MaleSurveyQuestion(id, uniqueQuestionId, type, category);
-
-    public static FemaleSurveyQuestion CreateFemaleQuestion(int id, int uniqueQuestionId, SurveyQuestionType type, SurveyQuestionCategory category) =>
-        new FemaleSurveyQuestion(id, uniqueQuestionId, type, category);
-
-}
-
-
-public class FemaleSurveyQuestion : SurveyQuestion
-{
-    private FemaleSurveyQuestion()
-    { }
-
-    public FemaleSurveyQuestion(int id, int uniqueQuestionId, SurveyQuestionType type, SurveyQuestionCategory questionType) : base(id, uniqueQuestionId, type, questionType)
+    public SurveyQuestion AddQuestions(IEnumerable<GenderText> subQuestions)
     {
-
+        Questions.AddRange(subQuestions);
+        return this;
     }
+    public static SurveyQuestion ForParticipant(SurveyQuestionType type, SurveyQuestionCategory category, GenderText? header = null) =>
+        new SurveyQuestion(type, category, ActivityTargetGroup.Participants, header);
 
+    public static SurveyQuestion ForYouthWorker(SurveyQuestionType type, SurveyQuestionCategory category, GenderText? header = null) =>
+        new SurveyQuestion(type, category, ActivityTargetGroup.YouthWorkers, header);
 }
 
-
-public class MaleSurveyQuestion : SurveyQuestion
-{
-    private MaleSurveyQuestion() { }
-
-    public MaleSurveyQuestion(int id, int uniqueQuestionId, SurveyQuestionType type, SurveyQuestionCategory questionType) : base(id, uniqueQuestionId, type, questionType)
-    {
-
-    }
-
-}
 

@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using Mladim.Application;
 using Mladim.Application.Contracts.File;
 using Mladim.Infrastracture;
+using Mladim.Infrastracture.Persistance;
 using Mladim.WebAPI.Services;
 using Swashbuckle.AspNetCore.Filters;
 using static System.Net.WebRequestMethods;
@@ -16,9 +18,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddJsonOptions(options => 
     options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
-
-
 
 
 builder.Services.AddRazorPages();
@@ -53,6 +52,18 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 
+using (var scope = app.Services.CreateScope())
+{   
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await db.Database.MigrateAsync(); // optional in production, helpful in dev
+
+    if (app.Environment.IsDevelopment())
+    {
+        await SurveyQuestionSeeder.SeedAsync(db); // default: no force, one-time
+    }  
+}
+
+
 
 
 // Configure the HTTP request pipeline.
@@ -81,3 +92,5 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
+

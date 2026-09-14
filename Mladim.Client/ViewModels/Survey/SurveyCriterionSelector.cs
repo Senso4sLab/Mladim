@@ -42,7 +42,7 @@ public class AgeGroupSelector : SurveyCriterionSelector
 
 
 
-public record ParticipantPredicate(string Name, Predicate<AnonymousParticipantVM> Predicate)
+public record ParticipantPredicate(string Name, Predicate<SurveyParticipantVM> Predicate)
 {
     public static ParticipantPredicate None =>
         new ParticipantPredicate("Skupaj", _ => true);

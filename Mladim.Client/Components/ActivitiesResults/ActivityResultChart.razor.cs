@@ -4,7 +4,6 @@ using Mladim.Client.ViewModels;
 using Mladim.Client.ViewModels.Survey;
 using Mladim.Domain.Enums;
 using Mladim.Domain.Extensions;
-using static MudBlazor.Colors;
 
 namespace Mladim.Client.Components.ActivitiesResults;
 
@@ -24,11 +23,11 @@ public partial class ActivityResultChart
         genderDoughnut = GenderDoughnutPercantages(participants, participants.Count).ToList();        
     }
 
-    private List<AnonymousParticipantVM> GetParticipantsFromSurveyResponse() =>    
+    private List<SurveyParticipantVM> GetParticipantsFromSurveyResponse() =>    
         this.SurveyResponsesGroupByQuestions.FirstOrDefault()?
-           .Participants.ToList() ?? new List<AnonymousParticipantVM>();    
+           .Participants.ToList() ?? new List<SurveyParticipantVM>();    
 
-    private IEnumerable<DoughnutPiece> GenderDoughnutPercantages(List<AnonymousParticipantVM> participants, int total)
+    private IEnumerable<DoughnutPiece> GenderDoughnutPercantages(List<SurveyParticipantVM> participants, int total)
     {        
        return participants.GroupBy(ap => ap.Gender)
             .Select(g => (name: g.Key, value: Math.Round(g.Count() * 100.0 / total)))
@@ -36,7 +35,7 @@ public partial class ActivityResultChart
             .ToList();        
     }
 
-    private IEnumerable<DoughnutPiece> AgeGroupDoughnutPercantages(List<AnonymousParticipantVM> participants, int total)
+    private IEnumerable<DoughnutPiece> AgeGroupDoughnutPercantages(List<SurveyParticipantVM> participants, int total)
     {
         return participants.GroupBy(ap => ap.AgeGroup)
              .Select(g => (name: g.Key, value: Math.Round(g.Count() * 100.0 / participants.Count)))
@@ -75,6 +74,10 @@ public partial class ActivityResultChart
             AgeGroups.Age15_19 => "#ffc700",
             AgeGroups.Age20_24 => "#8ed974",
             AgeGroups.Age25_29 => "#394241",
+            AgeGroups.Age30_35 => "#007bff",   
+            AgeGroups.Age36_49 => "#ff6b6b",   
+            AgeGroups.Age50Plus => "#6f42c1",  
+
             _ => throw new NotImplementedException(),
         };
 

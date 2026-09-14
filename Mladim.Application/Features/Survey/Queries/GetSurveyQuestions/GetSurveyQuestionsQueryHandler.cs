@@ -9,7 +9,6 @@ namespace Mladim.Application.Features.Survey.Queries.GetSurvey;
 
 public class GetSurveyQuestionsQueryHandler : IRequestHandler<GetSurveyQuestionsQuery, IEnumerable<SurveyQuestionQueryDto>>
 {
-
     public IMapper Mapper { get; }
     public IUnitOfWork UnitOfWork { get; }
 
@@ -18,16 +17,16 @@ public class GetSurveyQuestionsQueryHandler : IRequestHandler<GetSurveyQuestions
         Mapper = mapper;
         UnitOfWork = unitOfWork;
     }
-
+    
     public async Task<IEnumerable<SurveyQuestionQueryDto>> Handle(GetSurveyQuestionsQuery request, CancellationToken cancellationToken)
     {
-        var activity = await this.UnitOfWork.ActivityRepository.FirstOrDefaultAsync(a => a.Id == request.ActivityId && a.SurveyQuestionnairyId != null);
+        var activity = await UnitOfWork.ActivityRepository.FirstOrDefaultAsync(a => a.Id == request.ActivityId);
 
-        ArgumentNullException.ThrowIfNull(activity);
+        ArgumentNullException.ThrowIfNull(activity);        
 
-        var questionnairy = await this.UnitOfWork.SurveyQuestionRepository.GetSurveyQuestionnairy(activity.SurveyQuestionnairyId!.Value,request.Gender, activity.Attributes.GetSurveyQuestionCategory());
+        var questionnaire = await UnitOfWork.SurveyQuestionRepository.GetQuestionnaire(activity.Attributes.ActivityTargetGroup, activity.Attributes.GetSurveyQuestionCategory());
 
-        return this.Mapper.Map<IEnumerable<SurveyQuestionQueryDto>>(questionnairy);      
+        return this.Mapper.Map<IEnumerable<SurveyQuestionQueryDto>>(questionnaire);      
 
     }
 

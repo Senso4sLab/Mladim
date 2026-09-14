@@ -24,3 +24,4 @@ public class AnonymousParticipantValidator : AbstractValidator<AnonymousParticip
         return result.Errors.Select(e => e.ErrorMessage);
     };
 }
+

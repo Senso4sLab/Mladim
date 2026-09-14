@@ -1,13 +1,7 @@
 ﻿using AutoMapper;
-using Mladim.Application.Features.Members.AnonymousParticipants.Commands.AddAnonymousParticipant;
 using Mladim.Domain.Dtos;
 using Mladim.Domain.Dtos.Members.AnonymousParticipants;
 using Mladim.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mladim.Application.MappingProfiles.Profiles.AnonymousParticipants;
 
@@ -27,8 +21,11 @@ public class AnonymousParticipantProfile : Profile
             .ForMember(dest => dest.AnonymousParticipant, m => m.MapFrom(src => src));
 
 
+
+
         CreateMap<AnonymousParticipantCommandDto, AnonymousParticipant>().ReverseMap();
-        
+        CreateMap<AnonymousYouthWorkerCommandDto, AnonymousYouthWorker>().ReverseMap();
+
 
 
         //CreateMap<AddAnonymousParticipantCommand, AnonymousParticipant>();        

@@ -4,15 +4,18 @@
 @using Mladim.Domain.Models;
 
 
-<MudText Typo="Typo.h2" Color="Color.Tertiary" Class="py-3">@SurveyQuestion.Texts.FirstOrDefault()</MudText>
-<MudTextField Class="mud-width-full" Lines=3 Variant="Variant.Outlined" @bind-Value=@SurveryResponse.Response Typo="Typo.h1"></MudTextField>
+<MudText Typo="Typo.h2" Color="Color.Tertiary" Class="py-3">@SurveyQuestion.Questions.FirstOrDefault()?.GetByGender(Gender)</MudText>
+<MudTextField Class="mud-width-full" Lines=3 Variant="Variant.Outlined" @bind-Value=@Response.Response Typo="Typo.h1"></MudTextField>
 
 
 @code
 {
     [Parameter]
+    public Gender Gender { get; set; }
+
+    [Parameter]
     public SurveyQuestionVM SurveyQuestion { get; set; } = default!;
 
     [Parameter]
-    public QuestionTextResponseVM SurveryResponse { get; set; } = default!;
+    public QuestionTextResponseVM Response { get; set; } = default!;
 }
